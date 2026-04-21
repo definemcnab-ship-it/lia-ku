@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>待办事项</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 28px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: #fff;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: border-color 0.2s;
+    }
+
+    .input-row input:focus {
+      border-color: #6c63ff;
+    }
+
+    .input-row button {
+      padding: 14px 22px;
+      background: #6c63ff;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .input-row button:hover { background: #574fd6; }
+    .input-row button:active { transform: scale(0.97); }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: #fff;
+      color: #666;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: #6c63ff;
+      color: #fff;
+      border-color: #6c63ff;
+    }
+
+    .filter-btn:not(.active):hover {
+      border-color: #6c63ff;
+      color: #6c63ff;
+    }
+
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      animation: slideIn 0.2s ease;
+      transition: opacity 0.2s;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .todo-item.done { opacity: 0.55; }
+
+    .check-btn {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 50%;
+      border: 2px solid #d0d0d0;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .todo-item.done .check-btn {
+      background: #6c63ff;
+      border-color: #6c63ff;
+    }
+
+    .check-btn::after {
+      content: '';
+      display: none;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    .todo-item.done .check-btn::after { display: block; }
+
+    .todo-text {
+      flex: 1;
+      font-size: 1rem;
+      color: #333;
+      word-break: break-word;
+      line-height: 1.4;
+      transition: all 0.2s;
+    }
+
+    .todo-item.done .todo-text {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .del-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #ccc;
+      padding: 4px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      line-height: 1;
+    }
+
+    .del-btn:hover { color: #e74c3c; background: #fff0f0; }
+
+    .empty {
+      text-align: center;
+      color: #bbb;
+      font-size: 0.95rem;
+      padding: 40px 0;
+    }
+
+    .footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .clear-btn {
+      background: none;
+      border: none;
+      font-size: 0.85rem;
+      color: #ccc;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .clear-btn:hover { color: #e74c3c; background: #fff0f0; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>待办事项</h1>
+    <p class="subtitle" id="date-label"></p>
+
+    <div class="input-row">
+      <input type="text" id="todo-input" placeholder="添加新任务…" maxlength="200">
+      <button id="add-btn">添加</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      <button class="filter-btn" data-filter="active">未完成</button>
+      <button class="filter-btn" data-filter="done">已完成</button>
+    </div>
+
+    <div class="todo-list" id="todo-list"></div>
+
+    <div class="footer">
+      <span id="count-label"></span>
+      <button class="clear-btn" id="clear-btn">清除已完成</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'todos_v1';
+
+    let todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    let filter = 'all';
+
+    const input = document.getElementById('todo-input');
+    const list  = document.getElementById('todo-list');
+    const countLabel = document.getElementById('count-label');
+
+    // Date label
+    const d = new Date();
+    document.getElementById('date-label').textContent =
+      d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    }
+
+    function render() {
+      const visible = todos.filter(t =>
+        filter === 'all'    ? true :
+        filter === 'active' ? !t.done :
+                               t.done
+      );
+
+      list.innerHTML = '';
+
+      if (visible.length === 0) {
+        list.innerHTML = '<p class="empty">暂无任务</p>';
+      } else {
+        visible.forEach(todo => {
+          const item = document.createElement('div');
+          item.className = 'todo-item' + (todo.done ? ' done' : '');
+          item.innerHTML = `
+            <button class="check-btn" data-id="${todo.id}" title="标记完成"></button>
+            <span class="todo-text">${escHtml(todo.text)}</span>
+            <button class="del-btn" data-id="${todo.id}" title="删除">✕</button>
+          `;
+          list.appendChild(item);
+        });
+      }
+
+      const active = todos.filter(t => !t.done).length;
+      countLabel.textContent = `${active} 项未完成 / 共 ${todos.length} 项`;
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) { input.focus(); return; }
+      todos.unshift({ id: Date.now(), text, done: false });
+      save();
+      render();
+      input.value = '';
+      input.focus();
+    }
+
+    document.getElementById('add-btn').addEventListener('click', addTodo);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(); });
+
+    list.addEventListener('click', e => {
+      const checkBtn = e.target.closest('.check-btn');
+      const delBtn   = e.target.closest('.del-btn');
+
+      if (checkBtn) {
+        const id = Number(checkBtn.dataset.id);
+        const t = todos.find(t => t.id === id);
+        if (t) { t.done = !t.done; save(); render(); }
+      }
+
+      if (delBtn) {
+        const id = Number(delBtn.dataset.id);
+        todos = todos.filter(t => t.id !== id);
+        save();
+        render();
+      }
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filter = btn.dataset.filter;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+      });
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      todos = todos.filter(t => !t.done);
+      save();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
