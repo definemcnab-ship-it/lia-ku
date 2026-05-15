@@ -346,6 +346,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .trial-modal-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid var(--border); background: var(--bg); border-radius: 0 0 16px 16px; }
 .follow-up-tag:hover { opacity: .8; transform: scale(1.05); }
 
+/* Query & Icon buttons */
+.query-btn { padding: 4px 10px; border: 1px solid var(--primary); border-radius: 6px; background: var(--primary); color: #fff; cursor: pointer; font-size: 11px; white-space: nowrap; }
+.query-btn:hover { opacity: .85; }
+.icon-btn { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; line-height: 1; transition: all .15s; }
+.icon-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+
 /* Search */
 .search-box { position: relative; display: flex; align-items: center; }
 .search-box input { padding: 4px 8px 4px 26px; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; width: 130px; outline: none; transition: all .2s; background: #f8fafc; }
@@ -391,59 +397,37 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .alerts-panel { max-height: 60vh; overflow-y: auto; }
 .alerts-panel .alert-item { padding: 12px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 10px; align-items: flex-start; }
 .alerts-panel .alert-item:last-child { border-bottom: none; }
-.alerts-panel .alert-item.closed { opacity: 0.55; }
 .alerts-panel .alert-level { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
 .alerts-panel .alert-level.danger { background: #ef4444; }
 .alerts-panel .alert-level.warning { background: #f59e0b; }
 .alerts-panel .alert-level.info { background: #3b82f6; }
 
-/* Alert follow-up status badges */
-.fu-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
-.fu-badge.pending  { background: #fef3c7; color: #92400e; }
-.fu-badge.active   { background: #dbeafe; color: #1e40af; }
-.fu-badge.closed   { background: #d1fae5; color: #065f46; }
+/* Follow-up Status Badge */
+.fu-badge { display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px; }
+.fu-badge.pending { background:#fef3c7;color:#92400e; }
+.fu-badge.active  { background:#dbeafe;color:#1e40af; }
+.fu-badge.closed  { background:#d1fae5;color:#065f46; }
 
 /* Alert Detail Modal */
-.alert-detail-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.45); z-index: 350; align-items: center; justify-content: center; }
-.alert-detail-overlay.show { display: flex; }
-.alert-detail-modal { background: #fff; border-radius: 16px; width: 92%; max-width: 560px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
-.adm-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.adm-header-left { flex: 1; }
-.adm-header h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px; line-height: 1.3; }
-.adm-header .adm-meta { font-size: 11px; color: #64748b; }
-.adm-close { width: 32px; height: 32px; border-radius: 8px; border: none; background: #f1f5f9; cursor: pointer; font-size: 16px; flex-shrink: 0; }
-.adm-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
-.adm-detail-box { background: #f8fafc; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #475569; line-height: 1.6; margin-bottom: 16px; }
-.adm-closed-banner { background: #d1fae5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #065f46; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-/* Timeline */
-.fu-timeline { margin-bottom: 16px; }
-.fu-timeline-title { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
-.fu-timeline-empty { font-size: 12px; color: #94a3b8; text-align: center; padding: 16px 0; }
-.fu-log-item { display: flex; gap: 10px; margin-bottom: 10px; }
-.fu-log-dot { width: 8px; height: 8px; border-radius: 50%; background: #6366f1; flex-shrink: 0; margin-top: 5px; }
-.fu-log-dot.close-dot { background: #10b981; }
-.fu-log-body { flex: 1; }
-.fu-log-action { font-size: 11px; font-weight: 600; color: #6366f1; margin-bottom: 2px; }
-.fu-log-action.close-action { color: #10b981; }
-.fu-log-content { font-size: 12px; color: #334155; line-height: 1.5; }
-.fu-log-time { font-size: 10px; color: #94a3b8; margin-top: 2px; }
-/* Add log form */
-.adm-add-form { border-top: 1px solid #e2e8f0; padding-top: 14px; }
-.adm-add-form h4 { font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 10px; }
-.adm-action-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-.adm-action-pill { padding: 4px 10px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 11px; cursor: pointer; transition: all .15s; }
-.adm-action-pill.selected, .adm-action-pill:hover { background: #6366f1; color: #fff; border-color: #6366f1; }
-.adm-content-input { width: 100%; box-sizing: border-box; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; font-size: 12px; resize: vertical; min-height: 60px; font-family: inherit; color: #334155; }
-.adm-content-input:focus { outline: none; border-color: #6366f1; }
-.adm-form-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.adm-btn { padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
-.adm-btn.primary { background: #6366f1; color: #fff; }
-.adm-btn.primary:hover { background: #4f46e5; }
-.adm-btn.success { background: #10b981; color: #fff; }
-.adm-btn.success:hover { background: #059669; }
-.adm-btn.outline { background: #fff; color: #475569; border: 1px solid #e2e8f0; }
-.adm-btn.outline:hover { background: #f8fafc; }
-.adm-btn:disabled { opacity: .5; cursor: default; }
+.alert-detail-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px; }
+.alert-detail-overlay .adm-panel { background:#fff;border-radius:16px;width:100%;max-width:680px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25); }
+.adm-header { padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px; }
+.adm-header .adm-title { font-size:16px;font-weight:700;flex:1; }
+.adm-header .adm-close { width:32px;height:32px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.adm-body { padding:20px 24px;overflow-y:auto;flex:1; }
+.adm-detail-text { font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;background:var(--bg);padding:12px 16px;border-radius:8px; }
+.adm-status-row { display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap; }
+.adm-actions { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px; }
+.adm-actions button { padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .15s; }
+.adm-log-section h4 { font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text-secondary); }
+.fu-log-list { display:flex;flex-direction:column;gap:8px; }
+.fu-log-item { display:flex;gap:10px;align-items:flex-start; }
+.fu-log-dot { width:10px;height:10px;border-radius:50%;background:var(--primary);margin-top:3px;flex-shrink:0; }
+.fu-log-content { flex:1;font-size:12px; }
+.fu-log-content .fu-log-time { color:var(--text-secondary);font-size:10px;margin-top:2px; }
+.adm-note-area { width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:vertical;min-height:70px;margin-top:8px; }
+.adm-footer { padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg);border-radius:0 0 16px 16px; }
+.adm-footer .adm-close-section { display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap; }
 
 </style>
 </head>
@@ -522,20 +506,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="site-footer">PowerFit 智慧门店经营管理系统 v2.0 | 数据驱动经营决策</div>
 </main>
 
-<!-- Alert Detail Modal -->
-<div class="alert-detail-overlay" id="alertDetailOverlay">
-  <div class="alert-detail-modal" id="alertDetailModal">
-    <div class="adm-header">
-      <div class="adm-header-left">
-        <h3 id="admTitle">预警详情</h3>
-        <div class="adm-meta" id="admMeta"></div>
-      </div>
-      <button class="adm-close" onclick="closeAlertDetailModal()">✕</button>
-    </div>
-    <div class="adm-body" id="admBody"></div>
-  </div>
-</div>
-
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
@@ -570,6 +540,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       </div>
       <div id="importStep2" style="display:none"></div>
       <div id="importStep3" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Detail Modal -->
+<div class="alert-detail-overlay" id="alertDetailOverlay" style="display:none" onclick="if(event.target===this)closeAlertDetail()">
+  <div class="adm-panel">
+    <div class="adm-header">
+      <div class="adm-title" id="adm-title">预警详情</div>
+      <button class="adm-close" onclick="closeAlertDetail()">✕</button>
+    </div>
+    <div class="adm-body" id="adm-body"></div>
+    <div class="adm-footer">
+      <div class="adm-close-section">
+        <textarea class="adm-note-area" id="adm-note" placeholder="添加跟进备注…" style="min-height:48px;flex:1"></textarea>
+        <button style="padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:var(--primary);color:#fff" onclick="addFollowLog()">记录跟进</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button id="adm-close-btn" style="padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);cursor:pointer;background:#fff" onclick="closeAlertLoop()">闭环此预警</button>
+        <button id="adm-reopen-btn" style="padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);cursor:pointer;background:#fff;display:none" onclick="reopenAlert()">重新打开</button>
+      </div>
     </div>
   </div>
 </div>
@@ -997,14 +988,14 @@ function showAlertsPanel() {
   var alerts = d.alerts || [];
   var allAlerts = [];
 
-  // Gather coach-specific alerts with follow state keys
-  var logs = d.alertFollowLogs || {};
+  // Gather coach-specific alerts
   d.coaches.forEach(function(c) {
     var cd = d.coachDetail[c.name];
     if (!cd) return;
     cd.members.filter(function(m) { return m.alert; }).forEach(function(m) {
       var key = 'coach:' + c.name + ':member:' + m.name;
-      allAlerts.push({ key: key, level: 'warning', title: c.name + ' - ' + m.name + ' 低频预警', detail: m.name + '月均到店仅' + m.freq + '次/周', source: 'ops', coachName: c.name });
+      var st = getAlertState(key);
+      allAlerts.push({ level: 'warning', title: c.name + ' - ' + m.name + ' 低频预警', detail: m.name + '月均到店仅' + m.freq + '次/周', key: key, status: st.status, coachName: c.name });
     });
     cd.trials.filter(function(t) { return t.status === 'pending'; }).forEach(function(t) {
       var todayStr = new Date().toISOString().slice(0,10);
@@ -1014,11 +1005,13 @@ function showAlertsPanel() {
       if (fu.threeDay && fu.threeDay.date && !fu.threeDay.done && todayStr > fu.threeDay.date) overdue = true;
       if (fu.oneMonth && fu.oneMonth.date && !fu.oneMonth.done && todayStr > fu.oneMonth.date) overdue = true;
       var key = 'coach:' + c.name + ':trial:' + t.name;
-      allAlerts.push({ key: key, level: overdue ? 'danger' : 'info', title: c.name + ' - ' + t.name + ' 体验待转化', detail: t.type + '，' + t.date + '上课，状态：' + (t.status === 'pending' ? '跟进中' : t.status) + (overdue ? '（回访逾期！）' : ''), source: 'sales', coachName: c.name });
+      var st = getAlertState(key);
+      allAlerts.push({ level: overdue ? 'danger' : 'info', title: c.name + ' - ' + t.name + ' 体验待转化', detail: t.type + '，' + t.date + '上课，状态：' + (t.status === 'pending' ? '跟进中' : t.status) + (overdue ? '（回访逾期！）' : ''), key: key, status: st.status, coachName: c.name });
     });
     cd.renewals.filter(function(r) { return r.status === 'urgent'; }).forEach(function(r) {
       var key = 'coach:' + c.name + ':renewal:' + r.name;
-      allAlerts.push({ key: key, level: 'danger', title: c.name + ' - ' + r.name + ' 余额紧急预警', detail: '剩余课时' + r.balance + '节，余额¥' + r.remaining + '已不足预警线', source: 'ops', coachName: c.name });
+      var st = getAlertState(key);
+      allAlerts.push({ level: 'danger', title: c.name + ' - ' + r.name + ' 余额紧急预警', detail: '剩余课时' + r.balance + '节，余额¥' + r.remaining + '已不足预警线', key: key, status: st.status, coachName: c.name });
     });
   });
 
@@ -1028,12 +1021,12 @@ function showAlertsPanel() {
   overlay.id = 'alertsOverlay';
   overlay.onclick = function(e) { if (e.target === overlay) closeAlertsPanel(); };
 
+  var openAlerts = alerts.filter(function(a) { return !a.followState || a.followState.status !== 'closed'; });
+  var openCoachAlerts = allAlerts.filter(function(a) { return a.status !== 'closed'; });
   var totalAlerts = alerts.length + allAlerts.length;
-  var openCount = alerts.filter(function(a) { return !a.followState || a.followState.status !== 'closed'; }).length +
-    allAlerts.filter(function(a) { var st = logs[a.key]; return !st || st.status !== 'closed'; }).length;
   var html = '<div class="oplog-panel">';
   html += '<div class="oplog-header">';
-  html += '<h3>⚠️ 预警详情 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">— 共 ' + totalAlerts + ' 条，' + openCount + ' 条待处理</span></h3>';
+  html += '<h3>⚠️ 预警详情 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">— 共 ' + totalAlerts + ' 条 / 未闭环 ' + (openAlerts.length + openCoachAlerts.length) + ' 条</span></h3>';
   html += '<button style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:12px" onclick="closeAlertsPanel()">✕ 关闭</button>';
   html += '</div>';
   html += '<div class="alerts-panel">';
@@ -1046,30 +1039,25 @@ function showAlertsPanel() {
       var st = a.followState || { status: 'pending' };
       var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
       var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
-      var isClosed = st.status === 'closed';
-      var key = a.id;
-      var titleEsc = escHtml(a.title);
-      var detailEsc = escHtml(a.detail);
-      var sourceEsc = escHtml(a.source || '');
-      html += '<div class="alert-item' + (isClosed ? ' closed' : '') + '">';
+      var safeTitle = (a.title||'').replace(/'/g,"\\'");
+      var safeDetail = (a.detail||'').replace(/'/g,"\\'");
+      html += '<div class="alert-item" style="' + (st.status==='closed'?'opacity:.6':'') + '">';
       html += '<div class="alert-level ' + a.level + '"></div>';
-      html += '<div style="flex:1"><strong>' + titleEsc + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + detailEsc + '</span></div>';
-      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="showAlertDetail(\'' + escHtml(key) + '\',\'' + titleEsc.replace(/'/g,"\\'") + '\',\'' + detailEsc.replace(/'/g,"\\'") + '\',\'' + a.level + '\',\'' + sourceEsc + '\')">查看跟进</button>';
+      html += '<div style="flex:1"><strong>' + escHtml(a.title) + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + escHtml(a.detail) + '</span></div>';
+      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="closeAlertsPanel();showAlertDetail(\'' + a.id + '\',\'' + safeTitle + '\',\'' + safeDetail + '\',\'' + a.level + '\',\'' + (a.source||'') + '\')">' + (st.status==='closed'?'查看闭环':'跟进') + '</button>';
       html += '</div>';
     });
     // Coach alerts
     allAlerts.forEach(function(a) {
-      var st = logs[a.key] || { status: 'pending' };
-      var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
-      var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
-      var isClosed = st.status === 'closed';
-      var titleEsc = escHtml(a.title);
-      var detailEsc = escHtml(a.detail);
-      var sourceEsc = escHtml(a.source || '');
-      html += '<div class="alert-item' + (isClosed ? ' closed' : '') + '">';
+      var statusLabel = a.status === 'closed' ? '已闭环' : a.status === 'active' ? '跟进中' : '待跟进';
+      var statusCls = a.status === 'closed' ? 'closed' : a.status === 'active' ? 'active' : 'pending';
+      var safeTitle = (a.title||'').replace(/'/g,"\\'");
+      var safeDetail = (a.detail||'').replace(/'/g,"\\'");
+      var safeKey = (a.key||'').replace(/'/g,"\\'");
+      html += '<div class="alert-item" style="' + (a.status==='closed'?'opacity:.6':'') + '">';
       html += '<div class="alert-level ' + a.level + '"></div>';
-      html += '<div style="flex:1"><strong>' + titleEsc + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + detailEsc + '</span></div>';
-      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="showAlertDetail(\'' + escHtml(a.key) + '\',\'' + titleEsc.replace(/'/g,"\\'") + '\',\'' + detailEsc.replace(/'/g,"\\'") + '\',\'' + a.level + '\',\'' + sourceEsc + '\')">查看跟进</button>';
+      html += '<div style="flex:1"><strong>' + escHtml(a.title) + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + escHtml(a.detail) + '</span></div>';
+      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="closeAlertsPanel();showAlertDetail(\'' + safeKey + '\',\'' + safeTitle + '\',\'' + safeDetail + '\',\'' + a.level + '\',\'coach\')">' + (a.status==='closed'?'查看闭环':'跟进') + '</button>';
       html += '</div>';
     });
   }
@@ -1084,13 +1072,176 @@ function closeAlertsPanel() {
   if (overlay) overlay.remove();
 }
 
+function showCoachAlertList(coachName, type) {
+  var d = mockData;
+  var cd = d.coachDetail[coachName];
+  if (!cd) return;
+  var items = [];
+  if (type === 'member') {
+    cd.members.filter(function(m) { return m.alert; }).forEach(function(m) {
+      items.push({ key: 'coach:' + coachName + ':member:' + m.name, title: coachName + ' - ' + m.name + ' 低频预警', detail: m.name + '月均到店仅' + m.freq + '次/周，低于预警线2次/周', level: 'warning', source: 'coach' });
+    });
+  } else if (type === 'trial') {
+    cd.trials.filter(function(t) { return t.status === 'pending'; }).forEach(function(t) {
+      items.push({ key: 'coach:' + coachName + ':trial:' + t.name, title: coachName + ' - ' + t.name + ' 体验待转化', detail: t.type + '，' + t.date + '上课，状态跟进中', level: 'info', source: 'coach' });
+    });
+  } else if (type === 'renewal') {
+    cd.renewals.filter(function(r) { return r.status === 'urgent'; }).forEach(function(r) {
+      items.push({ key: 'coach:' + coachName + ':renewal:' + r.name, title: coachName + ' - ' + r.name + ' 余额紧急预警', detail: '剩余课时' + r.balance + '节，余额¥' + r.remaining + '已不足预警线', level: 'danger', source: 'coach' });
+    });
+  }
+  if (items.length === 0) { showToast('暂无此类预警', 'info'); return; }
+  if (items.length === 1) {
+    showAlertDetail(items[0].key, items[0].title, items[0].detail, items[0].level, items[0].source);
+    return;
+  }
+  var overlay = document.createElement('div');
+  overlay.className = 'oplog-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  var html = '<div class="oplog-panel"><div class="oplog-header"><h3>⚠️ ' + coachName + ' 预警列表</h3><button style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:12px" onclick="this.closest(\'.oplog-overlay\').remove()">✕ 关闭</button></div><div class="alerts-panel">';
+  items.forEach(function(a) {
+    var st = getAlertState(a.key);
+    var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+    var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+    var safeTitle = (a.title||'').replace(/'/g,"\\'");
+    var safeDetail = (a.detail||'').replace(/'/g,"\\'");
+    html += '<div class="alert-item"><div class="alert-level ' + a.level + '"></div>';
+    html += '<div style="flex:1"><strong>' + escHtml(a.title) + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + escHtml(a.detail) + '</span></div>';
+    html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px" onclick="this.closest(\'.oplog-overlay\').remove();showAlertDetail(\'' + a.key.replace(/'/g,"\\'") + '\',\'' + safeTitle + '\',\'' + safeDetail + '\',\'' + a.level + '\',\'' + a.source + '\')">' + (st.status==='closed'?'查看闭环':'跟进') + '</button>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+}
+
+// ==================== ALERT FOLLOW-UP SYSTEM ====================
+var _currentAlertKey = null;
+
+function getAlertState(key) {
+  var d = mockData;
+  var staticAlert = (d.alerts || []).find(function(a) { return a.id === key; });
+  if (staticAlert) return staticAlert.followState;
+  if (!d.alertFollowLogs) d.alertFollowLogs = {};
+  if (!d.alertFollowLogs[key]) {
+    d.alertFollowLogs[key] = { status: 'pending', logs: [], closedAt: null, closedNote: '' };
+  }
+  return d.alertFollowLogs[key];
+}
+
+function showAlertDetail(key, title, detail, level, source) {
+  _currentAlertKey = key;
+  var st = getAlertState(key);
+  var overlay = document.getElementById('alertDetailOverlay');
+  var titleEl = document.getElementById('adm-title');
+  var bodyEl = document.getElementById('adm-body');
+  var closeBtn = document.getElementById('adm-close-btn');
+  var reopenBtn = document.getElementById('adm-reopen-btn');
+  if (!overlay || !titleEl || !bodyEl) return;
+
+  var levelIcon = level === 'danger' ? '🔴' : level === 'warning' ? '🟡' : '🔵';
+  var sourceLabel = source === 'ops' ? '运营端' : source === 'sales' ? '销售端' : source === 'coach' ? '教练端' : source;
+  var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+  var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+
+  titleEl.innerHTML = levelIcon + ' ' + escHtml(title) + ' <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span>';
+
+  var logsHtml = '';
+  if (st.logs && st.logs.length > 0) {
+    logsHtml = '<div class="fu-log-list">';
+    st.logs.forEach(function(log) {
+      logsHtml += '<div class="fu-log-item"><div class="fu-log-dot"></div><div class="fu-log-content"><div>' + escHtml(log.note) + '</div><div class="fu-log-time">' + escHtml(log.time) + ' — ' + escHtml(log.by||'店长') + '</div></div></div>';
+    });
+    logsHtml += '</div>';
+  } else {
+    logsHtml = '<div style="color:var(--text-secondary);font-size:12px;text-align:center;padding:16px">暂无跟进记录</div>';
+  }
+
+  var closedNoteHtml = '';
+  if (st.status === 'closed') {
+    closedNoteHtml = '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12px;color:#065f46"><strong>✅ 闭环备注：</strong>' + escHtml(st.closedNote||'已闭环') + '<br><span style="font-size:10px;opacity:.8">闭环时间：' + escHtml(st.closedAt||'') + '</span></div>';
+  }
+
+  bodyEl.innerHTML = '<p class="adm-detail-text">' + escHtml(detail) + '</p>' +
+    '<div class="adm-status-row"><span style="font-size:12px;color:var(--text-secondary)">来源端口：</span><span class="data-source-badge">' + escHtml(sourceLabel) + '</span><span style="font-size:12px;color:var(--text-secondary);margin-left:8px">当前状态：</span><span class="fu-badge ' + statusCls + '">' + statusLabel + '</span></div>' +
+    closedNoteHtml +
+    '<div class="adm-log-section" style="margin-top:16px"><h4>📋 跟进记录</h4>' + logsHtml + '</div>';
+
+  if (closeBtn) { closeBtn.style.display = st.status === 'closed' ? 'none' : ''; }
+  if (reopenBtn) { reopenBtn.style.display = st.status === 'closed' ? '' : 'none'; }
+
+  overlay.style.display = 'flex';
+}
+
+function closeAlertDetail() {
+  var overlay = document.getElementById('alertDetailOverlay');
+  if (overlay) overlay.style.display = 'none';
+  _currentAlertKey = null;
+}
+
+function addFollowLog() {
+  if (!_currentAlertKey) return;
+  var noteEl = document.getElementById('adm-note');
+  var note = noteEl ? noteEl.value.trim() : '';
+  if (!note) { alert('请输入跟进备注内容'); return; }
+  var st = getAlertState(_currentAlertKey);
+  if (!st.logs) st.logs = [];
+  st.logs.push({ note: note, time: new Date().toLocaleString('zh-CN'), by: '店长' });
+  if (st.status === 'pending') st.status = 'active';
+  if (noteEl) noteEl.value = '';
+  saveData();
+  updateAlertCount();
+  // Refresh detail view
+  var d = mockData;
+  var a = (d.alerts || []).find(function(x) { return x.id === _currentAlertKey; });
+  if (a) showAlertDetail(a.id, a.title, a.detail, a.level, a.source||'');
+  else {
+    // For dynamic coach alerts, re-show with stored info
+    var titleEl = document.getElementById('adm-title');
+    var rawTitle = titleEl ? titleEl.textContent.replace(/^[🔴🟡🔵]\s*/,'').replace(/\s*(已闭环|跟进中|待跟进)$/,'').trim() : '';
+    showAlertDetail(_currentAlertKey, rawTitle, '', 'warning', 'coach');
+  }
+}
+
+function closeAlertLoop() {
+  if (!_currentAlertKey) return;
+  var noteEl = document.getElementById('adm-note');
+  var note = noteEl ? noteEl.value.trim() : '已完成跟进，预警闭环';
+  var st = getAlertState(_currentAlertKey);
+  if (!st.logs) st.logs = [];
+  st.logs.push({ note: '[闭环] ' + (note || '标记闭环'), time: new Date().toLocaleString('zh-CN'), by: '店长' });
+  st.status = 'closed';
+  st.closedAt = new Date().toLocaleString('zh-CN');
+  st.closedNote = note || '已完成跟进';
+  if (noteEl) noteEl.value = '';
+  saveData();
+  updateAlertCount();
+  closeAlertDetail();
+  showToast('预警已闭环', 'success');
+  refreshData();
+}
+
+function reopenAlert() {
+  if (!_currentAlertKey) return;
+  var st = getAlertState(_currentAlertKey);
+  st.status = 'active';
+  st.closedAt = null;
+  st.closedNote = '';
+  st.logs = st.logs || [];
+  st.logs.push({ note: '[重新打开] 预警已重新激活', time: new Date().toLocaleString('zh-CN'), by: '店长' });
+  saveData();
+  updateAlertCount();
+  var d = mockData;
+  var a = (d.alerts || []).find(function(x) { return x.id === _currentAlertKey; });
+  if (a) showAlertDetail(a.id, a.title, a.detail, a.level, a.source||'');
+  showToast('预警已重新打开', 'info');
+}
+
 function updateAlertCount() {
   var d = mockData;
-  // Only count non-closed static alerts
   var count = (d.alerts || []).filter(function(a) {
     return !a.followState || a.followState.status !== 'closed';
   }).length;
-  // Count coach-specific alerts not closed
   var logs = d.alertFollowLogs || {};
   (d.coaches || []).forEach(function(c) {
     var cd = d.coachDetail[c.name];
@@ -1111,204 +1262,6 @@ function updateAlertCount() {
   var el = document.getElementById('alertCount');
   if (el) el.textContent = '⚠️ ' + count + ' 条预警';
   return count;
-}
-
-// ==================== ALERT FOLLOW-UP TRACKING ====================
-
-function getAlertState(key) {
-  var d = mockData;
-  // Static alerts store state on the object itself
-  var staticAlert = (d.alerts || []).find(function(a) { return a.id === key; });
-  if (staticAlert) return staticAlert.followState;
-  // Dynamic alerts use alertFollowLogs dict
-  if (!d.alertFollowLogs) d.alertFollowLogs = {};
-  if (!d.alertFollowLogs[key]) {
-    d.alertFollowLogs[key] = { status: 'pending', logs: [], closedAt: null, closedNote: '' };
-  }
-  return d.alertFollowLogs[key];
-}
-
-var _admCurrentKey = null;
-var _admCurrentTitle = null;
-var _admCurrentDetail = null;
-var _admCurrentLevel = null;
-var _admCurrentSource = null;
-var _admSelectedAction = '电话联系';
-
-function showAlertDetail(key, title, detail, level, source) {
-  _admCurrentKey = key;
-  _admCurrentTitle = title;
-  _admCurrentDetail = detail;
-  _admCurrentLevel = level;
-  _admCurrentSource = source;
-  _admSelectedAction = '电话联系';
-  _renderAlertDetail();
-  var overlay = document.getElementById('alertDetailOverlay');
-  if (overlay) overlay.classList.add('show');
-}
-
-function _renderAlertDetail() {
-  var state = getAlertState(_admCurrentKey);
-  var title = _admCurrentTitle || '预警详情';
-  var detail = _admCurrentDetail || '';
-  var level = _admCurrentLevel || 'warning';
-  var source = _admCurrentSource || '';
-
-  var titleEl = document.getElementById('admTitle');
-  if (titleEl) titleEl.textContent = title;
-
-  var levelLabel = level === 'danger' ? '🔴 紧急' : level === 'warning' ? '🟡 警告' : '🔵 提示';
-  var sourceLabel = source === 'ops' ? '运营端' : source === 'sales' ? '销售端' : '';
-  var statusLabel = state.status === 'closed' ? '已闭环' : state.status === 'active' ? '跟进中' : '待跟进';
-  var statusCls = state.status === 'closed' ? 'closed' : state.status === 'active' ? 'active' : 'pending';
-
-  var metaEl = document.getElementById('admMeta');
-  if (metaEl) {
-    metaEl.innerHTML = levelLabel + (sourceLabel ? ' · ' + sourceLabel : '') +
-      ' <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span>';
-  }
-
-  var actions = ['电话联系', '微信沟通', '到店拜访', '发送方案', '其他'];
-  var actionPills = actions.map(function(a) {
-    return '<span class="adm-action-pill' + (a === _admSelectedAction ? ' selected' : '') +
-      '" onclick="selectAdmAction(\'' + a + '\')">' + a + '</span>';
-  }).join('');
-
-  var logsHtml = '';
-  if (state.logs && state.logs.length > 0) {
-    logsHtml = state.logs.map(function(log) {
-      var isClosed = log.action === '闭环';
-      return '<div class="fu-log-item">' +
-        '<div class="fu-log-dot' + (isClosed ? ' close-dot' : '') + '"></div>' +
-        '<div class="fu-log-body">' +
-          '<div class="fu-log-action' + (isClosed ? ' close-action' : '') + '">' + escHtml(log.action) + '</div>' +
-          '<div class="fu-log-content">' + escHtml(log.content) + '</div>' +
-          '<div class="fu-log-time">' + escHtml(log.time) + '</div>' +
-        '</div></div>';
-    }).join('');
-  } else {
-    logsHtml = '<div class="fu-timeline-empty">暂无跟进记录，添加第一条记录吧</div>';
-  }
-
-  var closedBanner = '';
-  if (state.status === 'closed') {
-    closedBanner = '<div class="adm-closed-banner">✅ 已于 ' + escHtml(state.closedAt || '') + ' 标记闭环' +
-      (state.closedNote ? '：' + escHtml(state.closedNote) : '') +
-      ' <button class="adm-btn outline" style="margin-left:auto;font-size:11px;padding:4px 10px" onclick="reopenAlertItem()">重新打开</button></div>';
-  }
-
-  var addFormHtml = '';
-  if (state.status !== 'closed') {
-    addFormHtml = '<div class="adm-add-form">' +
-      '<h4>添加跟进记录</h4>' +
-      '<div class="adm-action-pills">' + actionPills + '</div>' +
-      '<textarea class="adm-content-input" id="admContentInput" placeholder="输入跟进内容（如：已电话联系王女士，约定本周五到店体验新课程…）"></textarea>' +
-      '<div class="adm-form-actions">' +
-        '<button class="adm-btn primary" onclick="addAlertLog()">📝 记录跟进</button>' +
-        '<button class="adm-btn success" onclick="showCloseAlertForm()">✅ 标记闭环</button>' +
-      '</div>' +
-      '<div id="admCloseForm" style="display:none;margin-top:10px;padding:10px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0">' +
-        '<div style="font-size:12px;font-weight:600;color:#065f46;margin-bottom:6px">闭环备注（可选）</div>' +
-        '<textarea class="adm-content-input" id="admCloseNote" placeholder="如：已跟进完成，会员已预约下次到店" style="min-height:48px"></textarea>' +
-        '<div style="display:flex;gap:8px;margin-top:8px">' +
-          '<button class="adm-btn success" onclick="closeAlertItem()">确认闭环</button>' +
-          '<button class="adm-btn outline" onclick="document.getElementById(\'admCloseForm\').style.display=\'none\'">取消</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }
-
-  var bodyEl = document.getElementById('admBody');
-  if (bodyEl) {
-    bodyEl.innerHTML =
-      '<div class="adm-detail-box">' + escHtml(detail) + '</div>' +
-      closedBanner +
-      '<div class="fu-timeline">' +
-        '<div class="fu-timeline-title">跟进记录 <span style="font-weight:400;color:#94a3b8">(' + (state.logs ? state.logs.length : 0) + '条)</span></div>' +
-        logsHtml +
-      '</div>' +
-      addFormHtml;
-  }
-}
-
-function selectAdmAction(action) {
-  _admSelectedAction = action;
-  _renderAlertDetail();
-  // Restore textarea value
-}
-
-function showCloseAlertForm() {
-  var form = document.getElementById('admCloseForm');
-  if (form) form.style.display = 'block';
-}
-
-function addAlertLog() {
-  var input = document.getElementById('admContentInput');
-  var content = input ? input.value.trim() : '';
-  if (!content) { showToast('请输入跟进内容', 'error'); return; }
-  var state = getAlertState(_admCurrentKey);
-  if (!state.logs) state.logs = [];
-  var now = new Date();
-  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
-    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  state.logs.push({ action: _admSelectedAction, content: content, time: timeStr });
-  if (state.status === 'pending') state.status = 'active';
-  logOperation('add', '跟进记录', '【' + _admCurrentTitle + '】' + _admSelectedAction + ': ' + content.slice(0, 30));
-  saveData();
-  updateAlertCount();
-  _renderAlertDetail();
-  showToast('✅ 跟进记录已保存', 'success');
-}
-
-function closeAlertItem() {
-  var noteEl = document.getElementById('admCloseNote');
-  var note = noteEl ? noteEl.value.trim() : '';
-  var state = getAlertState(_admCurrentKey);
-  var now = new Date();
-  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
-    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  if (!state.logs) state.logs = [];
-  state.logs.push({ action: '闭环', content: note || '已闭环处理', time: timeStr });
-  state.status = 'closed';
-  state.closedAt = timeStr;
-  state.closedNote = note;
-  logOperation('edit', '预警闭环', '【' + _admCurrentTitle + '】已标记闭环' + (note ? ': ' + note.slice(0,30) : ''));
-  saveData();
-  updateAlertCount();
-  _renderAlertDetail();
-  // Refresh alerts panel if open
-  if (document.getElementById('alertsOverlay')) {
-    closeAlertsPanel();
-    showAlertsPanel();
-  }
-  showToast('✅ 已闭环，预警计数已更新', 'success');
-}
-
-function reopenAlertItem() {
-  var state = getAlertState(_admCurrentKey);
-  state.status = 'active';
-  state.closedAt = null;
-  state.closedNote = '';
-  var now = new Date();
-  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
-    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  if (!state.logs) state.logs = [];
-  state.logs.push({ action: '重新打开', content: '预警已重新打开，继续跟进', time: timeStr });
-  logOperation('edit', '预警重开', '【' + _admCurrentTitle + '】重新打开跟进');
-  saveData();
-  updateAlertCount();
-  _renderAlertDetail();
-  showToast('🔄 预警已重新打开', 'info');
-}
-
-function closeAlertDetailModal() {
-  var overlay = document.getElementById('alertDetailOverlay');
-  if (overlay) overlay.classList.remove('show');
-  // Refresh panels if open
-  if (document.getElementById('alertsOverlay')) {
-    closeAlertsPanel();
-    showAlertsPanel();
-  }
 }
 
 // ==================== GLOBAL SEARCH ====================
@@ -2984,7 +2937,7 @@ function renderRenewalDrillDown(d, cat, leads) {
                   <td>${l.contacted?'<span class="lead-status follow">✅ 已联系</span>':'<span class="lead-status lost">❌ 未联系</span>'}</td>
                   <td>${l.renewed?'<span class="lead-status won">✅ 已续单</span>':l.contacted?'<span class="lead-status follow">🟡 跟进中</span>':'<span class="lead-status lost">🔴 未续</span>'}</td>
                   <td>${l.amount>0?'¥'+l.amount.toLocaleString():'--'}</td>
-                  <td>${!l.renewed?`<button class="import-btn sm" onclick="createRenewalFollowUp(this,'${l.name}')">跟进</button>`:''}</td>
+                  <td>${!l.renewed?`<button class="import-btn sm" onclick="showAlertDetail('coach:${l.coach}:renewal:${l.name}','${l.coach} - ${l.name} 续课跟进','剩余${l.remain}节，余额¥${l.balance||0}，到期日${l.expireDate}','warning','sales')">跟进</button>`:''}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -3131,11 +3084,8 @@ function renderOps() {
           return `
           <div class="diagnosis-item" style="${st.status==='closed'?'opacity:.6':''}">
             <div class="diagnosis-icon ${a.level}">${a.level==='danger'?'🔴':'🟡'}</div>
-            <div class="diagnosis-body">
-              <div class="title">${a.title} <span class="fu-badge ${statusCls}">${statusLabel}</span></div>
-              <div class="detail">${a.detail}</div>
-            </div>
-            <button class="diagnosis-action ${a.actionType}" onclick="showAlertDetail('${a.id}','${safeTitle}','${safeDetail}','${a.level}','${a.source||''}')">${btnLabel}</button>
+            <div class="diagnosis-body"><div class="title">${a.title} <span class="fu-badge ${statusCls}">${statusLabel}</span></div><div class="detail">${a.detail}</div></div>
+            <button class="diagnosis-action ${a.actionType}" onclick="showAlertDetail('${a.id}','${safeTitle}','${safeDetail}','${a.level}','ops')">${btnLabel}</button>
           </div>`;
         }).join('')}
       </div>
@@ -3159,16 +3109,24 @@ function renderOps() {
           <table class="data-table">
             <thead><tr><th>会员</th><th>剩余课时</th><th>耗课率</th><th>最后到店</th><th>状态</th><th>操作</th></tr></thead>
             <tbody>
-              ${(() => { const ago = new Date(); ago.setDate(ago.getDate()-30); const agoStr = ago.toISOString().slice(0,10); return d.members.filter(m=>m.consumeRate<50||(m.lastVisit&&m.lastVisit<agoStr)); })().map(m=>`
+              ${d.members.filter(m=>{const t30=new Date();t30.setDate(t30.getDate()-30);const t30s=t30.toISOString().slice(0,10);return m.consumeRate<50||(m.lastVisit&&m.lastVisit<t30s);}).map(m=>{
+                const safeN=(m.name||'').replace(/'/g,"\\'");
+                const safeS=(m.stage||'').replace(/'/g,"\\'");
+                const safeD=('耗课率'+m.consumeRate+'%，最后到店'+m.lastVisit+'，剩余'+m.totalRemain+'节').replace(/'/g,"\\'");
+                const lvl=m.consumeRate<40?'danger':'warning';
+                return `
                 <tr>
                   <td><strong>${m.name}</strong></td>
                   <td>${m.totalRemain}节</td>
                   <td>${formatPct(m.consumeRate)}</td>
                   <td>${m.lastVisit}</td>
                   <td><span class="tag ${m.consumeRate<40?'tag-high':'tag-mid'}">${m.stage}</span></td>
-                  <td><button style="padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:11px" onclick="showMemberDetail('${m.id}')">详情</button></td>
-                </tr>
-              `).join('')}
+                  <td style="display:flex;gap:4px;flex-wrap:wrap">
+                    <button style="padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:11px" onclick="showMemberDetail('${m.id}')">详情</button>
+                    <button style="padding:3px 8px;border-radius:4px;border:none;background:var(--warning);color:#fff;cursor:pointer;font-size:11px" onclick="showAlertDetail('ops:risk:${m.id}','风险会员 - ${m.name}','${safeD}，阶段：${safeS}','${lvl}','ops')">跟进</button>
+                  </td>
+                </tr>`;
+              }).join('')}
             </tbody>
           </table>
         </div>
@@ -3183,21 +3141,21 @@ function renderOps() {
         const cd = d.coachDetail[c.name] || {};
         const classVol = cd.classVolume || {private:0,small:0,featured:0,tuan:0};
         const monthTotal = classVol.private + classVol.small + classVol.featured + classVol.tuan;
-        const periodLabel = currentTimePeriod === 'day' ? '今日' : '本周';
-        return '<div class="stat-card" style="cursor:pointer" onclick="showCoachDetail(\'' + c.name + '\')">'
-          + '<div class="label">👨‍🏫 ' + c.name + ' <span style="font-size:10px;color:var(--text-secondary)">点击查看详情</span></div>'
-          + '<div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">'
-          + '<span style="font-size:12px;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:10px">私教 ' + cc.private + '节</span>'
-          + '<span style="font-size:12px;background:var(--success-light);color:var(--success);padding:2px 8px;border-radius:10px">小班 ' + cc.small + '节</span>'
-          + '<span style="font-size:12px;background:var(--warning-light);color:var(--warning);padding:2px 8px;border-radius:10px">特色 ' + cc.featured + '节</span>'
-          + '<span style="font-size:12px;background:var(--info-light);color:var(--info);padding:2px 8px;border-radius:10px">团课 ' + cc.tuan + '节</span>'
-          + '</div>'
-          + '<div class="change" style="margin-top:6px">' + periodLabel + '合计 ' + total + '节 | 本月累计 ' + monthTotal + '节 | 耗课率 ' + c.consumeRate + '%</div>'
-          + '</div>';
+        return `
+        <div class="stat-card" style="cursor:pointer" onclick="showCoachDetail('\${c.name}')">
+          <div class="label">👨‍🏫 \${c.name} <span style="font-size:10px;color:var(--text-secondary)">点击查看详情</span></div>
+          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+            <span style="font-size:12px;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:10px">私教 \${cc.private}节</span>
+            <span style="font-size:12px;background:var(--success-light);color:var(--success);padding:2px 8px;border-radius:10px">小班 \${cc.small}节</span>
+            <span style="font-size:12px;background:var(--warning-light);color:var(--warning);padding:2px 8px;border-radius:10px">特色 \${cc.featured}节</span>
+            <span style="font-size:12px;background:var(--info-light);color:var(--info);padding:2px 8px;border-radius:10px">团课 \${cc.tuan}节</span>
+          </div>
+          <div class="change" style="margin-top:6px">\${currentTimePeriod==='day'?'今日':'本周'}合计 \${total}节 | 本月累计 \${monthTotal}节 | 耗课率 \${c.consumeRate}%</div>
+        </div>`;
       }).join('')}
     </div>
     <div class="chart-row two">
-      <div class="chart-card"><h3>📊 教练耗课对比（按课程类型 - ${getPeriodLabel(currentTimePeriod)}）</h3><div class="chart-box" id="opsCoachConsumeBar" style="height:320px"></div></div>
+      <div class="chart-card"><h3>📊 教练耗课对比（按课程类型 - \${getPeriodLabel(currentTimePeriod)}）</h3><div class="chart-box" id="opsCoachConsumeBar" style="height:320px"></div></div>
       <div class="chart-card"><h3>🥧 教练耗课占比</h3><div class="chart-box" id="opsCoachConsumePie" style="height:320px"></div></div>
     </div>
     <!-- Coach Consumption Detail Table -->
@@ -3551,9 +3509,9 @@ function renderAllCoachesOverview(d, alertMap) {
             <span>⭐ ${c.satisfaction}</span>
           </div>
           <div class="alert-row">
-            ${am.lowFreq > 0 ? `<span class="alert-pill red">🔴 ${am.lowFreq} 低频预警</span>` : ''}
-            ${am.trialPending > 0 ? `<span class="alert-pill orange">🟡 ${am.trialPending} 体验待转化</span>` : ''}
-            ${am.renewalUrgent > 0 ? `<span class="alert-pill red">🔴 ${am.renewalUrgent} 余额紧急</span>` : ''}
+            ${am.lowFreq > 0 ? `<span class="alert-pill red" style="cursor:pointer" onclick="event.stopPropagation();showCoachAlertList('${c.name}','member')">🔴 ${am.lowFreq} 低频预警</span>` : ''}
+            ${am.trialPending > 0 ? `<span class="alert-pill orange" style="cursor:pointer" onclick="event.stopPropagation();showCoachAlertList('${c.name}','trial')">🟡 ${am.trialPending} 体验待转化</span>` : ''}
+            ${am.renewalUrgent > 0 ? `<span class="alert-pill red" style="cursor:pointer" onclick="event.stopPropagation();showCoachAlertList('${c.name}','renewal')">🔴 ${am.renewalUrgent} 余额紧急</span>` : ''}
             ${am.renewalNormal > 0 ? `<span class="alert-pill blue">🔵 ${am.renewalNormal} 待续课</span>` : ''}
             ${totalAlerts === 0 ? '<span class="alert-pill" style="background:#d1fae5;color:#065f46">✅ 无预警</span>' : ''}
           </div>
@@ -3651,7 +3609,7 @@ function renderCoachRevenueTab(c, cd) {
                 <tr>
                   <td><strong>${m.name}</strong></td><td>${m.attended}</td><td>${m.total/4}</td><td>${m.freq}</td>
                   <td>${m.alert ? '<span class="tag tag-high">⚠️ 低频预警</span>' : '<span class="tag tag-low">✅ 正常</span>'}</td>
-                  <td>${m.alert ? '<button class="import-btn sm" style="background:var(--warning)" onclick="alert(\'已发送唤醒提醒给'+m.name+'\')">唤醒提醒</button>' : '<button class="import-btn sm outline">查看详情</button>'}</td>
+                  <td>${m.alert ? `<button class="import-btn sm" style="background:var(--warning)" onclick="showAlertDetail('coach:${c.name}:member:${m.name}','${c.name} - ${m.name} 低频预警','${m.name}月均到店仅${m.freq}次/周，低于预警线2次/周','warning','coach')">唤醒提醒</button>` : '<button class="import-btn sm outline">查看详情</button>'}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -3761,8 +3719,8 @@ function renderCoachRenewalTab(c, cd) {
               <div style="font-size:11px;color:var(--text-secondary)">${r.suggestion}</div>
             </div>
             <div style="display:flex;gap:6px">
-              ${r.status==='urgent' ? '<button class="import-btn sm" style="background:var(--danger)" onclick="alert(\'紧急续课提醒已发送给'+r.name+'\')">紧急跟进</button>' : ''}
-              ${r.status==='normal' ? '<button class="import-btn sm" style="background:var(--warning);color:#fff" onclick="alert(\'续课沟通已安排：'+r.name+'\')">安排沟通</button>' : ''}
+              ${r.status==='urgent' ? `<button class="import-btn sm" style="background:var(--danger)" onclick="showAlertDetail('coach:${c.name}:renewal:${r.name}','${c.name} - ${r.name} 余额紧急预警','剩余课时${r.balance}节，余额¥${r.remaining}已不足预警线','danger','coach')">紧急跟进</button>` : ''}
+              ${r.status==='normal' ? `<button class="import-btn sm" style="background:var(--warning);color:#fff" onclick="showAlertDetail('coach:${c.name}:renewal:${r.name}','${c.name} - ${r.name} 续课跟进','${r.suggestion}','warning','coach')">安排沟通</button>` : ''}
               ${r.status==='done' ? '<span class="tag tag-low">✅ 已完成</span>' : ''}
               <button class="import-btn sm outline" onclick="alert(\'查看'+r.name+'案例输出\')">案例</button>
             </div>
@@ -3983,7 +3941,10 @@ function renderMember() {
                 <td>${m.upsellPotential?'<span class="tag tag-low">是</span>':'否'}</td>
                 <td><span class="tag ${m.wakePriority==='高'?'tag-high':'tag-low'}">${m.wakePriority}</span></td>
                 <td>${m.stage}</td>
-                <td><button style="padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:11px" onclick="event.stopPropagation();editMember('${m.id}')">编辑</button></td>
+                <td style="display:flex;gap:4px;flex-wrap:wrap">
+                  <button style="padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:11px" onclick="event.stopPropagation();editMember('${m.id}')">编辑</button>
+                  ${(m.renewWindow||m.wakePriority==='高')?`<button style="padding:3px 8px;border-radius:4px;border:none;background:${m.wakePriority==='高'?'var(--danger)':'var(--warning)'};color:#fff;cursor:pointer;font-size:11px" onclick="event.stopPropagation();showAlertDetail('member:${m.id}','会员跟进 - ${m.name}','${m.stage}阶段，耗课率${m.consumeRate}%，最后到店${m.lastVisit}，${m.renewWindow?'处于续课窗口期，':''} ${m.wakePriority==='高'?'唤醒优先级高':''}','${m.wakePriority==='高'?'danger':'warning'}','ops')">跟进</button>`:''}
+                </td>
               </tr>
             `).join('')}
           </tbody>
@@ -4251,43 +4212,7 @@ function showCoachDetail(name) {
 }
 
 function editChannel(name) {
-  const ch = mockData.channels.find(function(c) { return c.name === name; });
-  if (!ch) return;
-  showQuickEditForm('编辑渠道 — ' + name, [
-    { key: 'inflow',     label: '资源流入量',   value: ch.inflow,     type: 'number' },
-    { key: 'conversion', label: '转化率(%)',     value: ch.conversion, type: 'number' },
-    { key: 'unitPrice',  label: '客单价(¥)',     value: ch.unitPrice,  type: 'number' },
-    { key: 'inflowLast', label: '上期流入量',    value: ch.inflowLast, type: 'number' },
-    { key: 'convLast',   label: '上期转化率(%)', value: ch.convLast,   type: 'number' }
-  ], function(vals) {
-    ch.inflow     = parseFloat(vals.inflow)     || ch.inflow;
-    ch.conversion = parseFloat(vals.conversion) || ch.conversion;
-    ch.unitPrice  = parseInt(vals.unitPrice)    || ch.unitPrice;
-    ch.inflowLast = parseFloat(vals.inflowLast) || ch.inflowLast;
-    ch.convLast   = parseFloat(vals.convLast)   || ch.convLast;
-    logOperation('edit', '渠道', '编辑渠道: ' + name);
-    notifyChange();
-  });
-}
-
-function createFollowUpTask(btn, e) {
-  if (e) e.stopPropagation();
-  var diagItem = btn.closest ? btn.closest('.diagnosis-item') : null;
-  var title = diagItem ? (diagItem.querySelector('.title') || {}).textContent : '';
-  title = title ? title.replace(/运营端|销售端/g, '').trim() : '跟进任务';
-  logOperation('add', '跟进任务', '创建跟进任务: ' + title);
-  showToast('✅ 已创建跟进任务：' + title.slice(0, 20), 'success');
-  btn.disabled = true;
-  btn.textContent = '✅ 已跟进';
-  btn.style.opacity = '0.6';
-}
-
-function createRenewalFollowUp(btn, memberName) {
-  logOperation('add', '跟进任务', '创建续课跟进任务: ' + memberName);
-  showToast('✅ 已创建续课跟进任务：' + memberName, 'success');
-  btn.disabled = true;
-  btn.textContent = '✅ 已跟进';
-  btn.style.opacity = '0.6';
+  alert(`🔧 编辑"${name}"渠道数据\n\n此功能允许店长直接修改各渠道的资源流入量、转化率、客单价等数据。修改后将自动重新计算所有相关指标。`);
 }
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
@@ -5332,12 +5257,11 @@ document.addEventListener('DOMContentLoaded', function() {
   updateAlertCount();
   renderPortal('overview');
   setTimeout(checkBirthdays, 500);
-
-  // Click-outside to close alert detail modal
-  var admOverlay = document.getElementById('alertDetailOverlay');
-  if (admOverlay) {
-    admOverlay.addEventListener('click', function(e) {
-      if (e.target === admOverlay) closeAlertDetailModal();
+  // Alert detail overlay click-outside handler
+  var adOverlay = document.getElementById('alertDetailOverlay');
+  if (adOverlay) {
+    adOverlay.addEventListener('click', function(e) {
+      if (e.target === adOverlay) closeAlertDetail();
     });
   }
 });
@@ -5502,7 +5426,7 @@ function saveTrialModal() {
   
   syncTrialAmountsToPeriods();
   syncCoachStats();
-  logOperation('edit', '体验课', '编辑体验课: ' + (t.name||'未知'), trialModalState.coachName);
+  logOperation('edit', '体验课', '编辑体验课: ' + (t.name||'未知'), cn);
   refreshData();
   showToast('体验课信息已保存', 'success');
 }
