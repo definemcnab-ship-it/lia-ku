@@ -3722,7 +3722,7 @@ function renderCoachRenewalTab(c, cd) {
               ${r.status==='urgent' ? `<button class="import-btn sm" style="background:var(--danger)" onclick="showAlertDetail('coach:${c.name}:renewal:${r.name}','${c.name} - ${r.name} 余额紧急预警','剩余课时${r.balance}节，余额¥${r.remaining}已不足预警线','danger','coach')">紧急跟进</button>` : ''}
               ${r.status==='normal' ? `<button class="import-btn sm" style="background:var(--warning);color:#fff" onclick="showAlertDetail('coach:${c.name}:renewal:${r.name}','${c.name} - ${r.name} 续课跟进','${r.suggestion}','warning','coach')">安排沟通</button>` : ''}
               ${r.status==='done' ? '<span class="tag tag-low">✅ 已完成</span>' : ''}
-              <button class="import-btn sm outline" onclick="alert(\'查看'+r.name+'案例输出\')">案例</button>
+              <button class="import-btn sm outline" onclick="showMemberCaseModal('${c.name}','${r.name}')">案例</button>
             </div>
           </div>
         `).join('')}
@@ -4022,12 +4022,45 @@ function showMemberDetail(id) {
       ${m.upsellPotential ? '<p style="color:var(--info);font-size:13px">💡 该会员有升单潜力，可推荐从现有课程升级到更高价值的私教课包。</p>' : ''}
       ${m.consumeRate>80 ? '<p style="color:var(--success);font-size:13px">✅ 该会员耗课率良好，保持当前跟进节奏即可。</p>' : ''}
     </div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap">
+      ${(m.renewWindow||m.wakePriority==='高'||m.consumeRate<50) ? `<button style="padding:7px 14px;border-radius:8px;background:${m.consumeRate<40?'var(--danger)':'var(--warning)'};color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:600" onclick="document.getElementById('modalOverlay').classList.remove('show');showAlertDetail('member:${m.id}','会员跟进 - ${m.name}','${m.stage}，耗课率${m.consumeRate}%，最后到店${m.lastVisit}${m.renewWindow?'，处于续课窗口期':''}${m.wakePriority==='高'?'，唤醒优先级高':''}','${m.consumeRate<40?'danger':'warning'}','ops')">📋 创建跟进任务</button>` : ''}
+      <button style="padding:7px 14px;border-radius:8px;background:#fff;color:var(--text);border:1px solid var(--border);cursor:pointer;font-size:12px" onclick="closeModal();editMember('${m.id}')">✏️ 编辑档案</button>
+      <button style="padding:7px 14px;border-radius:8px;background:#fff;color:var(--text);border:1px solid var(--border);cursor:pointer;font-size:12px" onclick="closeModal()">关闭</button>
+    </div>
   `;
   document.getElementById('modalOverlay').classList.add('show');
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function showMemberCaseModal(coachName, memberName) {
+  var d = mockData;
+  var cd = d.coachDetail[coachName];
+  var m = (cd && cd.members) ? cd.members.find(function(x) { return x.name === memberName; }) : null;
+  var globalM = d.members.find(function(x) { return x.name === memberName; });
+  var caseItems = [
+    { type: '体态改善', effect: '体脂率下降' + (globalM ? Math.round(globalM.consumeRate * 0.05 + 2) : 3) + '%，体态评分提升一级', data: '训练前/后对比照', scene: '续课沟通展示' },
+    { type: '运动习惯', effect: '月均到店' + (globalM ? globalM.monthlyVisits : 8) + '次，连续训练' + Math.round(Math.random() * 8 + 4) + '周', data: '打卡记录截图', scene: '朋友圈内容素材' },
+    { type: '功能提升', effect: '核心力量+30%，平衡性显著改善', data: '测试数据记录', scene: '教练能力展示' }
+  ];
+  document.getElementById('modalTitle').textContent = '案例输出 — ' + memberName + ' (' + coachName + ')';
+  document.getElementById('modalBody').innerHTML =
+    '<div style="margin-bottom:16px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px">' +
+    '💡 案例输出可用于续课沟通、朋友圈内容和教练能力展示，建议定期更新。</div>' +
+    '<table class="data-table"><thead><tr><th>案例类型</th><th>效果描述</th><th>对比数据</th><th>使用场景</th></tr></thead><tbody>' +
+    caseItems.map(function(ci) {
+      return '<tr><td><strong>' + ci.type + '</strong></td><td>' + ci.effect + '</td><td>' + ci.data + '</td><td>' + ci.scene + '</td></tr>';
+    }).join('') +
+    '</tbody></table>' +
+    '<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">' +
+    '<button style="padding:7px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:600" ' +
+    'onclick="document.getElementById(\'modalOverlay\').classList.remove(\'show\');' +
+    'showAlertDetail(\'coach:' + coachName + ':renewal:' + memberName + '\',\'' + coachName + ' - ' + memberName + ' 续课跟进\',\'案例已备好，安排续课沟通\',\'warning\',\'coach\')">📋 同步到跟进记录</button>' +
+    '<button style="padding:7px 14px;border-radius:8px;background:#fff;color:var(--text);border:1px solid var(--border);cursor:pointer;font-size:12px" onclick="closeModal()">关闭</button>' +
+    '</div>';
+  document.getElementById('modalOverlay').classList.add('show');
 }
 
 function editMember(id) {
