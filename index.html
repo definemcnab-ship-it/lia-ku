@@ -4212,7 +4212,23 @@ function showCoachDetail(name) {
 }
 
 function editChannel(name) {
-  alert(`🔧 编辑"${name}"渠道数据\n\n此功能允许店长直接修改各渠道的资源流入量、转化率、客单价等数据。修改后将自动重新计算所有相关指标。`);
+  var ch = (mockData.channels || []).find(function(c) { return c.name === name; });
+  if (!ch) return;
+  showQuickEditForm('编辑渠道 — ' + name, [
+    { key: 'inflow',     label: '资源流入量',   value: ch.inflow,     type: 'number' },
+    { key: 'conversion', label: '转化率(%)',     value: ch.conversion, type: 'number' },
+    { key: 'unitPrice',  label: '客单价(¥)',     value: ch.unitPrice,  type: 'number' },
+    { key: 'inflowLast', label: '上期流入量',    value: ch.inflowLast, type: 'number' },
+    { key: 'convLast',   label: '上期转化率(%)', value: ch.convLast,   type: 'number' }
+  ], function(vals) {
+    ch.inflow = parseFloat(vals.inflow)||ch.inflow;
+    ch.conversion = parseFloat(vals.conversion)||ch.conversion;
+    ch.unitPrice = parseInt(vals.unitPrice)||ch.unitPrice;
+    ch.inflowLast = parseFloat(vals.inflowLast)||ch.inflowLast;
+    ch.convLast = parseFloat(vals.convLast)||ch.convLast;
+    logOperation('edit', '渠道', '编辑渠道: ' + name);
+    notifyChange();
+  });
 }
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
