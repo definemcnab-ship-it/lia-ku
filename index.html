@@ -391,10 +391,59 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .alerts-panel { max-height: 60vh; overflow-y: auto; }
 .alerts-panel .alert-item { padding: 12px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 10px; align-items: flex-start; }
 .alerts-panel .alert-item:last-child { border-bottom: none; }
+.alerts-panel .alert-item.closed { opacity: 0.55; }
 .alerts-panel .alert-level { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
 .alerts-panel .alert-level.danger { background: #ef4444; }
 .alerts-panel .alert-level.warning { background: #f59e0b; }
 .alerts-panel .alert-level.info { background: #3b82f6; }
+
+/* Alert follow-up status badges */
+.fu-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+.fu-badge.pending  { background: #fef3c7; color: #92400e; }
+.fu-badge.active   { background: #dbeafe; color: #1e40af; }
+.fu-badge.closed   { background: #d1fae5; color: #065f46; }
+
+/* Alert Detail Modal */
+.alert-detail-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.45); z-index: 350; align-items: center; justify-content: center; }
+.alert-detail-overlay.show { display: flex; }
+.alert-detail-modal { background: #fff; border-radius: 16px; width: 92%; max-width: 560px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.adm-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.adm-header-left { flex: 1; }
+.adm-header h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px; line-height: 1.3; }
+.adm-header .adm-meta { font-size: 11px; color: #64748b; }
+.adm-close { width: 32px; height: 32px; border-radius: 8px; border: none; background: #f1f5f9; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+.adm-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
+.adm-detail-box { background: #f8fafc; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #475569; line-height: 1.6; margin-bottom: 16px; }
+.adm-closed-banner { background: #d1fae5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #065f46; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+/* Timeline */
+.fu-timeline { margin-bottom: 16px; }
+.fu-timeline-title { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+.fu-timeline-empty { font-size: 12px; color: #94a3b8; text-align: center; padding: 16px 0; }
+.fu-log-item { display: flex; gap: 10px; margin-bottom: 10px; }
+.fu-log-dot { width: 8px; height: 8px; border-radius: 50%; background: #6366f1; flex-shrink: 0; margin-top: 5px; }
+.fu-log-dot.close-dot { background: #10b981; }
+.fu-log-body { flex: 1; }
+.fu-log-action { font-size: 11px; font-weight: 600; color: #6366f1; margin-bottom: 2px; }
+.fu-log-action.close-action { color: #10b981; }
+.fu-log-content { font-size: 12px; color: #334155; line-height: 1.5; }
+.fu-log-time { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+/* Add log form */
+.adm-add-form { border-top: 1px solid #e2e8f0; padding-top: 14px; }
+.adm-add-form h4 { font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 10px; }
+.adm-action-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.adm-action-pill { padding: 4px 10px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 11px; cursor: pointer; transition: all .15s; }
+.adm-action-pill.selected, .adm-action-pill:hover { background: #6366f1; color: #fff; border-color: #6366f1; }
+.adm-content-input { width: 100%; box-sizing: border-box; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; font-size: 12px; resize: vertical; min-height: 60px; font-family: inherit; color: #334155; }
+.adm-content-input:focus { outline: none; border-color: #6366f1; }
+.adm-form-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.adm-btn { padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.adm-btn.primary { background: #6366f1; color: #fff; }
+.adm-btn.primary:hover { background: #4f46e5; }
+.adm-btn.success { background: #10b981; color: #fff; }
+.adm-btn.success:hover { background: #059669; }
+.adm-btn.outline { background: #fff; color: #475569; border: 1px solid #e2e8f0; }
+.adm-btn.outline:hover { background: #f8fafc; }
+.adm-btn:disabled { opacity: .5; cursor: default; }
 
 </style>
 </head>
@@ -472,6 +521,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <div class="site-footer">PowerFit 智慧门店经营管理系统 v2.0 | 数据驱动经营决策</div>
 </main>
+
+<!-- Alert Detail Modal -->
+<div class="alert-detail-overlay" id="alertDetailOverlay">
+  <div class="alert-detail-modal" id="alertDetailModal">
+    <div class="adm-header">
+      <div class="adm-header-left">
+        <h3 id="admTitle">预警详情</h3>
+        <div class="adm-meta" id="admMeta"></div>
+      </div>
+      <button class="adm-close" onclick="closeAlertDetailModal()">✕</button>
+    </div>
+    <div class="adm-body" id="admBody"></div>
+  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
@@ -593,12 +656,13 @@ const mockData = {
     { date:'2026-05-13',time:'15:30',member:'吴女士',type:'私教课',coach:'张教练',hours:1,content:'体态矫正',feedback:'非常满意' }
   ],
   alerts: [
-    { level:'danger', source:'ops', title:'王女士连续24天未到店', detail:'该会员剩余78课时，总耗课率仅35%，超过常规预警线。如不干预，预计将进入沉睡状态，存在退费风险。', action:'立即跟进', actionType:'danger' },
-    { level:'danger', source:'ops', title:'周女士月均到店仅3次', detail:'该会员购买60课时的高课包，但耗课率仅30%，属于典型的"买而不练"型会员。建议安排体验升级课程。', action:'安排体验课', actionType:'danger' },
-    { level:'warning', source:'ops', title:'孙女士和刘女士课时即将到期', detail:'2位会员剩余课时均不足3节，且处于续课窗口期。历史上这类会员续课率为45%，建议本周内完成续课沟通。', action:'安排续课沟通', actionType:'warn' },
-    { level:'warning', source:'sales', title:'王教练本月续课率(65%)低于目标', detail:'王教练续课率连续2个月低于70%的目标值(75%)，与门店均值(76%)差距明显。需关注其跟进质量和会员满意度。', action:'查看详情', actionType:'warn' },
-    { level:'info', source:'sales', title:'抖音渠道转化率(12.3%)有提升空间', detail:'抖音资源流入量增长18%，但转化率仅12.3%，低于大众点评(18.5%)和转介绍(32.6%)。建议优化到店体验流程。', action:'优化方案', actionType:'warn' }
+    { id:'A001', level:'danger', source:'ops', title:'王女士连续24天未到店', detail:'该会员剩余78课时，总耗课率仅35%，超过常规预警线。如不干预，预计将进入沉睡状态，存在退费风险。', action:'立即跟进', actionType:'danger', followState:{ status:'pending', logs:[], closedAt:null, closedNote:'' } },
+    { id:'A002', level:'danger', source:'ops', title:'周女士月均到店仅3次', detail:'该会员购买60课时的高课包，但耗课率仅30%，属于典型的"买而不练"型会员。建议安排体验升级课程。', action:'安排体验课', actionType:'danger', followState:{ status:'pending', logs:[], closedAt:null, closedNote:'' } },
+    { id:'A003', level:'warning', source:'ops', title:'孙女士和刘女士课时即将到期', detail:'2位会员剩余课时均不足3节，且处于续课窗口期。历史上这类会员续课率为45%，建议本周内完成续课沟通。', action:'安排续课沟通', actionType:'warn', followState:{ status:'pending', logs:[], closedAt:null, closedNote:'' } },
+    { id:'A004', level:'warning', source:'sales', title:'王教练本月续课率(65%)低于目标', detail:'王教练续课率连续2个月低于70%的目标值(75%)，与门店均值(76%)差距明显。需关注其跟进质量和会员满意度。', action:'查看详情', actionType:'warn', followState:{ status:'pending', logs:[], closedAt:null, closedNote:'' } },
+    { id:'A005', level:'info', source:'sales', title:'抖音渠道转化率(12.3%)有提升空间', detail:'抖音资源流入量增长18%，但转化率仅12.3%，低于大众点评(18.5%)和转介绍(32.6%)。建议优化到店体验流程。', action:'优化方案', actionType:'warn', followState:{ status:'pending', logs:[], closedAt:null, closedNote:'' } }
   ],
+  alertFollowLogs: {},
   // Coach-specific data
   coachDetail: {
     '张教练': {
@@ -933,12 +997,14 @@ function showAlertsPanel() {
   var alerts = d.alerts || [];
   var allAlerts = [];
 
-  // Gather coach-specific alerts
+  // Gather coach-specific alerts with follow state keys
+  var logs = d.alertFollowLogs || {};
   d.coaches.forEach(function(c) {
     var cd = d.coachDetail[c.name];
     if (!cd) return;
     cd.members.filter(function(m) { return m.alert; }).forEach(function(m) {
-      allAlerts.push({ level: 'warning', title: c.name + ' - ' + m.name + ' 低频预警', detail: m.name + '月均到店仅' + m.freq + '次/周' });
+      var key = 'coach:' + c.name + ':member:' + m.name;
+      allAlerts.push({ key: key, level: 'warning', title: c.name + ' - ' + m.name + ' 低频预警', detail: m.name + '月均到店仅' + m.freq + '次/周', source: 'ops', coachName: c.name });
     });
     cd.trials.filter(function(t) { return t.status === 'pending'; }).forEach(function(t) {
       var todayStr = new Date().toISOString().slice(0,10);
@@ -947,10 +1013,12 @@ function showAlertsPanel() {
       if (fu.nextDay && fu.nextDay.date && !fu.nextDay.done && todayStr > fu.nextDay.date) overdue = true;
       if (fu.threeDay && fu.threeDay.date && !fu.threeDay.done && todayStr > fu.threeDay.date) overdue = true;
       if (fu.oneMonth && fu.oneMonth.date && !fu.oneMonth.done && todayStr > fu.oneMonth.date) overdue = true;
-      allAlerts.push({ level: overdue ? 'danger' : 'info', title: c.name + ' - ' + t.name + ' 体验待转化', detail: t.type + '，' + t.date + '上课，状态：' + (t.status === 'pending' ? '跟进中' : t.status) + (overdue ? '（回访逾期！）' : '') });
+      var key = 'coach:' + c.name + ':trial:' + t.name;
+      allAlerts.push({ key: key, level: overdue ? 'danger' : 'info', title: c.name + ' - ' + t.name + ' 体验待转化', detail: t.type + '，' + t.date + '上课，状态：' + (t.status === 'pending' ? '跟进中' : t.status) + (overdue ? '（回访逾期！）' : ''), source: 'sales', coachName: c.name });
     });
     cd.renewals.filter(function(r) { return r.status === 'urgent'; }).forEach(function(r) {
-      allAlerts.push({ level: 'danger', title: c.name + ' - ' + r.name + ' 余额紧急预警', detail: '剩余课时' + r.balance + '节，余额¥' + r.remaining + '已不足预警线' });
+      var key = 'coach:' + c.name + ':renewal:' + r.name;
+      allAlerts.push({ key: key, level: 'danger', title: c.name + ' - ' + r.name + ' 余额紧急预警', detail: '剩余课时' + r.balance + '节，余额¥' + r.remaining + '已不足预警线', source: 'ops', coachName: c.name });
     });
   });
 
@@ -961,9 +1029,11 @@ function showAlertsPanel() {
   overlay.onclick = function(e) { if (e.target === overlay) closeAlertsPanel(); };
 
   var totalAlerts = alerts.length + allAlerts.length;
+  var openCount = alerts.filter(function(a) { return !a.followState || a.followState.status !== 'closed'; }).length +
+    allAlerts.filter(function(a) { var st = logs[a.key]; return !st || st.status !== 'closed'; }).length;
   var html = '<div class="oplog-panel">';
   html += '<div class="oplog-header">';
-  html += '<h3>⚠️ 预警详情 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">— 共 ' + totalAlerts + ' 条</span></h3>';
+  html += '<h3>⚠️ 预警详情 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">— 共 ' + totalAlerts + ' 条，' + openCount + ' 条待处理</span></h3>';
   html += '<button style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:12px" onclick="closeAlertsPanel()">✕ 关闭</button>';
   html += '</div>';
   html += '<div class="alerts-panel">';
@@ -973,19 +1043,33 @@ function showAlertsPanel() {
   } else {
     // System alerts first
     alerts.forEach(function(a) {
-      html += '<div class="alert-item">';
+      var st = a.followState || { status: 'pending' };
+      var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+      var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+      var isClosed = st.status === 'closed';
+      var key = a.id;
+      var titleEsc = escHtml(a.title);
+      var detailEsc = escHtml(a.detail);
+      var sourceEsc = escHtml(a.source || '');
+      html += '<div class="alert-item' + (isClosed ? ' closed' : '') + '">';
       html += '<div class="alert-level ' + a.level + '"></div>';
-      html += '<div style="flex:1"><strong>' + escHtml(a.title) + '</strong><br><span style="font-size:11px;color:var(--text-secondary)">' + escHtml(a.detail) + '</span></div>';
-      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="closeAlertsPanel();switchPortal(\x27overview\x27)">查看</button>';
+      html += '<div style="flex:1"><strong>' + titleEsc + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + detailEsc + '</span></div>';
+      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="showAlertDetail(\'' + escHtml(key) + '\',\'' + titleEsc.replace(/'/g,"\\'") + '\',\'' + detailEsc.replace(/'/g,"\\'") + '\',\'' + a.level + '\',\'' + sourceEsc + '\')">查看跟进</button>';
       html += '</div>';
     });
     // Coach alerts
     allAlerts.forEach(function(a) {
-      html += '<div class="alert-item">';
+      var st = logs[a.key] || { status: 'pending' };
+      var statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+      var statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+      var isClosed = st.status === 'closed';
+      var titleEsc = escHtml(a.title);
+      var detailEsc = escHtml(a.detail);
+      var sourceEsc = escHtml(a.source || '');
+      html += '<div class="alert-item' + (isClosed ? ' closed' : '') + '">';
       html += '<div class="alert-level ' + a.level + '"></div>';
-      html += '<div style="flex:1"><strong>' + escHtml(a.title) + '</strong><br><span style="font-size:11px;color:var(--text-secondary)">' + escHtml(a.detail) + '</span></div>';
-      var coachName = a.title.split(' - ')[0];
-      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="closeAlertsPanel();switchPortal(\x27coach\x27);setTimeout(function(){selectCoach(\x27' + coachName + '\x27);},200)">查看</button>';
+      html += '<div style="flex:1"><strong>' + titleEsc + '</strong> <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span><br><span style="font-size:11px;color:var(--text-secondary)">' + detailEsc + '</span></div>';
+      html += '<button style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;font-size:11px;white-space:nowrap" onclick="showAlertDetail(\'' + escHtml(a.key) + '\',\'' + titleEsc.replace(/'/g,"\\'") + '\',\'' + detailEsc.replace(/'/g,"\\'") + '\',\'' + a.level + '\',\'' + sourceEsc + '\')">查看跟进</button>';
       html += '</div>';
     });
   }
@@ -1002,18 +1086,229 @@ function closeAlertsPanel() {
 
 function updateAlertCount() {
   var d = mockData;
-  var count = (d.alerts || []).length;
-  // Count coach-specific alerts
+  // Only count non-closed static alerts
+  var count = (d.alerts || []).filter(function(a) {
+    return !a.followState || a.followState.status !== 'closed';
+  }).length;
+  // Count coach-specific alerts not closed
+  var logs = d.alertFollowLogs || {};
   (d.coaches || []).forEach(function(c) {
     var cd = d.coachDetail[c.name];
     if (!cd) return;
-    count += cd.members.filter(function(m) { return m.alert; }).length;
-    count += cd.trials.filter(function(t) { return t.status === 'pending'; }).length;
-    count += cd.renewals.filter(function(r) { return r.status === 'urgent'; }).length;
+    cd.members.filter(function(m) { return m.alert; }).forEach(function(m) {
+      var key = 'coach:' + c.name + ':member:' + m.name;
+      if (!logs[key] || logs[key].status !== 'closed') count++;
+    });
+    cd.trials.filter(function(t) { return t.status === 'pending'; }).forEach(function(t) {
+      var key = 'coach:' + c.name + ':trial:' + t.name;
+      if (!logs[key] || logs[key].status !== 'closed') count++;
+    });
+    cd.renewals.filter(function(r) { return r.status === 'urgent'; }).forEach(function(r) {
+      var key = 'coach:' + c.name + ':renewal:' + r.name;
+      if (!logs[key] || logs[key].status !== 'closed') count++;
+    });
   });
   var el = document.getElementById('alertCount');
   if (el) el.textContent = '⚠️ ' + count + ' 条预警';
   return count;
+}
+
+// ==================== ALERT FOLLOW-UP TRACKING ====================
+
+function getAlertState(key) {
+  var d = mockData;
+  // Static alerts store state on the object itself
+  var staticAlert = (d.alerts || []).find(function(a) { return a.id === key; });
+  if (staticAlert) return staticAlert.followState;
+  // Dynamic alerts use alertFollowLogs dict
+  if (!d.alertFollowLogs) d.alertFollowLogs = {};
+  if (!d.alertFollowLogs[key]) {
+    d.alertFollowLogs[key] = { status: 'pending', logs: [], closedAt: null, closedNote: '' };
+  }
+  return d.alertFollowLogs[key];
+}
+
+var _admCurrentKey = null;
+var _admCurrentTitle = null;
+var _admCurrentDetail = null;
+var _admCurrentLevel = null;
+var _admCurrentSource = null;
+var _admSelectedAction = '电话联系';
+
+function showAlertDetail(key, title, detail, level, source) {
+  _admCurrentKey = key;
+  _admCurrentTitle = title;
+  _admCurrentDetail = detail;
+  _admCurrentLevel = level;
+  _admCurrentSource = source;
+  _admSelectedAction = '电话联系';
+  _renderAlertDetail();
+  var overlay = document.getElementById('alertDetailOverlay');
+  if (overlay) overlay.classList.add('show');
+}
+
+function _renderAlertDetail() {
+  var state = getAlertState(_admCurrentKey);
+  var title = _admCurrentTitle || '预警详情';
+  var detail = _admCurrentDetail || '';
+  var level = _admCurrentLevel || 'warning';
+  var source = _admCurrentSource || '';
+
+  var titleEl = document.getElementById('admTitle');
+  if (titleEl) titleEl.textContent = title;
+
+  var levelLabel = level === 'danger' ? '🔴 紧急' : level === 'warning' ? '🟡 警告' : '🔵 提示';
+  var sourceLabel = source === 'ops' ? '运营端' : source === 'sales' ? '销售端' : '';
+  var statusLabel = state.status === 'closed' ? '已闭环' : state.status === 'active' ? '跟进中' : '待跟进';
+  var statusCls = state.status === 'closed' ? 'closed' : state.status === 'active' ? 'active' : 'pending';
+
+  var metaEl = document.getElementById('admMeta');
+  if (metaEl) {
+    metaEl.innerHTML = levelLabel + (sourceLabel ? ' · ' + sourceLabel : '') +
+      ' <span class="fu-badge ' + statusCls + '">' + statusLabel + '</span>';
+  }
+
+  var actions = ['电话联系', '微信沟通', '到店拜访', '发送方案', '其他'];
+  var actionPills = actions.map(function(a) {
+    return '<span class="adm-action-pill' + (a === _admSelectedAction ? ' selected' : '') +
+      '" onclick="selectAdmAction(\'' + a + '\')">' + a + '</span>';
+  }).join('');
+
+  var logsHtml = '';
+  if (state.logs && state.logs.length > 0) {
+    logsHtml = state.logs.map(function(log) {
+      var isClosed = log.action === '闭环';
+      return '<div class="fu-log-item">' +
+        '<div class="fu-log-dot' + (isClosed ? ' close-dot' : '') + '"></div>' +
+        '<div class="fu-log-body">' +
+          '<div class="fu-log-action' + (isClosed ? ' close-action' : '') + '">' + escHtml(log.action) + '</div>' +
+          '<div class="fu-log-content">' + escHtml(log.content) + '</div>' +
+          '<div class="fu-log-time">' + escHtml(log.time) + '</div>' +
+        '</div></div>';
+    }).join('');
+  } else {
+    logsHtml = '<div class="fu-timeline-empty">暂无跟进记录，添加第一条记录吧</div>';
+  }
+
+  var closedBanner = '';
+  if (state.status === 'closed') {
+    closedBanner = '<div class="adm-closed-banner">✅ 已于 ' + escHtml(state.closedAt || '') + ' 标记闭环' +
+      (state.closedNote ? '：' + escHtml(state.closedNote) : '') +
+      ' <button class="adm-btn outline" style="margin-left:auto;font-size:11px;padding:4px 10px" onclick="reopenAlertItem()">重新打开</button></div>';
+  }
+
+  var addFormHtml = '';
+  if (state.status !== 'closed') {
+    addFormHtml = '<div class="adm-add-form">' +
+      '<h4>添加跟进记录</h4>' +
+      '<div class="adm-action-pills">' + actionPills + '</div>' +
+      '<textarea class="adm-content-input" id="admContentInput" placeholder="输入跟进内容（如：已电话联系王女士，约定本周五到店体验新课程…）"></textarea>' +
+      '<div class="adm-form-actions">' +
+        '<button class="adm-btn primary" onclick="addAlertLog()">📝 记录跟进</button>' +
+        '<button class="adm-btn success" onclick="showCloseAlertForm()">✅ 标记闭环</button>' +
+      '</div>' +
+      '<div id="admCloseForm" style="display:none;margin-top:10px;padding:10px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0">' +
+        '<div style="font-size:12px;font-weight:600;color:#065f46;margin-bottom:6px">闭环备注（可选）</div>' +
+        '<textarea class="adm-content-input" id="admCloseNote" placeholder="如：已跟进完成，会员已预约下次到店" style="min-height:48px"></textarea>' +
+        '<div style="display:flex;gap:8px;margin-top:8px">' +
+          '<button class="adm-btn success" onclick="closeAlertItem()">确认闭环</button>' +
+          '<button class="adm-btn outline" onclick="document.getElementById(\'admCloseForm\').style.display=\'none\'">取消</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  var bodyEl = document.getElementById('admBody');
+  if (bodyEl) {
+    bodyEl.innerHTML =
+      '<div class="adm-detail-box">' + escHtml(detail) + '</div>' +
+      closedBanner +
+      '<div class="fu-timeline">' +
+        '<div class="fu-timeline-title">跟进记录 <span style="font-weight:400;color:#94a3b8">(' + (state.logs ? state.logs.length : 0) + '条)</span></div>' +
+        logsHtml +
+      '</div>' +
+      addFormHtml;
+  }
+}
+
+function selectAdmAction(action) {
+  _admSelectedAction = action;
+  _renderAlertDetail();
+  // Restore textarea value
+}
+
+function showCloseAlertForm() {
+  var form = document.getElementById('admCloseForm');
+  if (form) form.style.display = 'block';
+}
+
+function addAlertLog() {
+  var input = document.getElementById('admContentInput');
+  var content = input ? input.value.trim() : '';
+  if (!content) { showToast('请输入跟进内容', 'error'); return; }
+  var state = getAlertState(_admCurrentKey);
+  if (!state.logs) state.logs = [];
+  var now = new Date();
+  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
+    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  state.logs.push({ action: _admSelectedAction, content: content, time: timeStr });
+  if (state.status === 'pending') state.status = 'active';
+  logOperation('add', '跟进记录', '【' + _admCurrentTitle + '】' + _admSelectedAction + ': ' + content.slice(0, 30));
+  saveData();
+  updateAlertCount();
+  _renderAlertDetail();
+  showToast('✅ 跟进记录已保存', 'success');
+}
+
+function closeAlertItem() {
+  var noteEl = document.getElementById('admCloseNote');
+  var note = noteEl ? noteEl.value.trim() : '';
+  var state = getAlertState(_admCurrentKey);
+  var now = new Date();
+  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
+    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  if (!state.logs) state.logs = [];
+  state.logs.push({ action: '闭环', content: note || '已闭环处理', time: timeStr });
+  state.status = 'closed';
+  state.closedAt = timeStr;
+  state.closedNote = note;
+  logOperation('edit', '预警闭环', '【' + _admCurrentTitle + '】已标记闭环' + (note ? ': ' + note.slice(0,30) : ''));
+  saveData();
+  updateAlertCount();
+  _renderAlertDetail();
+  // Refresh alerts panel if open
+  if (document.getElementById('alertsOverlay')) {
+    closeAlertsPanel();
+    showAlertsPanel();
+  }
+  showToast('✅ 已闭环，预警计数已更新', 'success');
+}
+
+function reopenAlertItem() {
+  var state = getAlertState(_admCurrentKey);
+  state.status = 'active';
+  state.closedAt = null;
+  state.closedNote = '';
+  var now = new Date();
+  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') +
+    ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  if (!state.logs) state.logs = [];
+  state.logs.push({ action: '重新打开', content: '预警已重新打开，继续跟进', time: timeStr });
+  logOperation('edit', '预警重开', '【' + _admCurrentTitle + '】重新打开跟进');
+  saveData();
+  updateAlertCount();
+  _renderAlertDetail();
+  showToast('🔄 预警已重新打开', 'info');
+}
+
+function closeAlertDetailModal() {
+  var overlay = document.getElementById('alertDetailOverlay');
+  if (overlay) overlay.classList.remove('show');
+  // Refresh panels if open
+  if (document.getElementById('alertsOverlay')) {
+    closeAlertsPanel();
+    showAlertsPanel();
+  }
 }
 
 // ==================== GLOBAL SEARCH ====================
@@ -1790,16 +2085,23 @@ function renderOverview() {
     <div class="overview-section-header">🔍 智能诊断与行动建议 <span style="font-weight:400;font-size:11px;color:var(--text-secondary)">— 综合销售+运营数据自动生成</span></div>
     <div class="diagnosis-panel" style="margin-bottom:0">
       <div class="diagnosis-list">
-        ${d.alerts.map(a => `
-          <div class="diagnosis-item">
+        ${d.alerts.map(a => {
+          const st = a.followState || { status: 'pending' };
+          const statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+          const statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+          const btnLabel = st.status === 'closed' ? '查看闭环' : st.status === 'active' ? '继续跟进' : a.action;
+          const safeTitle = (a.title||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          const safeDetail = (a.detail||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          return `
+          <div class="diagnosis-item" style="${st.status==='closed'?'opacity:.6':''}">
             <div class="diagnosis-icon ${a.level}">${a.level==='danger'?'🔴':a.level==='warning'?'🟡':'🔵'}</div>
             <div class="diagnosis-body">
-              <div class="title">${a.title} <span class="data-source-badge">${a.source==='ops'?'运营端':'销售端'}</span></div>
+              <div class="title">${a.title} <span class="data-source-badge">${a.source==='ops'?'运营端':'销售端'}</span> <span class="fu-badge ${statusCls}">${statusLabel}</span></div>
               <div class="detail">${a.detail}</div>
             </div>
-            <button class="diagnosis-action ${a.actionType}" onclick="createFollowUpTask(this, event)">${a.action}</button>
-          </div>
-        `).join('')}
+            <button class="diagnosis-action ${a.actionType}" onclick="showAlertDetail('${a.id}','${safeTitle}','${safeDetail}','${a.level}','${a.source||''}')">${btnLabel}</button>
+          </div>`;
+        }).join('')}
       </div>
     </div>
     <!-- Summary Table -->
@@ -2819,13 +3121,23 @@ function renderOps() {
     <div class="diagnosis-panel">
       <div class="diagnosis-header">⚙️ 运营诊断 — 健康度监控与风险预警</div>
       <div class="diagnosis-list">
-        ${d.alerts.filter(a=>a.source==='ops').map(a => `
-          <div class="diagnosis-item">
+        ${d.alerts.filter(a=>a.source==='ops').map(a => {
+          const st = a.followState || { status: 'pending' };
+          const statusLabel = st.status === 'closed' ? '已闭环' : st.status === 'active' ? '跟进中' : '待跟进';
+          const statusCls = st.status === 'closed' ? 'closed' : st.status === 'active' ? 'active' : 'pending';
+          const btnLabel = st.status === 'closed' ? '查看闭环' : st.status === 'active' ? '继续跟进' : a.action;
+          const safeTitle = (a.title||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          const safeDetail = (a.detail||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          return `
+          <div class="diagnosis-item" style="${st.status==='closed'?'opacity:.6':''}">
             <div class="diagnosis-icon ${a.level}">${a.level==='danger'?'🔴':'🟡'}</div>
-            <div class="diagnosis-body"><div class="title">${a.title}</div><div class="detail">${a.detail}</div></div>
-            <button class="diagnosis-action ${a.actionType}" onclick="createFollowUpTask(this, event)">${a.action}</button>
-          </div>
-        `).join('')}
+            <div class="diagnosis-body">
+              <div class="title">${a.title} <span class="fu-badge ${statusCls}">${statusLabel}</span></div>
+              <div class="detail">${a.detail}</div>
+            </div>
+            <button class="diagnosis-action ${a.actionType}" onclick="showAlertDetail('${a.id}','${safeTitle}','${safeDetail}','${a.level}','${a.source||''}')">${btnLabel}</button>
+          </div>`;
+        }).join('')}
       </div>
     </div>
     <div class="stat-row">
@@ -5020,6 +5332,14 @@ document.addEventListener('DOMContentLoaded', function() {
   updateAlertCount();
   renderPortal('overview');
   setTimeout(checkBirthdays, 500);
+
+  // Click-outside to close alert detail modal
+  var admOverlay = document.getElementById('alertDetailOverlay');
+  if (admOverlay) {
+    admOverlay.addEventListener('click', function(e) {
+      if (e.target === admOverlay) closeAlertDetailModal();
+    });
+  }
 });
 
 // Handle window resize
