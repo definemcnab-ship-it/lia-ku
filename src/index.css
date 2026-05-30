@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 字体与图标：优先用本地系统字体兜底，CDN 可用时升级为品牌字体 */
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+}
+
+/* Material Symbols 字距设置 */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.fill-icon {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* 隐藏滚动条 */
+.custom-scroll::-webkit-scrollbar { display: none; }
+.custom-scroll { -ms-overflow-style: none; scrollbar-width: none; }
