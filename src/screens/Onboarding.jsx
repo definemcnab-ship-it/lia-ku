@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { setState } from '../lib/store.js'
 
 const scenes = ['居家', '办公室', '健身房']
 const gears = ['瑜伽垫', '弹力带', '哑铃', '无器械']
@@ -18,7 +19,13 @@ export default function Onboarding() {
     })
   }
 
-  const next = () => (step < slides.length - 1 ? setStep(step + 1) : nav('/scan'))
+  const finish = (to) => {
+    // 持久化引导期选择的场景/器械偏好
+    setState({ prefs: { scene: [...picked.scene], gear: [...picked.gear] } })
+    nav(to)
+  }
+
+  const next = () => (step < slides.length - 1 ? setStep(step + 1) : finish('/scan'))
 
   const slides = [
     <div key="s1" className="flex flex-col items-center text-center px-8">

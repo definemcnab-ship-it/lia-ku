@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { getState, setState } from '../lib/store.js'
 
 // 四个周期阶段及对应训练策略（方案文档 §6）
 const PHASES = [
@@ -117,11 +118,19 @@ function CycleDial({ cycleLen, periodLen, currentDay }) {
 
 export default function CycleSettings() {
   const nav = useNavigate()
-  const [enabled, setEnabled] = useState(true)
-  const [cycleLen, setCycleLen] = useState(28)
-  const [periodLen, setPeriodLen] = useState(5)
+  const saved = getState().cycle
+  const [enabled, setEnabled] = useState(saved.enabled)
+  const [cycleLen, setCycleLen] = useState(saved.cycleLen)
+  const [periodLen, setPeriodLen] = useState(saved.periodLen)
   const [expanded, setExpanded] = useState(CURRENT_PHASE_IDX)
+  const [justSaved, setJustSaved] = useState(false)
   const currentDay = 9 // 模拟当前为周期第 9 天
+
+  const save = () => {
+    setState({ cycle: { enabled, cycleLen, periodLen } })
+    setJustSaved(true)
+    setTimeout(() => nav('/profile'), 600)
+  }
 
   return (
     <div className="font-body text-on-background min-h-full">
@@ -130,7 +139,9 @@ export default function CycleSettings() {
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
         <span className="font-headline text-[18px] text-on-surface">经期周期适配</span>
-        <button className="font-label text-[14px] text-primary active:opacity-70 transition">保存</button>
+        <button onClick={save} className="font-label text-[14px] text-primary active:opacity-70 transition">
+          {justSaved ? '已保存 ✓' : '保存'}
+        </button>
       </header>
 
       <main className="px-container-padding-mobile pb-10 space-y-stack-lg">

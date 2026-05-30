@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { useStore } from '../lib/store.js'
 
 function greeting() {
   const h = new Date().getHours()
@@ -12,6 +13,9 @@ function greeting() {
 
 export default function Home() {
   const nav = useNavigate()
+  const { postureScore, lastScore } = useStore()
+  const diff = postureScore - lastScore
+  const ringOffset = (251.2 * (1 - postureScore / 100)).toFixed(2)
   return (
     <div className="font-body text-on-background">
       {/* 顶部栏 */}
@@ -41,12 +45,14 @@ export default function Home() {
             <div className="space-y-1">
               <p className="font-label text-[12px] text-outline uppercase tracking-wider">当前体态分</p>
               <div className="flex items-baseline gap-1">
-                <span className="font-display text-[36px] leading-[44px] font-bold text-primary">85</span>
+                <span className="font-display text-[36px] leading-[44px] font-bold text-primary">{postureScore}</span>
                 <span className="font-label text-[14px] text-on-surface-variant">/ 100</span>
               </div>
               <div className="flex items-center gap-1 text-secondary">
                 <Icon name="trending_up" size={16} />
-                <span className="font-label text-[12px]">比上周提升了 3 分</span>
+                <span className="font-label text-[12px]">
+                  {diff >= 0 ? `比上周提升了 ${diff} 分` : `比上周下降了 ${-diff} 分`}
+                </span>
               </div>
             </div>
             <div className="relative w-24 h-24 flex items-center justify-center">
@@ -54,7 +60,7 @@ export default function Home() {
                 <circle className="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" strokeWidth="8" />
                 <circle className="text-primary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
                   strokeDasharray="251.2" strokeWidth="8" strokeLinecap="round"
-                  style={{ '--ring-offset': '37.68px', strokeDashoffset: '37.68' }}
+                  style={{ '--ring-offset': `${ringOffset}px`, strokeDashoffset: ringOffset }}
                   className="animate-ring-draw" />
               </svg>
               <Icon name="accessibility_new" size={32} className="absolute text-primary" />

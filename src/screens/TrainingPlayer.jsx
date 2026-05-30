@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { recordTrainingDone } from '../lib/store.js'
 
 // 今日课表动作数据（与 Training.jsx 保持一致，增加 player 所需字段）
 const EXERCISES = [
@@ -129,6 +130,11 @@ export default function TrainingPlayer() {
     setRepsDone(next)
     if (next >= ex.reps) advancePhase()
   }
+
+  // 进入完成态时记录今日打卡（持久化）
+  useEffect(() => {
+    if (phase === PHASES.COMPLETE) recordTrainingDone()
+  }, [phase])
 
   if (phase === PHASES.COMPLETE) {
     return (

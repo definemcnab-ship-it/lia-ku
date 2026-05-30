@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { useStore, setState, todayStr } from '../lib/store.js'
 
 const mapping = [
   { issue: '上交叉综合征', focus: '钙 + 维 D', foods: '奶制品、深海鱼、蛋黄', avoid: '—' },
@@ -12,6 +13,18 @@ const meals = ['早餐', '午餐', '晚餐']
 
 export default function Diet() {
   const nav = useNavigate()
+  const { meals: mealRecord } = useStore()
+  const today = todayStr()
+  const todayMeals = mealRecord[today] || {}
+
+  const toggleMeal = (m) => {
+    setState(s => {
+      const day = { ...(s.meals[today] || {}) }
+      day[m] ? delete day[m] : (day[m] = true)
+      return { meals: { ...s.meals, [today]: day } }
+    })
+  }
+
   return (
     <div className="font-body text-on-background">
       <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40">
@@ -58,13 +71,20 @@ export default function Diet() {
             <span className="font-label text-[12px] text-outline">拍照 + 一句话 · 不算卡路里</span>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            {meals.map(m => (
-              <button key={m} className="aspect-square rounded-lg border-2 border-dashed border-outline-variant/50
-                bg-surface-container-lowest flex flex-col items-center justify-center gap-1 active:scale-95 transition">
-                <Icon name="add_a_photo" size={28} className="text-outline" />
-                <span className="font-label text-[12px] text-outline">{m}</span>
-              </button>
-            ))}
+            {meals.map(m => {
+              const done = !!todayMeals[m]
+              return (
+                <button key={m} onClick={() => toggleMeal(m)}
+                  className={`aspect-square rounded-lg border-2 flex flex-col items-center justify-center gap-1 active:scale-95 transition
+                    ${done
+                      ? 'border-solid border-primary-container bg-primary-fixed/40'
+                      : 'border-dashed border-outline-variant/50 bg-surface-container-lowest'}`}>
+                  <Icon name={done ? 'check_circle' : 'add_a_photo'} size={28}
+                    className={done ? 'text-primary' : 'text-outline'} />
+                  <span className={`font-label text-[12px] ${done ? 'text-primary font-bold' : 'text-outline'}`}>{m}</span>
+                </button>
+              )
+            })}
           </div>
         </section>
       </main>

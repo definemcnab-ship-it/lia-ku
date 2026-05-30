@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { useStore, computeStreak, countThisMonth, todayStr } from '../lib/store.js'
 
 const trend = [
   { label: '第1周', score: 72 },
@@ -18,14 +19,27 @@ const dims = [
   { name: '下肢力线', before: 85, now: 92 },
 ]
 
-// 打卡日历：4 周 × 7 天，1=训练，0=休息，-1=未来
-const CAL_DAYS = [
-  1,1,0,1,1,1,0,
-  1,1,1,0,1,1,0,
-  0,1,1,0,0,0,0,
-  0,0,0,0,0,0,0,
-]
 const WEEK_LABELS = ['日','一','二','三','四','五','六']
+
+// 构建当月日历：返回 { cells, monthLabel }
+// cells 为 42 格（6 周），每格 { day, dateStr, trained, isToday, blank }
+function buildMonthCalendar(checkIns) {
+  const set = new Set(checkIns)
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const firstWeekday = new Date(year, month, 1).getDay()       // 当月 1 号是周几
+  const daysInMonth = new Date(year, month + 1, 0).getDate()   // 当月天数
+  const today = todayStr(now)
+
+  const cells = []
+  for (let i = 0; i < firstWeekday; i++) cells.push({ blank: true, key: `b${i}` })
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    cells.push({ day: d, dateStr, trained: set.has(dateStr), isToday: dateStr === today, key: dateStr })
+  }
+  return { cells, monthLabel: `${year} 年 ${month + 1} 月` }
+}
 
 function ScoreChart() {
   const W = 300, H = 120, PL = 28, PR = 10, PT = 20, PB = 24
@@ -85,8 +99,11 @@ export default function Progress() {
   const nav = useNavigate()
   const [activeTab, setActiveTab] = useState('chart')
 
-  const trainedDays = CAL_DAYS.filter(d => d === 1).length
-  const streak = 12
+  const { checkIns, postureScore } = useStore()
+  const streak = computeStreak(checkIns)
+  const trainedDays = countThisMonth(checkIns)
+  const hasData = checkIns.length > 0
+  const { cells, monthLabel } = buildMonthCalendar(checkIns)
 
   return (
     <div className="font-body text-on-background">
@@ -109,7 +126,7 @@ export default function Progress() {
         {/* 摘要统计 */}
         <section className="grid grid-cols-3 gap-3 mt-stack-md">
           {[
-            { val: '85', unit: '分', desc: '当前体态分', color: 'text-primary' },
+            { val: String(postureScore), unit: '分', desc: '当前体态分', color: 'text-primary' },
             { val: String(streak), unit: '天', desc: '当前连续打卡', color: 'text-teal-600' },
             { val: String(trainedDays), unit: '次', desc: '本月训练', color: 'text-purple-600' },
           ].map(s => (
@@ -179,8 +196,10 @@ export default function Progress() {
           {activeTab === 'cal' && (
             <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
               <div className="flex justify-between items-baseline mb-4">
-                <h2 className="font-headline text-[17px] text-on-surface">体态成长日历</h2>
-                <span className="font-label text-[12px] text-teal-600">连续 {streak} 天 🔥</span>
+                <h2 className="font-headline text-[17px] text-on-surface">{monthLabel}</h2>
+                {streak > 0
+                  ? <span className="font-label text-[12px] text-teal-600">连续 {streak} 天 🔥</span>
+                  : <span className="font-label text-[12px] text-outline">本月训练 {trainedDays} 次</span>}
               </div>
               {/* 星期标头 */}
               <div className="grid grid-cols-7 gap-1.5 mb-1.5">
@@ -190,25 +209,36 @@ export default function Progress() {
               </div>
               {/* 日期格 */}
               <div className="grid grid-cols-7 gap-1.5">
-                {CAL_DAYS.map((d, i) => {
-                  const day = i + 1
-                  return (
-                    <div key={i}
+                {cells.map(c =>
+                  c.blank ? (
+                    <div key={c.key} className="aspect-square" />
+                  ) : (
+                    <div key={c.key}
                       className={`aspect-square rounded-md flex items-center justify-center text-[11px] font-label transition
-                        ${d === 1
+                        ${c.trained
                           ? 'bg-primary-container text-primary font-bold'
-                          : d === 0 && day <= 20
-                          ? 'bg-surface-container text-outline'
-                          : 'bg-transparent text-surface-container'}`}>
-                      {day <= 28 ? day : ''}
+                          : c.isToday
+                          ? 'bg-surface-container text-primary ring-1 ring-primary/40'
+                          : 'bg-surface-container text-outline'}`}>
+                      {c.day}
                     </div>
                   )
-                })}
+                )}
               </div>
               <div className="flex items-center gap-4 mt-3 justify-center">
                 <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-primary-container" /><span className="font-label text-[11px] text-outline">已训练</span></div>
-                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-surface-container" /><span className="font-label text-[11px] text-outline">休息日</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-surface-container ring-1 ring-primary/40" /><span className="font-label text-[11px] text-outline">今天</span></div>
               </div>
+              {!hasData && (
+                <div className="mt-4 text-center bg-surface-container rounded-lg py-4 px-3">
+                  <p className="font-label text-[13px] text-on-surface-variant">还没有训练记录</p>
+                  <p className="font-label text-[11px] text-outline mt-1">完成一次训练，这里会自动点亮今天 ✨</p>
+                  <button onClick={() => nav('/player')}
+                    className="mt-3 bg-primary text-white font-label text-[13px] px-5 py-2 rounded-full active:scale-95 transition">
+                    开始今日训练
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </section>
