@@ -155,17 +155,17 @@ export default function Progress() {
                   <div className="flex items-center gap-1"><div className="w-3 h-2 rounded-full bg-primary-container" /><span className="font-label text-[11px] text-primary">当前</span></div>
                 </div>
               </div>
-              {dims.map(d => (
-                <div key={d.name} className="space-y-1">
+              {dims.map((d, i) => (
+                <div key={d.name} className="space-y-1 animate-page-in" style={{ animationDelay: `${i * 70}ms` }}>
                   <div className="flex justify-between">
                     <span className="font-label text-[13px] text-on-surface">{d.name}</span>
                     <span className="font-label text-[12px] text-primary">+{d.now - d.before} 分</span>
                   </div>
                   <div className="relative h-4 bg-surface-container rounded-full overflow-hidden">
-                    <div className="absolute inset-y-0 left-0 bg-outline-variant/40 rounded-full transition-all duration-700"
-                      style={{ width: `${d.before}%` }} />
-                    <div className="absolute inset-y-0 left-0 bg-primary-container rounded-full transition-all duration-700"
-                      style={{ width: `${d.now}%` }} />
+                    <div className="absolute inset-y-0 left-0 bg-outline-variant/40 rounded-full animate-bar-grow"
+                      style={{ '--bar-w': `${d.before}%`, animationDelay: `${i * 70 + 100}ms` }} />
+                    <div className="absolute inset-y-0 left-0 bg-primary-container rounded-full animate-bar-grow"
+                      style={{ '--bar-w': `${d.now}%`, animationDelay: `${i * 70 + 200}ms` }} />
                   </div>
                   <div className="flex justify-between">
                     <span className="font-label text-[10px] text-outline">{d.before} 分</span>

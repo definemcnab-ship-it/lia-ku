@@ -82,7 +82,7 @@ export default function AIScan() {
           <Icon name="close" size={20} className="text-white" />
         </button>
         <div className="flex items-center gap-2 bg-primary/90 px-3 py-1.5 rounded-full">
-          <Icon name="graphic_eq" size={16} className="text-white" />
+          <Icon name="graphic_eq" size={16} className="text-white animate-pulse-soft" />
           <span className="font-label text-[12px]">正在播放语音</span>
         </div>
         <button className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
@@ -98,14 +98,21 @@ export default function AIScan() {
         </p>
       </div>
 
-      {/* 人形虚线对位框 */}
+      {/* 人形虚线对位框 + 扫描光束 */}
       <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-        <svg width="180" height="420" viewBox="0 0 180 420">
-          <ellipse cx="90" cy="55" rx="34" ry="42" fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" />
-          <path d="M90 97 L90 250 M90 130 L40 200 M90 130 L140 200 M90 250 L55 400 M90 250 L125 400"
-            fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" strokeLinecap="round" />
-          <circle cx="90" cy="250" r="5" fill="#e67e66" />
-        </svg>
+        <div className="relative">
+          <svg width="180" height="420" viewBox="0 0 180 420">
+            <ellipse cx="90" cy="55" rx="34" ry="42" fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" />
+            <path d="M90 97 L90 250 M90 130 L40 200 M90 130 L140 200 M90 250 L55 400 M90 250 L125 400"
+              fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" strokeLinecap="round" />
+            <circle cx="90" cy="250" r="5" fill="#e67e66" />
+          </svg>
+          {/* 扫描光束 */}
+          <div className="absolute left-0 right-0 top-12 pointer-events-none animate-scan-beam">
+            <div className="h-px bg-gradient-to-r from-transparent via-primary-container to-transparent w-full opacity-90" />
+            <div className="h-6 bg-gradient-to-b from-primary-container/20 to-transparent w-full" />
+          </div>
+        </div>
       </div>
 
       {/* 底部进度点 */}

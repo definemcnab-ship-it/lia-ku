@@ -88,7 +88,9 @@ export default function Onboarding() {
       </header>
 
       <main className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-6">
-        {slides[step]}
+        <div key={step} className="w-full flex flex-col items-center animate-slide-left">
+          {slides[step]}
+        </div>
       </main>
 
       <footer className="px-6 pb-10 space-y-3">

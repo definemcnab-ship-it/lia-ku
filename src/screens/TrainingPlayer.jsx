@@ -205,7 +205,7 @@ export default function TrainingPlayer() {
 
         {/* 阶段显示 */}
         {phase === PHASES.PREPARE && (
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-2 animate-page-in">
             <p className="font-label text-[13px] text-white/50 uppercase tracking-widest">准备开始</p>
             <p className="font-display text-[80px] font-bold leading-none text-primary-container">{prepSec}</p>
             <p className="font-headline text-[26px] text-white">{ex.name}</p>
@@ -214,7 +214,7 @@ export default function TrainingPlayer() {
         )}
 
         {phase === PHASES.EXERCISE && (
-          <div className="text-center space-y-3 w-full px-4">
+          <div className="text-center space-y-3 w-full px-4 animate-page-in">
             <p className="font-headline text-[26px] text-white">{ex.name}</p>
             {isHold ? (
               <>
@@ -244,7 +244,7 @@ export default function TrainingPlayer() {
         )}
 
         {phase === PHASES.REST && (
-          <div className="text-center space-y-3 w-full px-4">
+          <div className="text-center space-y-3 w-full px-4 animate-page-in">
             <p className="font-label text-[13px] text-white/50 uppercase tracking-widest">组间休息</p>
             <p className="font-display text-[80px] font-bold leading-none text-[#a8dadc]">{restSec}</p>
             <p className="font-label text-[13px] text-white/60">秒</p>

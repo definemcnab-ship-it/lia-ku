@@ -55,6 +55,50 @@ export default {
         body: ['Plus Jakarta Sans', 'sans-serif'],
         label: ['Plus Jakarta Sans', 'sans-serif'],
       },
+      keyframes: {
+        pageIn: {
+          from: { opacity: '0', transform: 'translateY(10px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideLeft: {
+          from: { opacity: '0', transform: 'translateX(28px)' },
+          to:   { opacity: '1', transform: 'translateX(0)' },
+        },
+        fadeIn: {
+          from: { opacity: '0' },
+          to:   { opacity: '1' },
+        },
+        barGrow: {
+          from: { width: '0%' },
+          to:   { width: 'var(--bar-w)' },
+        },
+        scanBeam: {
+          '0%,100%': { transform: 'translateY(-10px)', opacity: '0.9' },
+          '50%':     { transform: 'translateY(260px)', opacity: '0.6' },
+        },
+        ringDraw: {
+          from: { strokeDashoffset: '251.2' },
+          to:   { strokeDashoffset: 'var(--ring-offset)' },
+        },
+        pulseSoft: {
+          '0%,100%': { opacity: '1' },
+          '50%':     { opacity: '0.35' },
+        },
+        slideUp: {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'page-in':    'pageIn 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both',
+        'slide-left': 'slideLeft 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both',
+        'fade-in':    'fadeIn 0.3s ease-out both',
+        'bar-grow':   'barGrow 0.7s cubic-bezier(0.25,0.46,0.45,0.94) both',
+        'scan-beam':  'scanBeam 2.4s ease-in-out infinite',
+        'ring-draw':  'ringDraw 1s cubic-bezier(0.25,0.46,0.45,0.94) both',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'slide-up':   'slideUp 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both',
+      },
     },
   },
   plugins: [],

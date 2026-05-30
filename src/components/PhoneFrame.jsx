@@ -1,10 +1,8 @@
 import { useLocation } from 'react-router-dom'
 import TabBar from './TabBar.jsx'
 
-// 居中的手机外壳；桌面端显示设备边框，移动端全屏。
 export default function PhoneFrame({ children, chrome = true }) {
   const loc = useLocation()
-  // AI 扫描沉浸式全屏；onboarding 在 App 层已设 chrome=false
   const hideTab = loc.pathname === '/scan'
 
   return (
@@ -16,7 +14,8 @@ export default function PhoneFrame({ children, chrome = true }) {
         {/* 刘海 */}
         <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-7
           bg-[#1b1c1c] rounded-b-[18px] z-50" />
-        <div className="flex-1 overflow-y-auto custom-scroll">
+        {/* key 触发路由切换动画 */}
+        <div key={loc.pathname} className="flex-1 overflow-y-auto custom-scroll animate-page-in">
           {children}
         </div>
         {chrome && !hideTab && <TabBar />}

@@ -1,6 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 
+function greeting() {
+  const h = new Date().getHours()
+  if (h < 6)  return '夜深了，若曦'
+  if (h < 11) return '早安，若曦'
+  if (h < 14) return '午好，若曦'
+  if (h < 18) return '下午好，若曦'
+  return '晚上好，若曦'
+}
+
 export default function Home() {
   const nav = useNavigate()
   return (
@@ -23,7 +32,7 @@ export default function Home() {
         {/* 欢迎 + 体态分概览 */}
         <section className="mt-stack-md">
           <div className="mb-stack-md">
-            <h1 className="font-headline text-[36px] leading-[44px] text-on-surface">早安，若曦</h1>
+            <h1 className="font-headline text-[36px] leading-[44px] text-on-surface">{greeting()}</h1>
             <p className="font-body text-on-surface-variant">今天也要保持优雅体态哦 ✨</p>
           </div>
           <div onClick={() => nav('/report')}
@@ -44,7 +53,9 @@ export default function Home() {
               <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
                 <circle className="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" strokeWidth="8" />
                 <circle className="text-primary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
-                  strokeDasharray="251.2" strokeDashoffset="37.68" strokeWidth="8" strokeLinecap="round" />
+                  strokeDasharray="251.2" strokeWidth="8" strokeLinecap="round"
+                  style={{ '--ring-offset': '37.68px', strokeDashoffset: '37.68' }}
+                  className="animate-ring-draw" />
               </svg>
               <Icon name="accessibility_new" size={32} className="absolute text-primary" />
             </div>

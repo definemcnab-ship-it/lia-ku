@@ -119,14 +119,16 @@ export default function Report() {
           <section className="space-y-stack-md">
             <h2 className="font-headline text-[20px] text-on-surface">5 项关键测量</h2>
             <div className="space-y-3">
-              {dims.map(d => (
-                <div key={d.name} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+              {dims.map((d, i) => (
+                <div key={d.name} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)] animate-page-in"
+                  style={{ animationDelay: `${i * 60}ms` }}>
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-label text-[14px] text-on-surface">{d.name}</span>
                     <span className="font-label text-[12px] text-outline">权重 {d.weight} · {d.score}分</span>
                   </div>
                   <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-                    <div className="h-full bg-primary-container rounded-full transition-all duration-700" style={{ width: `${d.score}%` }} />
+                    <div className="h-full bg-primary-container rounded-full animate-bar-grow"
+                      style={{ '--bar-w': `${d.score}%`, animationDelay: `${i * 60 + 200}ms` }} />
                   </div>
                 </div>
               ))}
