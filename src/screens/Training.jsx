@@ -47,7 +47,8 @@ export default function Training() {
               </div>
             ))}
           </div>
-          <button className="w-full h-14 bg-primary text-on-primary font-label text-lg rounded-lg active:scale-[0.98] transition
+          <button onClick={() => nav('/player')}
+            className="w-full h-14 bg-primary text-on-primary font-label text-lg rounded-lg active:scale-[0.98] transition
             flex items-center justify-center gap-2">
             <Icon name="play_arrow" size={20} className="text-white" />开始训练
           </button>

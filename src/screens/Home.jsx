@@ -78,7 +78,7 @@ export default function Home() {
                 </div>
                 <p className="mt-2 font-label text-[12px] text-on-surface-variant">今日进度 45%</p>
               </div>
-              <button onClick={(e) => { e.stopPropagation(); nav('/training') }}
+              <button onClick={(e) => { e.stopPropagation(); nav('/player') }}
                 className="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-md active:scale-90 transition">
                 <Icon name="play_arrow" size={24} className="text-white" />
               </button>
