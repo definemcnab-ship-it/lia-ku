@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 
 const tabs = [
@@ -11,7 +11,6 @@ const tabs = [
 
 export default function TabBar() {
   const nav = useNavigate()
-  const { pathname } = useLocation()
 
   return (
     <nav className="flex-none flex justify-around items-center bg-surface px-2 pb-6 pt-3

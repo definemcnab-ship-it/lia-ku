@@ -64,7 +64,6 @@ const PHASES = [
 
 // 当前阶段（卵泡期第 9 天）
 const CURRENT_PHASE_IDX = 1
-const CURRENT_DAY_IN_PHASE = 4
 
 function CycleDial({ cycleLen, periodLen, currentDay }) {
   const cx = 100, cy = 100, r = 80
