@@ -5,7 +5,7 @@ const groups = [
   {
     title: '训练偏好',
     items: [
-      { icon: 'schedule', label: '经期周期适配', extra: '已开启 · 28天' },
+      { icon: 'schedule', label: '经期周期适配', extra: '已开启 · 28天', to: '/cycle' },
       { icon: 'home', label: '训练场景', extra: '居家 / 办公室' },
       { icon: 'notifications', label: '推送通知', extra: '8:00–21:00' },
     ],
@@ -44,6 +44,7 @@ export default function Profile() {
             <div className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
               {g.items.map((it, i) => (
                 <button key={it.label}
+                  onClick={() => it.to && nav(it.to)}
                   className={`w-full flex items-center gap-3 px-4 py-3.5 active:bg-surface-container transition
                     ${i > 0 ? 'border-t border-surface-variant' : ''}`}>
                   <Icon name={it.icon} size={22} className={it.danger ? 'text-error' : 'text-primary'} />

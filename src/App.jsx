@@ -10,6 +10,7 @@ import Profile from './screens/Profile.jsx'
 import Onboarding from './screens/Onboarding.jsx'
 import Diet from './screens/Diet.jsx'
 import TrainingPlayer from './screens/TrainingPlayer.jsx'
+import CycleSettings from './screens/CycleSettings.jsx'
 
 export default function App() {
   const loc = useLocation()
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/report" element={<Report />} />
         <Route path="/training" element={<Training />} />
         <Route path="/player" element={<TrainingPlayer />} />
+        <Route path="/cycle" element={<CycleSettings />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
