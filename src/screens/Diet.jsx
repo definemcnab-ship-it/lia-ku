@@ -1,13 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { useStore, setState, todayStr } from '../lib/store.js'
-
-const mapping = [
-  { issue: '上交叉综合征', focus: '钙 + 维 D', foods: '奶制品、深海鱼、蛋黄', avoid: '—' },
-  { issue: '骨盆前倾', focus: '抗炎饮食', foods: '蓝莓、姜黄、橄榄油', avoid: '高糖加工食品' },
-  { issue: '产后腹直肌分离', focus: '胶原蛋白 + 优质蛋白', foods: '骨汤、鸡蛋、鱼类', avoid: '—' },
-  { issue: '脊柱侧弯', focus: '钙镁平衡', foods: '绿叶蔬菜、坚果', avoid: '—' },
-]
+import { DIET_PLANS } from '../lib/content.js'
 
 const meals = ['早餐', '午餐', '晚餐']
 
@@ -49,17 +43,21 @@ export default function Diet() {
         <section className="space-y-stack-md">
           <h2 className="font-headline text-[18px] text-on-surface">体态 × 营养对照</h2>
           <div className="space-y-3">
-            {mapping.map(m => (
-              <div key={m.issue} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+            {DIET_PLANS.map(m => (
+              <button key={m.id} onClick={() => nav(`/diet/plan/${m.id}`)}
+                className="w-full text-left bg-surface-container-lowest rounded-lg p-4 active:scale-[0.98] transition
+                  shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-label text-[15px] text-on-surface">{m.issue}</span>
                   <span className="font-label text-[11px] text-primary bg-primary-fixed px-2 py-0.5 rounded-full">{m.focus}</span>
                 </div>
-                <p className="font-body text-[13px] text-on-surface-variant">
-                  <span className="text-on-surface">推荐：</span>{m.foods}
-                  {m.avoid !== '—' && <span className="text-error"> · 避免：{m.avoid}</span>}
-                </p>
-              </div>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-body text-[13px] text-on-surface-variant truncate">
+                    <span className="text-on-surface">推荐：</span>{m.foods.slice(0, 3).join('、')}
+                  </p>
+                  <Icon name="chevron_right" size={18} className="text-outline shrink-0" />
+                </div>
+              </button>
             ))}
           </div>
         </section>

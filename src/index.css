@@ -47,6 +47,16 @@ body {
   animation: pulseSoft 2s ease-in-out infinite;
 }
 
+/* 未勾选协议时的提示抖动 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
 /* 通用工具 */
 .tap-highlight-none { -webkit-tap-highlight-color: transparent; }
 

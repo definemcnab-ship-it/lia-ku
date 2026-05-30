@@ -10,8 +10,15 @@ const defaults = {
   lastScore: 82,           // 上次体态分（用于对比）
   checkIns: [],            // 完成训练的日期数组 ['2026-05-30', ...]
   cycle: { enabled: true, cycleLen: 28, periodLen: 5 },
-  prefs: { scene: [], gear: [] },   // 引导页选择的场景/器械
+  prefs: { scene: [], gear: [] },   // 引导页/设置页选择的场景/器械
   meals: {},               // { '2026-05-30': { '早餐': true } }
+  // 推送通知设置
+  notify: { enabled: true, start: '08:00', end: '21:00', daily: true, cycle: true, weekly: true },
+  // 体态照片管理（占位元数据，原型不存真实图片）
+  photos: [
+    { id: 'p1', date: '2026-05-30', label: '正面', score: 85 },
+    { id: 'p2', date: '2026-05-30', label: '侧面', score: 85 },
+  ],
 }
 
 function load() {

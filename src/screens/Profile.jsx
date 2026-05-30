@@ -5,10 +5,25 @@ import { useStore, resetAll } from '../lib/store.js'
 
 export default function Profile() {
   const nav = useNavigate()
-  const { postureScore, cycle, checkIns } = useStore()
+  const state = useStore()
+  const { postureScore, cycle, checkIns, prefs, notify, photos } = state
   const [confirmReset, setConfirmReset] = useState(false)
 
   const grade = postureScore >= 90 ? 'S' : postureScore >= 80 ? 'A' : postureScore >= 70 ? 'B' : 'C'
+
+  const sceneText = (prefs.scene && prefs.scene.length) ? prefs.scene.join(' / ') : '未设置'
+  const notifyText = notify.enabled ? `${notify.start}–${notify.end}` : '已关闭'
+
+  // 导出本地数据为 JSON（个保法：用户可携带自己的数据）
+  const exportData = () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `slique-data-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const groups = [
     {
@@ -19,16 +34,17 @@ export default function Profile() {
           extra: cycle.enabled ? `已开启 · ${cycle.cycleLen}天` : '未开启',
           to: '/cycle',
         },
-        { icon: 'home', label: '训练场景', extra: '居家 / 办公室' },
-        { icon: 'notifications', label: '推送通知', extra: '8:00–21:00' },
+        { icon: 'home', label: '训练场景', extra: sceneText, to: '/scene' },
+        { icon: 'notifications', label: '推送通知', extra: notifyText, to: '/notifications' },
       ],
     },
     {
       title: '账号与隐私',
       items: [
-        { icon: 'photo_library', label: '体态照片管理', extra: '可随时删除' },
-        { icon: 'ios_share', label: '导出我的数据', extra: '个保法合规' },
-        { icon: 'lock', label: '隐私政策', extra: '' },
+        { icon: 'photo_library', label: '体态照片管理', extra: `${photos.length} 张`, to: '/photos' },
+        { icon: 'ios_share', label: '导出我的数据', extra: '个保法合规', onClick: exportData },
+        { icon: 'lock', label: '隐私政策', extra: '', to: '/legal/privacy' },
+        { icon: 'description', label: '用户协议', extra: '', to: '/legal/user' },
         {
           icon: 'close', label: '清除本地数据',
           extra: `${checkIns.length} 条训练记录`, danger: true,

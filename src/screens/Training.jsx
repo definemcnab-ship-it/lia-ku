@@ -1,15 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import { LIBRARY } from '../lib/content.js'
 
 // 训练 / 动作库（方案文档 §2.1 训练核心、§4 体态问题分类）。
-const categories = [
-  { name: '上交叉综合征', en: 'Upper Crossed', count: '15-18', color: 'bg-mint text-teal-800' },
-  { name: '下交叉综合征', en: 'Lower Crossed', count: '12-15', color: 'bg-lavender text-purple-800' },
-  { name: '产后腹直肌分离', en: 'Diastasis Recti', count: '12-15', color: 'bg-primary-fixed text-primary' },
-  { name: '脊柱侧弯', en: 'Scoliosis', count: '10-12', color: 'bg-secondary-fixed/40 text-on-secondary-container' },
-  { name: '高低肩 / 翼状肩胛', en: 'Shoulder Imbalance', count: '8-10', color: 'bg-mint text-teal-800' },
-  { name: '膝超伸 / X·O 型腿', en: 'Leg Alignment', count: '10-12', color: 'bg-lavender text-purple-800' },
-]
 
 const todayPlan = [
   { name: '下巴后缩', dur: '3 组 × 15 次', level: '基础', lc: 'bg-green-100 text-green-700' },
@@ -58,14 +51,15 @@ export default function Training() {
         <section className="space-y-stack-md">
           <h2 className="font-headline text-[20px] text-on-surface">动作库 · 七大体态分类</h2>
           <div className="grid grid-cols-2 gap-3">
-            {categories.map(c => (
-              <div key={c.name} className={`rounded-lg p-4 h-28 flex flex-col justify-between active:scale-95 transition cursor-pointer ${c.color}`}>
+            {LIBRARY.map(c => (
+              <button key={c.id} onClick={() => nav(`/library/${c.id}`)}
+                className={`rounded-lg p-4 h-28 flex flex-col justify-between text-left active:scale-95 transition ${c.color}`}>
                 <div>
                   <p className="font-label text-[14px] font-bold leading-tight">{c.name}</p>
                   <p className="font-label text-[11px] opacity-70">{c.en}</p>
                 </div>
-                <p className="font-label text-[11px] opacity-80">{c.count} 个动作</p>
-              </div>
+                <p className="font-label text-[11px] opacity-80">{c.exercises.length} 个动作</p>
+              </button>
             ))}
           </div>
         </section>
