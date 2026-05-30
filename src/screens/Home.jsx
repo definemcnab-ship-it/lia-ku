@@ -104,7 +104,7 @@ export default function Home() {
           <Bento color="bg-surface-container-lowest border-surface-variant shadow-[0px_4px_20px_rgba(230,126,102,0.08)]"
             iconBg="bg-secondary-container" iconColor="text-secondary"
             icon="restaurant" title="饮食建议" titleColor="text-on-surface" desc="吃出好体态" descColor="text-on-surface-variant opacity-70"
-            onClick={() => nav('/report')} />
+            onClick={() => nav('/diet')} />
         </section>
 
         {/* 每日体态小贴士 */}

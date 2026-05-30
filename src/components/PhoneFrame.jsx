@@ -4,7 +4,8 @@ import TabBar from './TabBar.jsx'
 // 居中的手机外壳；桌面端显示设备边框，移动端全屏。
 export default function PhoneFrame({ children, chrome = true }) {
   const loc = useLocation()
-  const hideTab = loc.pathname === '/scan' // AI 扫描为沉浸式全屏，隐藏底部导航
+  // AI 扫描沉浸式全屏；onboarding 在 App 层已设 chrome=false
+  const hideTab = loc.pathname === '/scan'
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-0 sm:p-6

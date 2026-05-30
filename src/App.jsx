@@ -7,18 +7,22 @@ import Report from './screens/Report.jsx'
 import Training from './screens/Training.jsx'
 import Progress from './screens/Progress.jsx'
 import Profile from './screens/Profile.jsx'
+import Onboarding from './screens/Onboarding.jsx'
+import Diet from './screens/Diet.jsx'
 
 // 斯俪 Slique 原型路由
 // 登录页全屏展示；其余页面在带底部导航的手机框内展示。
 export default function App() {
   const loc = useLocation()
-  const isLogin = loc.pathname === '/login'
+  const fullscreen = loc.pathname === '/login' || loc.pathname === '/onboarding'
 
   return (
-    <PhoneFrame chrome={!isLogin}>
+    <PhoneFrame chrome={!fullscreen}>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/diet" element={<Diet />} />
         <Route path="/home" element={<Home />} />
         <Route path="/scan" element={<AIScan />} />
         <Route path="/report" element={<Report />} />

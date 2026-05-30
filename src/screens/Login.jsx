@@ -12,6 +12,7 @@ export default function Login() {
     if (!agreed) { alert('请先阅读并勾选同意《用户协议》与《隐私政策》'); return }
     nav(to)
   }
+  // 登录成功 → 进入首次引导流程（§2.2）
 
   return (
     <div className="min-h-full flex flex-col font-body text-on-surface relative">
@@ -51,14 +52,14 @@ export default function Login() {
 
         {/* 登录操作区 */}
         <div className="w-full space-y-gutter flex flex-col items-center">
-          <button onClick={() => go('/home')}
+          <button onClick={() => go('/onboarding')}
             className="w-full h-14 bg-primary-container text-on-primary font-label text-lg rounded-lg
               shadow-xl shadow-primary-container/20 hover:opacity-90 active:scale-[0.98] transition-all
               flex items-center justify-center gap-3">
             <span className="material-symbols-outlined">smartphone</span>手机号一键登录
           </button>
 
-          <button onClick={() => go('/home')}
+          <button onClick={() => go('/onboarding')}
             className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30
               text-on-surface-variant font-label text-lg rounded-lg hover:bg-surface-container-low
               active:scale-[0.98] transition-all flex items-center justify-center gap-3">

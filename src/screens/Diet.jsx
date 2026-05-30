@@ -1,0 +1,73 @@
+import { useNavigate } from 'react-router-dom'
+
+// 饮食建议（方案文档 §8）。体态问题 → 营养建议映射；不做卡路里计算。
+const mapping = [
+  { issue: '上交叉综合征', focus: '钙 + 维 D', foods: '奶制品、深海鱼、蛋黄', avoid: '—' },
+  { issue: '骨盆前倾', focus: '抗炎饮食', foods: '蓝莓、姜黄、橄榄油', avoid: '高糖加工食品' },
+  { issue: '产后腹直肌分离', focus: '胶原蛋白 + 优质蛋白', foods: '骨汤、鸡蛋、鱼类', avoid: '—' },
+  { issue: '脊柱侧弯', focus: '钙镁平衡', foods: '绿叶蔬菜、坚果', avoid: '—' },
+]
+
+const meals = ['早餐', '午餐', '晚餐']
+
+export default function Diet() {
+  const nav = useNavigate()
+  return (
+    <div className="font-body text-on-background">
+      <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40">
+        <button onClick={() => nav('/home')} className="active:scale-90 transition">
+          <span className="material-symbols-outlined text-on-surface">arrow_back</span>
+        </button>
+        <span className="font-headline text-[18px] text-on-surface">饮食建议</span>
+        <span className="w-6" />
+      </header>
+
+      <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
+        {/* 今日建议卡片 */}
+        <section className="bg-gradient-to-br from-secondary-container to-[#ffe088] rounded-lg p-5 shadow-lg">
+          <p className="font-label text-[12px] text-on-secondary-container uppercase tracking-wider">今日饮食建议</p>
+          <h2 className="font-headline text-[20px] text-on-secondary-container mt-1 mb-2">针对圆肩 · 加强骨骼排列</h2>
+          <p className="font-body text-sm text-on-secondary-container/80">
+            今天多补充钙与维生素 D：早餐一份牛奶 + 蛋黄，晚餐安排一次深海鱼。
+          </p>
+        </section>
+
+        {/* 体态问题 → 营养映射 */}
+        <section className="space-y-stack-md">
+          <h2 className="font-headline text-[18px] text-on-surface">体态 × 营养对照</h2>
+          <div className="space-y-3">
+            {mapping.map(m => (
+              <div key={m.issue} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-label text-[15px] text-on-surface">{m.issue}</span>
+                  <span className="font-label text-[11px] text-primary bg-primary-fixed px-2 py-0.5 rounded-full">{m.focus}</span>
+                </div>
+                <p className="font-body text-[13px] text-on-surface-variant">
+                  <span className="text-on-surface">推荐：</span>{m.foods}
+                  {m.avoid !== '—' && <span className="text-error"> · 避免：{m.avoid}</span>}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 简单三餐记录 */}
+        <section className="space-y-stack-md">
+          <div className="flex items-center justify-between">
+            <h2 className="font-headline text-[18px] text-on-surface">今日三餐记录</h2>
+            <span className="font-label text-[12px] text-outline">拍照 + 一句话 · 不算卡路里</span>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            {meals.map(m => (
+              <button key={m} className="aspect-square rounded-lg border-2 border-dashed border-outline-variant/50
+                bg-surface-container-lowest flex flex-col items-center justify-center gap-1 active:scale-95 transition">
+                <span className="material-symbols-outlined text-outline text-[28px]">add_a_photo</span>
+                <span className="font-label text-[12px] text-outline">{m}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
+  )
+}
