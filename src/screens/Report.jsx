@@ -1,6 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import Skeleton from '../components/Skeleton.jsx'
+
+function ReportSkeleton() {
+  return (
+    <div className="px-container-padding-mobile pb-10 space-y-stack-lg" aria-busy="true" aria-label="报告加载中">
+      <Skeleton className="h-44 w-full" />
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-32" rounded="rounded-md" />
+        {[0, 1, 2, 3, 4].map(i => <Skeleton key={i} className="h-16 w-full" />)}
+      </div>
+      <Skeleton className="h-14 w-full" />
+    </div>
+  )
+}
 
 const dims = [
   { name: '头颈姿态', score: 78, weight: '25%' },
@@ -89,19 +103,30 @@ function ShareCard({ onClose }) {
 export default function Report() {
   const nav = useNavigate()
   const [showShare, setShowShare] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  // 模拟从服务端拉取报告（真实产品会是网络请求）
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 850)
+    return () => clearTimeout(t)
+  }, [])
 
   return (
     <>
       <div className="font-body text-on-background">
         <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40">
-          <button onClick={() => nav('/home')} className="active:scale-90 transition">
+          <button onClick={() => nav('/home')} aria-label="返回首页" className="active:scale-90 transition">
             <Icon name="arrow_back" size={24} className="text-on-surface" />
           </button>
           <span className="font-headline text-[18px] text-on-surface">斯俪体态健康报告</span>
-          <button onClick={() => setShowShare(true)} className="active:scale-90 transition">
+          <button onClick={() => setShowShare(true)} aria-label="分享报告"
+            disabled={loading}
+            className="active:scale-90 transition disabled:opacity-40">
             <Icon name="ios_share" size={24} className="text-primary" />
           </button>
         </header>
+
+        {loading ? <ReportSkeleton /> : (
 
         <main className="px-container-padding-mobile pb-10 space-y-stack-lg">
           {/* 总分卡片 */}
@@ -153,6 +178,7 @@ export default function Report() {
             本报告由 AI 体态评估生成，仅供健康参考，不构成医疗诊断。如有不适请咨询专业医师。
           </p>
         </main>
+        )}
       </div>
 
       {showShare && <ShareCard onClose={() => setShowShare(false)} />}

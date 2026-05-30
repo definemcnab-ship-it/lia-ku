@@ -21,13 +21,13 @@ export default function Home() {
       {/* 顶部栏 */}
       <nav className="flex justify-between items-center px-container-padding-mobile py-stack-md w-full bg-surface sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <div onClick={() => nav('/profile')}
+          <button onClick={() => nav('/profile')} aria-label="我的主页"
             className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container cursor-pointer bg-primary-fixed flex items-center justify-center">
             <Icon name="person" size={22} className="text-primary" />
-          </div>
+          </button>
           <span className="font-headline text-[24px] text-primary tracking-tight">Slique</span>
         </div>
-        <button className="hover:opacity-80 active:scale-95 transition">
+        <button aria-label="通知" className="hover:opacity-80 active:scale-95 transition">
           <Icon name="notifications" size={28} className="text-primary" />
         </button>
       </nav>

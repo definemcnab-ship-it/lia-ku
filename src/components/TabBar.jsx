@@ -13,13 +13,13 @@ export default function TabBar() {
   const nav = useNavigate()
 
   return (
-    <nav className="flex-none flex justify-around items-center bg-surface px-2 pb-6 pt-3
+    <nav aria-label="主导航" className="flex-none flex justify-around items-center bg-surface px-2 pb-6 pt-3
       shadow-[0px_-4px_20px_rgba(230,126,102,0.08)] rounded-t-lg z-40">
       {tabs.map(t =>
         t.center ? (
           <div key={t.to} className="relative -mt-10 flex flex-col items-center">
             <button
-              onClick={() => nav(t.to)}
+              onClick={() => nav(t.to)} aria-label={t.label}
               className="bg-gradient-to-tr from-[#e67e66] to-[#ffb4a3] text-white w-14 h-14 rounded-full
                 flex items-center justify-center shadow-[0px_8px_24px_rgba(230,126,102,0.4)]
                 active:scale-90 transition-transform duration-200 border-4 border-surface">

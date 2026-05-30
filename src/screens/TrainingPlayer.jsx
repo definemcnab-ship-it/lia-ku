@@ -164,7 +164,7 @@ export default function TrainingPlayer() {
       {/* 顶部进度条 + 标题 */}
       <div className="px-5 pt-5 pb-3 space-y-2">
         <div className="flex items-center justify-between">
-          <button onClick={() => nav('/training')}
+          <button onClick={() => nav('/training')} aria-label="退出训练"
             className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
             <Icon name="close" size={18} className="text-white" />
           </button>
@@ -173,7 +173,7 @@ export default function TrainingPlayer() {
               动作 {exIdx + 1}/{EXERCISES.length} · 第 {setNum}/{totalSets} 组
             </p>
           </div>
-          <button onClick={() => setPaused(p => !p)}
+          <button onClick={() => setPaused(p => !p)} aria-label={paused ? '继续训练' : '暂停训练'}
             className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
             <Icon name={paused ? 'play_arrow' : 'pause'} size={18} className="text-white" />
           </button>

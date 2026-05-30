@@ -28,7 +28,7 @@ export default function Diet() {
   return (
     <div className="font-body text-on-background">
       <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40">
-        <button onClick={() => nav('/home')} className="active:scale-90 transition">
+        <button onClick={() => nav('/home')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
         <span className="font-headline text-[18px] text-on-surface">饮食建议</span>

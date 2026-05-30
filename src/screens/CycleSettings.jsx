@@ -135,7 +135,7 @@ export default function CycleSettings() {
   return (
     <div className="font-body text-on-background min-h-full">
       <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40 border-b border-surface-variant">
-        <button onClick={() => nav('/profile')} className="active:scale-90 transition">
+        <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
         <span className="font-headline text-[18px] text-on-surface">经期周期适配</span>
@@ -154,6 +154,7 @@ export default function CycleSettings() {
             <p className="font-label text-[12px] text-outline mt-0.5">根据生理周期自动调整训练强度</p>
           </div>
           <button onClick={() => setEnabled(e => !e)}
+            role="switch" aria-checked={enabled} aria-label="启用周期适配训练"
             className={`relative w-12 h-7 rounded-full transition-colors duration-300 ${enabled ? 'bg-primary' : 'bg-outline-variant'}`}>
             <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-all duration-300 ${enabled ? 'left-6' : 'left-1'}`} />
           </button>
@@ -188,20 +189,20 @@ export default function CycleSettings() {
               <div className="px-4 py-3 flex items-center justify-between border-b border-surface-variant">
                 <p className="font-label text-[15px] text-on-surface">周期长度</p>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => setCycleLen(l => Math.max(21, l - 1))}
+                  <button onClick={() => setCycleLen(l => Math.max(21, l - 1))} aria-label="减少周期长度"
                     className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center active:scale-90 transition font-bold text-on-surface-variant">−</button>
-                  <span className="font-label text-[16px] text-primary font-bold w-12 text-center">{cycleLen} 天</span>
-                  <button onClick={() => setCycleLen(l => Math.min(45, l + 1))}
+                  <span aria-live="polite" className="font-label text-[16px] text-primary font-bold w-12 text-center">{cycleLen} 天</span>
+                  <button onClick={() => setCycleLen(l => Math.min(45, l + 1))} aria-label="增加周期长度"
                     className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center active:scale-90 transition font-bold text-on-surface-variant">＋</button>
                 </div>
               </div>
               <div className="px-4 py-3 flex items-center justify-between">
                 <p className="font-label text-[15px] text-on-surface">经期天数</p>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => setPeriodLen(l => Math.max(2, l - 1))}
+                  <button onClick={() => setPeriodLen(l => Math.max(2, l - 1))} aria-label="减少经期天数"
                     className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center active:scale-90 transition font-bold text-on-surface-variant">−</button>
-                  <span className="font-label text-[16px] text-primary font-bold w-12 text-center">{periodLen} 天</span>
-                  <button onClick={() => setPeriodLen(l => Math.min(10, l + 1))}
+                  <span aria-live="polite" className="font-label text-[16px] text-primary font-bold w-12 text-center">{periodLen} 天</span>
+                  <button onClick={() => setPeriodLen(l => Math.min(10, l + 1))} aria-label="增加经期天数"
                     className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center active:scale-90 transition font-bold text-on-surface-variant">＋</button>
                 </div>
               </div>

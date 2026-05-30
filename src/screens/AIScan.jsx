@@ -77,7 +77,7 @@ export default function AIScan() {
 
       {/* 顶部状态条 */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-6">
-        <button onClick={() => nav('/home')}
+        <button onClick={() => nav('/home')} aria-label="退出扫描"
           className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
           <Icon name="close" size={20} className="text-white" />
         </button>
@@ -85,7 +85,7 @@ export default function AIScan() {
           <Icon name="graphic_eq" size={16} className="text-white animate-pulse-soft" />
           <span className="font-label text-[12px]">正在播放语音</span>
         </div>
-        <button className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
+        <button aria-label="拍摄帮助" className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
           <Icon name="help" size={20} className="text-white" />
         </button>
       </div>
@@ -124,16 +124,16 @@ export default function AIScan() {
 
       {/* 底部控制栏 */}
       <div className="absolute bottom-0 left-0 right-0 z-10 px-10 pb-10 flex items-center justify-between">
-        <button className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
+        <button aria-label="闪光灯" className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
           <Icon name="flash_on" size={22} className="text-white" />
         </button>
-        <button onClick={capture}
+        <button onClick={capture} aria-label={`拍摄${steps[shot]}照片`}
           className="w-20 h-20 rounded-full border-4 border-white/80 flex items-center justify-center active:scale-90 transition">
           <span className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#e67e66] to-[#ffb4a3] flex items-center justify-center">
             <Icon name="camera" size={28} className="text-white" />
           </span>
         </button>
-        <button className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
+        <button aria-label="从相册选择" className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
           <Icon name="photo_library" size={22} className="text-white" />
         </button>
       </div>
