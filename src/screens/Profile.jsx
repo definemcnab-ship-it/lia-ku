@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 
-// 我的（方案文档 §6 经期周期、§11 推送、§12 账号与隐私）。
 const groups = [
   {
     title: '训练偏好',
     items: [
-      { icon: 'event', label: '经期周期适配', extra: '已开启 · 28天' },
+      { icon: 'schedule', label: '经期周期适配', extra: '已开启 · 28天' },
       { icon: 'home', label: '训练场景', extra: '居家 / 办公室' },
       { icon: 'notifications', label: '推送通知', extra: '8:00–21:00' },
     ],
@@ -14,9 +14,9 @@ const groups = [
     title: '账号与隐私',
     items: [
       { icon: 'photo_library', label: '体态照片管理', extra: '可随时删除' },
-      { icon: 'download', label: '导出我的数据', extra: '个保法合规' },
-      { icon: 'shield', label: '隐私政策', extra: '' },
-      { icon: 'no_accounts', label: '注销账号', extra: '7 天冷静期', danger: true },
+      { icon: 'ios_share', label: '导出我的数据', extra: '个保法合规' },
+      { icon: 'lock', label: '隐私政策', extra: '' },
+      { icon: 'close', label: '注销账号', extra: '7 天冷静期', danger: true },
     ],
   },
 ]
@@ -27,9 +27,8 @@ export default function Profile() {
     <div className="font-body text-on-background">
       <header className="px-container-padding-mobile pt-stack-lg pb-stack-md">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary-container">
-            <img alt="头像" className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO3yRuRpo0wqoa9yzVrf7yRW863HZ8bMHb7N98KKSFLcwJrNga8TqTqYzeSiQjfKkneVaBN_58McJC53Lsy8GCu2DQj2sJ38lqAIXU2r_65NT4RU5ltny0Rer3eW7N04SnbA_ObP19m6v9wdmxK3yIYExZbKmICO22mYTLniXmhjsu10kZXcTzPraa0Hq7PbqTWuu71hpcOXqlWKlifJrTerBbWh__Mz9aAKQA28SB0z1Alzzf4p_-ZJkK-W5cugkMb9T0yCAgUl4" />
+          <div className="w-16 h-16 rounded-full border-2 border-primary-container bg-primary-fixed flex items-center justify-center">
+            <Icon name="person" size={32} className="text-primary" />
           </div>
           <div>
             <h1 className="font-headline text-[22px] text-on-surface">若曦</h1>
@@ -47,10 +46,10 @@ export default function Profile() {
                 <button key={it.label}
                   className={`w-full flex items-center gap-3 px-4 py-3.5 active:bg-surface-container transition
                     ${i > 0 ? 'border-t border-surface-variant' : ''}`}>
-                  <span className={`material-symbols-outlined ${it.danger ? 'text-error' : 'text-primary'}`}>{it.icon}</span>
+                  <Icon name={it.icon} size={22} className={it.danger ? 'text-error' : 'text-primary'} />
                   <span className={`flex-1 text-left font-label text-[15px] ${it.danger ? 'text-error' : 'text-on-surface'}`}>{it.label}</span>
                   {it.extra && <span className="font-label text-[12px] text-outline">{it.extra}</span>}
-                  <span className="material-symbols-outlined text-outline text-[20px]">chevron_right</span>
+                  <Icon name="chevron_right" size={20} className="text-outline" />
                 </button>
               ))}
             </div>

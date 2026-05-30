@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 
-// 斯俪体态健康报告（方案文档 §2.2 Step6 / §5 评分模型）。
 const dims = [
   { name: '头颈姿态', score: 78, weight: '25%' },
   { name: '肩背姿态', score: 82, weight: '25%' },
@@ -15,11 +15,11 @@ export default function Report() {
     <div className="font-body text-on-background">
       <header className="flex items-center justify-between px-container-padding-mobile py-stack-md sticky top-0 bg-surface z-40">
         <button onClick={() => nav('/home')} className="active:scale-90 transition">
-          <span className="material-symbols-outlined text-on-surface">arrow_back</span>
+          <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
         <span className="font-headline text-[18px] text-on-surface">斯俪体态健康报告</span>
         <button className="active:scale-90 transition">
-          <span className="material-symbols-outlined text-primary">ios_share</span>
+          <Icon name="ios_share" size={24} className="text-primary" />
         </button>
       </header>
 
@@ -61,7 +61,8 @@ export default function Report() {
           </button>
           <button className="w-full h-14 bg-surface-container-lowest border border-outline-variant/40 text-on-surface-variant
             font-label text-lg rounded-lg active:scale-[0.98] transition flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined">share</span>分享我的体态报告
+            <Icon name="share" size={20} className="text-on-surface-variant" />
+            分享我的体态报告
           </button>
         </section>
 

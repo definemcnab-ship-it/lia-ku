@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 
 // 训练 / 动作库（方案文档 §2.1 训练核心、§4 体态问题分类）。
 const categories = [
@@ -48,7 +49,7 @@ export default function Training() {
           </div>
           <button className="w-full h-14 bg-primary text-on-primary font-label text-lg rounded-lg active:scale-[0.98] transition
             flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined fill-icon">play_arrow</span>开始训练
+            <Icon name="play_arrow" size={20} className="text-white" />开始训练
           </button>
         </section>
 

@@ -1,42 +1,92 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 
-// 还原设计稿 ai_1（AI 体态扫描 / AR 取景对位）。沉浸式深色全屏，隐藏底部导航。
-// 方案文档：上传正面/右侧面/背面 3 张照片 → AI 关键点检测 → 生成体态报告。
 const steps = ['正面', '右侧面', '背面']
 
 export default function AIScan() {
   const nav = useNavigate()
-  const [shot, setShot] = useState(0) // 已拍张数
+  const [shot, setShot] = useState(0)
+  const [analyzing, setAnalyzing] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   const capture = () => {
     if (shot + 1 >= steps.length) {
-      // 模拟 30 秒 AI 分析后跳转报告
-      nav('/report')
+      setAnalyzing(true)
+      let p = 0
+      const interval = setInterval(() => {
+        p += 2
+        setProgress(p)
+        if (p >= 100) {
+          clearInterval(interval)
+          nav('/report')
+        }
+      }, 600)
     } else {
       setShot(shot + 1)
     }
   }
 
+  if (analyzing) {
+    return (
+      <div className="relative h-full w-full bg-[#1b1c1c] text-white overflow-hidden flex flex-col items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1b1c1c] via-[#2a1f1e] to-[#1b1c1c]" />
+        <div className="relative z-10 flex flex-col items-center gap-8 px-10 text-center">
+          <div className="relative w-32 h-32">
+            <svg className="w-full h-full -rotate-90 animate-spin" style={{ animationDuration: '3s' }} viewBox="0 0 128 128">
+              <circle cx="64" cy="64" r="56" fill="none" stroke="#ffffff15" strokeWidth="6" />
+              <circle cx="64" cy="64" r="56" fill="none" stroke="url(#scanGrad)" strokeWidth="6"
+                strokeLinecap="round" strokeDasharray="351.86" strokeDashoffset={351.86 * (1 - progress / 100)} />
+              <defs>
+                <linearGradient id="scanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#e67e66" />
+                  <stop offset="100%" stopColor="#ffb4a3" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Icon name="accessibility_new" size={40} className="text-primary-container" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-headline text-[24px]">AI 正在分析您的体态</h2>
+            <p className="font-body text-[14px] text-white/70">检测关键骨骼点 · 计算偏移量 · 生成报告…</p>
+          </div>
+
+          <div className="w-full bg-white/10 rounded-full h-1.5">
+            <div className="bg-gradient-to-r from-[#e67e66] to-[#ffb4a3] h-1.5 rounded-full transition-all duration-500"
+              style={{ width: `${progress}%` }} />
+          </div>
+          <p className="font-label text-[14px] text-primary-container">{progress}%</p>
+
+          <div className="flex flex-col gap-2 text-left w-full">
+            {['✓ 检测到 17 个骨骼关键点', '✓ 正面姿态分析完成', progress > 40 ? '✓ 侧面曲线分析完成' : '⋯ 分析侧面曲线…', progress > 70 ? '✓ 背部对称性评估完成' : '⋯ 评估背部对称性…'].map((item, i) => (
+              <p key={i} className={`font-label text-[13px] ${item.startsWith('✓') ? 'text-white/90' : 'text-white/40'}`}>{item}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="relative h-full w-full bg-[#1b1c1c] text-white overflow-hidden">
-      {/* 取景背景（模拟相机画面） */}
-      <img alt="取景画面" className="absolute inset-0 w-full h-full object-cover opacity-70"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHyI6whnTs_z1rs6V8iZd8gUmfEqQxIkKNwBvmvPRywg-Kt2-FAxQn7MH_y--q4UF7wcBxy7aXozKTMXsakKByqpsaTn88vostK0QLRg9LAAKe4xh5htOmBneMWTv4nIrtMNJSo_9Jx_vwHbh92PtHH_fgkCjiCv8tiwCSh2ysPE-_aEgs1KyOeiOaEke9tPIz8Z1nJ5dft6YFf_B3uNSLXt9c0TyBfYOM_W8d-SzumUZ2Ua5-R0VNaznf_8_mSuQsZyF-NCSzj1I" />
-      <div className="absolute inset-0 bg-black/30" />
+      {/* 模拟相机画面背景 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#2a2a2a] to-[#1b1c1c]" />
 
       {/* 顶部状态条 */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-6">
         <button onClick={() => nav('/home')}
           className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
-          <span className="material-symbols-outlined text-white">close</span>
+          <Icon name="close" size={20} className="text-white" />
         </button>
         <div className="flex items-center gap-2 bg-primary/90 px-3 py-1.5 rounded-full">
-          <span className="material-symbols-outlined fill-icon text-[16px]">graphic_eq</span>
+          <Icon name="graphic_eq" size={16} className="text-white" />
           <span className="font-label text-[12px]">正在播放语音</span>
         </div>
         <button className="w-9 h-9 rounded-full bg-black/40 flex items-center justify-center">
-          <span className="material-symbols-outlined text-white">help</span>
+          <Icon name="help" size={20} className="text-white" />
         </button>
       </div>
 
@@ -61,23 +111,23 @@ export default function AIScan() {
       {/* 底部进度点 */}
       <div className="absolute bottom-32 left-0 right-0 z-10 flex justify-center gap-2">
         {steps.map((s, i) => (
-          <div key={s} className={`w-2.5 h-2.5 rounded-full ${i <= shot ? 'bg-primary-container' : 'bg-white/40'}`} />
+          <div key={s} className={`w-2.5 h-2.5 rounded-full ${i < shot ? 'bg-primary' : i === shot ? 'bg-primary-container' : 'bg-white/40'}`} />
         ))}
       </div>
 
       {/* 底部控制栏 */}
       <div className="absolute bottom-0 left-0 right-0 z-10 px-10 pb-10 flex items-center justify-between">
         <button className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
-          <span className="material-symbols-outlined text-white">flash_on</span>
+          <Icon name="flash_on" size={22} className="text-white" />
         </button>
         <button onClick={capture}
           className="w-20 h-20 rounded-full border-4 border-white/80 flex items-center justify-center active:scale-90 transition">
           <span className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#e67e66] to-[#ffb4a3] flex items-center justify-center">
-            <span className="material-symbols-outlined text-white text-[30px]">shutter_speed</span>
+            <Icon name="camera" size={28} className="text-white" />
           </span>
         </button>
         <button className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center">
-          <span className="material-symbols-outlined text-white">photo_library</span>
+          <Icon name="photo_library" size={22} className="text-white" />
         </button>
       </div>
     </div>
