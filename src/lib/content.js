@@ -4,7 +4,7 @@
 // —— 动作库（七大体态分类 → 三级动作详情） ——
 export const LIBRARY = [
   {
-    id: 'upper-crossed', name: '上交叉综合征', en: 'Upper Crossed', color: 'bg-primary-fixed text-on-surface-variant',
+    id: 'upper-crossed', name: '上交叉综合征', en: 'Upper Crossed', color: 'bg-[#e9e2d4] text-on-surface-variant',
     desc: '头前引、圆肩、含胸——长期伏案的典型代偿。目标：放松胸小肌与上斜方，强化深层颈屈肌与中下斜方。',
     exercises: [
       { name: '下巴后缩', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline',
@@ -22,7 +22,7 @@ export const LIBRARY = [
     ],
   },
   {
-    id: 'lower-crossed', name: '下交叉综合征', en: 'Lower Crossed', color: 'bg-surface-container-high text-on-surface-variant',
+    id: 'lower-crossed', name: '下交叉综合征', en: 'Lower Crossed', color: 'bg-[#dfe3dd] text-on-surface-variant',
     desc: '骨盆前倾、腰椎过度前凸。目标：放松髂腰肌与竖脊肌，强化臀大肌与核心。',
     exercises: [
       { name: '臀桥', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline',
@@ -37,7 +37,7 @@ export const LIBRARY = [
     ],
   },
   {
-    id: 'diastasis', name: '产后腹直肌分离', en: 'Diastasis Recti', color: 'bg-primary-fixed text-primary',
+    id: 'diastasis', name: '产后腹直肌分离', en: 'Diastasis Recti', color: 'bg-[#ece0d8] text-on-surface-variant',
     desc: '产后腹白线松弛、腹直肌分离。目标：唤醒腹横肌，避免卷腹等增加腹压的动作。',
     exercises: [
       { name: '腹式呼吸激活', dur: '3 组 × 10 次', level: '基础', lc: 'bg-surface-container text-outline',
@@ -49,7 +49,7 @@ export const LIBRARY = [
     ],
   },
   {
-    id: 'scoliosis', name: '脊柱侧弯', en: 'Scoliosis', color: 'bg-secondary-fixed/40 text-on-secondary-container',
+    id: 'scoliosis', name: '脊柱侧弯', en: 'Scoliosis', color: 'bg-[#e7e4ea] text-on-surface-variant',
     desc: '脊柱左右不对称。原型仅提供温和对称性训练，结构性侧弯请遵医嘱。',
     exercises: [
       { name: '猫牛式', dur: '3 组 × 10 次', level: '基础', lc: 'bg-surface-container text-outline',
@@ -61,7 +61,7 @@ export const LIBRARY = [
     ],
   },
   {
-    id: 'shoulder', name: '高低肩 / 翼状肩胛', en: 'Shoulder Imbalance', color: 'bg-primary-fixed text-on-surface-variant',
+    id: 'shoulder', name: '高低肩 / 翼状肩胛', en: 'Shoulder Imbalance', color: 'bg-[#e4e6ea] text-on-surface-variant',
     desc: '双肩高低不一、肩胛内侧翘起。目标：强化前锯肌与下斜方，建立肩胛稳定。',
     exercises: [
       { name: '靠墙天使', dur: '3 组 × 12 次', level: '基础', lc: 'bg-surface-container text-outline',
@@ -73,7 +73,7 @@ export const LIBRARY = [
     ],
   },
   {
-    id: 'leg', name: '膝超伸 / X·O 型腿', en: 'Leg Alignment', color: 'bg-surface-container-high text-on-surface-variant',
+    id: 'leg', name: '膝超伸 / X·O 型腿', en: 'Leg Alignment', color: 'bg-[#ebe6d6] text-on-surface-variant',
     desc: '膝关节过伸或腿型不正。目标：强化臀中肌与腘绳肌，改善下肢力线。',
     exercises: [
       { name: '蚌式开合', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline',
