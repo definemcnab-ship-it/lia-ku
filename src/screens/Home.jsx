@@ -46,24 +46,25 @@ export default function Home() {
 
       <HomeBanner />
 
-      <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
+      <main className="px-container-padding-mobile pb-8 space-y-10">
         {/* 欢迎 + 体态分概览 */}
-        <section className="mt-stack-md">
-          <div className="mb-stack-md">
-            <h1 className="font-headline text-[36px] leading-[44px] text-on-surface">{greeting()}</h1>
-            <p className="font-body text-on-surface-variant">今天也要保持优雅体态哦 ✨</p>
+        <section className="mt-stack-lg space-y-stack-lg">
+          <div className="space-y-1.5">
+            <p className="font-label text-[11px] text-gold uppercase tracking-[0.2em]">SLIQUE · 优雅体态</p>
+            <h1 className="font-headline text-[34px] leading-[42px] text-ink font-medium">{greeting()}</h1>
+            <p className="font-body text-[14px] text-on-surface-variant">今天也要保持优雅体态哦 ✨</p>
           </div>
           <div onClick={() => nav('/report')}
-            className="bg-surface-container-lowest rounded-lg p-stack-md shadow-[0px_4px_20px_rgba(230,126,102,0.08)]
-              border border-primary-fixed flex items-center justify-between cursor-pointer">
-            <div className="space-y-1">
-              <p className="font-label text-[12px] text-outline uppercase tracking-wider">当前体态分</p>
-              <div className="flex items-baseline gap-1">
-                <span className="font-display text-[36px] leading-[44px] font-bold text-primary">{postureScore}</span>
-                <span className="font-label text-[14px] text-on-surface-variant">/ 100</span>
+            className="bg-surface-container-lowest rounded-[28px] p-6 shadow-soft
+              flex items-center justify-between cursor-pointer active:scale-[0.99] transition-transform">
+            <div className="space-y-2">
+              <p className="font-label text-[11px] text-outline uppercase tracking-[0.15em]">当前体态分</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-display text-[44px] leading-none text-ink">{postureScore}</span>
+                <span className="font-label text-[13px] text-outline">/ 100</span>
               </div>
-              <div className="flex items-center gap-1 text-secondary">
-                <Icon name="trending_up" size={16} />
+              <div className="flex items-center gap-1.5 text-gold">
+                <Icon name="trending_up" size={15} />
                 <span className="font-label text-[12px]">
                   {diff > 0 ? `较上次提升了 ${diff} 分` : diff < 0 ? `较上次下降了 ${-diff} 分` : '坚持训练即可提升'}
                 </span>
@@ -71,12 +72,12 @@ export default function Home() {
             </div>
             <div className="relative w-24 h-24 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
-                <circle className="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" strokeWidth="8" />
-                <circle className="text-primary-container animate-ring-draw" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
-                  strokeDasharray="251.2" strokeWidth="8" strokeLinecap="round"
+                <circle className="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" strokeWidth="6" />
+                <circle className="text-gold animate-ring-draw" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
+                  strokeDasharray="251.2" strokeWidth="6" strokeLinecap="round"
                   style={{ '--ring-offset': `${ringOffset}px`, strokeDashoffset: ringOffset }} />
               </svg>
-              <Icon name="accessibility_new" size={32} className="absolute text-primary" />
+              <Icon name="accessibility_new" size={30} className="absolute text-primary" />
             </div>
           </div>
         </section>
@@ -84,11 +85,11 @@ export default function Home() {
         {/* 今日训练计划 */}
         <section className="space-y-stack-md">
           <div className="flex justify-between items-center">
-            <h2 className="font-headline text-[24px] text-on-surface">今日训练计划</h2>
+            <h2 className="font-headline text-[22px] text-ink font-medium">今日训练计划</h2>
             <button onClick={() => nav('/training')} className="font-label text-[14px] text-primary">查看全部</button>
           </div>
           <div onClick={() => nav('/training')}
-            className="relative bg-surface-container-lowest rounded-lg overflow-hidden shadow-lg border border-surface-variant
+            className="relative bg-surface-container-lowest rounded-[28px] overflow-hidden shadow-soft
               group active:scale-[0.98] transition-transform cursor-pointer">
             <div className="h-48 w-full bg-gradient-to-br from-primary-fixed to-primary-container flex items-center justify-center relative">
               <div className="text-center text-primary">
@@ -167,7 +168,7 @@ export default function Home() {
         {/* 斯俪圈子 */}
         <section className="space-y-stack-md">
           <div className="flex justify-between items-center">
-            <h2 className="font-headline text-[24px] text-on-surface">斯俪圈子</h2>
+            <h2 className="font-headline text-[22px] text-ink font-medium">斯俪圈子</h2>
             <button onClick={() => nav('/community')} className="font-label text-[14px] text-primary">进入圈子</button>
           </div>
           <div onClick={() => nav('/community')}
@@ -199,7 +200,7 @@ export default function Home() {
 
         {/* 每日体态小贴士 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[24px] text-on-surface">每日体态小贴士</h2>
+          <h2 className="font-headline text-[22px] text-ink font-medium">每日体态小贴士</h2>
           <div className="bg-[#ece8e0]/60 rounded-lg p-stack-md flex items-start gap-4 border border-[#ece8e0]">
             <div className="bg-[#ece8e0] p-2 rounded-md">
               <Icon name="lightbulb" size={22} className="text-[#8f8779]" />

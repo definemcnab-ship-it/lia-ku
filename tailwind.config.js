@@ -38,6 +38,16 @@ export default {
         error: '#a85c47',
         mint: '#ece8e0',
         lavender: '#e6e1d8',
+        // 轻奢点睛色：暖古铜，仅用于小面积强调（数字、徽标、分隔线）
+        gold: '#a98c66',
+        'gold-soft': '#c4ab86',
+        // 更深的标题墨色，提升对比与厚重感
+        ink: '#2b2720',
+      },
+      boxShadow: {
+        // 高级柔和阴影：低透明、大扩散，营造悬浮呼吸感
+        soft: '0 1px 2px rgba(43,39,32,0.04), 0 8px 24px rgba(43,39,32,0.06)',
+        'soft-lg': '0 2px 4px rgba(43,39,32,0.04), 0 16px 48px rgba(43,39,32,0.08)',
       },
       borderRadius: { DEFAULT: '1rem', lg: '2rem', xl: '3rem', full: '9999px' },
       spacing: {
@@ -51,8 +61,8 @@ export default {
         'container-padding-desktop': '64px',
       },
       fontFamily: {
-        headline: ['Inter', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
-        display: ['Inter', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+        headline: ['"Noto Serif SC"', 'Georgia', 'PingFang SC', 'Songti SC', 'serif'],
+        display: ['"Noto Serif SC"', 'Georgia', 'PingFang SC', 'Songti SC', 'serif'],
         body: ['Inter', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
         label: ['Inter', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
       },
