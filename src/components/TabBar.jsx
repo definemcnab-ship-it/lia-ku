@@ -45,10 +45,10 @@ export default function TabBar() {
                   transition-all duration-300
                   ${isActive ? 'bg-primary/12' : 'bg-transparent'}`}>
                   {isActive && (
-                    <span className="absolute top-0.5 left-1/2 -translate-x-1/2 w-4 h-[3px] rounded-full bg-primary" />
+                    <span className="absolute top-0.5 left-1/2 -translate-x-1/2 w-4 h-[3px] rounded-full bg-primary animate-fade-in" />
                   )}
-                  <Icon name={t.icon} size={20}
-                    className={`transition-all duration-200 ${isActive ? 'text-primary scale-110' : 'text-on-surface-variant/50'}`} />
+                  <Icon name={t.icon} size={20} outline={!isActive}
+                    className={isActive ? 'text-primary animate-tab-pop' : 'text-on-surface-variant/45'} />
                 </div>
                 <span className={`font-label text-[10px] tracking-wide transition-all duration-200
                   ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant/50'}`}>

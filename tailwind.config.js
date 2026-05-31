@@ -89,6 +89,11 @@ export default {
           from: { opacity: '0', transform: 'translateY(20px)' },
           to:   { opacity: '1', transform: 'translateY(0)' },
         },
+        tabPop: {
+          '0%':   { transform: 'scale(0.8)' },
+          '55%':  { transform: 'scale(1.25)' },
+          '100%': { transform: 'scale(1.1)' },
+        },
       },
       animation: {
         'page-in':    'pageIn 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both',
@@ -99,6 +104,7 @@ export default {
         'ring-draw':  'ringDraw 1s cubic-bezier(0.25,0.46,0.45,0.94) both',
         'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
         'slide-up':   'slideUp 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both',
+        'tab-pop':    'tabPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both',
       },
     },
   },
