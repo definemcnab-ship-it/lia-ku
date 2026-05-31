@@ -2,34 +2,30 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { COMMUNITY_TOPICS, COMMUNITY_POSTS } from '../lib/content.js'
+import { useStore, toggleCommunityLike, addCommunityPost } from '../lib/store.js'
 
-// 社群圈子：体态矫正同好动态流。原型为运营内容 + 本地交互（点赞/发布）。
+// 社群圈子：体态矫正同好动态流。运营内容 + 本地交互（点赞/发布，持久化）。
 export default function Community() {
   const nav = useNavigate()
+  const { community } = useStore()
   const [topic, setTopic] = useState('rec')
-  const [likes, setLikes] = useState(() =>
-    Object.fromEntries(COMMUNITY_POSTS.map(p => [p.id, { count: p.likes, on: false }])))
   const [composing, setComposing] = useState(false)
   const [draft, setDraft] = useState('')
-  const [myPosts, setMyPosts] = useState([])
 
-  const toggleLike = (id) => setLikes(s => {
-    const cur = s[id]
-    return { ...s, [id]: { count: cur.count + (cur.on ? -1 : 1), on: !cur.on } }
-  })
+  // 某条动态当前的点赞数 = 基础数 + 我是否点赞
+  const likeCount = (p) => (p.likes ?? 0) + (community.likes[p.id] ? 1 : 0)
+  const likedByMe = (id) => !!community.likes[id]
 
   const publish = () => {
     if (!draft.trim()) return
-    const post = {
+    addCommunityPost({
       id: `me-${Date.now()}`, name: '若曦', level: '初遇', avatarBg: 'bg-primary-fixed',
-      time: '刚刚', tag: '我的动态', text: draft.trim(), img: null, mine: true,
-    }
-    setMyPosts(p => [post, ...p])
-    setLikes(s => ({ ...s, [post.id]: { count: 0, on: false } }))
+      time: '刚刚', tag: '我的动态', text: draft.trim(), img: null, mine: true, likes: 0, comments: 0,
+    })
     setDraft(''); setComposing(false)
   }
 
-  const allPosts = [...myPosts, ...COMMUNITY_POSTS]
+  const allPosts = [...community.posts, ...COMMUNITY_POSTS]
   const posts = topic === 'rec' ? allPosts : allPosts.filter(p => p.topic === topic || p.mine)
 
   return (
@@ -55,7 +51,7 @@ export default function Community() {
 
       <main className="px-container-padding-mobile pb-24 space-y-3 pt-2">
         {posts.map(p => {
-          const lk = likes[p.id] || { count: 0, on: false }
+          const liked = likedByMe(p.id)
           return (
             <article key={p.id} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
               <div className="flex items-center gap-3 mb-2">
@@ -83,10 +79,10 @@ export default function Community() {
               )}
 
               <div className="flex items-center gap-6 mt-3 pt-3 border-t border-surface-variant">
-                <button onClick={() => toggleLike(p.id)}
+                <button onClick={() => toggleCommunityLike(p.id)}
                   className="flex items-center gap-1.5 active:scale-90 transition">
-                  <Icon name="favorite" size={18} className={lk.on ? 'text-error' : 'text-outline'} />
-                  <span className={`font-label text-[13px] ${lk.on ? 'text-error' : 'text-outline'}`}>{lk.count}</span>
+                  <Icon name="favorite" size={18} className={liked ? 'text-error' : 'text-outline'} />
+                  <span className={`font-label text-[13px] ${liked ? 'text-error' : 'text-outline'}`}>{likeCount(p)}</span>
                 </button>
                 <div className="flex items-center gap-1.5">
                   <Icon name="description" size={17} className="text-outline" />

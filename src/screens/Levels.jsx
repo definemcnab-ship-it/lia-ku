@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { useStore, recordTrainingDone, todayStr } from '../lib/store.js'
@@ -10,6 +11,14 @@ export default function Levels() {
   const total = checkIns.length
   const { index, current, next, progress, remain } = computeLevel(total)
   const checkedToday = checkIns.includes(todayStr())
+
+  // 升级庆祝：打卡后等级 index 提升时弹出
+  const prevIndex = useRef(index)
+  const [celebrate, setCelebrate] = useState(null)
+  useEffect(() => {
+    if (index > prevIndex.current) setCelebrate(SLIQUE_LEVELS[index])
+    prevIndex.current = index
+  }, [index])
 
   return (
     <div className="font-body text-on-background">
@@ -95,6 +104,31 @@ export default function Levels() {
           每完成一次训练打卡累计 1 天，连续坚持即可解锁更高等级与专属权益。
         </p>
       </main>
+
+      {/* 升级庆祝 */}
+      {celebrate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-8 animate-fade-in"
+          onClick={() => setCelebrate(null)}>
+          <div className="bg-surface rounded-2xl p-7 w-full max-w-[320px] text-center animate-page-in" onClick={e => e.stopPropagation()}>
+            <div className={`w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center ${celebrate.color}`}>
+              <Icon name={celebrate.icon} size={40} className="text-[#8f8779]" />
+            </div>
+            <p className="font-label text-[12px] text-primary uppercase tracking-widest mb-1">Level Up</p>
+            <h3 className="font-headline text-[24px] text-on-surface mb-1">升级「{celebrate.name}」</h3>
+            <p className="font-body text-[13px] text-on-surface-variant mb-4 leading-relaxed">
+              恭喜解锁专属权益：{celebrate.perk}
+            </p>
+            <div className="flex items-center justify-center gap-1.5 bg-primary-fixed rounded-lg py-2.5 mb-5">
+              <Icon name="redeem" size={16} className="text-primary" />
+              <span className="font-label text-[13px] text-primary">{celebrate.reward}</span>
+            </div>
+            <button onClick={() => setCelebrate(null)}
+              className="w-full h-11 bg-primary text-white font-label rounded-lg active:scale-95 transition">
+              继续加油
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

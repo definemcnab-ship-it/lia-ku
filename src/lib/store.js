@@ -19,6 +19,8 @@ const defaults = {
     { id: 'p1', date: '2026-05-30', label: '正面', score: 85 },
     { id: 'p2', date: '2026-05-30', label: '侧面', score: 85 },
   ],
+  // 社群圈子：用户点赞状态与自己发布的动态（持久化，刷新不丢）
+  community: { likes: {}, posts: [] },
 }
 
 function load() {
@@ -108,6 +110,20 @@ export function countThisMonth(checkIns) {
   const now = new Date()
   const prefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-`
   return checkIns.filter(c => c.startsWith(prefix)).length
+}
+
+// 切换某条动态的点赞状态（持久化）
+export function toggleCommunityLike(id) {
+  setState(s => {
+    const likes = { ...s.community.likes }
+    likes[id] = !likes[id]
+    return { community: { ...s.community, likes } }
+  })
+}
+
+// 发布一条我的动态（最新在前，持久化）
+export function addCommunityPost(post) {
+  setState(s => ({ community: { ...s.community, posts: [post, ...s.community.posts] } }))
 }
 
 // 清空全部本地数据（用于"我的 → 清除数据"）
