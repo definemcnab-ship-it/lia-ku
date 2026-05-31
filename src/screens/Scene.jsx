@@ -34,7 +34,7 @@ export default function Scene() {
         <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">训练场景</span>
+        <span className="font-headline text-[18px] text-ink">训练场景</span>
         <span className="w-6" />
       </header>
 

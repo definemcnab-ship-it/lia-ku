@@ -18,7 +18,7 @@ export default function DietPlan() {
         <button onClick={() => nav('/diet')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface truncate px-3">{plan.issue}</span>
+        <span className="font-headline text-[18px] text-ink truncate px-3">{plan.issue}</span>
         <span className="w-6" />
       </header>
 
@@ -30,7 +30,7 @@ export default function DietPlan() {
         </section>
 
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[18px] text-on-surface">推荐食材</h2>
+          <h2 className="font-headline text-[18px] text-ink font-light">推荐食材</h2>
           <div className="flex flex-wrap gap-2">
             {plan.foods.map(f => (
               <span key={f} className="font-label text-[13px] bg-primary-fixed text-on-surface-variant px-3 py-1.5 rounded-full">{f}</span>
@@ -40,7 +40,7 @@ export default function DietPlan() {
 
         {plan.avoid.length > 0 && (
           <section className="space-y-stack-md">
-            <h2 className="font-headline text-[18px] text-on-surface">建议避免</h2>
+            <h2 className="font-headline text-[18px] text-ink font-light">建议避免</h2>
             <div className="flex flex-wrap gap-2">
               {plan.avoid.map(f => (
                 <span key={f} className="font-label text-[13px] bg-error/10 text-error px-3 py-1.5 rounded-full">{f}</span>
@@ -50,11 +50,11 @@ export default function DietPlan() {
         )}
 
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[18px] text-on-surface">参考一日餐单</h2>
+          <h2 className="font-headline text-[18px] text-ink font-light">参考一日餐单</h2>
           <div className="space-y-3">
             {Object.entries(plan.day).map(([meal, food]) => (
               <div key={meal} className="bg-surface-container-lowest rounded-lg p-4 flex items-center gap-4
-                shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+                shadow-soft">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center shrink-0">
                   <Icon name={mealIcons[meal] || 'restaurant'} size={20} className="text-primary" />
                 </div>

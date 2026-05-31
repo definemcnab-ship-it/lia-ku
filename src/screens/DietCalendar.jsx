@@ -46,18 +46,18 @@ export default function DietCalendar() {
         <button onClick={() => nav('/diet')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">饮食日历</span>
+        <span className="font-headline text-[18px] text-ink font-light">饮食日历</span>
         <span className="w-6" />
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
         {/* 月切换 + 统计 */}
-        <section className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+        <section className="bg-surface-container-lowest rounded-lg p-4 shadow-soft">
           <div className="flex items-center justify-between mb-4">
             <button onClick={() => shift(-1)} aria-label="上个月" className="active:scale-90 transition p-1">
               <Icon name="chevron_left" size={22} className="text-on-surface-variant" />
             </button>
-            <span className="font-headline text-[17px] text-on-surface">{cursor.y} 年 {cursor.m + 1} 月</span>
+            <span className="font-headline text-[17px] text-ink font-light">{cursor.y} 年 {cursor.m + 1} 月</span>
             <button onClick={() => shift(1)} aria-label="下个月" className="active:scale-90 transition p-1">
               <Icon name="chevron_right" size={22} className="text-on-surface-variant" />
             </button>
@@ -97,7 +97,7 @@ export default function DietCalendar() {
 
         {/* 选中日期的三餐 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[18px] text-on-surface">
+          <h2 className="font-headline text-[18px] text-ink font-light">
             {picked === today ? '今日' : picked.slice(5)} 三餐记录
           </h2>
           <div className="grid grid-cols-3 gap-3">

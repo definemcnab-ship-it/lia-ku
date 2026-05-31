@@ -16,7 +16,7 @@ export default function Training() {
   return (
     <div className="font-body text-on-background">
       <header className="px-container-padding-mobile pt-stack-md pb-2 sticky top-0 bg-surface z-40">
-        <h1 className="font-headline text-[28px] text-on-surface">矫正训练</h1>
+        <h1 className="font-headline text-[28px] text-ink font-light">矫正训练</h1>
         <p className="font-body text-on-surface-variant text-sm">天鹅颈塑形课 · 8周挺拔如模特 · 15分钟</p>
       </header>
 
@@ -24,13 +24,13 @@ export default function Training() {
         {/* 今日课表 */}
         <section className="space-y-stack-md">
           <div className="flex items-center justify-between">
-            <h2 className="font-headline text-[20px] text-on-surface">今日课表</h2>
+            <h2 className="font-headline text-[20px] text-ink font-light">今日课表</h2>
             <span className="font-label text-[12px] text-outline">70% 基础 · 20% 进阶 · 10% 挑战</span>
           </div>
           <div className="space-y-3">
             {todayPlan.map((m, i) => (
               <div key={m.name} className="bg-surface-container-lowest rounded-lg p-4 flex items-center gap-4
-                shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+                shadow-soft">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">{i + 1}</div>
                 <div className="flex-1">
                   <p className="font-label text-[15px] text-on-surface">{m.name}</p>
@@ -49,7 +49,7 @@ export default function Training() {
 
         {/* 动作库分类 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[20px] text-on-surface">动作库 · 七大体态分类</h2>
+          <h2 className="font-headline text-[20px] text-ink font-light">动作库 · 七大体态分类</h2>
           <div className="grid grid-cols-2 gap-3">
             {LIBRARY.map(c => (
               <button key={c.id} onClick={() => nav(`/library/${c.id}`)}

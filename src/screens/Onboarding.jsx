@@ -43,7 +43,7 @@ export default function Onboarding() {
       <p className="font-body text-on-surface-variant leading-relaxed">AI 体态评估 → 专属矫正计划 → 肉眼可见的改变。</p>
     </div>,
     <div key="s3" className="px-8 w-full">
-      <h2 className="font-headline text-[24px] text-on-surface mb-2">完善基础信息</h2>
+      <h2 className="font-headline text-[24px] text-ink mb-2">完善基础信息</h2>
       <p className="font-body text-on-surface-variant text-sm mb-6">用于体态分对照标准，可稍后在设置中补充。</p>
       <p className="font-label text-[14px] text-on-surface mb-2">训练场景（可多选）</p>
       <div className="flex flex-wrap gap-2 mb-6">
@@ -70,7 +70,7 @@ export default function Onboarding() {
       <div className="w-40 h-40 rounded-2xl bg-primary-fixed/50 flex items-center justify-center mb-6">
         <Icon name="photo_camera" size={64} className="text-primary" />
       </div>
-      <h2 className="font-headline text-[24px] text-on-surface mb-3">免费体态评估</h2>
+      <h2 className="font-headline text-[24px] text-ink mb-3">免费体态评估</h2>
       <p className="font-body text-on-surface-variant leading-relaxed mb-4">
         拍摄正面 / 侧面 / 背面 3 张照片，AI 即可生成你的「斯俪体态健康报告」。
       </p>

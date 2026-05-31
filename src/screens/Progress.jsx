@@ -113,7 +113,7 @@ export default function Progress() {
       <header className="px-container-padding-mobile pt-stack-md pb-2 sticky top-0 bg-surface z-40 border-b border-surface-variant">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-headline text-[28px] text-on-surface">进步追踪</h1>
+            <h1 className="font-headline text-[28px] text-ink font-light">进步追踪</h1>
             <p className="font-body text-on-surface-variant text-sm">累计体态分 +{totalGain} 🎉</p>
           </div>
           <button onClick={() => nav('/report')}
@@ -129,11 +129,11 @@ export default function Progress() {
         {/* 摘要统计 */}
         <section className="grid grid-cols-3 gap-3 mt-stack-md">
           {[
-            { val: String(postureScore), unit: '分', desc: '当前体态分', color: 'text-primary' },
+            { val: String(postureScore), unit: '分', desc: '当前体态分', color: 'text-gold' },
             { val: String(streak), unit: '天', desc: '当前连续打卡', color: 'text-on-surface-variant' },
             { val: String(trainedDays), unit: '次', desc: '本月训练', color: 'text-on-surface-variant' },
           ].map(s => (
-            <div key={s.desc} className="bg-surface-container-lowest rounded-lg p-3 text-center shadow-[0px_4px_16px_rgba(230,126,102,0.06)]">
+            <div key={s.desc} className="bg-surface-container-lowest rounded-lg p-3 text-center shadow-soft">
               <div className="flex items-end justify-center gap-0.5">
                 <span className={`font-display text-[28px] font-bold leading-none ${s.color}`}>{s.val}</span>
                 <span className={`font-label text-[13px] pb-0.5 ${s.color}`}>{s.unit}</span>
@@ -156,10 +156,10 @@ export default function Progress() {
           </div>
 
           {activeTab === 'chart' && (
-            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-soft">
               <div className="flex justify-between items-baseline mb-4">
-                <h2 className="font-headline text-[17px] text-on-surface">斯俪体态分趋势</h2>
-                <span className="font-label text-[12px] text-primary">+{totalGain} 分</span>
+                <h2 className="font-headline text-[17px] text-ink font-light">斯俪体态分趋势</h2>
+                <span className="font-label text-[12px] text-gold">+{totalGain} 分</span>
               </div>
               <ScoreChart current={postureScore} />
               <p className="font-label text-[11px] text-outline mt-3 text-center">持续训练每 2 周可见明显提升</p>
@@ -167,9 +167,9 @@ export default function Progress() {
           )}
 
           {activeTab === 'dims' && (
-            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(230,126,102,0.06)] space-y-4">
+            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-soft space-y-4">
               <div className="flex justify-between items-baseline">
-                <h2 className="font-headline text-[17px] text-on-surface">5 维体态对比</h2>
+                <h2 className="font-headline text-[17px] text-ink font-light">5 维体态对比</h2>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1"><div className="w-3 h-2 rounded-full bg-surface-container" /><span className="font-label text-[11px] text-outline">第1周</span></div>
                   <div className="flex items-center gap-1"><div className="w-3 h-2 rounded-full bg-primary-container" /><span className="font-label text-[11px] text-primary">当前</span></div>
@@ -197,9 +197,9 @@ export default function Progress() {
           )}
 
           {activeTab === 'cal' && (
-            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+            <div className="bg-surface-container-lowest rounded-xl p-5 shadow-soft">
               <div className="flex justify-between items-baseline mb-4">
-                <h2 className="font-headline text-[17px] text-on-surface">{monthLabel}</h2>
+                <h2 className="font-headline text-[17px] text-ink font-light">{monthLabel}</h2>
                 {streak > 0
                   ? <span className="font-label text-[12px] text-on-surface-variant">连续 {streak} 天 🔥</span>
                   : <span className="font-label text-[12px] text-outline">本月训练 {trainedDays} 次</span>}
@@ -248,7 +248,7 @@ export default function Progress() {
 
         {/* 前后对比占位 */}
         <section className="space-y-3">
-          <h2 className="font-headline text-[18px] text-on-surface">前后照片对比</h2>
+          <h2 className="font-headline text-[18px] text-ink font-light">前后照片对比</h2>
           <div className="grid grid-cols-2 gap-3">
             {[{ label: '第 1 周', score: 72, color: 'from-surface-container to-outline-variant/30' },
               { label: '第 8 周', score: 85, color: 'from-primary-fixed to-primary-container/60' }].map(item => (

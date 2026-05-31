@@ -16,7 +16,7 @@ export default function Legal() {
         <button onClick={() => nav(-1)} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">{data.title}</span>
+        <span className="font-headline text-[18px] text-ink">{data.title}</span>
         <span className="w-6" />
       </header>
 
@@ -27,7 +27,7 @@ export default function Legal() {
         <div className="space-y-stack-md pt-2">
           {data.sections.map(s => (
             <section key={s.h} className="space-y-1.5">
-              <h2 className="font-headline text-[16px] text-on-surface">{s.h}</h2>
+              <h2 className="font-headline text-[16px] text-ink">{s.h}</h2>
               <p className="font-body text-[14px] text-on-surface-variant leading-relaxed">{s.p}</p>
             </section>
           ))}

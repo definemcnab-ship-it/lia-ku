@@ -203,7 +203,7 @@ export default function Report() {
           <button onClick={() => nav('/home')} aria-label="返回首页" className="active:scale-90 transition">
             <Icon name="arrow_back" size={24} className="text-on-surface" />
           </button>
-          <span className="font-headline text-[18px] text-on-surface">斯俪体态健康报告</span>
+          <span className="font-headline text-[18px] text-ink font-light">斯俪体态健康报告</span>
           <button onClick={() => setShowShare(true)} aria-label="分享报告"
             disabled={loading}
             className="active:scale-90 transition disabled:opacity-40">
@@ -227,10 +227,10 @@ export default function Report() {
 
           {/* 5 项角度测量 */}
           <section className="space-y-stack-md">
-            <h2 className="font-headline text-[20px] text-on-surface">5 项关键测量</h2>
+            <h2 className="font-headline text-[20px] text-ink font-light">5 项关键测量</h2>
             <div className="space-y-3">
               {dims.map((d, i) => (
-                <div key={d.name} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)] animate-page-in"
+                <div key={d.name} className="bg-surface-container-lowest rounded-lg p-4 shadow-soft animate-page-in"
                   style={{ animationDelay: `${i * 60}ms` }}>
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-label text-[14px] text-on-surface">{d.name}</span>
@@ -248,7 +248,7 @@ export default function Report() {
           {/* AI 痛点详解 */}
           <section className="space-y-stack-md">
             <div className="flex items-center justify-between">
-              <h2 className="font-headline text-[20px] text-on-surface">AI 识别痛点</h2>
+              <h2 className="font-headline text-[20px] text-ink font-light">AI 识别痛点</h2>
               <span className="font-label text-[12px] text-outline">{PAIN_POINTS.length} 项分析</span>
             </div>
             <div className="space-y-3">

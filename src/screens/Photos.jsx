@@ -17,7 +17,7 @@ export default function Photos() {
         <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">体态照片管理</span>
+        <span className="font-headline text-[18px] text-ink">体态照片管理</span>
         <span className="w-6" />
       </header>
 
@@ -41,12 +41,12 @@ export default function Photos() {
         ) : (
           <section className="space-y-stack-md">
             <div className="flex items-center justify-between">
-              <h2 className="font-headline text-[18px] text-on-surface">我的照片</h2>
+              <h2 className="font-headline text-[18px] text-ink">我的照片</h2>
               <span className="font-label text-[12px] text-outline">{photos.length} 张</span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {photos.map(p => (
-                <div key={p.id} className="rounded-lg overflow-hidden bg-surface-container-lowest shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+                <div key={p.id} className="rounded-lg overflow-hidden bg-surface-container-lowest shadow-soft">
                   <div className="aspect-[3/4] bg-primary-fixed/40 flex items-center justify-center relative">
                     <Icon name="accessibility_new" size={48} className="text-primary/30" />
                     <button onClick={() => setPending(p)} aria-label={`删除${p.label}照片`}
@@ -74,7 +74,7 @@ export default function Photos() {
             <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-3">
               <Icon name="delete" size={24} className="text-error" />
             </div>
-            <h3 className="font-headline text-[18px] text-on-surface mb-1">删除这张照片？</h3>
+            <h3 className="font-headline text-[18px] text-ink mb-1">删除这张照片？</h3>
             <p className="font-label text-[13px] text-outline mb-5 leading-relaxed">
               「{pending.label} · {pending.date}」删除后不可恢复。
             </p>

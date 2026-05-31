@@ -138,7 +138,7 @@ export default function CycleSettings() {
         <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">经期周期适配</span>
+        <span className="font-headline text-[18px] text-ink">经期周期适配</span>
         <button onClick={save} className="font-label text-[14px] text-primary active:opacity-70 transition">
           {justSaved ? '已保存 ✓' : '保存'}
         </button>
@@ -148,7 +148,7 @@ export default function CycleSettings() {
 
         {/* 开关 */}
         <section className="flex items-center justify-between bg-surface-container-lowest rounded-xl px-4 py-4 mt-stack-md
-          shadow-[0px_4px_16px_rgba(230,126,102,0.06)]">
+          shadow-soft">
           <div>
             <p className="font-label text-[15px] text-on-surface">启用周期适配训练</p>
             <p className="font-label text-[12px] text-outline mt-0.5">根据生理周期自动调整训练强度</p>
@@ -163,8 +163,8 @@ export default function CycleSettings() {
         {enabled && (
           <>
             {/* 周期表盘 + 当前阶段 */}
-            <section className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_16px_rgba(230,126,102,0.06)]">
-              <h2 className="font-headline text-[17px] text-on-surface mb-4">当前所处阶段</h2>
+            <section className="bg-surface-container-lowest rounded-xl p-5 shadow-soft">
+              <h2 className="font-headline text-[17px] text-ink mb-4">当前所处阶段</h2>
               <div className="flex items-center gap-5">
                 <CycleDial cycleLen={cycleLen} periodLen={periodLen} currentDay={currentDay} />
                 <div className="flex-1 space-y-3">
@@ -182,7 +182,7 @@ export default function CycleSettings() {
             </section>
 
             {/* 周期参数设置 */}
-            <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_16px_rgba(230,126,102,0.06)]">
+            <section className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-soft">
               <div className="px-4 py-3 border-b border-surface-variant">
                 <h2 className="font-label text-[13px] text-outline uppercase tracking-wider">周期参数</h2>
               </div>

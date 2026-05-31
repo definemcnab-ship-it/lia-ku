@@ -188,7 +188,7 @@ export default function Home() {
             <button onClick={() => nav('/community')} className="font-label text-[14px] text-primary">进入圈子</button>
           </div>
           <div onClick={() => nav('/community')}
-            className="bg-surface-container-lowest rounded-lg p-stack-md shadow-[0px_4px_20px_rgba(230,126,102,0.06)]
+            className="bg-surface-container-lowest rounded-lg p-stack-md shadow-soft
               border border-surface-variant active:scale-[0.98] transition cursor-pointer space-y-3">
             {COMMUNITY_POSTS.slice(0, 2).map(p => (
               <div key={p.id} className="flex items-start gap-3">

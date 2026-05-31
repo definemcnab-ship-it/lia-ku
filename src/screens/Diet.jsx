@@ -25,7 +25,7 @@ export default function Diet() {
         <button onClick={() => nav('/home')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">饮食建议</span>
+        <span className="font-headline text-[18px] text-ink font-light">饮食建议</span>
         <button onClick={() => nav('/diet/calendar')} aria-label="饮食日历" className="active:scale-90 transition">
           <Icon name="calendar_month" size={22} className="text-on-surface" />
         </button>
@@ -43,12 +43,12 @@ export default function Diet() {
 
         {/* 体态问题 → 营养映射 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[18px] text-on-surface">体态 × 营养对照</h2>
+          <h2 className="font-headline text-[18px] text-ink font-light">体态 × 营养对照</h2>
           <div className="space-y-3">
             {DIET_PLANS.map(m => (
               <button key={m.id} onClick={() => nav(`/diet/plan/${m.id}`)}
                 className="w-full text-left bg-surface-container-lowest rounded-lg p-4 active:scale-[0.98] transition
-                  shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+                  shadow-soft">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-label text-[15px] text-on-surface">{m.issue}</span>
                   <span className="font-label text-[11px] text-primary bg-primary-fixed px-2 py-0.5 rounded-full">{m.focus}</span>
@@ -67,7 +67,7 @@ export default function Diet() {
         {/* 简单三餐记录 */}
         <section className="space-y-stack-md">
           <div className="flex items-center justify-between">
-            <h2 className="font-headline text-[18px] text-on-surface">今日三餐记录</h2>
+            <h2 className="font-headline text-[18px] text-ink font-light">今日三餐记录</h2>
             <button onClick={() => nav('/diet/calendar')} className="flex items-center gap-1 active:scale-95 transition">
               <span className="font-label text-[12px] text-primary">查看日历</span>
               <Icon name="calendar_month" size={14} className="text-primary" />

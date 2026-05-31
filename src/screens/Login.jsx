@@ -123,7 +123,7 @@ export default function Login() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={() => setSheet(false)}>
           <div className="bg-surface rounded-t-3xl w-full max-w-md p-6 pb-8 animate-page-in" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-outline-variant/40 rounded-full mx-auto mb-5" />
-            <h3 className="font-headline text-[20px] text-on-surface mb-1">手机号登录</h3>
+            <h3 className="font-headline text-[20px] text-ink mb-1">手机号登录</h3>
             <p className="font-label text-[13px] text-outline mb-5">未注册的手机号验证后将自动创建账号</p>
 
             <div className="flex items-center gap-2 bg-surface-container rounded-lg px-4 h-14 mb-3">
@@ -165,7 +165,7 @@ export default function Login() {
             onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-outline-variant/40 rounded-full mx-auto mb-4" />
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-headline text-[20px] text-on-surface">{LEGAL[doc].title}</h3>
+              <h3 className="font-headline text-[20px] text-ink">{LEGAL[doc].title}</h3>
               <button onClick={() => setDoc(null)} aria-label="关闭"><Icon name="close" size={22} className="text-outline" /></button>
             </div>
             <p className="font-label text-[12px] text-outline mb-4">更新日期：{LEGAL[doc].updated}</p>
@@ -173,7 +173,7 @@ export default function Login() {
             <div className="space-y-4">
               {LEGAL[doc].sections.map(s => (
                 <section key={s.h} className="space-y-1.5">
-                  <h4 className="font-headline text-[15px] text-on-surface">{s.h}</h4>
+                  <h4 className="font-headline text-[15px] text-ink">{s.h}</h4>
                   <p className="font-body text-[13px] text-on-surface-variant leading-relaxed">{s.p}</p>
                 </section>
               ))}

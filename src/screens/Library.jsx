@@ -18,7 +18,7 @@ export default function Library() {
         <button onClick={() => nav('/training')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface truncate px-3">{cat.name}</span>
+        <span className="font-headline text-[18px] text-ink truncate px-3">{cat.name}</span>
         <span className="w-6" />
       </header>
 
@@ -33,14 +33,14 @@ export default function Library() {
         {/* 动作列表 */}
         <section className="space-y-stack-md">
           <div className="flex items-center justify-between">
-            <h2 className="font-headline text-[18px] text-on-surface">推荐动作</h2>
+            <h2 className="font-headline text-[18px] text-ink font-light">推荐动作</h2>
             <span className="font-label text-[12px] text-outline">{cat.exercises.length} 个动作</span>
           </div>
           <div className="space-y-3">
             {cat.exercises.map((ex, i) => (
               <button key={ex.name} onClick={() => setActive(ex)}
                 className="w-full bg-surface-container-lowest rounded-lg p-4 flex items-center gap-4 text-left
-                  shadow-[0px_4px_20px_rgba(230,126,102,0.06)] active:scale-[0.98] transition">
+                  shadow-soft active:scale-[0.98] transition">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold shrink-0">{i + 1}</div>
                 <div className="flex-1 min-w-0">
                   <p className="font-label text-[15px] text-on-surface truncate">{ex.name}</p>
@@ -67,7 +67,7 @@ export default function Library() {
             onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-outline-variant/40 rounded-full mx-auto mb-4" />
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-headline text-[20px] text-on-surface">{active.name}</h3>
+              <h3 className="font-headline text-[20px] text-ink font-light">{active.name}</h3>
               <span className={`font-label text-[11px] px-2 py-1 rounded-full ${active.lc}`}>{active.level}</span>
             </div>
             <p className="font-label text-[13px] text-primary mb-5">{active.dur}</p>

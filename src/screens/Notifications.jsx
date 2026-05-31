@@ -21,13 +21,13 @@ export default function Notifications() {
         <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">推送通知</span>
+        <span className="font-headline text-[18px] text-ink">推送通知</span>
         <span className="w-6" />
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
         {/* 总开关 */}
-        <section className="bg-surface-container-lowest rounded-lg p-4 flex items-center gap-3 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+        <section className="bg-surface-container-lowest rounded-lg p-4 flex items-center gap-3 shadow-soft">
           <Icon name="notifications" size={22} className="text-primary" />
           <div className="flex-1">
             <p className="font-label text-[15px] text-on-surface">允许推送通知</p>
@@ -38,7 +38,7 @@ export default function Notifications() {
 
         <section className={`space-y-2 transition-opacity ${notify.enabled ? '' : 'opacity-40 pointer-events-none'}`}>
           <h2 className="font-label text-[13px] text-outline uppercase tracking-wider px-1">提醒类型</h2>
-          <div className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+          <div className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-soft">
             {toggles.map((t, i) => (
               <div key={t.k} className={`flex items-center gap-3 px-4 py-3.5 ${i > 0 ? 'border-t border-surface-variant' : ''}`}>
                 <div className="flex-1">
@@ -54,7 +54,7 @@ export default function Notifications() {
         {/* 免打扰时段 */}
         <section className={`space-y-2 transition-opacity ${notify.enabled ? '' : 'opacity-40 pointer-events-none'}`}>
           <h2 className="font-label text-[13px] text-outline uppercase tracking-wider px-1">推送时段</h2>
-          <div className="bg-surface-container-lowest rounded-lg p-4 flex items-center justify-between shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+          <div className="bg-surface-container-lowest rounded-lg p-4 flex items-center justify-between shadow-soft">
             <span className="font-label text-[15px] text-on-surface">仅在此时段推送</span>
             <div className="flex items-center gap-2">
               <input type="time" value={notify.start} onChange={e => patch('start', e.target.value)}

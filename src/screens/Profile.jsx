@@ -64,7 +64,7 @@ export default function Profile() {
             <Icon name="person" size={32} className="text-primary" />
           </div>
           <div>
-            <h1 className="font-headline text-[22px] text-on-surface">若曦</h1>
+            <h1 className="font-headline text-[22px] text-ink font-light">若曦</h1>
             <p className="font-label text-[13px] text-outline">斯俪体态分 {postureScore} · {grade} 级</p>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function Profile() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-headline text-[16px] text-on-surface">{lv.current.name}</span>
+              <span className="font-headline text-[16px] text-ink font-light">{lv.current.name}</span>
               <span className="font-label text-[11px] text-on-surface-variant">Lv.{lv.index + 1}</span>
             </div>
             <p className="font-label text-[12px] text-on-surface-variant mt-0.5">
@@ -92,7 +92,7 @@ export default function Profile() {
         {groups.map(g => (
           <section key={g.title} className="space-y-2">
             <h2 className="font-label text-[13px] text-outline uppercase tracking-wider px-1">{g.title}</h2>
-            <div className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+            <div className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-soft">
               {g.items.map((it, i) => (
                 <button key={it.label}
                   onClick={() => it.onClick ? it.onClick() : it.to && nav(it.to)}
@@ -121,7 +121,7 @@ export default function Profile() {
             <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-3">
               <Icon name="close" size={24} className="text-error" />
             </div>
-            <h3 className="font-headline text-[18px] text-on-surface mb-1">清除本地数据？</h3>
+            <h3 className="font-headline text-[18px] text-ink mb-1">清除本地数据？</h3>
             <p className="font-label text-[13px] text-outline mb-5 leading-relaxed">
               将删除训练打卡、周期设置等全部本地记录，此操作不可恢复。
             </p>

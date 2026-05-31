@@ -34,7 +34,7 @@ export default function Community() {
         <button onClick={() => nav('/home')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">斯俪圈子</span>
+        <span className="font-headline text-[18px] text-ink font-light">斯俪圈子</span>
         <span className="w-6" />
       </header>
 
@@ -53,7 +53,7 @@ export default function Community() {
         {posts.map(p => {
           const liked = likedByMe(p.id)
           return (
-            <article key={p.id} className="bg-surface-container-lowest rounded-lg p-4 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
+            <article key={p.id} className="bg-surface-container-lowest rounded-lg p-4 shadow-soft">
               <div className="flex items-center gap-3 mb-2">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${p.avatarBg}`}>
                   <Icon name="person" size={20} className="text-[#8f8779]" />
@@ -113,7 +113,7 @@ export default function Community() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={() => setComposing(false)}>
           <div className="bg-surface rounded-t-3xl w-full max-w-md p-6 pb-8 animate-page-in" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-outline-variant/40 rounded-full mx-auto mb-4" />
-            <h3 className="font-headline text-[18px] text-on-surface mb-3">分享我的体态日记</h3>
+            <h3 className="font-headline text-[18px] text-ink mb-3">分享我的体态日记</h3>
             <textarea autoFocus value={draft} onChange={e => setDraft(e.target.value)}
               rows={4} maxLength={200} placeholder="今天的训练感受、进步或疑问…"
               className="w-full bg-surface-container rounded-lg p-3 font-body text-[14px] text-on-surface

@@ -26,7 +26,7 @@ export default function Levels() {
         <button onClick={() => nav('/profile')} aria-label="返回" className="active:scale-90 transition">
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
-        <span className="font-headline text-[18px] text-on-surface">斯俪等级</span>
+        <span className="font-headline text-[18px] text-ink font-light">斯俪等级</span>
         <span className="w-6" />
       </header>
 
@@ -39,7 +39,7 @@ export default function Levels() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-label text-[12px] text-on-surface-variant/70 uppercase tracking-wider">{current.en}</p>
-              <h2 className="font-headline text-[24px] text-on-surface">{current.name}</h2>
+              <h2 className="font-headline text-[24px] text-ink font-light">{current.name}</h2>
             </div>
             <span className="font-label text-[13px] text-on-surface-variant">Lv.{index + 1}</span>
           </div>
@@ -67,7 +67,7 @@ export default function Levels() {
 
         {/* 等级阶梯 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[18px] text-on-surface">成长阶梯</h2>
+          <h2 className="font-headline text-[18px] text-ink font-light">成长阶梯</h2>
           <div className="space-y-3">
             {SLIQUE_LEVELS.map((lv, i) => {
               const unlocked = total >= lv.need
@@ -77,7 +77,7 @@ export default function Levels() {
                   className={`rounded-lg p-4 flex items-start gap-4 transition
                     ${unlocked ? 'bg-surface-container-lowest' : 'bg-surface-container-lowest opacity-55'}
                     ${isCurrent ? 'ring-2 ring-primary' : ''}
-                    shadow-[0px_4px_20px_rgba(230,126,102,0.06)]`}>
+                    shadow-soft`}>
                   <div className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${lv.color}`}>
                     <Icon name={unlocked ? lv.icon : 'lock'} size={20}
                       className={unlocked ? 'text-[#8f8779]' : 'text-outline'} />
@@ -114,7 +114,7 @@ export default function Levels() {
               <Icon name={celebrate.icon} size={40} className="text-[#8f8779]" />
             </div>
             <p className="font-label text-[12px] text-primary uppercase tracking-widest mb-1">Level Up</p>
-            <h3 className="font-headline text-[24px] text-on-surface mb-1">升级「{celebrate.name}」</h3>
+            <h3 className="font-headline text-[24px] text-ink mb-1">升级「{celebrate.name}」</h3>
             <p className="font-body text-[13px] text-on-surface-variant mb-4 leading-relaxed">
               恭喜解锁专属权益：{celebrate.perk}
             </p>
