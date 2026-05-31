@@ -23,7 +23,7 @@ export default function DietPlan() {
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
-        <section className="bg-gradient-to-br from-[#ece8e0] to-[#cfc8bb] rounded-lg p-5 shadow-lg">
+        <section className="bg-gradient-to-br from-[#f3ecdd] to-[#e7dcc2] rounded-lg p-5 shadow-lg">
           <p className="font-label text-[12px] text-[#8f8779] uppercase tracking-wider">营养重点</p>
           <h2 className="font-headline text-[22px] text-[#6e675b] mt-1 mb-2">{plan.focus}</h2>
           <p className="font-body text-[13px] text-[#6e675b]/80 leading-relaxed">{plan.why}</p>
