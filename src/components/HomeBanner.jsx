@@ -72,19 +72,19 @@ export default function HomeBanner() {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         onClick={() => nav(s.to)}
-        className={`relative bg-gradient-to-r ${s.bg} rounded-[28px] px-6 pt-6 pb-8 cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft`}>
+        className={`relative bg-gradient-to-r ${s.bg} rounded-[28px] px-6 h-[160px] flex items-center cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft`}>
 
         {/* 背景装饰圆 —— 收拢到右侧奖杯后方，避免中间空 */}
         <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-white/15 pointer-events-none" />
 
-        <div key={s.id} className="flex items-center gap-3 animate-fade-in">
+        <div key={s.id} className="flex items-center gap-3 w-full animate-fade-in">
           <div className="flex-1 min-w-0">
-            <span className="inline-block font-label text-[11px] text-on-surface-variant/70 bg-white/50 px-2.5 py-1 rounded-full mb-2.5">
+            <span className="inline-block font-label text-[11px] text-on-surface-variant/70 bg-white/50 px-2.5 py-1 rounded-full mb-2">
               {s.label}
             </span>
-            <h3 className="font-headline text-[21px] text-ink font-light leading-snug">{s.title}</h3>
-            <p className="font-body text-[13px] text-on-surface-variant/80 mt-1.5">{s.sub}</p>
-            <span className="inline-flex items-center font-label text-[12px] text-gold mt-3">{s.cta} →</span>
+            <h3 className="font-headline text-[20px] text-ink font-light leading-snug truncate">{s.title}</h3>
+            <p className="font-body text-[13px] text-on-surface-variant/80 mt-1 truncate">{s.sub}</p>
+            <span className="inline-flex items-center font-label text-[12px] text-gold mt-2.5">{s.cta} →</span>
           </div>
           <div className="shrink-0 w-20 h-20 rounded-full bg-white/55 flex items-center justify-center shadow-soft">
             <Icon name={s.icon} size={36} className={s.iconColor} />

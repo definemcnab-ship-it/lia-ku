@@ -104,14 +104,11 @@ export default function Home() {
             className="relative bg-surface-container-lowest rounded-[28px] overflow-hidden shadow-soft
               group active:scale-[0.98] transition-transform cursor-pointer">
             <div className="h-48 w-full bg-gradient-to-br from-primary-fixed to-primary-container flex items-center justify-center relative">
-              <div className="text-center text-primary">
-                <div className="relative mx-auto w-20 h-20 mb-2">
-                  <div className="absolute inset-0 rounded-full bg-white/20 animate-pulse-soft" />
-                  <div className="absolute inset-2 rounded-full bg-white/15 flex items-center justify-center">
-                    <Icon name="self_improvement" size={40} className="opacity-80" />
-                  </div>
+              <div className="relative w-20 h-20 text-primary">
+                <div className="absolute inset-0 rounded-full bg-white/20 animate-pulse-soft" />
+                <div className="absolute inset-2 rounded-full bg-white/15 flex items-center justify-center">
+                  <Icon name="self_improvement" size={40} className="opacity-80" />
                 </div>
-                <p className="font-label text-[13px] opacity-70">天鹅颈塑形课</p>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-4 left-4 text-white">
