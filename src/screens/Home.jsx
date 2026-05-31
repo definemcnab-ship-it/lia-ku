@@ -55,10 +55,10 @@ export default function Home() {
       </nav>
 
       {/* 欢迎语 —— 紧凑，置于顶部 */}
-      <div className="px-container-padding-mobile pt-1 pb-2">
-        <p className="font-label text-[10px] text-gold uppercase tracking-[0.2em]">SLIQUE · 优雅体态</p>
-        <h1 className="font-headline text-[24px] leading-[30px] text-ink font-normal mt-0.5">{greeting()}</h1>
-        <p className="font-body text-[12px] text-on-surface-variant mt-0.5">今天也要保持优雅体态哦 ✨</p>
+      <div className="px-container-padding-mobile pt-0.5 pb-1.5">
+        <p className="font-label text-[9px] text-gold uppercase tracking-[0.18em]">SLIQUE · 优雅体态</p>
+        <h1 className="font-headline text-[19px] leading-[26px] text-ink font-normal mt-0.5">{greeting()}</h1>
+        <p className="font-body text-[11px] text-on-surface-variant mt-0.5">今天也要保持优雅体态哦 ✨</p>
       </div>
 
       <HomeBanner />
