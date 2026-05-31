@@ -62,7 +62,7 @@ body {
 
 /* 再生纸颗粒质感背景 —— SVG feTurbulence 噪点叠在大地米色上，纯 CSS 零图片 */
 .paper-bg {
-  background-color: #f5f2ec;
+  background-color: #fbfaf8;
   position: relative;
 }
 .paper-bg::before {
