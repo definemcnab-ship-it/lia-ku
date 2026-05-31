@@ -12,6 +12,16 @@ const STORY_CARDS = [
   { id: 's5', bg: 'bg-gradient-to-br from-[#98b0c0] to-[#6888a0]', icon: 'trending_up', title: '体态分 +18 分', sub: '坚持60天的成果', tag: '数据见证' },
 ]
 
+// 分类卡 —— 借鉴彩色网格版式，配色用极淡大地色调（保持高级感，不花哨）
+const CATEGORIES = [
+  { to: '/scan',      icon: 'camera',          title: 'AI 姿态扫描', desc: '快速诊断潜在风险', bg: 'bg-[#ede7df]' },
+  { to: '/progress',  icon: 'analytics',       title: '进步追踪',     desc: '查看体态变化轨迹', bg: 'bg-[#e4e9e4]' },
+  { to: '/training',  icon: 'fitness_center',  title: '动作库',       desc: '探索专业矫正动作', bg: 'bg-[#efe5e1]' },
+  { to: '/diet',      icon: 'restaurant',      title: '饮食建议',     desc: '吃出好体态',      bg: 'bg-[#efe9dc]' },
+  { to: '/levels',    icon: 'emoji_events',    title: '斯俪等级',     desc: '打卡解锁专属权益', bg: 'bg-[#e8e6ee]' },
+  { to: '/community', icon: 'favorite',        title: '斯俪圈子',     desc: '同好动态与答疑',  bg: 'bg-[#e3e8ec]' },
+]
+
 function greeting() {
   const h = new Date().getHours()
   if (h < 6)  return '夜深了，若曦'
@@ -145,24 +155,30 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 核心功能 Bento */}
-        <section className="grid grid-cols-2 gap-stack-md">
-          <Bento color="bg-mint border-outline-variant" iconBg="bg-white/80" iconColor="text-on-surface-variant"
-            icon="camera" title="AI 姿态扫描" titleColor="text-on-surface-variant" desc="快速诊断潜在风险" descColor="text-on-surface-variant/70"
-            onClick={() => nav('/scan')} />
-          <Bento color="bg-lavender border-outline-variant" iconBg="bg-white/80" iconColor="text-on-surface-variant"
-            icon="analytics" title="进步追踪" titleColor="text-on-surface-variant" desc="查看体态变化轨迹" descColor="text-on-surface-variant/70"
-            onClick={() => nav('/progress')} />
-        </section>
-        <section className="grid grid-cols-2 gap-stack-md">
-          <Bento color="bg-surface-container-lowest border-surface-variant shadow-[0px_4px_20px_rgba(230,126,102,0.08)]"
-            iconBg="bg-primary-fixed" iconColor="text-primary"
-            icon="fitness_center" title="动作库" titleColor="text-on-surface" desc="探索专业矫正动作" descColor="text-on-surface-variant"
-            onClick={() => nav('/training')} />
-          <Bento color="bg-surface-container-lowest border-surface-variant shadow-[0px_4px_20px_rgba(230,126,102,0.08)]"
-            iconBg="bg-[#ece8e0]" iconColor="text-[#8f8779]"
-            icon="restaurant" title="饮食建议" titleColor="text-on-surface" desc="吃出好体态" descColor="text-on-surface-variant"
-            onClick={() => nav('/diet')} />
+        {/* 核心功能 - 分类卡网格 */}
+        <section className="space-y-stack-md">
+          <h2 className="font-headline text-[22px] text-ink font-light">探索功能</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {CATEGORIES.map(c => (
+              <button key={c.to} onClick={() => nav(c.to)}
+                className={`relative text-left rounded-[24px] p-4 h-[132px] flex flex-col justify-between
+                  ${c.bg} active:scale-[0.97] transition-transform`}>
+                <div className="flex items-start justify-between">
+                  <div className="w-9 h-9 rounded-full bg-white/70 flex items-center justify-center shadow-soft">
+                    <Icon name={c.icon} size={18} className="text-ink/70" />
+                  </div>
+                  <Icon name="trending_up" size={16} className="text-ink/25" />
+                </div>
+                <div>
+                  <h3 className="font-label text-[15px] text-ink font-semibold">{c.title}</h3>
+                  <p className="font-label text-[11px] text-ink/55 mt-0.5 leading-snug">{c.desc}</p>
+                  <span className="inline-flex items-center gap-0.5 font-label text-[11px] text-gold mt-2">
+                    查看 →
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
         </section>
 
         {/* 斯俪圈子 */}
@@ -212,21 +228,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </div>
-  )
-}
-
-function Bento({ color, iconBg, iconColor, icon, title, titleColor, desc, descColor, onClick }) {
-  return (
-    <div onClick={onClick}
-      className={`rounded-lg p-stack-md flex flex-col justify-between h-40 border active:scale-95 transition-transform cursor-pointer ${color}`}>
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${iconBg}`}>
-        <Icon name={icon} size={22} className={iconColor} />
-      </div>
-      <div>
-        <h3 className={`font-label text-[14px] ${titleColor}`}>{title}</h3>
-        <p className={`font-label text-[12px] ${descColor}`}>{desc}</p>
-      </div>
     </div>
   )
 }
