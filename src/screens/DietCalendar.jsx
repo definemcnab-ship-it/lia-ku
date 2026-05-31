@@ -23,7 +23,6 @@ export default function DietCalendar() {
   for (let d = 1; d <= daysInMonth; d++) cells.push(d)
 
   const dateStr = (d) => `${cursor.y}-${String(cursor.m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
-  const countFor = (ds) => MEALS.filter(m => meals[ds] && meals[ds][m]).length
 
   const shift = (delta) => setCursor(c => {
     const nm = c.m + delta
@@ -73,7 +72,6 @@ export default function DietCalendar() {
             {cells.map((d, i) => {
               if (!d) return <div key={`e${i}`} />
               const ds = dateStr(d)
-              const cnt = countFor(ds)
               const isToday = ds === today
               const isPicked = ds === picked
               return (
