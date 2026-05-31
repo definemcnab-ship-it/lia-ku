@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import HomeBanner from '../components/HomeBanner.jsx'
 import { useStore, todayStr } from '../lib/store.js'
+import { COMMUNITY_POSTS } from '../lib/content.js'
 
 function greeting() {
   const h = new Date().getHours()
@@ -128,6 +129,39 @@ export default function Home() {
             iconBg="bg-[#ece8e0]" iconColor="text-[#8f8779]"
             icon="restaurant" title="饮食建议" titleColor="text-on-surface" desc="吃出好体态" descColor="text-on-surface-variant"
             onClick={() => nav('/diet')} />
+        </section>
+
+        {/* 斯俪圈子 */}
+        <section className="space-y-stack-md">
+          <div className="flex justify-between items-center">
+            <h2 className="font-headline text-[24px] text-on-surface">斯俪圈子</h2>
+            <button onClick={() => nav('/community')} className="font-label text-[14px] text-primary">进入圈子</button>
+          </div>
+          <div onClick={() => nav('/community')}
+            className="bg-surface-container-lowest rounded-lg p-stack-md shadow-[0px_4px_20px_rgba(230,126,102,0.06)]
+              border border-surface-variant active:scale-[0.98] transition cursor-pointer space-y-3">
+            {COMMUNITY_POSTS.slice(0, 2).map(p => (
+              <div key={p.id} className="flex items-start gap-3">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${p.avatarBg}`}>
+                  <Icon name="person" size={16} className="text-[#8f8779]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-label text-[13px] text-on-surface">{p.name}</span>
+                    <span className="font-label text-[10px] text-primary bg-primary-fixed px-1.5 rounded-full"># {p.tag}</span>
+                  </div>
+                  <p className="font-body text-[12px] text-on-surface-variant line-clamp-1 mt-0.5">{p.text}</p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Icon name="favorite" size={13} className="text-outline" />
+                  <span className="font-label text-[11px] text-outline">{p.likes}</span>
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center justify-center gap-1 pt-1 border-t border-surface-variant">
+              <span className="font-label text-[12px] text-primary pt-2">查看更多体态日记 · 答疑</span>
+            </div>
+          </div>
         </section>
 
         {/* 每日体态小贴士 */}

@@ -19,6 +19,7 @@ import Photos from './screens/Photos.jsx'
 import Legal from './screens/Legal.jsx'
 import Levels from './screens/Levels.jsx'
 import DietCalendar from './screens/DietCalendar.jsx'
+import Community from './screens/Community.jsx'
 
 export default function App() {
   const loc = useLocation()
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/legal/:doc" element={<Legal />} />
         <Route path="/levels" element={<Levels />} />
         <Route path="/diet/calendar" element={<DietCalendar />} />
+        <Route path="/community" element={<Community />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </PhoneFrame>

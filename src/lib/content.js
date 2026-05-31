@@ -244,6 +244,52 @@ export const SLIQUE_LEVELS = [
   },
 ]
 
+// —— 社群圈子（运营内容，营造活跃氛围） ——
+export const COMMUNITY_TOPICS = [
+  { id: 'rec', label: '推荐' },
+  { id: 'same', label: '同阶段' },
+  { id: 'checkin', label: '打卡' },
+  { id: 'qa', label: '答疑' },
+]
+
+export const COMMUNITY_POSTS = [
+  {
+    id: 'c1', topic: 'checkin', name: '安妮Annie', level: '满月', avatarBg: 'bg-[#ece0d8]',
+    time: '8 分钟前', tag: '圆肩矫正',
+    text: '坚持靠墙天使 30 天打卡✅ 今天体态分终于到 90 了！同事说我背挺拔了好多，姐妹们一起冲～',
+    img: 'bg-gradient-to-br from-[#e9e2d4] to-[#d8cfbf]', imgIcon: 'self_improvement',
+    likes: 128, comments: 32, liked: false,
+  },
+  {
+    id: 'c2', topic: 'qa', name: '柠檬不酸', level: '上弦', avatarBg: 'bg-[#dfe3dd]',
+    time: '25 分钟前', tag: '骨盆前倾',
+    text: '请问下死虫式练的时候腰一直会离地是怎么回事呀？是核心力量不够吗？有没有姐妹有经验分享一下🙏',
+    img: null,
+    likes: 46, comments: 18, liked: false,
+  },
+  {
+    id: 'c3', topic: 'checkin', name: 'momo妈妈', level: '新月', avatarBg: 'bg-[#e7e4ea]',
+    time: '1 小时前', tag: '产后修复',
+    text: '产后第 6 周，按照斯俪的腹式呼吸 + 脚跟滑动方案练了两周，腹直肌分离从三指缩到两指了！循序渐进真的有用💪',
+    img: 'bg-gradient-to-br from-[#ece0d8] to-[#d8c4b8]', imgIcon: 'favorite',
+    likes: 215, comments: 56, liked: false,
+  },
+  {
+    id: 'c4', topic: 'same', name: '小鹿乱撞', level: '晨星', avatarBg: 'bg-[#ebe6d6]',
+    time: '2 小时前', tag: '高低肩',
+    text: '新手第三天报到～原来我一直是右肩高，AI 扫描出来差了 11mm😲 准备跟着下斜方激活练起来，求监督！',
+    img: null,
+    likes: 33, comments: 9, liked: false,
+  },
+  {
+    id: 'c5', topic: 'qa', name: '理疗师·林', level: '星河', avatarBg: 'bg-[#e4e6ea]', pro: true,
+    time: '3 小时前', tag: '专业答疑',
+    text: '【科普】很多姐妹问圆肩能不能自己练好。结论：功能性圆肩通过放松胸小肌+强化中下斜方，多数 8-12 周可见明显改善；但若是结构性问题建议先就医评估～',
+    img: null,
+    likes: 402, comments: 88, liked: false,
+  },
+]
+
 // 根据累计打卡数计算当前等级、下一级与进度。
 export function computeLevel(total = 0) {
   let idx = 0
