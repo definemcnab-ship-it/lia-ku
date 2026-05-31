@@ -67,35 +67,35 @@ export default function HomeBanner() {
 
   const s = SLIDES[idx]
   return (
-    <div className="px-container-padding-mobile pt-1 pb-0.5">
+    <div className="px-container-padding-mobile pt-2 pb-1">
       <div
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         onClick={() => nav(s.to)}
-        className={`relative bg-gradient-to-r ${s.bg} rounded-lg px-5 py-4 cursor-pointer active:scale-[0.98] transition overflow-hidden`}>
+        className={`relative bg-gradient-to-r ${s.bg} rounded-[28px] px-6 py-7 cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft`}>
 
         {/* 背景装饰圆 */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-white/20 pointer-events-none" />
-        <div className="absolute right-12 top-0 w-14 h-14 rounded-full bg-white/10 pointer-events-none" />
+        <div className="absolute right-5 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-white/20 pointer-events-none" />
+        <div className="absolute right-14 top-1 w-20 h-20 rounded-full bg-white/10 pointer-events-none" />
 
         <div key={s.id} className="flex items-center gap-4 animate-fade-in">
           <div className="flex-1 min-w-0">
-            <span className="inline-block font-label text-[10px] text-on-surface-variant/70 bg-white/40 px-2 py-0.5 rounded-full mb-1.5">
+            <span className="inline-block font-label text-[11px] text-on-surface-variant/70 bg-white/50 px-2.5 py-1 rounded-full mb-2.5">
               {s.label}
             </span>
-            <h3 className="font-headline text-[16px] text-on-surface truncate">{s.title}</h3>
-            <p className="font-body text-[12px] text-on-surface-variant/80 mt-0.5 truncate">{s.sub}</p>
+            <h3 className="font-headline text-[22px] text-ink font-light leading-tight truncate">{s.title}</h3>
+            <p className="font-body text-[13px] text-on-surface-variant/80 mt-1.5 truncate">{s.sub}</p>
           </div>
-          <div className="shrink-0 flex flex-col items-center gap-2">
-            <div className="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center">
-              <Icon name={s.icon} size={22} className={s.iconColor} />
+          <div className="shrink-0 flex flex-col items-center gap-3">
+            <div className="w-16 h-16 rounded-full bg-white/55 flex items-center justify-center shadow-soft">
+              <Icon name={s.icon} size={30} className={s.iconColor} />
             </div>
-            <span className="font-label text-[11px] text-primary whitespace-nowrap">{s.cta} →</span>
+            <span className="font-label text-[12px] text-gold whitespace-nowrap">{s.cta} →</span>
           </div>
         </div>
 
         {/* 点状指示器 */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
           {SLIDES.map((_, i) => (
             <button key={i} onClick={(e) => { e.stopPropagation(); go(i) }}
               className={`rounded-full transition-all ${i === idx ? 'w-4 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-outline-variant/60'}`}
