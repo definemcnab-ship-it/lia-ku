@@ -1,12 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import Icon from './Icon.jsx'
+import { HomeIcon, TrainingIcon, AnalyticsIcon, ProfileIcon, ScanPlusIcon } from './NavIcons.jsx'
 
 const tabs = [
-  { to: '/home',     icon: 'home',          label: '首页' },
-  { to: '/training', icon: 'fitness_center', label: '训练' },
-  { to: '/scan',     icon: 'camera',         label: 'AI 扫描', center: true },
-  { to: '/progress', icon: 'analytics',      label: '数据' },
-  { to: '/profile',  icon: 'person',         label: '我的' },
+  { to: '/home',     Ic: HomeIcon,      label: '首页' },
+  { to: '/training', Ic: TrainingIcon,  label: '训练' },
+  { to: '/scan',     Ic: ScanPlusIcon,  label: 'AI 扫描', center: true },
+  { to: '/progress', Ic: AnalyticsIcon, label: '数据' },
+  { to: '/profile',  Ic: ProfileIcon,   label: '我的' },
 ]
 
 export default function TabBar() {
@@ -14,45 +14,36 @@ export default function TabBar() {
 
   return (
     <nav aria-label="主导航"
-      className="flex-none flex justify-around items-end
-        bg-surface/80 backdrop-blur-xl px-3 pb-6 pt-2
-        border-t border-surface-variant/30
-        shadow-[0px_-1px_0px_rgba(143,135,121,0.08),0px_-8px_32px_rgba(230,126,102,0.06)]
+      className="flex-none flex justify-around items-center
+        bg-white/96 backdrop-blur-xl px-2 pb-5 pt-2
+        shadow-[0px_-1px_0px_rgba(0,0,0,0.05),0px_-6px_24px_rgba(0,0,0,0.04)]
         z-40">
-      {tabs.map(t =>
-        t.center ? (
-          <div key={t.to} className="relative -mt-8 flex flex-col items-center gap-1">
+      {tabs.map(({ to, Ic, label, center }) =>
+        center ? (
+          <div key={to} className="relative -mt-5 flex flex-col items-center gap-1">
             <button
-              onClick={() => nav(t.to)} aria-label={t.label}
-              className="w-[56px] h-[56px] rounded-[18px] bg-gradient-to-br from-[#b8afa0] to-[#8f8779]
+              onClick={() => nav(to)} aria-label={label}
+              className="w-[52px] h-[52px] rounded-full bg-primary
                 flex items-center justify-center
-                shadow-[0px_4px_20px_rgba(143,135,121,0.45),0px_1px_0px_rgba(255,255,255,0.15)_inset]
-                active:scale-90 active:shadow-[0px_2px_10px_rgba(143,135,121,0.3)]
-                transition-all duration-200
-                border border-white/20">
-              <Icon name={t.icon} size={24} className="text-white" />
+                shadow-[0px_4px_18px_rgba(143,135,121,0.55)]
+                active:scale-90 transition-all duration-200">
+              <Ic size={26} className="text-white" />
             </button>
-            <span className="font-label text-[10px] text-primary font-bold tracking-wide">{t.label}</span>
+            <span className="font-label text-[10px] text-primary font-bold tracking-wide">{label}</span>
           </div>
         ) : (
           <NavLink
-            key={t.to}
-            to={t.to}
-            className="flex flex-col items-center justify-end gap-1 px-2 active:scale-90 duration-150">
+            key={to}
+            to={to}
+            className="flex flex-col items-center gap-[3px] px-3 py-1 active:scale-90 transition-transform duration-150">
             {({ isActive }) => (
               <>
-                <div className={`relative flex items-center justify-center w-12 h-[30px] rounded-xl
-                  transition-all duration-300
-                  ${isActive ? 'bg-primary/12' : 'bg-transparent'}`}>
-                  {isActive && (
-                    <span className="absolute top-0.5 left-1/2 -translate-x-1/2 w-4 h-[3px] rounded-full bg-primary animate-fade-in" />
-                  )}
-                  <Icon name={t.icon} size={20} outline={!isActive}
-                    className={isActive ? 'text-primary animate-tab-pop' : 'text-on-surface-variant/45'} />
+                <div className={isActive ? 'animate-tab-pop' : ''}>
+                  <Ic size={24} className={isActive ? 'text-primary' : 'text-[#bbb4ac]'} />
                 </div>
-                <span className={`font-label text-[10px] tracking-wide transition-all duration-200
-                  ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant/50'}`}>
-                  {t.label}
+                <span className={`font-label text-[10px] tracking-wide transition-colors duration-200
+                  ${isActive ? 'text-primary font-bold' : 'text-[#bbb4ac]'}`}>
+                  {label}
                 </span>
               </>
             )}
