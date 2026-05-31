@@ -19,6 +19,15 @@ export const LIBRARY = [
       { name: '俯卧 Y-T-W', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-primary text-on-primary',
         steps: ['俯卧，额头轻贴垫面', '手臂依次摆出 Y / T / W 三个字母', '每个位置肩胛主动后缩', '全程拇指朝上'],
         breath: '抬起吐气，落下吸气', tip: '腰部不要发力代偿，动作宜慢。' },
+      { name: '上斜方肌拉伸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['坐姿，一手扶头另侧', '头部缓慢向对侧倾斜', '感受颈侧牵拉，停留', '缓慢回正换边'],
+        breath: '均匀深呼吸，吐气加深', tip: '不要耸肩，对侧肩膀下沉。' },
+      { name: '颈深屈肌点头', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['仰卧屈膝，后脑贴地', '做轻微"点头"动作', '感受喉咙下方深层发力', '保持 3 秒缓慢回'],
+        breath: '点头吐气，回位吸气', tip: '幅度极小，避免浅层肌肉代偿。' },
+      { name: '胸椎泡沫轴伸展', dur: '2 组 × 8 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['泡沫轴横置于上背', '双手抱头支撑颈部', '上背缓慢后仰伸展', '逐节向上移动滚动'],
+        breath: '后仰吐气，回正吸气', tip: '腰部不要塌陷，核心轻收。' },
     ],
   },
   {
@@ -34,6 +43,15 @@ export const LIBRARY = [
       { name: '髂腰肌弓步拉伸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline',
         steps: ['弓步跪姿，后腿髋部下沉', '收紧后侧臀部', '骨盆后倾感受髋前伸展', '换边'],
         breath: '均匀呼吸，吐气加深', tip: '上身保持直立，不要塌腰。' },
+      { name: '骨盆后倾卷动', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['仰卧屈膝，双手放髋两侧', '收腹将下背压向地面', '骨盆轻微后倾', '保持 2 秒缓慢放松'],
+        breath: '后倾吐气，放松吸气', tip: '用腹部而非臀部主导。' },
+      { name: '鸟狗式', dur: '3 组 × 10 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['四足跪姿，核心收紧', '对侧手脚同时伸出成直线', '保持骨盆水平不晃', '收回换边'],
+        breath: '伸出吐气，收回吸气', tip: '想象背上放杯水不洒出。' },
+      { name: '臀大肌跪姿后抬腿', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['四足跪姿，一腿屈膝', '脚跟向天花板方向抬起', '顶端夹紧臀部', '控制还原不塌腰'],
+        breath: '抬腿吐气，还原吸气', tip: '腰不要反弓，发力集中在臀。' },
     ],
   },
   {
@@ -46,6 +64,15 @@ export const LIBRARY = [
       { name: '脚跟滑动', dur: '3 组 × 10 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
         steps: ['仰卧屈膝，收紧核心', '一侧脚跟缓慢滑出伸直', '腹部保持收紧、腰不离地', '收回换边'],
         breath: '滑出吐气，收回吸气', tip: '腹部凸起（顶起）说明腹压过大，减小幅度。' },
+      { name: '腹横肌收束（凯格尔配合）', dur: '3 组 × 10 次', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['仰卧或坐姿，放松呼吸', '吐气时同时收紧盆底与下腹', '想象把肚脐"扣向脊柱"', '保持 5 秒缓慢放松'],
+        breath: '收紧时吐气，放松时吸气', tip: '产后修复核心动作，循序渐进。' },
+      { name: '靠墙站姿收腹', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['背靠墙站立，腰部贴墙', '吐气收紧下腹使腰更贴墙', '保持骨盆中立', '维持 3 秒放松'],
+        breath: '收腹吐气，放松吸气', tip: '避免憋气与耸肩。' },
+      { name: '改良平板支撑（跪姿）', dur: '3 组 × 20 秒', level: '挑战', lc: 'bg-primary text-on-primary',
+        steps: ['跪姿前臂撑地', '身体从头到膝成直线', '收紧下腹不让腰下沉', '均匀呼吸保持'],
+        breath: '保持均匀呼吸不憋气', tip: '腹部出现凸起即停止，避免分离加重。' },
     ],
   },
   {
@@ -58,6 +85,15 @@ export const LIBRARY = [
       { name: '单侧侧平板', dur: '2 组 × 20 秒', level: '挑战', lc: 'bg-primary text-on-primary',
         steps: ['侧卧，肘在肩下支撑', '抬髋使身体成直线', '保持核心收紧', '换边时间一致'],
         breath: '保持均匀呼吸不憋气', tip: '凹侧多练有助对称，遵专业指导。' },
+      { name: '单臂上举侧伸展', dur: '2 组 × 8 次', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['站姿或坐姿，一手上举', '身体向对侧缓慢侧弯', '感受体侧延展', '回正换边'],
+        breath: '侧弯吐气，回正吸气', tip: '凸侧一般多做侧伸，遵医嘱方向。' },
+      { name: '四足支撑伸展', dur: '3 组 × 10 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['四足跪姿，脊柱中立', '单臂前伸贴近地面', '保持骨盆稳定', '缓慢收回换边'],
+        breath: '伸出吐气，收回吸气', tip: '体会脊柱两侧均衡延展。' },
+      { name: '靠墙脊柱拉长', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['背靠墙站立，后脑贴墙', '想象头顶向上延伸', '肩膀放松下沉', '保持均匀呼吸'],
+        breath: '缓慢深长呼吸', tip: '建立"长高"的脊柱排列感。' },
     ],
   },
   {
@@ -70,6 +106,15 @@ export const LIBRARY = [
       { name: '前锯肌推墙', dur: '3 组 × 15 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
         steps: ['俯身手撑墙', '保持手肘伸直', '主动外推使上背隆起', '回收使肩胛靠拢'],
         breath: '前推吐气，回收吸气', tip: '感受肩胛"包住"肋骨。' },
+      { name: '耸肩放松绕环', dur: '2 组 × 10 次', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['站姿放松，双肩同时上提', '向后缓慢绕环下沉', '感受斜方肌松解', '反向重复'],
+        breath: '上提吸气，下沉吐气', tip: '高肩侧可单侧多做下沉。' },
+      { name: '下斜方肌激活', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['俯卧，手臂呈 V 字外展', '拇指朝上抬起手臂', '主动将肩胛向下后收', '控制还原'],
+        breath: '抬起吐气，落下吸气', tip: '感受肩胛"向裤兜方向"下沉。' },
+      { name: '弹力带外旋', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['手肘贴身屈 90 度', '握弹力带做向外旋转', '肩胛保持稳定下沉', '缓慢还原'],
+        breath: '外旋吐气，还原吸气', tip: '肘部始终夹紧身体一侧。' },
     ],
   },
   {
@@ -82,6 +127,15 @@ export const LIBRARY = [
       { name: '靠墙静蹲', dur: '3 组 × 30 秒', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
         steps: ['后背贴墙，下蹲至大腿接近水平', '膝盖不超过脚尖', '保持膝盖朝向脚尖', '稳定呼吸坚持'],
         breath: '保持均匀呼吸不憋气', tip: '膝盖不要内扣。' },
+      { name: '臀中肌侧抬腿', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline',
+        steps: ['侧卧，下腿屈膝稳定', '上腿伸直向上抬起', '脚尖朝前不要外翻', '控制还原换边'],
+        breath: '抬腿吐气，还原吸气', tip: 'O 型腿尤需强化臀中肌。' },
+      { name: '腘绳肌离心下放', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-primary text-on-primary',
+        steps: ['仰卧屈膝做臀桥姿', '单腿支撑缓慢下放骨盆', '感受大腿后侧控制', '换边'],
+        breath: '下放吸气，抬起吐气', tip: '膝超伸者强化后侧链很关键。' },
+      { name: '足弓短足训练', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant',
+        steps: ['坐姿赤足踩地', '脚趾不卷曲，主动抬起足弓', '把脚掌"缩短"', '保持 3 秒放松'],
+        breath: '收足弓吐气，放松吸气', tip: '改善下肢力线从足部地基开始。' },
     ],
   },
 ]
@@ -159,4 +213,48 @@ export const DIET_PLANS = [
 
 export function findDietPlan(id) {
   return DIET_PLANS.find(p => p.id === id)
+}
+
+// —— 斯俪分阶梯等级（按累计打卡天数解锁，对应专属权益） ——
+// 以"月相"为视觉隐喻，呼应女性周期与渐进成长。
+export const SLIQUE_LEVELS = [
+  {
+    id: 'l1', name: '初遇', en: 'First Light', need: 0, icon: 'wb_sunny', color: 'bg-[#ece8e0]',
+    perk: '体态自测 + 基础训练库', reward: '新人 7 天陪伴计划',
+  },
+  {
+    id: 'l2', name: '晨星', en: 'Morning Star', need: 3, icon: 'wb_sunny', color: 'bg-[#e9e2d4]',
+    perk: '解锁进阶动作 · 进步曲线', reward: '8 折训练好物券',
+  },
+  {
+    id: 'l3', name: '新月', en: 'New Moon', need: 7, icon: 'bedtime', color: 'bg-[#dfe3dd]',
+    perk: '周期适配训练 · 饮食日历', reward: '定制弹力带礼包',
+  },
+  {
+    id: 'l4', name: '上弦', en: 'First Quarter', need: 15, icon: 'bedtime', color: 'bg-[#e7e4ea]',
+    perk: '专属体态报告解读', reward: '线上私教 1 次',
+  },
+  {
+    id: 'l5', name: '满月', en: 'Full Moon', need: 30, icon: 'bedtime', color: 'bg-[#ebe6d6]',
+    perk: '挑战动作全解锁', reward: '斯俪瑜伽垫周边',
+  },
+  {
+    id: 'l6', name: '星河', en: 'Galaxy', need: 60, icon: 'auto_awesome', color: 'bg-[#e4e6ea]',
+    perk: '终身会员 · 年度体态档案', reward: '季度体态私教营名额',
+  },
+]
+
+// 根据累计打卡数计算当前等级、下一级与进度。
+export function computeLevel(total = 0) {
+  let idx = 0
+  for (let i = 0; i < SLIQUE_LEVELS.length; i++) {
+    if (total >= SLIQUE_LEVELS[i].need) idx = i
+  }
+  const current = SLIQUE_LEVELS[idx]
+  const next = SLIQUE_LEVELS[idx + 1] || null
+  const span = next ? next.need - current.need : 1
+  const done = next ? total - current.need : 1
+  const progress = next ? Math.min(1, done / span) : 1
+  const remain = next ? Math.max(0, next.need - total) : 0
+  return { index: idx, current, next, progress, remain }
 }

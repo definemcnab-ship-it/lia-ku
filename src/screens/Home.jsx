@@ -58,10 +58,9 @@ export default function Home() {
             <div className="relative w-24 h-24 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
                 <circle className="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" strokeWidth="8" />
-                <circle className="text-primary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
+                <circle className="text-primary-container animate-ring-draw" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor"
                   strokeDasharray="251.2" strokeWidth="8" strokeLinecap="round"
-                  style={{ '--ring-offset': `${ringOffset}px`, strokeDashoffset: ringOffset }}
-                  className="animate-ring-draw" />
+                  style={{ '--ring-offset': `${ringOffset}px`, strokeDashoffset: ringOffset }} />
               </svg>
               <Icon name="accessibility_new" size={32} className="absolute text-primary" />
             </div>

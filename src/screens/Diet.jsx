@@ -26,7 +26,9 @@ export default function Diet() {
           <Icon name="arrow_back" size={24} className="text-on-surface" />
         </button>
         <span className="font-headline text-[18px] text-on-surface">饮食建议</span>
-        <span className="w-6" />
+        <button onClick={() => nav('/diet/calendar')} aria-label="饮食日历" className="active:scale-90 transition">
+          <Icon name="calendar_month" size={22} className="text-on-surface" />
+        </button>
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
@@ -66,7 +68,10 @@ export default function Diet() {
         <section className="space-y-stack-md">
           <div className="flex items-center justify-between">
             <h2 className="font-headline text-[18px] text-on-surface">今日三餐记录</h2>
-            <span className="font-label text-[12px] text-outline">拍照 + 一句话 · 不算卡路里</span>
+            <button onClick={() => nav('/diet/calendar')} className="flex items-center gap-1 active:scale-95 transition">
+              <span className="font-label text-[12px] text-primary">查看日历</span>
+              <Icon name="calendar_month" size={14} className="text-primary" />
+            </button>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {meals.map(m => {

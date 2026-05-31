@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { useStore, resetAll } from '../lib/store.js'
+import { computeLevel } from '../lib/content.js'
 
 export default function Profile() {
   const nav = useNavigate()
@@ -10,6 +11,7 @@ export default function Profile() {
   const [confirmReset, setConfirmReset] = useState(false)
 
   const grade = postureScore >= 90 ? 'S' : postureScore >= 80 ? 'A' : postureScore >= 70 ? 'B' : 'C'
+  const lv = computeLevel(checkIns.length)
 
   const sceneText = (prefs.scene && prefs.scene.length) ? prefs.scene.join(' / ') : '未设置'
   const notifyText = notify.enabled ? `${notify.start}–${notify.end}` : '已关闭'
@@ -69,6 +71,24 @@ export default function Profile() {
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
+        {/* 斯俪等级入口 */}
+        <button onClick={() => nav('/levels')}
+          className={`w-full text-left rounded-lg p-4 active:scale-[0.98] transition flex items-center gap-3 ${lv.current.color}`}>
+          <div className="w-11 h-11 rounded-full bg-white/60 flex items-center justify-center shrink-0">
+            <Icon name={lv.current.icon} size={22} className="text-[#8f8779]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-headline text-[16px] text-on-surface">{lv.current.name}</span>
+              <span className="font-label text-[11px] text-on-surface-variant">Lv.{lv.index + 1}</span>
+            </div>
+            <p className="font-label text-[12px] text-on-surface-variant mt-0.5">
+              {lv.next ? `再打卡 ${lv.remain} 天解锁「${lv.next.name}」` : '已达最高等级 · 星河'}
+            </p>
+          </div>
+          <Icon name="chevron_right" size={20} className="text-on-surface-variant" />
+        </button>
+
         {groups.map(g => (
           <section key={g.title} className="space-y-2">
             <h2 className="font-label text-[13px] text-outline uppercase tracking-wider px-1">{g.title}</h2>
