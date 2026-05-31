@@ -2,6 +2,15 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import Skeleton from '../components/Skeleton.jsx'
+import { useStore } from '../lib/store.js'
+
+// 由体态分推导等级文案
+function gradeLabel(score) {
+  if (score >= 90) return 'S 级 · 体态优秀'
+  if (score >= 80) return 'A 级 · 略有偏差'
+  if (score >= 70) return 'B 级 · 需要改善'
+  return 'C 级 · 建议干预'
+}
 
 function ReportSkeleton() {
   return (
@@ -63,7 +72,7 @@ const PAIN_POINTS = [
   },
 ]
 
-function ShareCard({ onClose }) {
+function ShareCard({ onClose, score }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60" onClick={onClose}>
       <div className="w-full max-w-[390px] bg-surface rounded-t-3xl pb-10 overflow-hidden"
@@ -85,11 +94,11 @@ function ShareCard({ onClose }) {
             </div>
             <p className="font-label text-white/70 text-[11px] uppercase tracking-widest mb-1">体态健康评估报告</p>
             <div className="flex items-end gap-2">
-              <span className="font-display text-[64px] font-bold text-white leading-none">85</span>
+              <span className="font-display text-[64px] font-bold text-white leading-none">{score}</span>
               <div className="pb-2">
                 <span className="font-label text-white/70 text-[14px]">/ 100</span>
                 <div className="mt-1 bg-white/20 px-2 py-0.5 rounded-full">
-                  <span className="font-label text-white text-[12px]">A 级 · 略有偏差</span>
+                  <span className="font-label text-white text-[12px]">{gradeLabel(score)}</span>
                 </div>
               </div>
             </div>
@@ -177,6 +186,7 @@ function PainPointCard({ p, delay }) {
 
 export default function Report() {
   const nav = useNavigate()
+  const { postureScore } = useStore()
   const [showShare, setShowShare] = useState(false)
   const [loading, setLoading] = useState(true)
 
@@ -208,10 +218,10 @@ export default function Report() {
           <section className="bg-gradient-to-br from-[#a89f90] to-[#8f8779] rounded-lg p-6 text-white text-center shadow-lg">
             <p className="font-label text-[12px] uppercase tracking-wider opacity-90">斯俪体态分</p>
             <div className="flex items-end justify-center gap-1 my-2">
-              <span className="font-display text-[64px] leading-none font-bold">85</span>
+              <span className="font-display text-[64px] leading-none font-bold">{postureScore}</span>
               <span className="font-label text-[16px] mb-3 opacity-90">/ 100</span>
             </div>
-            <span className="inline-block bg-white/20 px-4 py-1 rounded-full font-label text-[14px]">A 级 · 略有偏差</span>
+            <span className="inline-block bg-white/20 px-4 py-1 rounded-full font-label text-[14px]">{gradeLabel(postureScore)}</span>
             <p className="font-body text-sm opacity-90 mt-3">整体体态良好，主要问题集中在头颈前倾与圆肩，建议加强上交叉矫正训练。</p>
           </section>
 
@@ -269,7 +279,7 @@ export default function Report() {
         )}
       </div>
 
-      {showShare && <ShareCard onClose={() => setShowShare(false)} />}
+      {showShare && <ShareCard onClose={() => setShowShare(false)} score={postureScore} />}
     </>
   )
 }

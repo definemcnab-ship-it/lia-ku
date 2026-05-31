@@ -41,12 +41,14 @@ function buildMonthCalendar(checkIns) {
   return { cells, monthLabel: `${year} 年 ${month + 1} 月` }
 }
 
-function ScoreChart() {
+function ScoreChart({ current }) {
   const W = 300, H = 120, PL = 28, PR = 10, PT = 20, PB = 24
   const iW = W - PL - PR, iH = H - PT - PB
   const minS = 65, maxS = 100
 
-  const pts = trend.map((t, i) => ({
+  // 末点用真实体态分，随打卡变化
+  const data = trend.map((t, i) => (i === trend.length - 1 ? { ...t, score: current } : t))
+  const pts = data.map((t, i) => ({
     x: PL + (i / (trend.length - 1)) * iW,
     y: PT + (1 - (t.score - minS) / (maxS - minS)) * iH,
     score: t.score,
@@ -104,6 +106,7 @@ export default function Progress() {
   const trainedDays = countThisMonth(checkIns)
   const hasData = checkIns.length > 0
   const { cells, monthLabel } = buildMonthCalendar(checkIns)
+  const totalGain = postureScore - trend[0].score
 
   return (
     <div className="font-body text-on-background">
@@ -111,7 +114,7 @@ export default function Progress() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-headline text-[28px] text-on-surface">进步追踪</h1>
-            <p className="font-body text-on-surface-variant text-sm">8 周体态分 +13 🎉</p>
+            <p className="font-body text-on-surface-variant text-sm">累计体态分 +{totalGain} 🎉</p>
           </div>
           <button onClick={() => nav('/report')}
             className="flex items-center gap-1.5 bg-primary-fixed px-3 py-1.5 rounded-full active:scale-95 transition">
@@ -156,9 +159,9 @@ export default function Progress() {
             <div className="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(230,126,102,0.06)]">
               <div className="flex justify-between items-baseline mb-4">
                 <h2 className="font-headline text-[17px] text-on-surface">斯俪体态分趋势</h2>
-                <span className="font-label text-[12px] text-primary">+13 分</span>
+                <span className="font-label text-[12px] text-primary">+{totalGain} 分</span>
               </div>
-              <ScoreChart />
+              <ScoreChart current={postureScore} />
               <p className="font-label text-[11px] text-outline mt-3 text-center">持续训练每 2 周可见明显提升</p>
             </div>
           )}

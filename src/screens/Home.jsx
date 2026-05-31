@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import HomeBanner from '../components/HomeBanner.jsx'
-import { useStore } from '../lib/store.js'
+import { useStore, todayStr } from '../lib/store.js'
 
 function greeting() {
   const h = new Date().getHours()
@@ -14,9 +14,11 @@ function greeting() {
 
 export default function Home() {
   const nav = useNavigate()
-  const { postureScore, lastScore } = useStore()
+  const { postureScore, lastScore, checkIns } = useStore()
   const diff = postureScore - lastScore
   const ringOffset = (251.2 * (1 - postureScore / 100)).toFixed(2)
+  const trainedToday = checkIns.includes(todayStr())
+  const todayPct = trainedToday ? 100 : 0
   return (
     <div className="font-body text-on-background">
       {/* 顶部栏 */}
@@ -54,7 +56,7 @@ export default function Home() {
               <div className="flex items-center gap-1 text-secondary">
                 <Icon name="trending_up" size={16} />
                 <span className="font-label text-[12px]">
-                  {diff >= 0 ? `比上周提升了 ${diff} 分` : `比上周下降了 ${-diff} 分`}
+                  {diff > 0 ? `较上次提升了 ${diff} 分` : diff < 0 ? `较上次下降了 ${-diff} 分` : '坚持训练即可提升'}
                 </span>
               </div>
             </div>
@@ -93,13 +95,16 @@ export default function Home() {
             <div className="p-stack-md flex items-center justify-between">
               <div className="flex-1 mr-stack-md">
                 <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full bg-primary-container w-[45%]" />
+                  <div className="h-full bg-primary-container transition-all duration-700" style={{ width: `${todayPct}%` }} />
                 </div>
-                <p className="mt-2 font-label text-[12px] text-on-surface-variant">今日进度 45%</p>
+                <p className="mt-2 font-label text-[12px] text-on-surface-variant">
+                  {trainedToday ? '今日已完成 ✓' : '今日进度 0% · 待开始'}
+                </p>
               </div>
               <button onClick={(e) => { e.stopPropagation(); nav('/player') }}
+                aria-label={trainedToday ? '再次训练' : '开始训练'}
                 className="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-md active:scale-90 transition">
-                <Icon name="play_arrow" size={24} className="text-white" />
+                <Icon name={trainedToday ? 'check_circle' : 'play_arrow'} size={24} className="text-white" />
               </button>
             </div>
           </div>
