@@ -24,6 +24,45 @@ const dims = [
   { name: '下肢力线', score: 92, weight: '15%' },
 ]
 
+// AI 识别出的具体痛点，含严重程度与优先级
+const PAIN_POINTS = [
+  {
+    id: 'pp1', title: '头部前伸 (FHP)', severity: 'high', deg: '4.2 cm',
+    icon: 'flash_on', color: 'bg-[#ece0d8]', badge: 'bg-error/15 text-error',
+    badgeText: '需重点改善',
+    desc: 'AI 检测到头部重心超出肩关节前方约 4.2 cm，长期可增加颈椎负荷约 3 倍，易引发颈源性头痛。',
+    actions: ['下巴后缩练习 · 每日 3 组', '上斜方肌拉伸 · 每日 2 次', '减少低头看手机时间'],
+  },
+  {
+    id: 'pp2', title: '双侧圆肩', severity: 'high', deg: '左 +18° / 右 +14°',
+    icon: 'flash_on', color: 'bg-[#ece0d8]', badge: 'bg-error/15 text-error',
+    badgeText: '需重点改善',
+    desc: '肩峰内旋显著，左侧较右侧更明显。长期圆肩会压迫肩袖，增加肩袖撞击综合征风险。',
+    actions: ['弹力带划船 · 每日 3 组', '胸大肌墙角拉伸 · 每日 2 次', '俯卧 Y-T-W 激活中下斜方'],
+  },
+  {
+    id: 'pp3', title: '骨盆轻度前倾', severity: 'medium', deg: '12°（正常 ≤8°）',
+    icon: 'lightbulb', color: 'bg-[#ebe6d6]', badge: 'bg-[#ebe6d6] text-[#8f7a55]',
+    badgeText: '轻度偏差',
+    desc: '骨盆前倾角度轻微偏高，下背可能存在补偿性紧张，久坐时腰部容易酸胀。',
+    actions: ['臀桥强化臀大肌 · 3 组 × 15 次', '髂腰肌弓步拉伸 · 每日换边各 30 秒', '鸟狗式核心激活'],
+  },
+  {
+    id: 'pp4', title: '高低肩（左高于右）', severity: 'medium', deg: '差值 11 mm',
+    icon: 'lightbulb', color: 'bg-[#ebe6d6]', badge: 'bg-[#ebe6d6] text-[#8f7a55]',
+    badgeText: '轻度偏差',
+    desc: '肩峰高度左侧高于右侧约 11 mm，可能与惯用手负重习惯或脊柱轻度侧弯有关。',
+    actions: ['右侧下斜方肌激活练习', '避免单侧背包', '睡眠时可尝试右侧垫薄枕调整'],
+  },
+  {
+    id: 'pp5', title: '膝关节排列良好', severity: 'low', deg: 'Q 角正常范围',
+    icon: 'check_circle', color: 'bg-[#dfe3dd]', badge: 'bg-[#dfe3dd] text-[#5a7a5a]',
+    badgeText: '表现良好',
+    desc: 'Q 角在正常女性参考范围内，下肢力线无明显 X/O 型异常，继续保持。',
+    actions: ['蚌式开合维持臀中肌力量', '足弓短足训练，维护地基稳定'],
+  },
+]
+
 function ShareCard({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60" onClick={onClose}>
@@ -100,6 +139,42 @@ function ShareCard({ onClose }) {
   )
 }
 
+function PainPointCard({ p, delay }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`${p.color} rounded-lg overflow-hidden animate-page-in`}
+      style={{ animationDelay: `${delay}ms` }}>
+      <button className="w-full p-4 flex items-start gap-3 text-left active:opacity-80 transition"
+        onClick={() => setOpen(o => !o)}>
+        <Icon name={p.icon} size={20} className="text-on-surface-variant shrink-0 mt-0.5" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-label text-[14px] text-on-surface">{p.title}</span>
+            <span className={`font-label text-[10px] px-2 py-0.5 rounded-full ${p.badge}`}>{p.badgeText}</span>
+          </div>
+          <p className="font-label text-[12px] text-on-surface-variant mt-0.5">{p.deg}</p>
+        </div>
+        <Icon name={open ? 'expand_more' : 'chevron_right'} size={18}
+          className={`text-outline shrink-0 transition-transform ${open ? 'rotate-0' : ''}`} />
+      </button>
+      {open && (
+        <div className="px-4 pb-4 space-y-3 animate-page-in">
+          <p className="font-body text-[13px] text-on-surface-variant leading-relaxed">{p.desc}</p>
+          <div className="space-y-1.5">
+            <p className="font-label text-[12px] text-on-surface font-bold">改善建议</p>
+            {p.actions.map((a, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <span className="w-4 h-4 rounded-full bg-white/60 text-primary text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                <span className="font-body text-[13px] text-on-surface-variant">{a}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Report() {
   const nav = useNavigate()
   const [showShare, setShowShare] = useState(false)
@@ -156,6 +231,19 @@ export default function Report() {
                       style={{ '--bar-w': `${d.score}%`, animationDelay: `${i * 60 + 200}ms` }} />
                   </div>
                 </div>
+              ))}
+            </div>
+          </section>
+
+          {/* AI 痛点详解 */}
+          <section className="space-y-stack-md">
+            <div className="flex items-center justify-between">
+              <h2 className="font-headline text-[20px] text-on-surface">AI 识别痛点</h2>
+              <span className="font-label text-[12px] text-outline">{PAIN_POINTS.length} 项分析</span>
+            </div>
+            <div className="space-y-3">
+              {PAIN_POINTS.map((p, i) => (
+                <PainPointCard key={p.id} p={p} delay={i * 60} />
               ))}
             </div>
           </section>

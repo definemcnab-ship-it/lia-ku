@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
+import HomeBanner from '../components/HomeBanner.jsx'
 import { useStore } from '../lib/store.js'
 
 function greeting() {
@@ -31,6 +32,8 @@ export default function Home() {
           <Icon name="notifications" size={28} className="text-primary" />
         </button>
       </nav>
+
+      <HomeBanner />
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
         {/* 欢迎 + 体态分概览 */}
