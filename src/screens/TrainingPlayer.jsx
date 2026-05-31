@@ -143,7 +143,7 @@ export default function TrainingPlayer() {
           <Icon name="check_circle" size={64} className="text-white" />
         </div>
         <h2 className="font-display text-[32px] font-bold mb-2">训练完成！</h2>
-        <p className="font-body text-white/80 mb-2">天鹅颈舒缓拉伸 · {EXERCISES.length} 个动作全部完成</p>
+        <p className="font-body text-white/80 mb-2">天鹅颈塑形课 · {EXERCISES.length} 个动作全部完成</p>
         <p className="font-label text-[14px] text-white/60 mb-10">坚持每天训练，体态改变肉眼可见 ✨</p>
         <div className="w-full space-y-3">
           <button onClick={() => nav('/progress')}

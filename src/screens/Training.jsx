@@ -5,10 +5,10 @@ import { LIBRARY } from '../lib/content.js'
 // 训练 / 动作库（方案文档 §2.1 训练核心、§4 体态问题分类）。
 
 const todayPlan = [
-  { name: '下巴后缩', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline' },
-  { name: '弹力带划船', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant' },
-  { name: '墙角胸大肌拉伸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline' },
-  { name: '俯卧 Y-T-W', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-primary text-on-primary' },
+  { name: '天鹅颈塑形', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline' },
+  { name: '展翼开肩·背部唤醒', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant' },
+  { name: '胸廓绽放·芭蕾开胸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline' },
+  { name: '背部雕塑·振翅式', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-primary text-on-primary' },
 ]
 
 export default function Training() {
@@ -17,7 +17,7 @@ export default function Training() {
     <div className="font-body text-on-background">
       <header className="px-container-padding-mobile pt-stack-md pb-2 sticky top-0 bg-surface z-40">
         <h1 className="font-headline text-[28px] text-on-surface">矫正训练</h1>
-        <p className="font-body text-on-surface-variant text-sm">天鹅颈舒缓拉伸 · 15分钟 · 12个动作</p>
+        <p className="font-body text-on-surface-variant text-sm">天鹅颈塑形课 · 8周挺拔如模特 · 15分钟</p>
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">

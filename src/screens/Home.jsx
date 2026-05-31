@@ -98,7 +98,7 @@ export default function Home() {
                     <Icon name="self_improvement" size={40} className="opacity-80" />
                   </div>
                 </div>
-                <p className="font-label text-[13px] opacity-70">天鹅颈舒缓拉伸</p>
+                <p className="font-label text-[13px] opacity-70">天鹅颈塑形课</p>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-4 left-4 text-white">
