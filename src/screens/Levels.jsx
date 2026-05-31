@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { useStore } from '../lib/store.js'
+import { useStore, recordTrainingDone, todayStr } from '../lib/store.js'
 import { SLIQUE_LEVELS, computeLevel } from '../lib/content.js'
 
 // 我的 → 斯俪分阶梯等级：累计打卡解锁等级与专属权益。
@@ -9,6 +9,7 @@ export default function Levels() {
   const { checkIns } = useStore()
   const total = checkIns.length
   const { index, current, next, progress, remain } = computeLevel(total)
+  const checkedToday = checkIns.includes(todayStr())
 
   return (
     <div className="font-body text-on-background">
@@ -42,10 +43,17 @@ export default function Levels() {
               </span>
             </div>
             <div className="h-2 rounded-full bg-white/50 overflow-hidden">
-              <div className="h-full rounded-full bg-[#8f8779] transition-all"
+              <div className="h-full rounded-full bg-[#8f8779] transition-all duration-500"
                 style={{ width: `${Math.round(progress * 100)}%` }} />
             </div>
           </div>
+
+          <button onClick={recordTrainingDone} disabled={checkedToday}
+            className={`mt-4 w-full h-11 rounded-lg font-label text-[15px] flex items-center justify-center gap-2 transition active:scale-[0.98]
+              ${checkedToday ? 'bg-white/40 text-on-surface-variant/60' : 'bg-[#8f8779] text-white'}`}>
+            <Icon name={checkedToday ? 'check_circle' : 'add'} size={18} className={checkedToday ? 'text-on-surface-variant/60' : 'text-white'} />
+            {checkedToday ? '今日已打卡' : '立即打卡 +1 天'}
+          </button>
         </section>
 
         {/* 等级阶梯 */}

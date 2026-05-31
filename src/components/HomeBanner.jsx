@@ -78,7 +78,7 @@ export default function HomeBanner() {
         <div className="absolute right-4 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-white/20 pointer-events-none" />
         <div className="absolute right-12 top-0 w-14 h-14 rounded-full bg-white/10 pointer-events-none" />
 
-        <div className="flex items-center gap-4">
+        <div key={s.id} className="flex items-center gap-4 animate-fade-in">
           <div className="flex-1 min-w-0">
             <span className="inline-block font-label text-[10px] text-on-surface-variant/70 bg-white/40 px-2 py-0.5 rounded-full mb-1.5">
               {s.label}
