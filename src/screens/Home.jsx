@@ -134,16 +134,17 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 成果画廊 - 横向滑动卡片 */}
-        <section className="-mx-container-padding-mobile">
-          <div className="flex gap-3 px-container-padding-mobile overflow-x-auto pb-1 scrollbar-none">
-            {STORY_CARDS.map(s => (
-              <div key={s.id} className={`flex-none w-44 h-52 rounded-2xl overflow-hidden relative ${s.bg} shrink-0`}>
+        {/* 成果故事 - 两列网格（与下方探索功能列宽对齐，保证对称） */}
+        <section className="space-y-stack-md">
+          <h2 className="font-headline text-[22px] text-ink font-light">真实蜕变故事</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {STORY_CARDS.slice(0, 4).map(s => (
+              <div key={s.id} className={`h-44 rounded-[24px] overflow-hidden relative ${s.bg}`}>
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4">
                   <div className="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center">
                     <Icon name={s.icon} size={28} className="text-white/80" />
                   </div>
-                  <p className="font-headline text-[13px] text-white text-center leading-snug">{s.title}</p>
+                  <p className="font-headline text-[14px] text-white text-center leading-snug">{s.title}</p>
                   <p className="font-label text-[11px] text-white/70 text-center">{s.sub}</p>
                 </div>
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center">
