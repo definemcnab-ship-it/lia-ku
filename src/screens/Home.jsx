@@ -4,6 +4,14 @@ import HomeBanner from '../components/HomeBanner.jsx'
 import { useStore, todayStr } from '../lib/store.js'
 import { COMMUNITY_POSTS } from '../lib/content.js'
 
+const STORY_CARDS = [
+  { id: 's1', bg: 'bg-gradient-to-br from-[#c8b89a] to-[#a89070]', icon: 'self_improvement', title: '8周挺拔如模特', sub: '圆肩 → 开肩展背', tag: '真实蜕变' },
+  { id: 's2', bg: 'bg-gradient-to-br from-[#a5b5a0] to-[#7d9878]', icon: 'accessibility_new', title: '骨盆归位腰细了', sub: '前倾 → 标准中立', tag: '体态故事' },
+  { id: 's3', bg: 'bg-gradient-to-br from-[#b0a8c8] to-[#8878a8]', icon: 'star', title: '天鹅颈不再是梦', sub: '头前引 → 颈部纤长', tag: '30天打卡' },
+  { id: 's4', bg: 'bg-gradient-to-br from-[#c0a898] to-[#9a7868]', icon: 'favorite', title: '产后腰腹复原', sub: '腹直肌分离修复', tag: '妈妈蜕变' },
+  { id: 's5', bg: 'bg-gradient-to-br from-[#98b0c0] to-[#6888a0]', icon: 'trending_up', title: '体态分 +18 分', sub: '坚持60天的成果', tag: '数据见证' },
+]
+
 function greeting() {
   const h = new Date().getHours()
   if (h < 6)  return '夜深了，若曦'
@@ -84,13 +92,18 @@ export default function Home() {
               group active:scale-[0.98] transition-transform cursor-pointer">
             <div className="h-48 w-full bg-gradient-to-br from-primary-fixed to-primary-container flex items-center justify-center relative">
               <div className="text-center text-primary">
-                <Icon name="fitness_center" size={56} className="mx-auto mb-2 opacity-60" />
+                <div className="relative mx-auto w-20 h-20 mb-2">
+                  <div className="absolute inset-0 rounded-full bg-white/20 animate-pulse-soft" />
+                  <div className="absolute inset-2 rounded-full bg-white/15 flex items-center justify-center">
+                    <Icon name="self_improvement" size={40} className="opacity-80" />
+                  </div>
+                </div>
                 <p className="font-label text-[13px] opacity-70">天鹅颈舒缓拉伸</p>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-4 left-4 text-white">
-                <h3 className="font-headline text-[22px]">天鹅颈舒缓拉伸</h3>
-                <p className="font-label text-[13px] opacity-90">改善圆肩 · 15分钟 · 12个动作</p>
+                <h3 className="font-headline text-[22px]">天鹅颈塑形课</h3>
+                <p className="font-label text-[13px] opacity-90">8周挺拔如模特 · 15分钟 · 4个动作</p>
               </div>
             </div>
             <div className="p-stack-md flex items-center justify-between">
@@ -108,6 +121,26 @@ export default function Home() {
                 <Icon name={trainedToday ? 'check_circle' : 'play_arrow'} size={24} className="text-white" />
               </button>
             </div>
+          </div>
+        </section>
+
+        {/* 成果画廊 - 横向滑动卡片 */}
+        <section className="-mx-container-padding-mobile">
+          <div className="flex gap-3 px-container-padding-mobile overflow-x-auto pb-1 scrollbar-none">
+            {STORY_CARDS.map(s => (
+              <div key={s.id} className={`flex-none w-44 h-52 rounded-2xl overflow-hidden relative ${s.bg} shrink-0`}>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4">
+                  <div className="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center">
+                    <Icon name={s.icon} size={28} className="text-white/80" />
+                  </div>
+                  <p className="font-headline text-[13px] text-white text-center leading-snug">{s.title}</p>
+                  <p className="font-label text-[11px] text-white/70 text-center">{s.sub}</p>
+                </div>
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+                  <span className="font-label text-[10px] text-white/60 bg-black/20 px-2 py-0.5 rounded-full">{s.tag}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
