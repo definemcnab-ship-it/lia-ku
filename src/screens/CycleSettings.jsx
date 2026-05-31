@@ -9,11 +9,11 @@ const PHASES = [
     id: 'menstrual',
     name: '月经期',
     days: '第 1–5 天',
-    color: 'bg-[#fce4ec]',
-    textColor: 'text-[#c62828]',
-    dotColor: 'bg-[#ef9a9a]',
+    color: 'bg-[#f0ede7]',
+    textColor: 'text-[#8f8779]',
+    dotColor: 'bg-[#cfc8bb]',
     intensity: '轻度',
-    intensityColor: 'text-green-600 bg-green-50',
+    intensityColor: 'text-on-surface-variant bg-primary-fixed',
     icon: '🌙',
     desc: '以舒缓拉伸为主，避免高强度腹部训练。重点缓解经期不适引起的腰背酸痛。',
     exercises: ['猫牛式脊柱活动', '仰卧抱膝放松', '深呼吸横隔膜训练'],
@@ -23,11 +23,11 @@ const PHASES = [
     id: 'follicular',
     name: '卵泡期',
     days: '第 6–13 天',
-    color: 'bg-[#e8f5e9]',
-    textColor: 'text-[#2e7d32]',
-    dotColor: 'bg-[#a5d6a7]',
+    color: 'bg-[#ece8e0]',
+    textColor: 'text-[#8f8779]',
+    dotColor: 'bg-[#cfc8bb]',
     intensity: '中等',
-    intensityColor: 'text-teal-600 bg-teal-50',
+    intensityColor: 'text-on-surface-variant bg-primary-fixed',
     icon: '🌱',
     desc: '雌激素上升，体力最充沛。这是攻克难度动作的最佳窗口，可适当增加训练量。',
     exercises: ['弹力带划船', '俯卧 Y-T-W', '靠墙深蹲'],
@@ -37,11 +37,11 @@ const PHASES = [
     id: 'ovulatory',
     name: '排卵期',
     days: '第 14–16 天',
-    color: 'bg-[#fff8e1]',
-    textColor: 'text-[#f57f17]',
-    dotColor: 'bg-[#ffe082]',
+    color: 'bg-[#ece8e0]',
+    textColor: 'text-[#8f8779]',
+    dotColor: 'bg-[#cfc8bb]',
     intensity: '中高',
-    intensityColor: 'text-orange-600 bg-orange-50',
+    intensityColor: 'text-on-surface-variant bg-primary-fixed',
     icon: '✨',
     desc: '体能顶峰，力量和协调性最佳。适合挑战型动作，但注意关节韧带较松弛，控制幅度。',
     exercises: ['天鹅颈抗阻训练', '单腿平衡站立', '肩胛稳定进阶'],
@@ -51,11 +51,11 @@ const PHASES = [
     id: 'luteal',
     name: '黄体期',
     days: '第 17–28 天',
-    color: 'bg-[#f3e5f5]',
-    textColor: 'text-[#6a1b9a]',
-    dotColor: 'bg-[#ce93d8]',
+    color: 'bg-[#e6e1d8]',
+    textColor: 'text-[#8f8779]',
+    dotColor: 'bg-[#cfc8bb]',
     intensity: '中低',
-    intensityColor: 'text-purple-600 bg-purple-50',
+    intensityColor: 'text-on-surface-variant bg-primary-fixed',
     icon: '🌸',
     desc: '孕激素升高，基础代谢加快但易疲劳。保持规律训练，注重放松与恢复。',
     exercises: ['墙角胸大肌拉伸', '下巴后缩基础版', '泡沫轴放松'],
@@ -78,8 +78,8 @@ function CycleDial({ cycleLen, periodLen, currentDay }) {
 
   // 四个阶段角度分配（按天数比例，总 cycleLen 天）
   const phaseDays = [periodLen, 8, 3, cycleLen - periodLen - 8 - 3]
-  const phaseColors = ['#ef9a9a', '#a5d6a7', '#ffe082', '#ce93d8']
-  const phaseStroke = ['#c62828', '#2e7d32', '#f57f17', '#6a1b9a']
+  const phaseColors = ['#cfc8bb', '#cfc8bb', '#cfc8bb', '#cfc8bb']
+  const phaseStroke = ['#8f8779', '#8f8779', '#8f8779', '#8f8779']
   let acc = 0
   const segments = phaseDays.map((d, i) => {
     const startDeg = (acc / cycleLen) * 360
@@ -96,20 +96,20 @@ function CycleDial({ cycleLen, periodLen, currentDay }) {
   return (
     <svg viewBox="0 0 200 200" className="w-48 h-48">
       {/* 背景圆 */}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#f0eded" strokeWidth="18" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#ece8e0" strokeWidth="18" />
       {/* 阶段弧段 */}
       {segments.map((s, i) => (
         <path key={i} d={arc(s.startDeg + 1, s.endDeg - 1, r)} fill="none"
           stroke={s.color} strokeWidth="16" strokeLinecap="round" />
       ))}
       {/* 当前位置 */}
-      <circle cx={curX} cy={curY} r="7" fill="white" stroke="#9b4430" strokeWidth="3" />
+      <circle cx={curX} cy={curY} r="7" fill="white" stroke="#8f8779" strokeWidth="3" />
       {/* 中心文字 */}
-      <text x={cx} y={cy - 8} textAnchor="middle" fontSize="11" fill="#55423e">第 {currentDay} 天</text>
-      <text x={cx} y={cy + 8} textAnchor="middle" fontSize="13" fontWeight="bold" fill="#9b4430">
+      <text x={cx} y={cy - 8} textAnchor="middle" fontSize="11" fill="#6e675b">第 {currentDay} 天</text>
+      <text x={cx} y={cy + 8} textAnchor="middle" fontSize="13" fontWeight="bold" fill="#8f8779">
         {PHASES[CURRENT_PHASE_IDX].name}
       </text>
-      <text x={cx} y={cy + 22} textAnchor="middle" fontSize="10" fill="#88726d">
+      <text x={cx} y={cy + 22} textAnchor="middle" fontSize="10" fill="#9e9688">
         {PHASES[CURRENT_PHASE_IDX].days}
       </text>
     </svg>

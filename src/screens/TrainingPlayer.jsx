@@ -12,9 +12,9 @@ const EXERCISES = [
     focus: '颈部前侧',
     tip: '下巴水平向后推，感受颈部后侧轻微拉伸，保持呼吸均匀。',
     highlightY: 20, // 人体图高亮区域 Y%
-    color: '#e0f2f1',
+    color: '#ece8e0',
     level: '基础',
-    lc: 'bg-green-100 text-green-700',
+    lc: 'bg-primary-fixed text-on-surface-variant',
   },
   {
     name: '弹力带划船',
@@ -23,9 +23,9 @@ const EXERCISES = [
     focus: '肩背部',
     tip: '肩胛骨主动后缩，手肘贴近身体，避免耸肩代偿。',
     highlightY: 30,
-    color: '#f3e5f5',
+    color: '#e6e1d8',
     level: '进阶',
-    lc: 'bg-orange-100 text-orange-700',
+    lc: 'bg-primary-fixed text-on-surface-variant',
   },
   {
     name: '墙角胸大肌拉伸',
@@ -34,9 +34,9 @@ const EXERCISES = [
     focus: '胸大肌',
     tip: '面对墙角，双臂撑墙，身体缓慢前倾，感受胸前展开。',
     highlightY: 35,
-    color: '#fce4ec',
+    color: '#f0ede7',
     level: '基础',
-    lc: 'bg-green-100 text-green-700',
+    lc: 'bg-primary-fixed text-on-surface-variant',
   },
   {
     name: '俯卧 Y-T-W',
@@ -45,9 +45,9 @@ const EXERCISES = [
     focus: '下斜方肌',
     tip: '俯卧于垫上，依次做 Y / T / W 手臂动作，激活肩胛稳定肌群。',
     highlightY: 45,
-    color: '#fff8e1',
+    color: '#ece8e0',
     level: '挑战',
-    lc: 'bg-red-100 text-red-700',
+    lc: 'bg-primary-fixed text-on-surface-variant',
   },
 ]
 
@@ -138,7 +138,7 @@ export default function TrainingPlayer() {
 
   if (phase === PHASES.COMPLETE) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-gradient-to-b from-primary to-[#6d2f21] text-white px-8 text-center">
+      <div className="h-full flex flex-col items-center justify-center bg-gradient-to-b from-primary to-[#6e675b] text-white px-8 text-center">
         <div className="w-28 h-28 rounded-full bg-white/20 flex items-center justify-center mb-6">
           <Icon name="check_circle" size={64} className="text-white" />
         </div>
@@ -252,7 +252,7 @@ export default function TrainingPlayer() {
         {phase === PHASES.REST && (
           <div className="text-center space-y-3 w-full px-4 animate-page-in">
             <p className="font-label text-[13px] text-white/50 uppercase tracking-widest">组间休息</p>
-            <p className="font-display text-[80px] font-bold leading-none text-[#a8dadc]">{restSec}</p>
+            <p className="font-display text-[80px] font-bold leading-none text-[#cfc8bb]">{restSec}</p>
             <p className="font-label text-[13px] text-white/60">秒</p>
             {/* 下一动作预告 */}
             {setNum < totalSets ? (

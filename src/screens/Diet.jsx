@@ -31,10 +31,10 @@ export default function Diet() {
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
         {/* 今日建议卡片 */}
-        <section className="bg-gradient-to-br from-[#FFF8E1] to-[#ffe088] rounded-lg p-5 shadow-lg">
-          <p className="font-label text-[12px] text-[#F57F17] uppercase tracking-wider">今日饮食建议</p>
-          <h2 className="font-headline text-[20px] text-[#4E342E] mt-1 mb-2">针对圆肩 · 加强骨骼排列</h2>
-          <p className="font-body text-sm text-[#4E342E]/80">
+        <section className="bg-gradient-to-br from-[#ece8e0] to-[#cfc8bb] rounded-lg p-5 shadow-lg">
+          <p className="font-label text-[12px] text-[#8f8779] uppercase tracking-wider">今日饮食建议</p>
+          <h2 className="font-headline text-[20px] text-[#6e675b] mt-1 mb-2">针对圆肩 · 加强骨骼排列</h2>
+          <p className="font-body text-sm text-[#6e675b]/80">
             今天多补充钙与维生素 D：早餐一份牛奶 + 蛋黄，晚餐安排一次深海鱼。
           </p>
         </section>

@@ -32,7 +32,7 @@ function ShareCard({ onClose }) {
 
         {/* 可分享的卡片主体 */}
         <div className="mx-5 mt-5 rounded-2xl overflow-hidden shadow-xl"
-          style={{ background: 'linear-gradient(135deg, #e67e66 0%, #9b4430 60%, #6d2f21 100%)' }}>
+          style={{ background: 'linear-gradient(135deg, #a89f90 0%, #8f8779 60%, #6d2f21 100%)' }}>
           {/* 顶部装饰 */}
           <div className="relative px-6 pt-6 pb-4">
             <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
@@ -130,7 +130,7 @@ export default function Report() {
 
         <main className="px-container-padding-mobile pb-10 space-y-stack-lg">
           {/* 总分卡片 */}
-          <section className="bg-gradient-to-br from-[#e67e66] to-[#9b4430] rounded-lg p-6 text-white text-center shadow-lg">
+          <section className="bg-gradient-to-br from-[#a89f90] to-[#8f8779] rounded-lg p-6 text-white text-center shadow-lg">
             <p className="font-label text-[12px] uppercase tracking-wider opacity-90">斯俪体态分</p>
             <div className="flex items-end justify-center gap-1 my-2">
               <span className="font-display text-[64px] leading-none font-bold">85</span>

@@ -23,8 +23,8 @@ export default function Photos() {
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
         <div className="bg-mint/40 rounded-lg p-4 flex items-start gap-2">
-          <Icon name="verified_user" size={18} className="text-teal-700 shrink-0 mt-0.5" />
-          <p className="font-body text-[13px] text-teal-800/90 leading-relaxed">
+          <Icon name="verified_user" size={18} className="text-on-surface-variant shrink-0 mt-0.5" />
+          <p className="font-body text-[13px] text-on-surface-variant/90 leading-relaxed">
             照片仅保存在你的手机本地，不会上传服务器。你可随时删除任意照片，删除后不可恢复。
           </p>
         </div>

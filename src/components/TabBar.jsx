@@ -20,7 +20,7 @@ export default function TabBar() {
           <div key={t.to} className="relative -mt-10 flex flex-col items-center">
             <button
               onClick={() => nav(t.to)} aria-label={t.label}
-              className="bg-gradient-to-tr from-[#e67e66] to-[#ffb4a3] text-white w-14 h-14 rounded-full
+              className="bg-gradient-to-tr from-[#a89f90] to-[#cfc8bb] text-white w-14 h-14 rounded-full
                 flex items-center justify-center shadow-[0px_8px_24px_rgba(230,126,102,0.4)]
                 active:scale-90 transition-transform duration-200 border-4 border-surface">
               <Icon name={t.icon} size={26} className="text-white" />

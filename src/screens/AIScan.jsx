@@ -39,8 +39,8 @@ export default function AIScan() {
                 strokeLinecap="round" strokeDasharray="351.86" strokeDashoffset={351.86 * (1 - progress / 100)} />
               <defs>
                 <linearGradient id="scanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#e67e66" />
-                  <stop offset="100%" stopColor="#ffb4a3" />
+                  <stop offset="0%" stopColor="#a89f90" />
+                  <stop offset="100%" stopColor="#cfc8bb" />
                 </linearGradient>
               </defs>
             </svg>
@@ -55,7 +55,7 @@ export default function AIScan() {
           </div>
 
           <div className="w-full bg-white/10 rounded-full h-1.5">
-            <div className="bg-gradient-to-r from-[#e67e66] to-[#ffb4a3] h-1.5 rounded-full transition-all duration-500"
+            <div className="bg-gradient-to-r from-[#a89f90] to-[#cfc8bb] h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }} />
           </div>
           <p className="font-label text-[14px] text-primary-container">{progress}%</p>
@@ -105,7 +105,7 @@ export default function AIScan() {
             <ellipse cx="90" cy="55" rx="34" ry="42" fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" />
             <path d="M90 97 L90 250 M90 130 L40 200 M90 130 L140 200 M90 250 L55 400 M90 250 L125 400"
               fill="none" stroke="#ffffffcc" strokeWidth="2" strokeDasharray="6 8" strokeLinecap="round" />
-            <circle cx="90" cy="250" r="5" fill="#e67e66" />
+            <circle cx="90" cy="250" r="5" fill="#a89f90" />
           </svg>
           {/* 扫描光束 */}
           <div className="absolute left-0 right-0 top-12 pointer-events-none animate-scan-beam">
@@ -129,7 +129,7 @@ export default function AIScan() {
         </button>
         <button onClick={capture} aria-label={`拍摄${steps[shot]}照片`}
           className="w-20 h-20 rounded-full border-4 border-white/80 flex items-center justify-center active:scale-90 transition">
-          <span className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#e67e66] to-[#ffb4a3] flex items-center justify-center">
+          <span className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#a89f90] to-[#cfc8bb] flex items-center justify-center">
             <Icon name="camera" size={28} className="text-white" />
           </span>
         </button>

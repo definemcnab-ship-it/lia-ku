@@ -5,10 +5,10 @@ import { LIBRARY } from '../lib/content.js'
 // 训练 / 动作库（方案文档 §2.1 训练核心、§4 体态问题分类）。
 
 const todayPlan = [
-  { name: '下巴后缩', dur: '3 组 × 15 次', level: '基础', lc: 'bg-green-100 text-green-700' },
-  { name: '弹力带划船', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-orange-100 text-orange-700' },
-  { name: '墙角胸大肌拉伸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-green-100 text-green-700' },
-  { name: '俯卧 Y-T-W', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-red-100 text-red-700' },
+  { name: '下巴后缩', dur: '3 组 × 15 次', level: '基础', lc: 'bg-surface-container text-outline' },
+  { name: '弹力带划船', dur: '3 组 × 12 次', level: '进阶', lc: 'bg-primary-fixed text-on-surface-variant' },
+  { name: '墙角胸大肌拉伸', dur: '2 组 × 30 秒', level: '基础', lc: 'bg-surface-container text-outline' },
+  { name: '俯卧 Y-T-W', dur: '3 组 × 10 次', level: '挑战', lc: 'bg-primary text-on-primary' },
 ]
 
 export default function Training() {

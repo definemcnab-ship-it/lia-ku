@@ -105,11 +105,11 @@ export default function Home() {
 
         {/* 核心功能 Bento */}
         <section className="grid grid-cols-2 gap-stack-md">
-          <Bento color="bg-mint border-teal-100" iconBg="bg-white/80" iconColor="text-teal-600"
-            icon="camera" title="AI 姿态扫描" titleColor="text-teal-900" desc="快速诊断潜在风险" descColor="text-teal-700/70"
+          <Bento color="bg-mint border-outline-variant" iconBg="bg-white/80" iconColor="text-on-surface-variant"
+            icon="camera" title="AI 姿态扫描" titleColor="text-on-surface-variant" desc="快速诊断潜在风险" descColor="text-on-surface-variant/70"
             onClick={() => nav('/scan')} />
-          <Bento color="bg-lavender border-purple-100" iconBg="bg-white/80" iconColor="text-purple-600"
-            icon="analytics" title="进步追踪" titleColor="text-purple-900" desc="查看体态变化轨迹" descColor="text-purple-700/70"
+          <Bento color="bg-lavender border-outline-variant" iconBg="bg-white/80" iconColor="text-on-surface-variant"
+            icon="analytics" title="进步追踪" titleColor="text-on-surface-variant" desc="查看体态变化轨迹" descColor="text-on-surface-variant/70"
             onClick={() => nav('/progress')} />
         </section>
         <section className="grid grid-cols-2 gap-stack-md">
@@ -118,7 +118,7 @@ export default function Home() {
             icon="fitness_center" title="动作库" titleColor="text-on-surface" desc="探索专业矫正动作" descColor="text-on-surface-variant"
             onClick={() => nav('/training')} />
           <Bento color="bg-surface-container-lowest border-surface-variant shadow-[0px_4px_20px_rgba(230,126,102,0.08)]"
-            iconBg="bg-[#FFF8E1]" iconColor="text-[#F57F17]"
+            iconBg="bg-[#ece8e0]" iconColor="text-[#8f8779]"
             icon="restaurant" title="饮食建议" titleColor="text-on-surface" desc="吃出好体态" descColor="text-on-surface-variant"
             onClick={() => nav('/diet')} />
         </section>
@@ -126,9 +126,9 @@ export default function Home() {
         {/* 每日体态小贴士 */}
         <section className="space-y-stack-md">
           <h2 className="font-headline text-[24px] text-on-surface">每日体态小贴士</h2>
-          <div className="bg-[#FFF8E1]/60 rounded-lg p-stack-md flex items-start gap-4 border border-[#FFF8E1]">
-            <div className="bg-[#FFF8E1] p-2 rounded-md">
-              <Icon name="lightbulb" size={22} className="text-[#F9A825]" />
+          <div className="bg-[#ece8e0]/60 rounded-lg p-stack-md flex items-start gap-4 border border-[#ece8e0]">
+            <div className="bg-[#ece8e0] p-2 rounded-md">
+              <Icon name="lightbulb" size={22} className="text-[#8f8779]" />
             </div>
             <div className="space-y-1">
               <h4 className="font-label text-[14px] text-on-surface">长期办公时的颈部保护</h4>

@@ -23,17 +23,17 @@ export default function DietPlan() {
       </header>
 
       <main className="px-container-padding-mobile pb-8 space-y-stack-lg">
-        <section className="bg-gradient-to-br from-[#FFF8E1] to-[#ffe088] rounded-lg p-5 shadow-lg">
-          <p className="font-label text-[12px] text-[#F57F17] uppercase tracking-wider">营养重点</p>
-          <h2 className="font-headline text-[22px] text-[#4E342E] mt-1 mb-2">{plan.focus}</h2>
-          <p className="font-body text-[13px] text-[#4E342E]/80 leading-relaxed">{plan.why}</p>
+        <section className="bg-gradient-to-br from-[#ece8e0] to-[#cfc8bb] rounded-lg p-5 shadow-lg">
+          <p className="font-label text-[12px] text-[#8f8779] uppercase tracking-wider">营养重点</p>
+          <h2 className="font-headline text-[22px] text-[#6e675b] mt-1 mb-2">{plan.focus}</h2>
+          <p className="font-body text-[13px] text-[#6e675b]/80 leading-relaxed">{plan.why}</p>
         </section>
 
         <section className="space-y-stack-md">
           <h2 className="font-headline text-[18px] text-on-surface">推荐食材</h2>
           <div className="flex flex-wrap gap-2">
             {plan.foods.map(f => (
-              <span key={f} className="font-label text-[13px] bg-mint/50 text-teal-800 px-3 py-1.5 rounded-full">{f}</span>
+              <span key={f} className="font-label text-[13px] bg-primary-fixed text-on-surface-variant px-3 py-1.5 rounded-full">{f}</span>
             ))}
           </div>
         </section>

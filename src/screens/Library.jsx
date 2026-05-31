@@ -87,18 +87,18 @@ export default function Library() {
             </ol>
 
             <div className="grid grid-cols-1 gap-3 mb-6">
-              <div className="bg-mint/40 rounded-lg p-3 flex items-start gap-2">
-                <Icon name="self_improvement" size={18} className="text-teal-700 shrink-0 mt-0.5" />
+              <div className="bg-primary-fixed/60 rounded-lg p-3 flex items-start gap-2">
+                <Icon name="self_improvement" size={18} className="text-on-surface-variant shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-label text-[12px] text-teal-800 font-bold">呼吸引导</p>
-                  <p className="font-body text-[13px] text-teal-800/80">{active.breath}</p>
+                  <p className="font-label text-[12px] text-on-surface-variant font-bold">呼吸引导</p>
+                  <p className="font-body text-[13px] text-on-surface-variant/80">{active.breath}</p>
                 </div>
               </div>
-              <div className="bg-[#FFF8E1] rounded-lg p-3 flex items-start gap-2">
-                <Icon name="lightbulb" size={18} className="text-[#F57F17] shrink-0 mt-0.5" />
+              <div className="bg-[#ece8e0] rounded-lg p-3 flex items-start gap-2">
+                <Icon name="lightbulb" size={18} className="text-[#8f8779] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-label text-[12px] text-[#8a5a00] font-bold">安全提示</p>
-                  <p className="font-body text-[13px] text-[#8a5a00]/90">{active.tip}</p>
+                  <p className="font-label text-[12px] text-[#6e675b] font-bold">安全提示</p>
+                  <p className="font-body text-[13px] text-[#6e675b]/90">{active.tip}</p>
                 </div>
               </div>
             </div>

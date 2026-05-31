@@ -45,10 +45,10 @@ export default function Login() {
 
   return (
     <div className="min-h-full flex flex-col font-body text-on-surface relative">
-      <div className="fixed inset-0 -z-20 bg-gradient-to-br from-[#fce8e4] via-[#efe7e4] to-[#e8ddd9]" />
+      <div className="fixed inset-0 -z-20 bg-gradient-to-br from-[#f0ede7] via-[#ece8e0] to-[#e4ded4]" />
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-0 right-0 w-72 h-72 bg-primary-container/20 rounded-full blur-3xl translate-x-1/3 -translate-y-1/4" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFF8E1]/40 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ece8e0]/40 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4" />
       </div>
 
       <header className="w-full flex justify-between items-center px-container-padding-mobile h-20">

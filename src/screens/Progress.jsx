@@ -63,8 +63,8 @@ function ScoreChart() {
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible">
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#e67e66" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#e67e66" stopOpacity="0.02" />
+          <stop offset="0%" stopColor="#a89f90" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#a89f90" stopOpacity="0.02" />
         </linearGradient>
       </defs>
 
@@ -73,22 +73,22 @@ function ScoreChart() {
         const gy = PT + (1 - (s - minS) / (maxS - minS)) * iH
         return (
           <g key={s}>
-            <line x1={PL} y1={gy} x2={W - PR} y2={gy} stroke="#dbc1bb" strokeWidth="0.8" strokeDasharray="3 4" />
-            <text x={PL - 4} y={gy + 4} textAnchor="end" fontSize="9" fill="#88726d">{s}</text>
+            <line x1={PL} y1={gy} x2={W - PR} y2={gy} stroke="#cfc8bb" strokeWidth="0.8" strokeDasharray="3 4" />
+            <text x={PL - 4} y={gy + 4} textAnchor="end" fontSize="9" fill="#9e9688">{s}</text>
           </g>
         )
       })}
 
       {/* area + line */}
       <path d={areaPath} fill="url(#areaGrad)" />
-      <path d={linePath} fill="none" stroke="#9b4430" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={linePath} fill="none" stroke="#8f8779" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
       {/* data points + labels */}
       {pts.map((p, i) => (
         <g key={i}>
-          <circle cx={p.x} cy={p.y} r="5" fill="white" stroke="#9b4430" strokeWidth="2" />
-          <text x={p.x} y={p.y - 9} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#9b4430">{p.score}</text>
-          <text x={p.x} y={H - 4} textAnchor="middle" fontSize="9" fill="#88726d">{p.label}</text>
+          <circle cx={p.x} cy={p.y} r="5" fill="white" stroke="#8f8779" strokeWidth="2" />
+          <text x={p.x} y={p.y - 9} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#8f8779">{p.score}</text>
+          <text x={p.x} y={H - 4} textAnchor="middle" fontSize="9" fill="#9e9688">{p.label}</text>
         </g>
       ))}
     </svg>
@@ -127,8 +127,8 @@ export default function Progress() {
         <section className="grid grid-cols-3 gap-3 mt-stack-md">
           {[
             { val: String(postureScore), unit: '分', desc: '当前体态分', color: 'text-primary' },
-            { val: String(streak), unit: '天', desc: '当前连续打卡', color: 'text-teal-600' },
-            { val: String(trainedDays), unit: '次', desc: '本月训练', color: 'text-purple-600' },
+            { val: String(streak), unit: '天', desc: '当前连续打卡', color: 'text-on-surface-variant' },
+            { val: String(trainedDays), unit: '次', desc: '本月训练', color: 'text-on-surface-variant' },
           ].map(s => (
             <div key={s.desc} className="bg-surface-container-lowest rounded-lg p-3 text-center shadow-[0px_4px_16px_rgba(230,126,102,0.06)]">
               <div className="flex items-end justify-center gap-0.5">
@@ -198,7 +198,7 @@ export default function Progress() {
               <div className="flex justify-between items-baseline mb-4">
                 <h2 className="font-headline text-[17px] text-on-surface">{monthLabel}</h2>
                 {streak > 0
-                  ? <span className="font-label text-[12px] text-teal-600">连续 {streak} 天 🔥</span>
+                  ? <span className="font-label text-[12px] text-on-surface-variant">连续 {streak} 天 🔥</span>
                   : <span className="font-label text-[12px] text-outline">本月训练 {trainedDays} 次</span>}
               </div>
               {/* 星期标头 */}

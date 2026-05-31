@@ -36,8 +36,8 @@ export default function Onboarding() {
       <p className="font-body text-on-surface-variant leading-relaxed">专注女性体态的 AI 矫正方案，让改变肉眼可见。</p>
     </div>,
     <div key="s2" className="flex flex-col items-center text-center px-8">
-      <div className="w-40 h-40 rounded-full bg-[#FFF8E1]/80 flex items-center justify-center mb-8">
-        <Icon name="auto_awesome" size={72} className="text-[#F57F17]" />
+      <div className="w-40 h-40 rounded-full bg-[#ece8e0]/80 flex items-center justify-center mb-8">
+        <Icon name="auto_awesome" size={72} className="text-[#8f8779]" />
       </div>
       <h2 className="font-display text-[28px] font-bold text-on-surface mb-3">3 分钟看见专属计划</h2>
       <p className="font-body text-on-surface-variant leading-relaxed">AI 体态评估 → 专属矫正计划 → 肉眼可见的改变。</p>
