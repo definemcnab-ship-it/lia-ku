@@ -54,16 +54,18 @@ export default function Home() {
         </button>
       </nav>
 
+      {/* 欢迎语 —— 紧凑，置于顶部 */}
+      <div className="px-container-padding-mobile pt-1 pb-2">
+        <p className="font-label text-[10px] text-gold uppercase tracking-[0.2em]">SLIQUE · 优雅体态</p>
+        <h1 className="font-headline text-[24px] leading-[30px] text-ink font-normal mt-0.5">{greeting()}</h1>
+        <p className="font-body text-[12px] text-on-surface-variant mt-0.5">今天也要保持优雅体态哦 ✨</p>
+      </div>
+
       <HomeBanner />
 
       <main className="px-container-padding-mobile pb-8 space-y-10">
-        {/* 欢迎 + 体态分概览 */}
-        <section className="mt-stack-lg space-y-stack-lg">
-          <div className="space-y-1.5">
-            <p className="font-label text-[11px] text-gold uppercase tracking-[0.2em]">SLIQUE · 优雅体态</p>
-            <h1 className="font-headline text-[34px] leading-[42px] text-ink font-normal">{greeting()}</h1>
-            <p className="font-body text-[14px] text-on-surface-variant">今天也要保持优雅体态哦 ✨</p>
-          </div>
+        {/* 体态分概览 */}
+        <section className="mt-stack-lg">
           <div onClick={() => nav('/report')}
             className="bg-surface-container-lowest rounded-[28px] p-6 shadow-soft
               flex items-center justify-between cursor-pointer active:scale-[0.99] transition-transform">
