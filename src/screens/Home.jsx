@@ -51,7 +51,7 @@ export default function Home() {
         <section className="mt-stack-lg space-y-stack-lg">
           <div className="space-y-1.5">
             <p className="font-label text-[11px] text-gold uppercase tracking-[0.2em]">SLIQUE · 优雅体态</p>
-            <h1 className="font-headline text-[34px] leading-[42px] text-ink font-medium">{greeting()}</h1>
+            <h1 className="font-headline text-[34px] leading-[42px] text-ink font-normal">{greeting()}</h1>
             <p className="font-body text-[14px] text-on-surface-variant">今天也要保持优雅体态哦 ✨</p>
           </div>
           <div onClick={() => nav('/report')}
@@ -85,7 +85,7 @@ export default function Home() {
         {/* 今日训练计划 */}
         <section className="space-y-stack-md">
           <div className="flex justify-between items-center">
-            <h2 className="font-headline text-[22px] text-ink font-medium">今日训练计划</h2>
+            <h2 className="font-headline text-[22px] text-ink font-light">今日训练计划</h2>
             <button onClick={() => nav('/training')} className="font-label text-[14px] text-primary">查看全部</button>
           </div>
           <div onClick={() => nav('/training')}
@@ -168,7 +168,7 @@ export default function Home() {
         {/* 斯俪圈子 */}
         <section className="space-y-stack-md">
           <div className="flex justify-between items-center">
-            <h2 className="font-headline text-[22px] text-ink font-medium">斯俪圈子</h2>
+            <h2 className="font-headline text-[22px] text-ink font-light">斯俪圈子</h2>
             <button onClick={() => nav('/community')} className="font-label text-[14px] text-primary">进入圈子</button>
           </div>
           <div onClick={() => nav('/community')}
@@ -200,7 +200,7 @@ export default function Home() {
 
         {/* 每日体态小贴士 */}
         <section className="space-y-stack-md">
-          <h2 className="font-headline text-[22px] text-ink font-medium">每日体态小贴士</h2>
+          <h2 className="font-headline text-[22px] text-ink font-light">每日体态小贴士</h2>
           <div className="bg-[#ece8e0]/60 rounded-lg p-stack-md flex items-start gap-4 border border-[#ece8e0]">
             <div className="bg-[#ece8e0] p-2 rounded-md">
               <Icon name="lightbulb" size={22} className="text-[#8f8779]" />

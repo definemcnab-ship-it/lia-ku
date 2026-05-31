@@ -39,8 +39,8 @@ export default {
         mint: '#ece8e0',
         lavender: '#e6e1d8',
         // 轻奢点睛色：暖古铜，仅用于小面积强调（数字、徽标、分隔线）
-        gold: '#a98c66',
-        'gold-soft': '#c4ab86',
+        gold: '#c08a7d',
+        'gold-soft': '#d8b0a4',
         // 更深的标题墨色，提升对比与厚重感
         ink: '#2b2720',
       },
