@@ -72,30 +72,27 @@ export default function HomeBanner() {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         onClick={() => nav(s.to)}
-        className={`relative bg-gradient-to-r ${s.bg} rounded-[28px] px-6 py-7 cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft`}>
+        className={`relative bg-gradient-to-r ${s.bg} rounded-[28px] px-6 pt-6 pb-8 cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft`}>
 
-        {/* 背景装饰圆 */}
-        <div className="absolute right-5 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-white/20 pointer-events-none" />
-        <div className="absolute right-14 top-1 w-20 h-20 rounded-full bg-white/10 pointer-events-none" />
+        {/* 背景装饰圆 —— 收拢到右侧奖杯后方，避免中间空 */}
+        <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-white/15 pointer-events-none" />
 
-        <div key={s.id} className="flex items-center gap-4 animate-fade-in">
+        <div key={s.id} className="flex items-center gap-3 animate-fade-in">
           <div className="flex-1 min-w-0">
             <span className="inline-block font-label text-[11px] text-on-surface-variant/70 bg-white/50 px-2.5 py-1 rounded-full mb-2.5">
               {s.label}
             </span>
-            <h3 className="font-headline text-[22px] text-ink font-light leading-tight truncate">{s.title}</h3>
-            <p className="font-body text-[13px] text-on-surface-variant/80 mt-1.5 truncate">{s.sub}</p>
+            <h3 className="font-headline text-[21px] text-ink font-light leading-snug">{s.title}</h3>
+            <p className="font-body text-[13px] text-on-surface-variant/80 mt-1.5">{s.sub}</p>
+            <span className="inline-flex items-center font-label text-[12px] text-gold mt-3">{s.cta} →</span>
           </div>
-          <div className="shrink-0 flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-full bg-white/55 flex items-center justify-center shadow-soft">
-              <Icon name={s.icon} size={30} className={s.iconColor} />
-            </div>
-            <span className="font-label text-[12px] text-gold whitespace-nowrap">{s.cta} →</span>
+          <div className="shrink-0 w-20 h-20 rounded-full bg-white/55 flex items-center justify-center shadow-soft">
+            <Icon name={s.icon} size={36} className={s.iconColor} />
           </div>
         </div>
 
         {/* 点状指示器 */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-3.5 left-6 flex gap-1.5">
           {SLIDES.map((_, i) => (
             <button key={i} onClick={(e) => { e.stopPropagation(); go(i) }}
               className={`rounded-full transition-all ${i === idx ? 'w-4 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-outline-variant/60'}`}
