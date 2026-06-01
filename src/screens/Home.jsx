@@ -63,6 +63,27 @@ export default function Home() {
 
       <HomeBanner />
 
+      {/* 快捷入口 —— 一排圆形图标，仿超级猩猩风格 */}
+      <div className="px-container-padding-mobile pt-4 pb-2">
+        <div className="flex justify-between">
+          {[
+            { to: '/scan',     icon: 'camera',         label: 'AI 扫描' },
+            { to: '/training', icon: 'fitness_center',  label: '训练课' },
+            { to: '/diet',     icon: 'restaurant',      label: '饮食' },
+            { to: '/progress', icon: 'analytics',       label: '进步' },
+            { to: '/levels',   icon: 'emoji_events',    label: '等级' },
+          ].map(item => (
+            <button key={item.to} onClick={() => nav(item.to)}
+              className="flex flex-col items-center gap-1.5 active:scale-90 transition">
+              <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center shadow-soft">
+                <Icon name={item.icon} size={26} className="text-primary" />
+              </div>
+              <span className="font-label text-[11px] text-on-surface-variant">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <main className="px-container-padding-mobile pb-8 space-y-10">
         {/* 体态分概览 */}
         <section className="mt-stack-lg">
