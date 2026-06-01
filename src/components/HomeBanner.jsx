@@ -67,12 +67,12 @@ export default function HomeBanner() {
 
   const s = SLIDES[idx]
   return (
-    <div className="px-container-padding-mobile pt-1 pb-1">
+    <div>
       <div
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         onClick={() => nav(s.to)}
-        className={`relative bg-gradient-to-r ${s.bg} rounded-[32px] px-7 h-[268px] flex items-center cursor-pointer active:scale-[0.98] transition overflow-hidden shadow-soft-lg`}>
+        className={`relative bg-gradient-to-r ${s.bg} px-7 h-[268px] flex items-center cursor-pointer active:scale-[0.98] transition overflow-hidden`}>
 
         {/* 背景装饰圆 —— 收拢到右侧奖杯后方，避免中间空 */}
         <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-52 h-52 rounded-full bg-white/15 pointer-events-none" />
