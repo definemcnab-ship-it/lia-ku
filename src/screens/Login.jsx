@@ -6,11 +6,9 @@ import { LEGAL } from '../lib/content.js'
 export default function Login() {
   const nav = useNavigate()
   const [agreed, setAgreed] = useState(false)
-  const [sheet, setSheet] = useState(false)      // 手机号登录抽屉
-  const [doc, setDoc] = useState(null)           // 当前查看的协议 key
-  const [shake, setShake] = useState(false)      // 未勾选协议时的提示抖动
-
-  // 手机号 / 验证码
+  const [sheet, setSheet] = useState(false)
+  const [doc, setDoc] = useState(null)
+  const [shake, setShake] = useState(false)
   const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [countdown, setCountdown] = useState(0)
@@ -26,7 +24,6 @@ export default function Login() {
   }
 
   const openPhone = () => { if (requireAgree()) setSheet(true) }
-
   const wechatLogin = () => { if (requireAgree()) nav('/onboarding') }
 
   const sendCode = () => {
@@ -44,79 +41,74 @@ export default function Login() {
   const canSubmit = phoneValid && code.length === 4
 
   return (
-    <div className="min-h-full flex flex-col font-body text-on-surface relative">
-      <div className="fixed inset-0 -z-20 bg-gradient-to-br from-[#f0ede7] via-[#ece8e0] to-[#e4ded4]" />
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-primary-container/20 rounded-full blur-3xl translate-x-1/3 -translate-y-1/4" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ece8e0]/40 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4" />
-      </div>
+    <div className="min-h-full flex flex-col font-body relative overflow-hidden">
 
-      <header className="w-full flex justify-between items-center px-container-padding-mobile h-20">
-        <button onClick={() => nav('/home')} aria-label="跳过登录"
-          className="hover:opacity-80 active:scale-95 transition flex items-center justify-center">
-          <Icon name="close" size={28} className="text-on-surface" />
+      {/* 上半：全屏品牌视觉区 */}
+      <div className="relative flex-none h-[55%] bg-gradient-to-br from-[#d8cfbf] via-[#c8bfaf] to-[#a89f90] flex flex-col justify-end pb-10 px-8">
+        {/* 右上角跳过 */}
+        <button onClick={() => nav('/home')}
+          className="absolute top-12 right-6 font-label text-[13px] text-white/70 bg-white/20 px-3 py-1 rounded-full">
+          跳过
         </button>
-      </header>
 
-      <main className="flex-grow flex flex-col items-center px-container-padding-mobile pt-stack-lg pb-10 max-w-md mx-auto w-full">
-        <div className="flex flex-col items-center text-center mt-8 mb-16 relative w-full">
-          <div className="mb-6 relative group">
-            <div className="absolute inset-0 bg-primary-container/30 blur-xl rounded-full scale-110 group-hover:scale-125 transition-transform duration-700" />
-            <div className="relative w-24 h-24 flex items-center justify-center bg-surface-container-lowest rounded-xl shadow-lg">
-              <svg className="text-primary-container" fill="none" height="64" viewBox="0 0 64 64" width="64">
-                <path d="M48 16C48 16 44 12 36 12C28 12 24 20 24 24C24 28 28 32 36 36C44 40 48 44 48 52C48 60 40 64 32 64C24 64 16 60 16 52" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="6" />
-                <path d="M16 48C16 48 20 52 28 52C36 52 40 44 40 40C40 36 36 32 28 28C20 24 16 20 16 12C16 4 24 0 32 0C40 0 48 4 48 12" opacity="0.4" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="6" />
-              </svg>
-            </div>
+        {/* 装饰圆 */}
+        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/10" />
+        <div className="absolute top-10 -left-16 w-52 h-52 rounded-full bg-white/8" />
+
+        {/* 中央图标 */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3">
+          <div className="w-20 h-20 rounded-2xl bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-soft-lg">
+            <Icon name="self_improvement" size={44} className="text-white" />
           </div>
-          <h1 className="font-display text-[36px] leading-[44px] font-bold tracking-tight text-primary mb-2">斯俪 Slique</h1>
-          <p className="font-body text-[18px] text-on-surface-variant tracking-widest opacity-80">科学训练，优雅体态</p>
         </div>
 
-        <div className="w-full space-y-gutter flex flex-col items-center">
+        {/* 左下品牌文字 */}
+        <div>
+          <p className="font-label text-[11px] text-white/60 uppercase tracking-[0.2em] mb-1">SLIQUE · 优雅体态</p>
+          <h1 className="font-headline text-[38px] leading-[44px] text-white font-light">欢迎来到</h1>
+          <h2 className="font-headline text-[44px] leading-[50px] text-white font-normal">斯俪</h2>
+          <p className="font-body text-[15px] text-white/75 mt-2">科学矫正 · 8 周挺拔如模特</p>
+        </div>
+      </div>
+
+      {/* 下半：白色卡片 */}
+      <div className="flex-1 bg-surface rounded-t-[32px] -mt-6 px-8 pt-8 pb-6 flex flex-col shadow-soft-lg">
+        <h3 className="font-headline text-[26px] text-ink font-light mb-1">开始使用</h3>
+        <p className="font-body text-[13px] text-on-surface-variant mb-7">登录后解锁全部体态训练功能</p>
+
+        <div className="space-y-3 flex-1">
           <button onClick={openPhone}
-            className="w-full h-14 bg-primary text-on-primary font-label text-lg rounded-lg
-              shadow-xl shadow-primary/20 hover:opacity-90 active:scale-[0.98] transition-all
-              flex items-center justify-center gap-3">
+            className="w-full h-14 bg-primary text-on-primary font-label text-[16px] rounded-xl
+              active:scale-[0.98] transition flex items-center justify-center gap-3 shadow-soft">
             <Icon name="smartphone" size={22} className="text-white" />
-            手机号登录
+            手机号登录 / 注册
           </button>
 
           <button onClick={wechatLogin}
-            className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30
-              text-on-surface-variant font-label text-lg rounded-lg hover:bg-surface-container
-              active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-            <svg className="text-[#07C160]" fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+            className="w-full h-14 bg-surface-container text-on-surface font-label text-[16px] rounded-xl
+              active:scale-[0.98] transition flex items-center justify-center gap-3">
+            <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22" className="text-[#07C160]">
               <path d="M8.5 13.5C9.33 13.5 10 12.83 10 12C10 11.17 9.33 10.5 8.5 10.5C7.67 10.5 7 11.17 7 12C7 12.83 7.67 13.5 8.5 13.5Z" />
               <path d="M15.5 13.5C16.33 13.5 17 12.83 17 12C17 11.17 16.33 10.5 15.5 10.5C14.67 10.5 14 11.17 14 12C14 12.83 14.67 13.5 15.5 13.5Z" />
-              <path d="M12 4C7.03 4 3 7.58 3 12C3 14.39 4.14 16.52 5.92 18L5.5 21L8.5 19.5C9.59 19.82 10.77 20 12 20C16.97 20 21 16.42 21 12C21 7.58 16.97 4 12 4ZM12 18.5C11.03 18.5 10.1 18.36 9.24 18.1L7.24 19.1L7.52 17.1C5.64 15.89 4.5 14.07 4.5 12C4.5 8.41 7.86 5.5 12 5.5C16.14 5.5 19.5 8.41 19.5 12C19.5 15.59 16.14 18.5 12 18.5Z" />
+              <path d="M12 4C7.03 4 3 7.58 3 12C3 14.39 4.14 16.52 5.92 18L5.5 21L8.5 19.5C9.59 19.82 10.77 20 12 20C16.97 20 21 16.42 21 12C21 7.58 16.97 4 12 4Z" />
             </svg>
-            微信登录
-          </button>
-
-          <button onClick={() => nav('/home')}
-            className="mt-4 px-6 py-2 text-outline font-label hover:text-primary transition-colors active:scale-95">
-            暂不登录，先试用
+            微信一键登录
           </button>
         </div>
 
-        <div className="flex-grow min-h-[40px]" />
-
-        {/* 协议勾选 */}
-        <footer className="w-full pb-container-padding-mobile">
-          <div className={`flex items-start gap-3 px-2 rounded-lg transition ${shake ? 'animate-shake bg-error/5' : ''}`}>
-            <input id="privacy" type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)}
-              className="mt-0.5 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary transition-all cursor-pointer" />
-            <label htmlFor="privacy" className="font-label text-[12px] text-on-surface-variant leading-relaxed select-none">
-              我已阅读并同意
-              <button type="button" onClick={() => setDoc('user')} className="text-primary">《用户协议》</button>
-              <button type="button" onClick={() => setDoc('privacy')} className="text-primary">《隐私政策》</button>
-              与
-              <button type="button" onClick={() => setDoc('data')} className="text-primary">《数据采集协议》</button>
-            </label>
-          </div>
-        </footer>
-      </main>
+        {/* 协议 */}
+        <div className={`flex items-start gap-2.5 mt-6 px-1 rounded-lg transition ${shake ? 'bg-error/5' : ''}`}>
+          <input id="privacy" type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)}
+            className="mt-0.5 w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" />
+          <label htmlFor="privacy" className="font-label text-[11px] text-on-surface-variant leading-relaxed select-none">
+            我已阅读并同意
+            <button type="button" onClick={() => setDoc('user')} className="text-primary">《用户协议》</button>
+            <button type="button" onClick={() => setDoc('privacy')} className="text-primary">《隐私政策》</button>
+            与
+            <button type="button" onClick={() => setDoc('data')} className="text-primary">《数据采集协议》</button>
+          </label>
+        </div>
+      </div>
 
       {/* 手机号登录抽屉 */}
       {sheet && (
@@ -125,7 +117,6 @@ export default function Login() {
             <div className="w-10 h-1 bg-outline-variant/40 rounded-full mx-auto mb-5" />
             <h3 className="font-headline text-[20px] text-ink mb-1">手机号登录</h3>
             <p className="font-label text-[13px] text-outline mb-5">未注册的手机号验证后将自动创建账号</p>
-
             <div className="flex items-center gap-2 bg-surface-container rounded-lg px-4 h-14 mb-3">
               <span className="font-label text-[15px] text-on-surface-variant">+86</span>
               <input type="tel" inputMode="numeric" maxLength={11} value={phone}
@@ -133,7 +124,6 @@ export default function Login() {
                 placeholder="请输入手机号" aria-label="手机号"
                 className="flex-1 bg-transparent outline-none font-label text-[16px] text-on-surface placeholder:text-outline" />
             </div>
-
             <div className="flex items-center gap-2 bg-surface-container rounded-lg px-4 h-14 mb-5">
               <input type="tel" inputMode="numeric" maxLength={4} value={code}
                 onChange={e => setCode(e.target.value.replace(/\D/g, ''))}
@@ -144,11 +134,9 @@ export default function Login() {
                 {countdown > 0 ? `${countdown}s 后重发` : '获取验证码'}
               </button>
             </div>
-
             {countdown > 0 && (
               <p className="font-label text-[12px] text-outline text-center mb-4 -mt-2">演示验证码：任意 4 位数字即可</p>
             )}
-
             <button onClick={() => nav('/onboarding')} disabled={!canSubmit}
               className="w-full h-14 bg-primary text-on-primary font-label text-lg rounded-lg
                 active:scale-[0.98] transition disabled:opacity-40 disabled:active:scale-100">
