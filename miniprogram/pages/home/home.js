@@ -21,6 +21,12 @@ Page({
       { to: '/pages/progress/progress', icon: 'analytics',       label: '进步' },
       { to: '/pages/levels/levels',     icon: 'emoji_events',    label: '等级' },
     ],
+    stories: [
+      { id: 's1', icon: 'self_improvement', title: '8周挺拔如模特', sub: '圆肩 → 开肩展背', tag: '真实蜕变' },
+      { id: 's2', icon: 'accessibility_new', title: '骨盆归位腰细了', sub: '前倾 → 标准中立', tag: '体态故事' },
+      { id: 's3', icon: 'star', title: '天鹅颈不再是梦', sub: '头前引 → 颈部纤长', tag: '30天打卡' },
+      { id: 's4', icon: 'favorite', title: '产后腰腹复原', sub: '腹直肌分离修复', tag: '妈妈蜕变' },
+    ],
     categories: [
       { to: '/pages/scan/scan',             icon: 'camera',         title: 'AI 姿态扫描', desc: '快速诊断潜在风险' },
       { to: '/pages/progress/progress',     icon: 'analytics',      title: '进步追踪',     desc: '查看体态变化轨迹' },

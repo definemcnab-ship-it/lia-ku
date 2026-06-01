@@ -110,6 +110,21 @@
     </view>
   </view>
 
+  <!-- 真实蜕变故事 -->
+  <view class="section">
+    <text class="section-title font-headline">真实蜕变故事</text>
+    <view class="stories-grid">
+      <view wx:for="{{stories}}" wx:key="id" class="story-card story-bg{{index+1}}">
+        <view class="story-icon-wrap">
+          <mp-icon name="{{item.icon}}" size="28" color="rgba(255,255,255,0.8)" />
+        </view>
+        <text class="story-title font-headline">{{item.title}}</text>
+        <text class="story-sub">{{item.sub}}</text>
+        <text class="story-tag">{{item.tag}}</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 探索功能 -->
   <view class="section">
     <text class="section-title font-headline">探索功能</text>
