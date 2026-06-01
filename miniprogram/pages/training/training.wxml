@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="navbar" bindtap="navBack">
+    <text class="back-icon">‹</text>
+    <text class="nav-title">training</text>
+  </view>
+  <view class="placeholder">
+    <text class="placeholder-text">training 页面（待迁移）</text>
+  </view>
+</view>

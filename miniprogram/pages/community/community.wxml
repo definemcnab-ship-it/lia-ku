@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="navbar" bindtap="navBack">
+    <text class="back-icon">‹</text>
+    <text class="nav-title">community</text>
+  </view>
+  <view class="placeholder">
+    <text class="placeholder-text">community 页面（待迁移）</text>
+  </view>
+</view>

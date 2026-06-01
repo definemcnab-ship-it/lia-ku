@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/onboarding/onboarding",
+    "pages/home/home",
+    "pages/training/training",
+    "pages/player/player",
+    "pages/progress/progress",
+    "pages/profile/profile",
+    "pages/scan/scan",
+    "pages/diet/diet",
+    "pages/levels/levels",
+    "pages/community/community"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "斯俪 Slique",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fbfaf8"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#bbb4ac",
+    "selectedColor": "#8f8779",
+    "backgroundColor": "#ffffff",
+    "list": [
+      { "pagePath": "pages/home/home",       "text": "首页" },
+      { "pagePath": "pages/training/training","text": "训练" },
+      { "pagePath": "pages/scan/scan",        "text": "扫描" },
+      { "pagePath": "pages/progress/progress","text": "数据" },
+      { "pagePath": "pages/profile/profile",  "text": "我的" }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

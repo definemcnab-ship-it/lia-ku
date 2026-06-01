@@ -1,0 +1,83 @@
+<view class="page">
+  <!-- 上半：品牌视觉区 -->
+  <view class="hero">
+    <view class="hero-deco-circle1"></view>
+    <view class="hero-deco-circle2"></view>
+
+    <view class="hero-icon-wrap">
+      <view class="hero-icon-bg">
+        <text class="hero-icon-text">🧘</text>
+      </view>
+    </view>
+
+    <view class="hero-text">
+      <text class="hero-sub">SLIQUE · 优雅体态</text>
+      <text class="hero-title1">欢迎来到</text>
+      <text class="hero-title2">斯俪</text>
+      <text class="hero-desc">科学矫正 · 8 周挺拔如模特</text>
+    </view>
+
+    <view class="skip-btn" bindtap="skipLogin">
+      <text class="skip-text">跳过</text>
+    </view>
+  </view>
+
+  <!-- 下半：白色卡片 -->
+  <view class="card">
+    <text class="card-title font-headline">开始使用</text>
+    <text class="card-sub">登录后解锁全部体态训练功能</text>
+
+    <button class="btn-primary" bindtap="openPhoneSheet">
+      <text class="btn-icon">📱</text>
+      <text>手机号登录 / 注册</text>
+    </button>
+
+    <button class="btn-secondary" bindtap="wechatLogin">
+      <text class="btn-icon">💬</text>
+      <text>微信一键登录</text>
+    </button>
+
+    <!-- 协议 -->
+    <view class="agreement {{shake ? 'shake' : ''}}">
+      <checkbox-group bindchange="onAgreeChange">
+        <checkbox value="agreed" checked="{{agreed}}" color="#8f8779" style="transform:scale(0.8)" />
+      </checkbox-group>
+      <text class="agree-text">
+        我已阅读并同意
+        <text class="agree-link" bindtap="openDoc" data-doc="user">《用户协议》</text>
+        <text class="agree-link" bindtap="openDoc" data-doc="privacy">《隐私政策》</text>
+        与
+        <text class="agree-link" bindtap="openDoc" data-doc="data">《数据采集协议》</text>
+      </text>
+    </view>
+  </view>
+
+  <!-- 手机号登录弹层 -->
+  <view class="sheet-mask {{showSheet ? 'visible' : ''}}" bindtap="closeSheet">
+    <view class="sheet {{showSheet ? 'sheet-up' : ''}}" catchtap="">
+      <view class="sheet-handle"></view>
+      <text class="sheet-title font-headline">手机号登录</text>
+      <text class="sheet-hint">未注册的手机号验证后将自动创建账号</text>
+
+      <view class="input-row">
+        <text class="phone-prefix">+86</text>
+        <input class="input" type="number" maxlength="11" value="{{phone}}"
+          placeholder="请输入手机号" placeholder-class="input-placeholder"
+          bindinput="onPhoneInput" />
+      </view>
+
+      <view class="input-row">
+        <input class="input" type="number" maxlength="4" value="{{code}}"
+          placeholder="4 位验证码" placeholder-class="input-placeholder"
+          bindinput="onCodeInput" />
+        <text class="send-code {{phoneValid ? 'active' : ''}}" bindtap="sendCode">
+          {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
+        </text>
+      </view>
+
+      <button class="btn-primary btn-login {{canSubmit ? '' : 'disabled'}}" bindtap="doLogin">
+        登录 / 注册
+      </button>
+    </view>
+  </view>
+</view>

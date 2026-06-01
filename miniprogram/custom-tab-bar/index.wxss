@@ -1,0 +1,83 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 112rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 100;
+}
+
+.tab-bar-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: rgba(220, 214, 204, 0.6);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 0 4rpx;
+}
+
+.icon-wrap {
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 44rpx;
+  color: #bbb4ac;
+  transition: color 0.2s;
+}
+.icon-active {
+  color: #8f8779;
+}
+
+.tab-label {
+  font-size: 20rpx;
+  color: #bbb4ac;
+  margin-top: 4rpx;
+}
+.tab-item.active .tab-label {
+  color: #8f8779;
+  font-weight: 600;
+}
+
+/* 中间扫描按钮 */
+.tab-center {
+  position: relative;
+}
+.center-btn {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #8f8779;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -40rpx;
+  box-shadow: 0 2px 4px rgba(43,39,32,0.08), 0 8px 24px rgba(143,135,121,0.28);
+}
+.center-icon {
+  color: #f7f5f0;
+  font-size: 52rpx;
+  line-height: 1;
+  margin-top: -4rpx;
+}
+.tab-label-center {
+  color: #8f8779;
+  font-weight: 500;
+}

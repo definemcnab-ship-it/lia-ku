@@ -1,0 +1,6 @@
+.page { min-height: 100vh; background: #fbfaf8; }
+.navbar { display: flex; align-items: center; gap: 16rpx; padding: 80rpx 48rpx 32rpx; background: #fff; }
+.back-icon { font-size: 60rpx; color: #8f8779; line-height: 1; }
+.nav-title { font-size: 36rpx; color: #2b2720; }
+.placeholder { display: flex; align-items: center; justify-content: center; height: 60vh; }
+.placeholder-text { font-size: 32rpx; color: #9e9688; }
