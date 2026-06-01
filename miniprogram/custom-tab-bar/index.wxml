@@ -2,47 +2,30 @@
   <view class="tab-bar-border"></view>
 
   <view class="tab-item {{selected === 0 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/home/home" data-index="0">
-    <view class="icon-wrap">
-      <!-- 首页图标 -->
-      <view class="icon {{selected === 0 ? 'icon-active' : ''}}">
-        <text class="iconfont">⌂</text>
-      </view>
-    </view>
+    <mp-icon name="home" size="24" color="{{selected === 0 ? '#8f8779' : '#bbb4ac'}}" />
     <text class="tab-label">首页</text>
   </view>
 
   <view class="tab-item {{selected === 1 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/training/training" data-index="1">
-    <view class="icon-wrap">
-      <view class="icon {{selected === 1 ? 'icon-active' : ''}}">
-        <text class="iconfont">◎</text>
-      </view>
-    </view>
+    <mp-icon name="fitness_center" size="24" color="{{selected === 1 ? '#8f8779' : '#bbb4ac'}}" />
     <text class="tab-label">训练</text>
   </view>
 
   <!-- 中间扫描按钮 -->
   <view class="tab-item tab-center" bindtap="switchTab" data-path="/pages/scan/scan" data-index="2">
-    <view class="center-btn shadow-soft">
-      <text class="center-icon">＋</text>
+    <view class="center-btn">
+      <mp-icon name="camera" size="26" color="#f7f5f0" />
     </view>
     <text class="tab-label tab-label-center">扫描</text>
   </view>
 
   <view class="tab-item {{selected === 3 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/progress/progress" data-index="3">
-    <view class="icon-wrap">
-      <view class="icon {{selected === 3 ? 'icon-active' : ''}}">
-        <text class="iconfont">▦</text>
-      </view>
-    </view>
+    <mp-icon name="analytics" size="24" color="{{selected === 3 ? '#8f8779' : '#bbb4ac'}}" />
     <text class="tab-label">数据</text>
   </view>
 
   <view class="tab-item {{selected === 4 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/profile/profile" data-index="4">
-    <view class="icon-wrap">
-      <view class="icon {{selected === 4 ? 'icon-active' : ''}}">
-        <text class="iconfont">☺</text>
-      </view>
-    </view>
+    <mp-icon name="person" size="24" color="{{selected === 4 ? '#8f8779' : '#bbb4ac'}}" />
     <text class="tab-label">我的</text>
   </view>
 </view>

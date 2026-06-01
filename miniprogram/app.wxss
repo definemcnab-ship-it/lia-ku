@@ -41,7 +41,7 @@ page {
 
 /* 字体 */
 .font-headline {
-  font-family: "Songti SC", Georgia, serif;
+  font-family: NotoSerifSC, "Noto Serif SC", "Songti SC", Georgia, serif;
   font-weight: 300;
 }
 .font-label {

@@ -6,6 +6,15 @@ App({
   },
 
   onLaunch() {
+    // 加载思源宋体，用于 font-headline（与网页版一致）
+    wx.loadFontFace({
+      family: 'NotoSerifSC',
+      source: 'url("https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mpm6.woff2")',
+      global: true,
+      success: () => {},
+      fail: () => {},
+    })
+
     const score = wx.getStorageSync('postureScore')
     const lastScore = wx.getStorageSync('lastScore')
     const checkIns = wx.getStorageSync('checkIns')

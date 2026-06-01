@@ -1,1 +1,1 @@
-{ "usingComponents": {} }
+{ "usingComponents": { "mp-icon": "/components/mp-icon/index" } }

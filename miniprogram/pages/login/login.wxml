@@ -6,7 +6,7 @@
 
     <view class="hero-icon-wrap">
       <view class="hero-icon-bg">
-        <text class="hero-icon-text">🧘</text>
+        <mp-icon name="self_improvement" size="64" color="rgba(255,255,255,0.9)" />
       </view>
     </view>
 
@@ -28,12 +28,14 @@
     <text class="card-sub">登录后解锁全部体态训练功能</text>
 
     <button class="btn-primary" bindtap="openPhoneSheet">
-      <text class="btn-icon">📱</text>
+      <mp-icon name="smartphone" size="22" color="#f7f5f0" />
       <text>手机号登录 / 注册</text>
     </button>
 
     <button class="btn-secondary" bindtap="wechatLogin">
-      <text class="btn-icon">💬</text>
+      <view class="wechat-icon">
+        <mp-icon name="favorite" size="20" color="#07C160" />
+      </view>
       <text>微信一键登录</text>
     </button>
 
