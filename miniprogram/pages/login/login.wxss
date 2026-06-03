@@ -13,31 +13,35 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 100rpx;
-  margin-bottom: 16rpx;
+  padding-top: 60rpx;
+  margin-bottom: 48rpx;
 }
 .illus {
-  width: 520rpx;
-  height: 520rpx;
+  width: 600rpx;
+  height: 600rpx;
 }
 
 /* 标题 */
 .title-wrap {
   text-align: center;
-  margin-bottom: 72rpx;
+  margin-bottom: 80rpx;
+  padding: 0 16rpx;
 }
 .title {
   display: block;
-  font-size: 52rpx;
+  font-family: NotoSerifSC, "Noto Serif SC", "Songti SC", Georgia, serif;
+  font-size: 56rpx;
   color: #2b2720;
   font-weight: 300;
-  line-height: 1.3;
-  margin-bottom: 16rpx;
+  line-height: 1.4;
+  margin-bottom: 20rpx;
+  letter-spacing: 4rpx;
 }
 .subtitle {
   display: block;
-  font-size: 28rpx;
-  color: #9e9688;
+  font-size: 26rpx;
+  color: #b0a898;
+  letter-spacing: 6rpx;
 }
 
 /* 按钮 */
@@ -45,35 +49,36 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
-  margin-bottom: 48rpx;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
 }
 .btn-phone {
   width: 100%;
-  height: 100rpx;
-  background: #8f8779;
+  height: 96rpx;
+  background: #2b2720;
   color: #f7f5f0;
-  border-radius: 20rpx;
-  font-size: 32rpx;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  letter-spacing: 2rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16rpx;
   border: none;
-  box-shadow: 0 8px 24px rgba(143,135,121,0.25);
 }
 .btn-wechat {
   width: 100%;
-  height: 100rpx;
-  background: #f4f1ec;
+  height: 96rpx;
+  background: #ffffff;
   color: #3f3a32;
-  border-radius: 20rpx;
-  font-size: 32rpx;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  letter-spacing: 2rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16rpx;
-  border: none;
+  border: 1.5rpx solid #dcd6cc;
 }
 .wechat-logo {
   width: 44rpx; height: 44rpx; border-radius: 50%;
@@ -84,9 +89,10 @@
 
 .skip-link {
   text-align: center;
-  font-size: 28rpx;
-  color: #9e9688;
-  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #b0a898;
+  letter-spacing: 2rpx;
+  margin-top: 12rpx;
 }
 
 /* 协议 */
@@ -96,6 +102,8 @@
   align-items: flex-start;
   gap: 8rpx;
   padding: 0 8rpx;
+  margin-top: auto;
+  padding-bottom: 60rpx;
 }
 .agree-text { font-size: 22rpx; color: #9e9688; line-height: 1.7; flex: 1; }
 .agree-link { color: #8f8779; }
