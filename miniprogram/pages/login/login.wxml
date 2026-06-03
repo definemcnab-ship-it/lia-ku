@@ -4,11 +4,7 @@
     <view class="hero-deco-circle1"></view>
     <view class="hero-deco-circle2"></view>
 
-    <view class="hero-icon-wrap">
-      <view class="hero-icon-bg">
-        <mp-icon name="self_improvement" size="64" color="rgba(255,255,255,0.9)" />
-      </view>
-    </view>
+    <image class="hero-illus" src="/illus-yoga.png" mode="aspectFit" />
 
     <view class="hero-text">
       <text class="hero-sub">SLIQUE · 优雅体态</text>
