@@ -4,7 +4,7 @@
     <view class="hero-deco-circle1"></view>
     <view class="hero-deco-circle2"></view>
 
-    <image class="hero-illus" src="/illus-yoga.png" mode="aspectFit" />
+    <image class="hero-illus" src="/illus-yoga.jpg" mode="aspectFit" />
 
     <view class="hero-text">
       <text class="hero-sub">SLIQUE · 优雅体态</text>
