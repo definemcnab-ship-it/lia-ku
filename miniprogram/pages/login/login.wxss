@@ -17,6 +17,16 @@
   overflow: hidden;
 }
 
+.hero-illus {
+  position: absolute;
+  right: -20rpx;
+  top: 50%;
+  transform: translateY(-60%);
+  width: 420rpx;
+  height: 420rpx;
+  opacity: 0.92;
+}
+
 .hero-deco-circle1 {
   position: absolute;
   top: -120rpx;
