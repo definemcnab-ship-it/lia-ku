@@ -1,53 +1,44 @@
 <view class="page">
-  <!-- 上半：品牌视觉区 -->
-  <view class="hero">
-    <view class="hero-deco-circle1"></view>
-    <view class="hero-deco-circle2"></view>
-
-    <image class="hero-illus" src="/illus-yoga-nobg.png" mode="aspectFit" />
-
-    <view class="hero-text">
-      <text class="hero-sub">SLIQUE · 优雅体态</text>
-      <text class="hero-title1">欢迎来到</text>
-      <text class="hero-title2">斯俪</text>
-      <text class="hero-desc">科学矫正 · 8 周挺拔如模特</text>
-    </view>
-
-    <view class="skip-btn" bindtap="skipLogin">
-      <text class="skip-text">跳过</text>
-    </view>
+  <!-- 插图居中，顶部大图 -->
+  <view class="illus-wrap">
+    <image class="illus" src="/illus-yoga-nobg.png" mode="aspectFit" />
   </view>
 
-  <!-- 下半：白色卡片 -->
-  <view class="card">
-    <text class="card-title font-headline">开始使用</text>
-    <text class="card-sub">登录后解锁全部体态训练功能</text>
+  <!-- 标题区 -->
+  <view class="title-wrap">
+    <text class="title font-headline">优雅体态，从这里开始</text>
+    <text class="subtitle">科学矫正 · 8 周挺拔如模特</text>
+  </view>
 
-    <button class="btn-primary" bindtap="openPhoneSheet">
-      <mp-icon name="smartphone" size="22" color="#f7f5f0" />
+  <!-- 登录按钮 -->
+  <view class="buttons">
+    <button class="btn-phone" bindtap="openPhoneSheet">
+      <mp-icon name="smartphone" size="20" color="#ffffff" />
       <text>手机号登录 / 注册</text>
     </button>
 
-    <button class="btn-secondary" bindtap="wechatLogin">
-      <view class="wechat-icon">
-        <mp-icon name="favorite" size="20" color="#07C160" />
+    <button class="btn-wechat" bindtap="wechatLogin">
+      <view class="wechat-logo">
+        <text class="wechat-text">微</text>
       </view>
       <text>微信一键登录</text>
     </button>
 
-    <!-- 协议 -->
-    <view class="agreement {{shake ? 'shake' : ''}}">
-      <checkbox-group bindchange="onAgreeChange">
-        <checkbox value="agreed" checked="{{agreed}}" color="#8f8779" style="transform:scale(0.8)" />
-      </checkbox-group>
-      <text class="agree-text">
-        我已阅读并同意
-        <text class="agree-link" bindtap="openDoc" data-doc="user">《用户协议》</text>
-        <text class="agree-link" bindtap="openDoc" data-doc="privacy">《隐私政策》</text>
-        与
-        <text class="agree-link" bindtap="openDoc" data-doc="data">《数据采集协议》</text>
-      </text>
-    </view>
+    <text class="skip-link" bindtap="skipLogin">暂不登录，先体验 →</text>
+  </view>
+
+  <!-- 协议 -->
+  <view class="agreement {{shake ? 'shake' : ''}}">
+    <checkbox-group bindchange="onAgreeChange">
+      <checkbox value="agreed" checked="{{agreed}}" color="#8f8779" style="transform:scale(0.75)" />
+    </checkbox-group>
+    <text class="agree-text">
+      我已阅读并同意
+      <text class="agree-link" bindtap="openDoc" data-doc="user">《用户协议》</text>
+      <text class="agree-link" bindtap="openDoc" data-doc="privacy">《隐私政策》</text>
+      与
+      <text class="agree-link" bindtap="openDoc" data-doc="data">《数据采集协议》</text>
+    </text>
   </view>
 
   <!-- 手机号登录弹层 -->
@@ -56,14 +47,12 @@
       <view class="sheet-handle"></view>
       <text class="sheet-title font-headline">手机号登录</text>
       <text class="sheet-hint">未注册的手机号验证后将自动创建账号</text>
-
       <view class="input-row">
         <text class="phone-prefix">+86</text>
         <input class="input" type="number" maxlength="11" value="{{phone}}"
           placeholder="请输入手机号" placeholder-class="input-placeholder"
           bindinput="onPhoneInput" />
       </view>
-
       <view class="input-row">
         <input class="input" type="number" maxlength="4" value="{{code}}"
           placeholder="4 位验证码" placeholder-class="input-placeholder"
@@ -72,8 +61,7 @@
           {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
         </text>
       </view>
-
-      <button class="btn-primary btn-login {{canSubmit ? '' : 'disabled'}}" bindtap="doLogin">
+      <button class="btn-phone btn-login {{canSubmit ? '' : 'disabled'}}" bindtap="doLogin">
         登录 / 注册
       </button>
     </view>
