@@ -1,84 +1,70 @@
 .page {
-  min-height: 100vh;
+  height: 100vh;
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 48rpx;
-  box-sizing: border-box;
-  justify-content: space-between;
+  overflow: hidden;
 }
 
-/* 插图 */
-.illus-wrap {
-  width: 100%;
+/* 上半：插图区，flex:1 撑满剩余空间 */
+.top {
+  flex: 1;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding-top: 80rpx;
+  padding-top: 60rpx;
 }
 .illus {
-  width: 560rpx;
-  height: 560rpx;
+  width: 580rpx;
+  height: 580rpx;
 }
 
-/* 标题 */
-.title-wrap {
-  text-align: center;
-  margin-bottom: 40rpx;
-  padding: 0 16rpx;
-  margin-top: 0;
+/* 下半：紧凑内容区，固定高度不撑开 */
+.bottom {
+  padding: 40rpx 48rpx 56rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
+
 .title {
   display: block;
   font-family: NotoSerifSC, "Noto Serif SC", "Songti SC", Georgia, serif;
-  font-size: 56rpx;
+  font-size: 52rpx;
   color: #2b2720;
   font-weight: 300;
-  line-height: 1.4;
-  margin-bottom: 20rpx;
   letter-spacing: 4rpx;
+  margin-bottom: 12rpx;
 }
 .subtitle {
   display: block;
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #b0a898;
   letter-spacing: 6rpx;
+  margin-bottom: 48rpx;
 }
 
-/* 按钮 */
+/* 按钮组 */
 .buttons {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20rpx;
-  margin-bottom: 40rpx;
+  margin-bottom: 32rpx;
 }
 .btn-phone {
-  width: 100%;
-  height: 96rpx;
-  background: #2b2720;
-  color: #f7f5f0;
-  border-radius: 48rpx;
-  font-size: 30rpx;
+  width: 100%; height: 96rpx;
+  background: #2b2720; color: #f7f5f0;
+  border-radius: 48rpx; font-size: 30rpx;
   letter-spacing: 2rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16rpx;
+  display: flex; align-items: center; justify-content: center; gap: 16rpx;
   border: none;
 }
 .btn-wechat {
-  width: 100%;
-  height: 96rpx;
-  background: #ffffff;
-  color: #3f3a32;
-  border-radius: 48rpx;
-  font-size: 30rpx;
+  width: 100%; height: 96rpx;
+  background: #ffffff; color: #3f3a32;
+  border-radius: 48rpx; font-size: 30rpx;
   letter-spacing: 2rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16rpx;
+  display: flex; align-items: center; justify-content: center; gap: 16rpx;
   border: 1.5rpx solid #dcd6cc;
 }
 .wechat-logo {
@@ -87,26 +73,16 @@
   display: flex; align-items: center; justify-content: center;
 }
 .wechat-text { font-size: 24rpx; color: #fff; font-weight: bold; }
-
 .skip-link {
-  text-align: center;
-  font-size: 26rpx;
-  color: #b0a898;
-  letter-spacing: 2rpx;
-  margin-top: 12rpx;
+  text-align: center; font-size: 26rpx; color: #b0a898; letter-spacing: 2rpx;
 }
 
 /* 协议 */
 .agreement {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 8rpx;
-  padding: 0 8rpx;
-  margin-top: 0;
-  padding-bottom: 48rpx;
+  display: flex; flex-direction: row;
+  align-items: flex-start; gap: 8rpx;
 }
-.agree-text { font-size: 22rpx; color: #9e9688; line-height: 1.7; flex: 1; }
+.agree-text { font-size: 22rpx; color: #b0a898; line-height: 1.7; flex: 1; }
 .agree-link { color: #8f8779; }
 .shake { animation: shake 0.5s ease; }
 @keyframes shake {
@@ -115,15 +91,13 @@
   40%,80% { transform: translateX(8rpx); }
 }
 
-/* 手机号抽屉 */
+/* 弹层 */
 .sheet-mask {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0); z-index: 200;
   pointer-events: none; transition: background 0.3s;
 }
-.sheet-mask.visible {
-  background: rgba(0,0,0,0.5); pointer-events: auto;
-}
+.sheet-mask.visible { background: rgba(0,0,0,0.5); pointer-events: auto; }
 .sheet {
   position: absolute; bottom: 0; left: 0; right: 0;
   background: #ffffff; border-radius: 48rpx 48rpx 0 0;
@@ -148,5 +122,4 @@
 .input-placeholder { color: #9e9688; }
 .send-code { font-size: 26rpx; color: #dcd6cc; }
 .send-code.active { color: #8f8779; }
-.btn-login { margin-top: 16rpx; }
 .disabled { opacity: 0.4; }
