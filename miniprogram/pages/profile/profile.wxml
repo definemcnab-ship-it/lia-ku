@@ -1,9 +1,51 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">profile</text>
+
+  <!-- 头像信息卡片 -->
+  <view class="avatar-card">
+    <view class="avatar-circle">
+      <mp-icon name="person" size="48" color="#8f8779" />
+    </view>
+    <text class="nickname font-headline">{{nickname}}</text>
+    <view class="level-badge">
+      <mp-icon name="star" size="16" color="#c08a7d" />
+      <text class="level-text">{{level}}</text>
+    </view>
+    <view class="avatar-stats">
+      <view class="avatar-stat">
+        <text class="avatar-stat-value font-headline">{{postureScore}}</text>
+        <text class="avatar-stat-label">体态分</text>
+      </view>
+      <view class="avatar-stat-divider"></view>
+      <view class="avatar-stat">
+        <text class="avatar-stat-value font-headline">{{checkInDays}}天</text>
+        <text class="avatar-stat-label">打卡</text>
+      </view>
+    </view>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">profile 页面（待迁移）</text>
+
+  <!-- 菜单卡片 -->
+  <view class="menu-card">
+    <view
+      wx:for="{{menus}}"
+      wx:key="label"
+      class="menu-item"
+      bindtap="navMenu"
+      data-index="{{index}}"
+    >
+      <view class="menu-icon-wrap">
+        <mp-icon name="{{item.icon}}" size="22" color="#8f8779" />
+      </view>
+      <text class="menu-label">{{item.label}}</text>
+      <view class="menu-arrow">
+        <mp-icon name="trending_up" size="18" color="#b8b0a4" />
+      </view>
+    </view>
   </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-wrap">
+    <text class="logout-text">退出登录</text>
+  </view>
+
+  <view style="height: 140rpx"></view>
 </view>

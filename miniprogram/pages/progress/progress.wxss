@@ -1,6 +1,236 @@
-.page { min-height: 100vh; background: #fbfaf8; }
-.navbar { display: flex; align-items: center; gap: 16rpx; padding: 80rpx 48rpx 32rpx; background: #fff; }
-.back-icon { font-size: 60rpx; color: #8f8779; line-height: 1; }
-.nav-title { font-size: 36rpx; color: #2b2720; }
-.placeholder { display: flex; align-items: center; justify-content: center; height: 60vh; }
-.placeholder-text { font-size: 32rpx; color: #9e9688; }
+.page {
+  background: #f7f5f0;
+  min-height: 100vh;
+  padding: 80rpx 40rpx 0;
+  box-sizing: border-box;
+}
+
+/* ── 页面标题 ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+.page-title {
+  font-size: 52rpx;
+  color: #2b2720;
+  font-weight: 300;
+}
+.header-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 评分卡片 ── */
+.score-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 48rpx 48rpx 44rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.score-main {
+  display: flex;
+  align-items: flex-end;
+  gap: 24rpx;
+}
+.score-number {
+  font-size: 120rpx;
+  color: #2b2720;
+  font-weight: 200;
+  line-height: 1;
+}
+.score-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  padding-bottom: 12rpx;
+}
+.score-label {
+  font-size: 26rpx;
+  color: #8f8779;
+}
+.score-diff {
+  font-size: 22rpx;
+  color: #c08a7d;
+  background: #fdf0ed;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+.score-ring {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #fdf0ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 通用 section ── */
+.section {
+  margin-bottom: 24rpx;
+}
+.section-title {
+  display: block;
+  font-size: 40rpx;
+  color: #2b2720;
+  font-weight: 300;
+  margin-bottom: 20rpx;
+}
+
+/* ── 趋势图 ── */
+.chart-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 36rpx 32rpx 28rpx;
+}
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8rpx;
+  height: 220rpx;
+}
+.bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 8rpx;
+  height: 100%;
+  justify-content: flex-end;
+}
+.bar-value {
+  font-size: 18rpx;
+  color: #8f8779;
+  line-height: 1;
+}
+.bar-track {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+}
+.bar-fill {
+  width: 28rpx;
+  background: #d5cec5;
+  border-radius: 6rpx 6rpx 0 0;
+  min-height: 12rpx;
+}
+.bar-fill-today {
+  background: #c08a7d;
+}
+.bar-label {
+  font-size: 18rpx;
+  color: #8f8779;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── 统计行 ── */
+.stats-row {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+.stat-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 36rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.stat-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f7f5f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-value {
+  display: block;
+  font-size: 52rpx;
+  color: #2b2720;
+  font-weight: 200;
+  line-height: 1.1;
+}
+.stat-label {
+  display: block;
+  font-size: 22rpx;
+  color: #8f8779;
+}
+
+/* ── 里程碑 ── */
+.milestones-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  overflow: hidden;
+}
+.milestone-row {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 40rpx;
+  gap: 24rpx;
+  border-bottom: 1rpx solid #f4f1ec;
+}
+.milestone-row:last-child {
+  border-bottom: none;
+}
+.milestone-undone {
+  opacity: 0.65;
+}
+.milestone-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.icon-wrap-done {
+  background: #fdf0ed;
+}
+.icon-wrap-undone {
+  background: #f4f1ec;
+}
+.milestone-label {
+  flex: 1;
+  font-size: 28rpx;
+}
+.label-done {
+  color: #2b2720;
+}
+.label-undone {
+  color: #8f8779;
+}
+.milestone-status {
+  flex-shrink: 0;
+}
+.status-text {
+  font-size: 22rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+}
+.status-done {
+  color: #c08a7d;
+  background: #fdf0ed;
+}
+.status-pending {
+  color: #8f8779;
+  background: #f4f1ec;
+}

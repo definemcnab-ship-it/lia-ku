@@ -1,6 +1,131 @@
-.page { min-height: 100vh; background: #fbfaf8; }
-.navbar { display: flex; align-items: center; gap: 16rpx; padding: 80rpx 48rpx 32rpx; background: #fff; }
-.back-icon { font-size: 60rpx; color: #8f8779; line-height: 1; }
-.nav-title { font-size: 36rpx; color: #2b2720; }
-.placeholder { display: flex; align-items: center; justify-content: center; height: 60vh; }
-.placeholder-text { font-size: 32rpx; color: #9e9688; }
+.page {
+  background: #f7f5f0;
+  min-height: 100vh;
+  padding: 80rpx 40rpx 0;
+  box-sizing: border-box;
+}
+
+/* ── 头像卡片 ── */
+.avatar-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 56rpx 48rpx 48rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.avatar-circle {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: #ece8e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+.nickname {
+  font-size: 52rpx;
+  color: #2b2720;
+  font-weight: 300;
+  margin-bottom: 16rpx;
+}
+.level-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #fdf0ed;
+  border-radius: 30rpx;
+  padding: 8rpx 24rpx;
+  margin-bottom: 40rpx;
+}
+.level-text {
+  font-size: 24rpx;
+  color: #c08a7d;
+}
+
+/* 统计行 */
+.avatar-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  justify-content: center;
+}
+.avatar-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+.avatar-stat-value {
+  font-size: 52rpx;
+  color: #2b2720;
+  font-weight: 200;
+  line-height: 1;
+}
+.avatar-stat-label {
+  font-size: 22rpx;
+  color: #8f8779;
+}
+.avatar-stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: #e8e4de;
+}
+
+/* ── 菜单卡片 ── */
+.menu-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  overflow: hidden;
+  margin-bottom: 24rpx;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 40rpx;
+  gap: 24rpx;
+  border-bottom: 1rpx solid #f4f1ec;
+}
+.menu-item:last-child {
+  border-bottom: none;
+}
+.menu-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f7f5f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.menu-label {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2b2720;
+}
+.menu-arrow {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(90deg);
+  opacity: 0.6;
+}
+
+/* ── 退出登录 ── */
+.logout-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32rpx 0;
+}
+.logout-text {
+  font-size: 28rpx;
+  color: #b8b0a4;
+  padding: 12rpx 40rpx;
+}
