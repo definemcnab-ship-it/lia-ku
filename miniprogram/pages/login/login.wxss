@@ -46,7 +46,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-top: 72rpx;
+  padding-top: 16rpx;
   overflow: hidden;
 }
 
