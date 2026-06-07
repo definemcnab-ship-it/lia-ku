@@ -1,9 +1,78 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">levels</text>
+  <!-- Navbar -->
+  <view class="navbar">
+    <text class="page-title">斯俪等级</text>
+    <text class="page-subtitle">积累经验，解锁专属特权</text>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">levels 页面（待迁移）</text>
-  </view>
+
+  <scroll-view class="scroll-area" scroll-y>
+    <!-- Current level card -->
+    <view class="section">
+      <view class="card current-level-card">
+        <view class="current-level-badge">
+          <text class="badge-label">当前等级</text>
+        </view>
+        <text class="current-level-name">{{currentLevel}}</text>
+        <view class="checkin-row">
+          <mp-icon icon="calendar" size="28" color="#8f8779" />
+          <text class="checkin-text">已连续签到 {{checkInDays}} 天</text>
+        </view>
+        <view class="xp-section">
+          <view class="xp-labels">
+            <text class="xp-current">{{currentXP}} XP</text>
+            <text class="xp-next">{{nextXP}} XP</text>
+          </view>
+          <view class="xp-bar-bg">
+            <view class="xp-bar-fill" style="width: {{currentXP / nextXP * 100}}%;"></view>
+          </view>
+          <text class="xp-hint">距下一级还需 {{nextXP - currentXP}} 经验</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Level roadmap -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">等级路线图</text>
+      </view>
+      <view class="card roadmap-card">
+        <view class="level-row" wx:for="{{levels}}" wx:key="name">
+          <view class="level-dot-col">
+            <view class="level-dot {{item.done ? 'done' : ''}} {{item.current ? 'current' : ''}}" style="background: {{item.done || item.current ? item.color : '#f4f1ec'}};"></view>
+            <view class="level-line" wx:if="{{index < levels.length - 1}}"></view>
+          </view>
+          <view class="level-info {{item.current ? 'current-info' : ''}}">
+            <view class="level-name-row">
+              <text class="level-name {{item.current ? 'current-name' : ''}}">{{item.name}}</text>
+              <view class="current-tag" wx:if="{{item.current}}">
+                <text class="current-tag-text">当前</text>
+              </view>
+            </view>
+            <text class="level-desc">{{item.desc}}</text>
+            <text class="level-xp-range">{{item.minXP}} – {{item.maxXP === 9999 ? '∞' : item.maxXP}} XP</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Rewards -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">等级奖励</text>
+      </view>
+      <view class="card rewards-card">
+        <view class="reward-item" wx:for="{{rewards}}" wx:key="label">
+          <view class="reward-icon-wrap {{item.unlocked ? 'unlocked' : 'locked'}}">
+            <mp-icon icon="{{item.unlocked ? 'success' : 'lock'}}" size="36" color="{{item.unlocked ? '#c08a7d' : '#8f8779'}}" />
+          </view>
+          <text class="reward-label {{item.unlocked ? '' : 'locked-label'}}">{{item.label}}</text>
+          <view class="reward-status-tag {{item.unlocked ? 'unlocked-tag' : 'locked-tag'}}">
+            <text class="reward-status-text">{{item.unlocked ? '已解锁' : '未解锁'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
 </view>

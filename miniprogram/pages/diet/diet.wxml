@@ -1,9 +1,103 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">diet</text>
+  <!-- Navbar -->
+  <view class="navbar">
+    <text class="page-title">饮食建议</text>
+    <text class="page-subtitle">科学饮食，助力体态改善</text>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">diet 页面（待迁移）</text>
-  </view>
+
+  <scroll-view class="scroll-area" scroll-y>
+    <!-- Calorie ring card -->
+    <view class="section">
+      <view class="card calorie-card">
+        <view class="calorie-header">
+          <text class="calorie-card-title">今日热量</text>
+          <text class="calorie-date">今天</text>
+        </view>
+        <view class="calorie-body">
+          <!-- Arc visual -->
+          <view class="ring-wrap">
+            <view class="ring-outer">
+              <view class="ring-fill" style="transform: rotate({{todayCalories / targetCalories * 180}}deg);"></view>
+              <view class="ring-cover">
+                <text class="ring-number">{{todayCalories}}</text>
+                <text class="ring-unit">千卡</text>
+              </view>
+            </view>
+          </view>
+          <view class="calorie-stats">
+            <view class="stat-row">
+              <view class="stat-dot eaten"></view>
+              <text class="stat-label">已摄入</text>
+              <text class="stat-value eaten-val">{{todayCalories}} kcal</text>
+            </view>
+            <view class="stat-row">
+              <view class="stat-dot target"></view>
+              <text class="stat-label">目标</text>
+              <text class="stat-value">{{targetCalories}} kcal</text>
+            </view>
+            <view class="stat-row">
+              <view class="stat-dot remain"></view>
+              <text class="stat-label">剩余</text>
+              <text class="stat-value remain-val">{{targetCalories - todayCalories}} kcal</text>
+            </view>
+          </view>
+        </view>
+        <!-- Progress bar -->
+        <view class="progress-bar-bg">
+          <view class="progress-bar-fill" style="width: {{todayCalories / targetCalories * 100}}%;"></view>
+        </view>
+        <text class="progress-pct">已达成 {{Math.round(todayCalories / targetCalories * 100)}}%</text>
+      </view>
+    </view>
+
+    <!-- Meal log -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">今日饮食</text>
+      </view>
+      <view class="card meal-list-card">
+        <view class="meal-item" wx:for="{{meals}}" wx:key="type">
+          <view class="meal-icon-wrap">
+            <text class="meal-emoji">{{item.icon}}</text>
+          </view>
+          <view class="meal-info">
+            <view class="meal-top-row">
+              <text class="meal-type">{{item.type}}</text>
+              <text class="meal-time">{{item.time}}</text>
+            </view>
+            <text class="meal-items">{{item.items}}</text>
+          </view>
+          <view class="meal-cal-wrap">
+            <text class="meal-calories">{{item.calories}}</text>
+            <text class="meal-cal-unit">kcal</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Add meal button -->
+    <view class="section">
+      <view class="add-meal-btn" bindtap="addMeal">
+        <mp-icon icon="add" size="36" color="#ffffff" />
+        <text class="add-meal-text">记录餐食</text>
+      </view>
+    </view>
+
+    <!-- Nutrition tips -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">营养小贴士</text>
+      </view>
+      <view class="card tips-card">
+        <view class="tip-item" wx:for="{{tips}}" wx:key="index">
+          <view class="tip-icon-wrap">
+            <mp-icon icon="info" size="32" color="#c08a7d" />
+          </view>
+          <text class="tip-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
 </view>

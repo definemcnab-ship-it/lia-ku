@@ -1,9 +1,105 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">scan</text>
+  <!-- Custom navbar -->
+  <view class="navbar">
+    <view class="navbar-inner">
+      <text class="page-title">AI 姿态扫描</text>
+      <text class="page-subtitle">上传照片，智能分析你的体态</text>
+    </view>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">scan 页面（待迁移）</text>
-  </view>
+
+  <scroll-view class="scroll-area" scroll-y>
+    <!-- Camera upload zone -->
+    <view class="section">
+      <view class="upload-card" bindtap="startScan">
+        <view class="upload-inner">
+          <view class="camera-icon-wrap">
+            <mp-icon icon="camera" size="64" color="#c08a7d" />
+          </view>
+          <text class="upload-label">点击上传照片</text>
+          <text class="upload-hint">支持拍照或从相册选择</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Scanning state -->
+    <view class="section" wx:if="{{scanning}}">
+      <view class="card loading-card">
+        <view class="spinner"></view>
+        <text class="loading-text">AI 分析中...</text>
+        <text class="loading-sub">正在识别你的体态特征</text>
+      </view>
+    </view>
+
+    <!-- Result card -->
+    <view class="section" wx:if="{{result && !scanning}}">
+      <view class="card result-card">
+        <view class="score-row">
+          <view class="score-circle">
+            <text class="score-number">{{result.score}}</text>
+            <text class="score-unit">分</text>
+          </view>
+          <view class="score-label-wrap">
+            <text class="score-title">体态评分</text>
+            <text class="score-desc">整体体态良好，有改进空间</text>
+          </view>
+        </view>
+
+        <view class="divider"></view>
+
+        <view class="issues-section">
+          <text class="section-label">发现问题</text>
+          <view class="issue-item" wx:for="{{result.issues}}" wx:key="index">
+            <mp-icon icon="warn" size="32" color="#c08a7d" />
+            <text class="issue-text">{{item}}</text>
+          </view>
+        </view>
+
+        <view class="divider"></view>
+
+        <view class="suggestions-section">
+          <text class="section-label">改善建议</text>
+          <view class="suggestion-item" wx:for="{{result.suggestions}}" wx:key="index">
+            <mp-icon icon="arrow-right" size="28" color="#8f8779" />
+            <text class="suggestion-text">{{item}}</text>
+          </view>
+        </view>
+
+        <view class="reset-btn-wrap">
+          <view class="reset-btn" bindtap="reset">
+            <text class="reset-btn-text">重新扫描</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Tips section (shown when no result) -->
+    <view class="section" wx:if="{{!result && !scanning}}">
+      <view class="card tips-card">
+        <text class="tips-title">拍摄小贴士</text>
+        <view class="tip-item">
+          <view class="tip-index">1</view>
+          <view class="tip-content">
+            <text class="tip-text">全身正面站立</text>
+            <text class="tip-desc">确保全身都在画面内，双脚自然分开</text>
+          </view>
+        </view>
+        <view class="tip-item">
+          <view class="tip-index">2</view>
+          <view class="tip-content">
+            <text class="tip-text">保持自然站姿</text>
+            <text class="tip-desc">放松身体，避免刻意挺胸或弯腰</text>
+          </view>
+        </view>
+        <view class="tip-item">
+          <view class="tip-index">3</view>
+          <view class="tip-content">
+            <text class="tip-text">光线充足</text>
+            <text class="tip-desc">选择明亮环境，避免逆光拍摄</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
 </view>

@@ -1,9 +1,65 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">community</text>
+  <!-- Navbar -->
+  <view class="navbar">
+    <text class="page-title">斯俪圈子</text>
+    <text class="page-subtitle">与姐妹们分享蜕变之路</text>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">community 页面（待迁移）</text>
+
+  <!-- Tab bar -->
+  <view class="tab-bar-wrap">
+    <view class="tab-bar">
+      <view
+        class="tab-pill {{activeTab === index ? 'tab-pill-active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="switchTab"
+      >
+        <text class="tab-text {{activeTab === index ? 'tab-text-active' : ''}}">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y>
+    <!-- Post list -->
+    <view class="section">
+      <view class="post-card card" wx:for="{{posts}}" wx:key="id">
+        <!-- Post header -->
+        <view class="post-header">
+          <view class="avatar-circle">
+            <text class="avatar-emoji">{{item.avatar}}</text>
+          </view>
+          <view class="post-meta">
+            <text class="post-name">{{item.name}}</text>
+            <text class="post-time">{{item.time}}</text>
+          </view>
+          <view class="tag-badge">
+            <text class="tag-text">{{item.tag}}</text>
+          </view>
+        </view>
+
+        <!-- Post content -->
+        <text class="post-content">{{item.content}}</text>
+
+        <!-- Post footer -->
+        <view class="post-footer">
+          <view class="post-action" data-id="{{item.id}}" bindtap="likePost">
+            <mp-icon icon="like" size="32" color="#8f8779" />
+            <text class="action-count">{{item.likes}}</text>
+          </view>
+          <view class="post-action">
+            <mp-icon icon="comment" size="32" color="#8f8779" />
+            <text class="action-count">{{item.comments}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- Floating post button -->
+  <view class="fab">
+    <mp-icon icon="add" size="48" color="#ffffff" />
   </view>
 </view>

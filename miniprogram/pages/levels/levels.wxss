@@ -1,6 +1,259 @@
-.page { min-height: 100vh; background: #fbfaf8; }
-.navbar { display: flex; align-items: center; gap: 16rpx; padding: 80rpx 48rpx 32rpx; background: #fff; }
-.back-icon { font-size: 60rpx; color: #8f8779; line-height: 1; }
-.nav-title { font-size: 36rpx; color: #2b2720; }
-.placeholder { display: flex; align-items: center; justify-content: center; height: 60vh; }
-.placeholder-text { font-size: 32rpx; color: #9e9688; }
+/* levels.wxss */
+page { background: #f7f5f0; }
+
+.page {
+  min-height: 100vh;
+  background: #f7f5f0;
+}
+
+/* Navbar */
+.navbar {
+  padding: 100rpx 48rpx 40rpx;
+  background: #f7f5f0;
+}
+.page-title {
+  display: block;
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #2b2720;
+  letter-spacing: 2rpx;
+}
+.page-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #8f8779;
+  margin-top: 8rpx;
+}
+
+/* Scroll */
+.scroll-area {
+  height: calc(100vh - 220rpx);
+}
+
+/* Section */
+.section {
+  padding: 0 40rpx 32rpx;
+}
+.section-header {
+  margin-bottom: 20rpx;
+}
+.section-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2b2720;
+}
+
+/* Card base */
+.card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 24rpx rgba(43,39,32,0.06);
+}
+
+/* Current level card */
+.current-level-card {
+  padding: 56rpx 48rpx 48rpx;
+  background: linear-gradient(145deg, #2b2720 0%, #3d3530 100%);
+}
+.current-level-badge {
+  display: inline-block;
+  background: rgba(192,138,125,0.25);
+  border-radius: 999rpx;
+  padding: 8rpx 24rpx;
+  margin-bottom: 24rpx;
+}
+.badge-label {
+  font-size: 24rpx;
+  color: #c08a7d;
+  letter-spacing: 2rpx;
+}
+.current-level-name {
+  display: block;
+  font-size: 72rpx;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 4rpx;
+  margin-bottom: 20rpx;
+  font-family: serif;
+}
+.checkin-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 40rpx;
+}
+.checkin-text {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.65);
+}
+
+.xp-section {
+  margin-top: 8rpx;
+}
+.xp-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+.xp-current {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #c08a7d;
+}
+.xp-next {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.5);
+}
+.xp-bar-bg {
+  height: 16rpx;
+  background: rgba(255,255,255,0.15);
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c08a7d, #d4a090);
+  border-radius: 999rpx;
+  max-width: 100%;
+}
+.xp-hint {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.55);
+}
+
+/* Roadmap card */
+.roadmap-card {
+  padding: 16rpx 48rpx;
+}
+.level-row {
+  display: flex;
+  gap: 32rpx;
+  align-items: flex-start;
+}
+.level-dot-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 32rpx;
+}
+.level-dot {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  margin-top: 28rpx;
+  flex-shrink: 0;
+  background: #f4f1ec;
+}
+.level-dot.done {
+  box-shadow: 0 0 0 4rpx rgba(0,0,0,0.08);
+}
+.level-dot.current {
+  width: 40rpx;
+  height: 40rpx;
+  margin-top: 24rpx;
+  box-shadow: 0 0 0 8rpx rgba(143,135,121,0.2);
+}
+.level-line {
+  width: 2rpx;
+  flex: 1;
+  min-height: 32rpx;
+  background: #f4f1ec;
+  margin: 8rpx 0;
+}
+.level-info {
+  flex: 1;
+  padding: 24rpx 0 32rpx;
+  border-bottom: 1rpx solid #f4f1ec;
+}
+.level-row:last-child .level-info {
+  border-bottom: none;
+}
+.current-info {
+  padding: 20rpx 24rpx;
+  background: #f7f5f0;
+  border-radius: 20rpx;
+  margin: 16rpx 0 16rpx -8rpx;
+  border-bottom: none !important;
+}
+.level-name-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+.level-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2b2720;
+}
+.current-name {
+  color: #2b2720;
+}
+.current-tag {
+  background: #c08a7d;
+  border-radius: 999rpx;
+  padding: 4rpx 16rpx;
+}
+.current-tag-text {
+  font-size: 20rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+.level-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #8f8779;
+  margin-bottom: 6rpx;
+}
+.level-xp-range {
+  display: block;
+  font-size: 24rpx;
+  color: #c08a7d;
+}
+
+/* Rewards card */
+.rewards-card {
+  padding: 8rpx 0;
+}
+.reward-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 48rpx;
+  gap: 28rpx;
+  border-bottom: 1rpx solid #f4f1ec;
+}
+.reward-item:last-child { border-bottom: none; }
+.reward-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.reward-icon-wrap.unlocked { background: #f4f1ec; }
+.reward-icon-wrap.locked { background: #f7f5f0; }
+.reward-label {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2b2720;
+}
+.locked-label { color: #8f8779; }
+.reward-status-tag {
+  border-radius: 999rpx;
+  padding: 8rpx 24rpx;
+}
+.unlocked-tag { background: #f4f1ec; }
+.locked-tag { background: #f7f5f0; }
+.reward-status-text {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+.unlocked-tag .reward-status-text { color: #c08a7d; }
+.locked-tag .reward-status-text { color: #8f8779; }
+
+.bottom-spacer { height: 60rpx; }
