@@ -16,11 +16,11 @@
 
     <view class="buttons">
       <button class="btn-phone" bindtap="openPhoneSheet">
-        <mp-icon name="smartphone" size="20" color="#ffffff" />
+        <mp-icon name="phone_wave" size="26" color="#ffffff" />
         <text>手机号登录 / 注册</text>
       </button>
       <button class="btn-wechat" bindtap="wechatLogin">
-        <view class="wechat-logo"><text class="wechat-text">微</text></view>
+        <mp-icon name="wechat_bubble" size="26" color="#07C160" />
         <text>微信一键登录</text>
       </button>
     </view>
