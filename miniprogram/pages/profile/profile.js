@@ -20,5 +20,25 @@ Page({
       this.getTabBar().setData({ selected: 4 })
     }
   },
-  navMenu(e) { /* placeholder */ },
+  navMenu(e) {
+    const routes = [
+      '/pages/training/training',
+      '/pages/progress/progress',
+      '/pages/levels/levels',
+      '/pages/diet/diet',
+      null,
+    ]
+    const url = routes[e.currentTarget.dataset.index]
+    if (url) wx.navigateTo({ url })
+    else wx.showToast({ title: '功能即将上线', icon: 'none' })
+  },
+  logout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '确认退出当前账号？',
+      success(res) {
+        if (res.confirm) wx.reLaunch({ url: '/pages/login/login' })
+      }
+    })
+  },
 })

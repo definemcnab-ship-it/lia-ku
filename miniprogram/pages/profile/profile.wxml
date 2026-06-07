@@ -37,13 +37,13 @@
       </view>
       <text class="menu-label">{{item.label}}</text>
       <view class="menu-arrow">
-        <mp-icon name="trending_up" size="18" color="#b8b0a4" />
+        <mp-icon name="arrow_forward" size="18" color="#b8b0a4" />
       </view>
     </view>
   </view>
 
   <!-- 退出登录 -->
-  <view class="logout-wrap">
+  <view class="logout-wrap" bindtap="logout">
     <text class="logout-text">退出登录</text>
   </view>
 

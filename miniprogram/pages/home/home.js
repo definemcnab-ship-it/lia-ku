@@ -77,11 +77,13 @@ Page({
 
   navTo(e) {
     const url = e.currentTarget.dataset.url
-    wx.navigateTo({ url })
+    const tabPages = ['/pages/home/home', '/pages/training/training', '/pages/scan/scan', '/pages/progress/progress', '/pages/profile/profile']
+    if (tabPages.includes(url)) wx.switchTab({ url })
+    else wx.navigateTo({ url })
   },
 
   goProfile() {
-    wx.navigateTo({ url: '/pages/profile/profile' })
+    wx.switchTab({ url: '/pages/profile/profile' })
   },
 
   startTraining() {
