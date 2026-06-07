@@ -69,6 +69,111 @@
   color: #f7f5f0;
 }
 
+/* ── 今日推荐 ── */
+.section-label {
+  font-size: 22rpx;
+  color: #8f8779;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  margin-bottom: 20rpx;
+  display: block;
+}
+.recommend-card {
+  background: #2b2720;
+  border-radius: 40rpx;
+  overflow: hidden;
+  margin-bottom: 44rpx;
+  position: relative;
+}
+.recommend-banner {
+  height: 180rpx;
+  background: linear-gradient(135deg, #c08a7d, #8f6a60);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.recommend-banner-deco {
+  position: absolute;
+  left: -60rpx;
+  bottom: -60rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.recommend-tag {
+  position: absolute;
+  top: 20rpx;
+  left: 24rpx;
+  background: rgba(255,255,255,0.25);
+  border-radius: 30rpx;
+  padding: 8rpx 22rpx;
+}
+.recommend-tag-text {
+  font-size: 20rpx;
+  color: #fff;
+  letter-spacing: 1rpx;
+}
+.recommend-icon-wrap {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.recommend-body {
+  padding: 28rpx 36rpx 36rpx;
+}
+.recommend-name {
+  display: block;
+  font-size: 40rpx;
+  color: #f7f5f0;
+  font-weight: 300;
+  margin-bottom: 8rpx;
+}
+.recommend-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #8f8779;
+  margin-bottom: 28rpx;
+}
+.recommend-meta {
+  display: flex;
+  gap: 14rpx;
+  margin-bottom: 32rpx;
+  flex-wrap: wrap;
+}
+.recommend-meta-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(255,255,255,0.08);
+  padding: 10rpx 20rpx;
+  border-radius: 30rpx;
+}
+.recommend-meta-text {
+  font-size: 22rpx;
+  color: #a89f90;
+}
+.recommend-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: #c08a7d;
+  border-radius: 60rpx;
+  height: 96rpx;
+}
+.recommend-btn-text {
+  font-size: 30rpx;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
+
 /* ── 课程卡片列表 ── */
 .course-list {
   display: flex;

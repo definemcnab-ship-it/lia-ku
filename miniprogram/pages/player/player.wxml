@@ -1,13 +1,13 @@
 <view class="page">
 
   <!-- Back nav -->
-  <view class="navbar" bindtap="goTraining">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">返回</text>
+  <view class="navbar">
+    <view class="back-btn" bindtap="goTraining">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="nav-title">{{courseN || '训练'}}</text>
+    <view class="nav-spacer"></view>
   </view>
-
-  <!-- Course title -->
-  <text class="course-title">{{courseN}}</text>
 
   <!-- Move visual card -->
   <view class="visual-card">

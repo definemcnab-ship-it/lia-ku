@@ -10,27 +10,36 @@
 .navbar {
   display: flex;
   align-items: center;
-  gap: 12rpx;
   padding: 80rpx 48rpx 24rpx;
 }
+.back-btn {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(43, 39, 32, 0.08);
+  flex-shrink: 0;
+}
 .back-icon {
-  font-size: 64rpx;
-  color: #8f8779;
+  font-size: 56rpx;
+  color: #2b2720;
   line-height: 1;
+  margin-top: -4rpx;
 }
 .nav-title {
-  font-size: 32rpx;
-  color: #8f8779;
-}
-
-/* ── Course title ── */
-.course-title {
-  display: block;
-  font-size: 40rpx;
-  font-weight: 700;
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 600;
   color: #2b2720;
-  padding: 0 48rpx 32rpx;
   letter-spacing: 1rpx;
+}
+.nav-spacer {
+  width: 72rpx;
+  flex-shrink: 0;
 }
 
 /* ── Visual card ── */
@@ -254,7 +263,17 @@
   border: 2rpx solid #c08a7d;
   color: #c08a7d;
 }
+.done-btn-outline text {
+  color: #c08a7d;
+  font-size: 30rpx;
+  font-weight: 600;
+}
 .done-btn-fill {
   background: #2b2720;
   color: #fff;
+}
+.done-btn-fill text {
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
 }
