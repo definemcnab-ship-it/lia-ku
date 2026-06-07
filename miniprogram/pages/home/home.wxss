@@ -8,58 +8,43 @@
 /* ── Hero 卡片 ── */
 .hero-card {
   background: #ffffff;
-  border-radius: 48rpx;
-  padding: 8rpx 44rpx 8rpx;
-  margin-bottom: 28rpx;
+  border-radius: 40rpx;
+  padding: 20rpx 40rpx 24rpx;
+  margin-bottom: 20rpx;
 }
 .hero-top {
   display: flex;
   align-items: center;
-  margin-bottom: 8rpx;
+  margin-bottom: 16rpx;
+  gap: 16rpx;
 }
 .hero-avatar {
-  width: 64rpx; height: 64rpx; border-radius: 50%;
+  width: 56rpx; height: 56rpx; border-radius: 50%;
   background: #ece8e0;
   display: flex; align-items: center; justify-content: center;
-  margin-right: 16rpx;
 }
 .hero-brand {
-  font-size: 40rpx; color: #8f8779; flex: 1;
+  font-size: 36rpx; color: #8f8779; flex: 1;
 }
+.hero-score-inline {
+  display: flex; align-items: baseline; gap: 4rpx;
+  background: #f4f1ec; border-radius: 24rpx; padding: 8rpx 20rpx;
+}
+.hero-score-num {
+  font-size: 32rpx; color: #2b2720; font-weight: 300;
+}
+.hero-score-unit { font-size: 18rpx; color: #9e9688; }
 .hero-notify {
-  width: 64rpx; height: 64rpx; border-radius: 50%;
+  width: 56rpx; height: 56rpx; border-radius: 50%;
   background: #f4f1ec;
   display: flex; align-items: center; justify-content: center;
 }
-
-.hero-body {
-  display: flex; align-items: flex-end; justify-content: space-between;
-}
-.hero-text { flex: 1; }
-.hero-sub {
-  display: block; font-size: 18rpx; color: #c08a7d; letter-spacing: 4rpx; margin-bottom: 4rpx;
-}
 .hero-greeting {
-  display: block; font-size: 36rpx; color: #2b2720; font-weight: 300; margin-bottom: 4rpx; line-height: 1.2;
+  display: block; font-size: 40rpx; color: #2b2720; font-weight: 300; margin-bottom: 6rpx; line-height: 1.2;
 }
 .hero-hint {
   display: block; font-size: 22rpx; color: #9e9688;
 }
-
-.hero-score-wrap {
-  display: flex; flex-direction: column; align-items: center; gap: 8rpx; flex-shrink: 0;
-}
-.hero-ring {
-  width: 80rpx; height: 80rpx; border-radius: 50%;
-  border: 6rpx solid #ece8e0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.hero-score-num {
-  font-size: 34rpx; color: #2b2720; line-height: 1; font-weight: 300;
-}
-.hero-score-unit { font-size: 20rpx; color: #9e9688; }
-.hero-score-label { font-size: 20rpx; color: #9e9688; letter-spacing: 2rpx; }
-.hero-score-diff { font-size: 20rpx; color: #c08a7d; }
 
 /* ── 轮播 ── */
 .banner-swiper { width: 100%; height: 400rpx; margin-bottom: 28rpx; border-radius: 40rpx; overflow: hidden; }

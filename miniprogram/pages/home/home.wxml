@@ -1,31 +1,22 @@
 <view class="page">
 
   <!-- Hero 卡片：问候 + 体态分 -->
-  <view class="hero-card" bindtap="navTo" data-url="/pages/report/report">
+  <view class="hero-card">
     <view class="hero-top">
       <view class="hero-avatar" bindtap="goProfile">
-        <mp-icon name="person" size="22" color="#8f8779" />
+        <mp-icon name="person" size="20" color="#8f8779" />
       </view>
       <text class="hero-brand font-headline">Slique</text>
+      <view class="hero-score-inline" bindtap="navTo" data-url="/pages/report/report">
+        <text class="hero-score-num font-headline">{{postureScore}}</text>
+        <text class="hero-score-unit">分</text>
+      </view>
       <view class="hero-notify">
-        <mp-icon name="notifications" size="22" color="#8f8779" />
+        <mp-icon name="notifications" size="20" color="#8f8779" />
       </view>
     </view>
-    <view class="hero-body">
-      <view class="hero-text">
-        <text class="hero-sub">SLIQUE · 优雅体态</text>
-        <text class="hero-greeting font-headline">{{greetingText}}</text>
-        <text class="hero-hint">今天也要保持优雅体态哦</text>
-      </view>
-      <view class="hero-score-wrap">
-        <view class="hero-ring">
-          <text class="hero-score-num font-headline">{{postureScore}}</text>
-          <text class="hero-score-unit">分</text>
-        </view>
-        <text class="hero-score-label">体态评分</text>
-        <text class="hero-score-diff">{{diffText}}</text>
-      </view>
-    </view>
+    <text class="hero-greeting font-headline">{{greetingText}}</text>
+    <text class="hero-hint">今天也要保持优雅体态哦</text>
   </view>
 
   <!-- Banner 轮播 -->
