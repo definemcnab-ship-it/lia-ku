@@ -1,9 +1,87 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
+
+  <!-- Back nav -->
+  <view class="navbar" bindtap="goTraining">
     <text class="back-icon">‹</text>
-    <text class="nav-title">player</text>
+    <text class="nav-title">返回</text>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">player 页面（待迁移）</text>
+
+  <!-- Course title -->
+  <text class="course-title">{{courseN}}</text>
+
+  <!-- Move visual card -->
+  <view class="visual-card">
+    <view class="visual-icon-wrap">
+      <mp-icon name="{{moves[currentIdx].icon}}" size="72" color="#fff" />
+    </view>
+    <view class="visual-name-bar">
+      <text class="visual-name">{{moves[currentIdx].name}}</text>
+    </view>
   </view>
+
+  <!-- Progress dots -->
+  <view class="dots-row">
+    <view
+      wx:for="{{moves}}"
+      wx:key="index"
+      class="dot {{index === currentIdx ? 'dot-active' : ''}}"
+    ></view>
+  </view>
+
+  <!-- Timer -->
+  <view class="timer-wrap">
+    <text class="timer-num">{{timeLeft}}</text>
+    <text class="timer-unit">秒</text>
+  </view>
+
+  <!-- Move description -->
+  <text class="move-desc">{{moves[currentIdx].desc}}</text>
+
+  <!-- Controls -->
+  <view class="controls-row">
+    <view class="ctrl-btn ctrl-side" bindtap="prevMove">
+      <mp-icon name="skip_previous" size="28" color="#8f8779" />
+    </view>
+    <view class="ctrl-btn ctrl-play" bindtap="togglePlay">
+      <mp-icon name="{{playing ? 'pause' : 'play_arrow'}}" size="44" color="#fff" />
+    </view>
+    <view class="ctrl-btn ctrl-side" bindtap="nextMove">
+      <mp-icon name="skip_next" size="28" color="#8f8779" />
+    </view>
+  </view>
+
+  <!-- Step list -->
+  <view class="step-list">
+    <view
+      wx:for="{{moves}}"
+      wx:key="index"
+      class="step-row {{index === currentIdx ? 'step-active' : 'step-muted'}}"
+    >
+      <text class="step-num">{{index + 1}}</text>
+      <view class="step-info">
+        <text class="step-name">{{item.name}}</text>
+      </view>
+      <text class="step-dur">{{item.duration}}秒</text>
+    </view>
+  </view>
+
+  <!-- Completion overlay -->
+  <view class="done-backdrop" wx:if="{{done}}">
+    <view class="done-card">
+      <view class="done-check">
+        <mp-icon name="check_circle" size="64" color="#c08a7d" />
+      </view>
+      <text class="done-title">训练完成！</text>
+      <text class="done-sub">今日打卡成功</text>
+      <view class="done-actions">
+        <view class="done-btn done-btn-outline" bindtap="goTraining">
+          <text>返回训练</text>
+        </view>
+        <view class="done-btn done-btn-fill" bindtap="goHome">
+          <text>回到首页</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </view>
