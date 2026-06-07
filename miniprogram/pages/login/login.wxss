@@ -103,6 +103,8 @@
 .agreement {
   display: flex; flex-direction: row;
   align-items: flex-start; gap: 8rpx;
+  margin-top: auto;
+  padding-top: 60rpx;
 }
 .agree-text { font-size: 20rpx; color: #b0a898; line-height: 1.7; flex: 1; }
 .agree-link { color: #8f8779; }
