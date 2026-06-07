@@ -37,25 +37,25 @@
 }
 .hero-text { flex: 1; }
 .hero-sub {
-  display: block; font-size: 20rpx; color: #c08a7d; letter-spacing: 4rpx; margin-bottom: 10rpx;
+  display: block; font-size: 18rpx; color: #c08a7d; letter-spacing: 4rpx; margin-bottom: 4rpx;
 }
 .hero-greeting {
-  display: block; font-size: 44rpx; color: #2b2720; font-weight: 300; margin-bottom: 6rpx; line-height: 1.2;
+  display: block; font-size: 36rpx; color: #2b2720; font-weight: 300; margin-bottom: 4rpx; line-height: 1.2;
 }
 .hero-hint {
-  display: block; font-size: 24rpx; color: #9e9688;
+  display: block; font-size: 22rpx; color: #9e9688;
 }
 
 .hero-score-wrap {
   display: flex; flex-direction: column; align-items: center; gap: 8rpx; flex-shrink: 0;
 }
 .hero-ring {
-  width: 100rpx; height: 100rpx; border-radius: 50%;
-  border: 8rpx solid #ece8e0;
+  width: 80rpx; height: 80rpx; border-radius: 50%;
+  border: 6rpx solid #ece8e0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .hero-score-num {
-  font-size: 44rpx; color: #2b2720; line-height: 1; font-weight: 300;
+  font-size: 34rpx; color: #2b2720; line-height: 1; font-weight: 300;
 }
 .hero-score-unit { font-size: 20rpx; color: #9e9688; }
 .hero-score-label { font-size: 20rpx; color: #9e9688; letter-spacing: 2rpx; }
