@@ -91,11 +91,11 @@
   display: flex; flex-direction: column; align-items: center; gap: 12rpx;
 }
 .shortcut-icon-wrap {
-  width: 88rpx; height: 88rpx; border-radius: 50%;
+  width: 72rpx; height: 72rpx; border-radius: 50%;
   background: #f4f1ec;
   display: flex; align-items: center; justify-content: center;
 }
-.shortcut-label { font-size: 22rpx; color: #6e675b; }
+.shortcut-label { font-size: 20rpx; color: #6e675b; }
 
 /* ── 通用 section ── */
 .section { margin-bottom: 28rpx; }
