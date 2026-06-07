@@ -84,10 +84,8 @@
 /* ── 快捷入口 ── */
 .shortcuts-row {
   display: flex; justify-content: space-between;
-  background: #ffffff;
-  border-radius: 40rpx;
-  padding: 32rpx 24rpx;
-  margin-bottom: 28rpx;
+  padding: 8rpx 24rpx 24rpx;
+  margin-bottom: 8rpx;
 }
 .shortcut {
   display: flex; flex-direction: column; align-items: center; gap: 12rpx;
