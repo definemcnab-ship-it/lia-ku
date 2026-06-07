@@ -1,47 +1,67 @@
 .page {
   height: 100vh;
-  background: #ffffff;
+  background: #f7f5f0;
   display: flex;
   flex-direction: column;
+  padding: 48rpx 48rpx 40rpx;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
-/* 上半：插图区，flex:1 撑满剩余空间 */
-.top {
-  flex: 1;
+/* 插图卡片区 */
+.illus-card {
+  border-radius: 48rpx;
+  background: #ece8e0;
+  height: 44vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 60rpx;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 .illus {
-  width: 580rpx;
-  height: 580rpx;
+  width: 100%;
+  height: 100%;
 }
 
-/* 下半：紧凑内容区，固定高度不撑开 */
-.bottom {
-  padding: 40rpx 48rpx 56rpx;
+/* 品牌标签 */
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28rpx;
+  margin-bottom: 4rpx;
+}
+.brand-label {
+  font-size: 22rpx;
+  color: #b0a898;
+  letter-spacing: 8rpx;
+  text-transform: uppercase;
+}
+
+/* 文案区 */
+.content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  padding-top: 16rpx;
 }
 
 .title {
   display: block;
   font-family: NotoSerifSC, "Noto Serif SC", "Songti SC", Georgia, serif;
-  font-size: 52rpx;
+  font-size: 50rpx;
   color: #2b2720;
   font-weight: 300;
   letter-spacing: 4rpx;
-  margin-bottom: 12rpx;
+  margin-bottom: 10rpx;
 }
 .subtitle {
   display: block;
   font-size: 24rpx;
   color: #b0a898;
-  letter-spacing: 6rpx;
-  margin-bottom: 48rpx;
+  letter-spacing: 4rpx;
+  margin-bottom: 36rpx;
 }
 
 /* 按钮组 */
@@ -49,7 +69,7 @@
   display: flex;
   flex-direction: column;
   gap: 20rpx;
-  margin-bottom: 32rpx;
+  margin-bottom: 28rpx;
 }
 .btn-phone {
   width: 100%; height: 96rpx;
@@ -75,6 +95,7 @@
 .wechat-text { font-size: 24rpx; color: #fff; font-weight: bold; }
 .skip-link {
   text-align: center; font-size: 26rpx; color: #b0a898; letter-spacing: 2rpx;
+  margin-bottom: 28rpx;
 }
 
 /* 协议 */

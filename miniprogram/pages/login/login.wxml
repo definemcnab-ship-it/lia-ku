@@ -1,11 +1,16 @@
 <view class="page">
-  <!-- 上半：插图充满 -->
-  <view class="top">
-    <image class="illus" src="/illus-yoga-nobg.png" mode="aspectFit" />
+  <!-- 插图卡片 -->
+  <view class="illus-card">
+    <image class="illus" src="/illus-yoga-nobg.png" mode="aspectFill" />
   </view>
 
-  <!-- 下半：文字+按钮紧凑排列 -->
-  <view class="bottom">
+  <!-- 品牌标签 -->
+  <view class="brand-row">
+    <text class="brand-label">Slique 斯俪</text>
+  </view>
+
+  <!-- 内容区 -->
+  <view class="content">
     <text class="title">优雅体态，从这里开始</text>
     <text class="subtitle">科学矫正 · 8 周挺拔如模特</text>
 
@@ -18,8 +23,9 @@
         <view class="wechat-logo"><text class="wechat-text">微</text></view>
         <text>微信一键登录</text>
       </button>
-      <text class="skip-link" bindtap="skipLogin">暂不登录，先体验 →</text>
     </view>
+
+    <text class="skip-link" bindtap="skipLogin">暂不登录，先体验 →</text>
 
     <view class="agreement {{shake ? 'shake' : ''}}">
       <checkbox-group bindchange="onAgreeChange">
