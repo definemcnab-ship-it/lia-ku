@@ -3,7 +3,7 @@
   background: #f7f5f0;
   display: flex;
   flex-direction: column;
-  padding: 48rpx 48rpx 40rpx;
+  padding: 48rpx 0 40rpx;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -18,6 +18,7 @@
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  margin: 0 48rpx;
 }
 .illus {
   width: 100%;
@@ -31,6 +32,7 @@
   justify-content: center;
   margin-top: 28rpx;
   margin-bottom: 4rpx;
+  padding: 0 48rpx;
 }
 .brand-label {
   font-size: 22rpx;
@@ -45,6 +47,7 @@
   display: flex;
   flex-direction: column;
   padding-top: 16rpx;
+  overflow: hidden;
 }
 
 .title {
@@ -55,6 +58,7 @@
   font-weight: 300;
   letter-spacing: 4rpx;
   margin-bottom: 10rpx;
+  padding: 0 48rpx;
 }
 .subtitle {
   display: block;
@@ -63,6 +67,7 @@
   letter-spacing: 4rpx;
   margin-bottom: 36rpx;
   text-align: center;
+  padding: 0 48rpx;
 }
 
 /* 按钮组 */
@@ -72,8 +77,7 @@
   gap: 20rpx;
   margin-top: 68rpx;
   margin-bottom: 28rpx;
-  margin-left: -48rpx;
-  margin-right: -48rpx;
+  padding: 0 16rpx;
 }
 .btn-phone {
   width: 100%; height: 108rpx;
@@ -99,7 +103,7 @@
 .wechat-text { font-size: 24rpx; color: #fff; font-weight: bold; }
 .skip-link {
   text-align: center; font-size: 26rpx; color: #b0a898; letter-spacing: 2rpx;
-  margin-top: 40rpx; margin-bottom: 28rpx;
+  margin-top: 40rpx; margin-bottom: 28rpx; padding: 0 48rpx;
 }
 
 /* 协议 */
@@ -108,6 +112,7 @@
   align-items: flex-start; gap: 8rpx;
   margin-top: auto;
   padding-top: 60rpx;
+  padding-left: 48rpx; padding-right: 48rpx;
 }
 .agree-text { font-size: 20rpx; color: #b0a898; line-height: 1.7; flex: 1; }
 .agree-link { color: #8f8779; }
