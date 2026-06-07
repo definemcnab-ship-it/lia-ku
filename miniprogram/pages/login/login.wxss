@@ -72,24 +72,24 @@
   gap: 20rpx;
   margin-top: 68rpx;
   margin-bottom: 28rpx;
-  margin-left: -24rpx;
-  margin-right: -24rpx;
+  margin-left: -48rpx;
+  margin-right: -48rpx;
 }
 .btn-phone {
-  width: 100%; height: 168rpx;
+  width: 100%; height: 108rpx;
   background: #2b2720; color: #f7f5f0;
-  border-radius: 56rpx; font-size: 32rpx;
+  border-radius: 54rpx; font-size: 32rpx;
   letter-spacing: 2rpx;
   display: flex; align-items: center; justify-content: center; gap: 20rpx;
-  border: none;
+  border: none; white-space: nowrap;
 }
 .btn-wechat {
-  width: 100%; height: 168rpx;
+  width: 100%; height: 108rpx;
   background: #ffffff; color: #3f3a32;
-  border-radius: 56rpx; font-size: 32rpx;
+  border-radius: 54rpx; font-size: 32rpx;
   letter-spacing: 2rpx;
   display: flex; align-items: center; justify-content: center; gap: 20rpx;
-  border: 1.5rpx solid #dcd6cc;
+  border: 1.5rpx solid #dcd6cc; white-space: nowrap;
 }
 .wechat-logo {
   width: 44rpx; height: 44rpx; border-radius: 50%;
