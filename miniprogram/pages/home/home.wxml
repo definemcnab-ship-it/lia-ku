@@ -28,6 +28,31 @@
     </view>
   </view>
 
+  <!-- Banner 轮播 -->
+  <swiper class="banner-swiper" circular autoplay interval="3000"
+    current="{{bannerIdx}}" bindchange="onBannerChange">
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <view class="banner-slide banner-bg{{index+1}}" bindtap="navTo" data-url="{{item.to}}">
+        <view class="banner-deco-circle"></view>
+        <view class="banner-content">
+          <view class="banner-text">
+            <text class="banner-tag">{{item.label}}</text>
+            <text class="banner-title font-headline">{{item.title}}</text>
+            <text class="banner-sub">{{item.sub}}</text>
+            <text class="banner-cta">{{item.cta}} →</text>
+          </view>
+          <view class="banner-icon-wrap">
+            <mp-icon name="{{item.icon}}" size="44" color="{{item.iconColor}}" />
+          </view>
+        </view>
+        <view class="banner-dots">
+          <view wx:for="{{banners}}" wx:for-item="dot" wx:key="index"
+            class="dot {{index === bannerIdx ? 'dot-active' : ''}}"></view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
   <!-- 快捷入口 -->
   <view class="shortcuts-row">
     <view class="shortcut" wx:for="{{shortcuts}}" wx:key="to"
