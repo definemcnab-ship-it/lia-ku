@@ -62,6 +62,7 @@
   color: #b0a898;
   letter-spacing: 4rpx;
   margin-bottom: 36rpx;
+  text-align: center;
 }
 
 /* 按钮组 */
