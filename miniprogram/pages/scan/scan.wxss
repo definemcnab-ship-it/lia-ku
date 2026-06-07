@@ -119,29 +119,55 @@ page { background: #f7f5f0; }
   gap: 40rpx;
   margin-bottom: 40rpx;
 }
-.score-circle {
-  width: 140rpx;
-  height: 140rpx;
+.score-circle-outer {
+  width: 156rpx;
+  height: 156rpx;
+  border-radius: 50%;
   background: linear-gradient(135deg, #c08a7d, #d4a090);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 32rpx rgba(192,138,125,0.35);
+}
+.score-circle {
+  width: 128rpx;
+  height: 128rpx;
+  background: #fff7f5;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 .score-number {
-  font-size: 56rpx;
+  font-size: 52rpx;
   font-weight: 800;
-  color: #ffffff;
+  color: #c08a7d;
   line-height: 1;
 }
 .score-unit {
+  font-size: 20rpx;
+  color: #8f8779;
+}
+.score-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+  background: #fdf0ed;
+  border-radius: 20rpx;
+  padding: 8rpx 20rpx;
+  align-self: flex-start;
+}
+.score-badge-text {
   font-size: 22rpx;
-  color: rgba(255,255,255,0.85);
+  color: #c08a7d;
 }
 .score-label-wrap {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .score-title {
   display: block;
@@ -178,10 +204,22 @@ page { background: #f7f5f0; }
   display: flex;
   align-items: center;
   gap: 16rpx;
-  padding: 16rpx 0;
+  padding: 20rpx 24rpx;
+  background: #fdf6f5;
+  border-radius: 20rpx;
+  margin-bottom: 12rpx;
+  border-left: 6rpx solid #c08a7d;
+}
+.issue-item:last-child { margin-bottom: 0; }
+.issue-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #c08a7d;
+  flex-shrink: 0;
 }
 .issue-text {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: #2b2720;
 }
 
@@ -190,10 +228,13 @@ page { background: #f7f5f0; }
   align-items: center;
   gap: 16rpx;
   padding: 16rpx 0;
+  border-bottom: 1rpx solid #f4f1ec;
 }
+.suggestion-item:last-child { border-bottom: none; }
 .suggestion-text {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: #2b2720;
+  flex: 1;
 }
 
 .reset-btn-wrap {

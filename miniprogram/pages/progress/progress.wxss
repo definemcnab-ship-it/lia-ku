@@ -98,7 +98,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 8rpx;
-  height: 220rpx;
+  height: 300rpx;
 }
 .bar-col {
   display: flex;
@@ -233,4 +233,51 @@
 .status-pending {
   color: #8f8779;
   background: #f4f1ec;
+}
+
+/* ── 日历 ── */
+.calendar-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 40rpx 32rpx;
+}
+.cal-week {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.cal-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+}
+.cal-day-label {
+  font-size: 20rpx;
+  color: #8f8779;
+}
+.cal-dot-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cal-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+}
+.cal-dot-on {
+  background: #c08a7d;
+}
+.cal-dot-off {
+  background: #ece8e3;
+}
+.cal-date-num {
+  font-size: 24rpx;
+  color: #b8b0a4;
+}
+.cal-date-on {
+  color: #c08a7d;
+  font-weight: 600;
 }

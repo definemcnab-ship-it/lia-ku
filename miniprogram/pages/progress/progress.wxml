@@ -87,5 +87,25 @@
     </view>
   </view>
 
+  <!-- 本月打卡日历 -->
+  <view class="section">
+    <text class="section-title font-headline">本月打卡日历</text>
+    <view class="calendar-card">
+      <view class="cal-week">
+        <view
+          wx:for="{{calendarDays}}"
+          wx:key="date"
+          class="cal-day"
+        >
+          <text class="cal-day-label">{{item.label}}</text>
+          <view class="cal-dot-wrap">
+            <view class="cal-dot {{item.checked ? 'cal-dot-on' : 'cal-dot-off'}}"></view>
+          </view>
+          <text class="cal-date-num {{item.checked ? 'cal-date-on' : ''}}">{{item.num}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <view style="height: 140rpx"></view>
 </view>
