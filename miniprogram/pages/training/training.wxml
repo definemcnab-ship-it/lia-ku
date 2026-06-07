@@ -1,9 +1,78 @@
 <view class="page">
-  <view class="navbar" bindtap="navBack">
-    <text class="back-icon">‹</text>
-    <text class="nav-title">training</text>
+
+  <!-- 页面 Header -->
+  <view class="page-header">
+    <view class="header-text">
+      <text class="header-title font-headline">训练课程</text>
+      <text class="header-subtitle">专业矫正动作库</text>
+    </view>
+    <view class="header-icon-wrap">
+      <mp-icon name="fitness_center" size="24" color="#8f8779" />
+    </view>
   </view>
-  <view class="placeholder">
-    <text class="placeholder-text">training 页面（待迁移）</text>
+
+  <!-- 筛选 Tabs -->
+  <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="filter-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="index"
+        class="filter-tab {{activeFilter === index ? 'filter-tab-active' : ''}}"
+        bindtap="switchFilter"
+        data-idx="{{index}}"
+      >
+        <text class="filter-tab-text {{activeFilter === index ? 'filter-tab-text-active' : ''}}">{{item}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 课程卡片列表 -->
+  <view class="course-list">
+    <view
+      wx:for="{{courses}}"
+      wx:key="id"
+      class="course-card"
+    >
+      <!-- 渐变 Banner -->
+      <view class="course-banner course-banner-bg{{item.bg}}">
+        <view class="banner-deco-circle"></view>
+        <view class="course-banner-icon-wrap">
+          <mp-icon name="{{item.icon}}" size="44" color="rgba(255,255,255,0.9)" />
+        </view>
+        <view class="difficulty-badge difficulty-badge-{{item.level === '初级' ? 'beginner' : 'intermediate'}}">
+          <text class="difficulty-badge-text">{{item.level}}</text>
+        </view>
+      </view>
+
+      <!-- 卡片内容 -->
+      <view class="course-body">
+        <text class="course-name font-headline">{{item.name}}</text>
+        <text class="course-desc">{{item.desc}}</text>
+
+        <!-- 元信息标签 -->
+        <view class="course-meta">
+          <view class="meta-tag">
+            <mp-icon name="schedule" size="14" color="#8f8779" />
+            <text class="meta-tag-text">{{item.duration}}</text>
+          </view>
+          <view class="meta-tag">
+            <mp-icon name="format_list_numbered" size="14" color="#8f8779" />
+            <text class="meta-tag-text">{{item.moves}}个动作</text>
+          </view>
+          <view class="meta-tag">
+            <mp-icon name="signal_cellular_alt" size="14" color="#8f8779" />
+            <text class="meta-tag-text">{{item.level}}</text>
+          </view>
+        </view>
+
+        <!-- 开始按钮 -->
+        <view class="start-btn" bindtap="startCourse" data-id="{{item.id}}">
+          <mp-icon name="play_arrow" size="20" color="#f7f5f0" />
+          <text class="start-btn-text">开始训练</text>
+        </view>
+      </view>
+    </view>
   </view>
+
+  <view style="height: 140rpx"></view>
 </view>
