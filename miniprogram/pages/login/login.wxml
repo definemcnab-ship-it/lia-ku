@@ -31,13 +31,7 @@
       <checkbox-group bindchange="onAgreeChange">
         <checkbox value="agreed" checked="{{agreed}}" color="#8f8779" style="transform:scale(0.75)" />
       </checkbox-group>
-      <text class="agree-text">
-        我已阅读并同意
-        <text class="agree-link" bindtap="openDoc" data-doc="user">《用户协议》</text>
-        <text class="agree-link" bindtap="openDoc" data-doc="privacy">《隐私政策》</text>
-        与
-        <text class="agree-link" bindtap="openDoc" data-doc="data">《数据采集协议》</text>
-      </text>
+      <text class="agree-text">我已阅读并同意<text class="agree-link" bindtap="openDoc" data-doc="user">《用户协议》</text><text class="agree-link" bindtap="openDoc" data-doc="privacy">《隐私政策》</text>与<text class="agree-link" bindtap="openDoc" data-doc="data">《数据采集协议》</text></text>
     </view>
   </view>
 
