@@ -1,99 +1,58 @@
 <view class="page">
-  <!-- 顶部导航 -->
-  <view class="navbar" style="padding-top: {{statusBarHeight}}px">
-    <view class="navbar-inner">
-      <view class="nav-left" bindtap="goProfile">
-        <view class="avatar">
-          <mp-icon name="person" size="22" color="#8f8779" />
-        </view>
-        <text class="brand font-headline">Slique</text>
+
+  <!-- Hero 卡片：问候 + 体态分 -->
+  <view class="hero-card" bindtap="navTo" data-url="/pages/report/report">
+    <view class="hero-top">
+      <view class="hero-avatar" bindtap="goProfile">
+        <mp-icon name="person" size="22" color="#8f8779" />
       </view>
-      <view class="nav-right">
-        <mp-icon name="notifications" size="26" color="#8f8779" />
+      <text class="hero-brand font-headline">Slique</text>
+      <view class="hero-notify">
+        <mp-icon name="notifications" size="22" color="#8f8779" />
+      </view>
+    </view>
+    <view class="hero-body">
+      <view class="hero-text">
+        <text class="hero-sub">SLIQUE · 优雅体态</text>
+        <text class="hero-greeting font-headline">{{greetingText}}</text>
+        <text class="hero-hint">今天也要保持优雅体态哦</text>
+      </view>
+      <view class="hero-score-wrap">
+        <view class="hero-ring">
+          <text class="hero-score-num font-headline">{{postureScore}}</text>
+          <text class="hero-score-unit">分</text>
+        </view>
+        <text class="hero-score-label">体态评分</text>
+        <text class="hero-score-diff">{{diffText}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 欢迎语 -->
-  <view class="greeting">
-    <text class="greeting-sub">SLIQUE · 优雅体态</text>
-    <text class="greeting-title font-headline">{{greetingText}}</text>
-    <text class="greeting-body">今天也要保持优雅体态哦 ✨</text>
-  </view>
-
-  <!-- Banner 轮播（全宽铺满） -->
-  <swiper class="banner-swiper" circular autoplay interval="3000"
-    current="{{bannerIdx}}" bindchange="onBannerChange">
-    <swiper-item wx:for="{{banners}}" wx:key="id">
-      <view class="banner-slide banner-bg{{index+1}}" bindtap="navTo" data-url="{{item.to}}">
-        <view class="banner-deco-circle"></view>
-        <view class="banner-content">
-          <view class="banner-text">
-            <text class="banner-tag">{{item.label}}</text>
-            <text class="banner-title font-headline">{{item.title}}</text>
-            <text class="banner-sub">{{item.sub}}</text>
-            <text class="banner-cta">{{item.cta}} →</text>
-          </view>
-          <view class="banner-icon-wrap">
-            <mp-icon name="{{item.icon}}" size="44" color="{{item.iconColor}}" />
-          </view>
-        </view>
-        <view class="banner-dots">
-          <view wx:for="{{banners}}" wx:for-item="dot" wx:key="index"
-            class="dot {{index === bannerIdx ? 'dot-active' : ''}}"></view>
-        </view>
-      </view>
-    </swiper-item>
-  </swiper>
-
   <!-- 快捷入口 -->
-  <view class="shortcuts">
+  <view class="shortcuts-row">
     <view class="shortcut" wx:for="{{shortcuts}}" wx:key="to"
       bindtap="navTo" data-url="{{item.to}}">
       <view class="shortcut-icon-wrap">
-        <mp-icon name="{{item.icon}}" size="26" color="#8f8779" />
+        <mp-icon name="{{item.icon}}" size="24" color="#8f8779" />
       </view>
       <text class="shortcut-label">{{item.label}}</text>
     </view>
   </view>
 
-  <!-- 体态分概览 -->
-  <view class="section">
-    <view class="score-card shadow-soft" bindtap="navTo" data-url="/pages/report/report">
-      <view class="score-left">
-        <text class="score-label-text">当前体态分</text>
-        <view class="score-num-row">
-          <text class="score-num font-headline">{{postureScore}}</text>
-          <text class="score-denom">/ 100</text>
-        </view>
-        <view class="score-diff">
-          <mp-icon name="trending_up" size="15" color="#c08a7d" />
-          <text class="score-diff-text">{{diffText}}</text>
-        </view>
-      </view>
-      <view class="score-ring-wrap">
-        <view class="ring-outer">
-          <mp-icon name="accessibility_new" size="30" color="#8f8779" />
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 今日训练计划 -->
+  <!-- 今日训练 -->
   <view class="section">
     <view class="section-header">
-      <text class="section-title font-headline">今日训练计划</text>
-      <text class="section-more" bindtap="navTo" data-url="/pages/training/training">查看全部</text>
+      <text class="section-title font-headline">今日训练</text>
+      <text class="section-more" bindtap="navTo" data-url="/pages/training/training">查看全部 →</text>
     </view>
-    <view class="training-card shadow-soft" bindtap="navTo" data-url="/pages/training/training">
+    <view class="training-card" bindtap="navTo" data-url="/pages/training/training">
       <view class="training-visual">
         <view class="training-icon-ring">
-          <view class="training-icon-pulse"></view>
           <mp-icon name="self_improvement" size="40" color="#8f8779" />
         </view>
         <view class="training-overlay">
           <text class="training-course-name font-headline">天鹅颈塑形课</text>
-          <text class="training-course-sub">8周挺拔如模特 · 15分钟 · 4个动作</text>
+          <text class="training-course-sub">15分钟 · 4个动作 · 8周挺拔如模特</text>
         </view>
       </view>
       <view class="training-footer">
@@ -101,7 +60,7 @@
           <view class="progress-bar">
             <view class="progress-fill" style="width: {{trainedToday ? '100' : '0'}}%"></view>
           </view>
-          <text class="progress-text">{{trainedToday ? '今日已完成 ✓' : '今日进度 0% · 待开始'}}</text>
+          <text class="progress-text">{{trainedToday ? '今日已完成 ✓' : '今日进度 0%  · 待开始'}}</text>
         </view>
         <view class="play-btn" catchtap="startTraining">
           <mp-icon name="{{trainedToday ? 'check_circle' : 'play_arrow'}}" size="24" color="#f7f5f0" />
@@ -110,13 +69,32 @@
     </view>
   </view>
 
-  <!-- 真实蜕变故事 -->
+  <!-- 功能入口网格 -->
   <view class="section">
-    <text class="section-title font-headline">真实蜕变故事</text>
+    <view class="section-header">
+      <text class="section-title font-headline">探索功能</text>
+    </view>
+    <view class="categories-grid">
+      <view class="cat-card cat-bg{{index+1}}" wx:for="{{categories}}" wx:key="to"
+        bindtap="navTo" data-url="{{item.to}}">
+        <view class="cat-icon-wrap">
+          <mp-icon name="{{item.icon}}" size="20" color="#3f3a32" />
+        </view>
+        <text class="cat-title">{{item.title}}</text>
+        <text class="cat-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 蜕变故事 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title font-headline">真实蜕变故事</text>
+    </view>
     <view class="stories-grid">
       <view wx:for="{{stories}}" wx:key="id" class="story-card story-bg{{index+1}}">
         <view class="story-icon-wrap">
-          <mp-icon name="{{item.icon}}" size="28" color="rgba(255,255,255,0.8)" />
+          <mp-icon name="{{item.icon}}" size="26" color="rgba(255,255,255,0.85)" />
         </view>
         <text class="story-title font-headline">{{item.title}}</text>
         <text class="story-sub">{{item.sub}}</text>
@@ -125,26 +103,5 @@
     </view>
   </view>
 
-  <!-- 探索功能 -->
-  <view class="section">
-    <text class="section-title font-headline">探索功能</text>
-    <view class="categories-grid">
-      <view class="cat-card cat-bg{{index+1}}" wx:for="{{categories}}" wx:key="to"
-        bindtap="navTo" data-url="{{item.to}}">
-        <view class="cat-top">
-          <view class="cat-icon-wrap">
-            <mp-icon name="{{item.icon}}" size="18" color="#3f3a32" />
-          </view>
-          <mp-icon name="trending_up" size="14" color="rgba(43,39,32,0.2)" />
-        </view>
-        <view class="cat-bottom">
-          <text class="cat-title">{{item.title}}</text>
-          <text class="cat-desc">{{item.desc}}</text>
-          <text class="cat-cta">查看 →</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <view style="height: 120rpx"></view>
+  <view style="height: 140rpx"></view>
 </view>

@@ -1,202 +1,139 @@
 .page {
-  background: #fbfaf8;
+  background: #f7f5f0;
   min-height: 100vh;
+  padding: 40rpx 40rpx 0;
+  box-sizing: border-box;
 }
 
-/* 导航栏 */
-.navbar { background: #ffffff; position: sticky; top: 0; z-index: 50; }
-.navbar-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12rpx 48rpx 20rpx;
+/* ── Hero 卡片 ── */
+.hero-card {
+  background: #ffffff;
+  border-radius: 48rpx;
+  padding: 40rpx 44rpx 48rpx;
+  margin-bottom: 28rpx;
 }
-.nav-left { display: flex; align-items: center; gap: 20rpx; }
-.avatar {
-  width: 72rpx; height: 72rpx; border-radius: 50%;
-  background: #ece8e0; display: flex; align-items: center; justify-content: center;
+.hero-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
 }
-.avatar-icon { font-size: 36rpx; }
-.brand { font-family: "Songti SC", serif; font-size: 44rpx; color: #8f8779; }
-.notify-icon { font-size: 48rpx; }
-
-/* 欢迎语 */
-.greeting { padding: 8rpx 48rpx 24rpx; }
-.greeting-sub { font-size: 22rpx; color: #c08a7d; letter-spacing: 4rpx; display: block; }
-.greeting-title { font-size: 38rpx; color: #2b2720; display: block; margin-top: 4rpx; }
-.greeting-body { font-size: 24rpx; color: #6e675b; display: block; margin-top: 6rpx; }
-
-/* Banner */
-.banner-swiper { width: 100%; height: 480rpx; }
-.banner-slide {
-  width: 100%; height: 100%;
-  display: flex; align-items: center;
-  padding: 0 56rpx;
-  position: relative; overflow: hidden;
-}
-.banner-bg1 { background: linear-gradient(135deg, #e9e2d4, #d8cfbf); }
-.banner-bg2 { background: linear-gradient(135deg, #dfe3dd, #c8d0c8); }
-.banner-bg3 { background: linear-gradient(135deg, #ebe6d6, #d8d0b8); }
-
-.banner-deco-circle {
-  position: absolute; right: -60rpx; top: 50%;
-  transform: translateY(-50%);
-  width: 400rpx; height: 400rpx; border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-}
-.banner-content { display: flex; align-items: center; gap: 32rpx; width: 100%; }
-.banner-text { flex: 1; }
-.banner-tag {
-  display: inline-block; font-size: 22rpx; color: rgba(43,39,32,0.6);
-  background: rgba(255,255,255,0.5); padding: 8rpx 20rpx; border-radius: 30rpx;
-  margin-bottom: 20rpx;
-}
-.banner-title {
-  display: block; font-size: 48rpx; color: #2b2720; font-weight: 300;
-  line-height: 1.2; margin-bottom: 12rpx;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.banner-sub { display: block; font-size: 26rpx; color: rgba(43,39,32,0.7); margin-bottom: 24rpx; }
-.banner-cta { display: block; font-size: 26rpx; color: #c08a7d; }
-.banner-icon-wrap {
-  width: 160rpx; height: 160rpx; border-radius: 50%;
-  background: rgba(255,255,255,0.55);
+.hero-avatar {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #ece8e0;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  margin-right: 16rpx;
 }
-.banner-icon-emoji { font-size: 80rpx; }
-
-.banner-dots {
-  position: absolute; bottom: 24rpx; left: 56rpx;
-  display: flex; gap: 12rpx;
+.hero-brand {
+  font-size: 40rpx; color: #8f8779; flex: 1;
 }
-.dot { width: 12rpx; height: 12rpx; border-radius: 50%; background: rgba(143,135,121,0.4); }
-.dot-active { width: 32rpx; border-radius: 6rpx; background: #8f8779; }
+.hero-notify {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #f4f1ec;
+  display: flex; align-items: center; justify-content: center;
+}
 
-/* 快捷入口 */
-.shortcuts {
+.hero-body {
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.hero-text { flex: 1; }
+.hero-sub {
+  display: block; font-size: 20rpx; color: #c08a7d; letter-spacing: 4rpx; margin-bottom: 10rpx;
+}
+.hero-greeting {
+  display: block; font-size: 52rpx; color: #2b2720; font-weight: 300; margin-bottom: 10rpx; line-height: 1.2;
+}
+.hero-hint {
+  display: block; font-size: 24rpx; color: #9e9688;
+}
+
+.hero-score-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8rpx; flex-shrink: 0;
+}
+.hero-ring {
+  width: 140rpx; height: 140rpx; border-radius: 50%;
+  border: 10rpx solid #ece8e0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.hero-score-num {
+  font-size: 64rpx; color: #2b2720; line-height: 1; font-weight: 300;
+}
+.hero-score-unit { font-size: 20rpx; color: #9e9688; }
+.hero-score-label { font-size: 20rpx; color: #9e9688; letter-spacing: 2rpx; }
+.hero-score-diff { font-size: 20rpx; color: #c08a7d; }
+
+/* ── 快捷入口 ── */
+.shortcuts-row {
   display: flex; justify-content: space-between;
-  padding: 32rpx 48rpx 8rpx;
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 32rpx 24rpx;
+  margin-bottom: 28rpx;
 }
 .shortcut {
   display: flex; flex-direction: column; align-items: center; gap: 12rpx;
 }
 .shortcut-icon-wrap {
-  width: 104rpx; height: 104rpx; border-radius: 50%;
+  width: 88rpx; height: 88rpx; border-radius: 50%;
   background: #f4f1ec;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 1px 2px rgba(43,39,32,0.04), 0 8px 24px rgba(43,39,32,0.06);
 }
-.shortcut-emoji { font-size: 48rpx; }
 .shortcut-label { font-size: 22rpx; color: #6e675b; }
 
-/* 通用section */
-.section { padding: 40rpx 48rpx 0; }
-.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24rpx; }
-.section-title { font-size: 42rpx; color: #2b2720; font-weight: 300; display: block; margin-bottom: 24rpx; }
-.section-more { font-size: 28rpx; color: #8f8779; }
-
-/* 体态分卡 */
-.score-card {
-  background: #ffffff; border-radius: 56rpx; padding: 48rpx;
-  display: flex; align-items: center; justify-content: space-between;
+/* ── 通用 section ── */
+.section { margin-bottom: 28rpx; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20rpx;
 }
-.score-label-text { font-size: 22rpx; color: #9e9688; letter-spacing: 3rpx; display: block; margin-bottom: 12rpx; }
-.score-num-row { display: flex; align-items: baseline; gap: 8rpx; }
-.score-num { font-size: 88rpx; color: #2b2720; line-height: 1; font-weight: 300; }
-.score-denom { font-size: 26rpx; color: #9e9688; }
-.score-diff { display: flex; align-items: center; gap: 8rpx; margin-top: 16rpx; }
-.score-diff-icon { font-size: 28rpx; color: #c08a7d; }
-.score-diff-text { font-size: 24rpx; color: #c08a7d; }
-.ring-outer {
-  width: 160rpx; height: 160rpx; border-radius: 50%;
-  border: 12rpx solid #ece8e0;
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
+.section-title {
+  font-size: 40rpx; color: #2b2720; font-weight: 300;
 }
-.ring-icon { font-size: 64rpx; }
+.section-more { font-size: 26rpx; color: #8f8779; }
 
-/* 训练卡 */
+/* ── 训练卡 ── */
 .training-card {
-  background: #ffffff; border-radius: 56rpx; overflow: hidden;
+  background: #ffffff; border-radius: 40rpx; overflow: hidden;
 }
 .training-visual {
-  height: 320rpx; width: 100%;
+  height: 300rpx; width: 100%;
   background: linear-gradient(135deg, #ece8e0, #a89f90);
   display: flex; align-items: center; justify-content: center;
   position: relative;
 }
 .training-icon-ring {
-  width: 160rpx; height: 160rpx; border-radius: 50%;
+  width: 140rpx; height: 140rpx; border-radius: 50%;
   background: rgba(255,255,255,0.2);
   display: flex; align-items: center; justify-content: center;
 }
-.training-icon-emoji { font-size: 80rpx; }
 .training-overlay {
-  position: absolute; bottom: 32rpx; left: 40rpx; right: 40rpx;
+  position: absolute; bottom: 28rpx; left: 36rpx; right: 36rpx;
 }
-.training-course-name { display: block; font-size: 44rpx; color: #ffffff; }
-.training-course-sub { display: block; font-size: 26rpx; color: rgba(255,255,255,0.8); margin-top: 8rpx; }
+.training-course-name { display: block; font-size: 42rpx; color: #ffffff; }
+.training-course-sub { display: block; font-size: 24rpx; color: rgba(255,255,255,0.75); margin-top: 8rpx; }
 .training-footer {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 32rpx 40rpx;
+  padding: 28rpx 36rpx;
 }
-.training-progress { flex: 1; margin-right: 32rpx; }
+.training-progress { flex: 1; margin-right: 28rpx; }
 .progress-bar {
   height: 8rpx; background: #f4f1ec; border-radius: 4rpx; overflow: hidden; margin-bottom: 12rpx;
 }
 .progress-fill { height: 100%; background: #a89f90; border-radius: 4rpx; transition: width 0.7s; }
 .progress-text { font-size: 24rpx; color: #6e675b; }
 .play-btn {
-  width: 88rpx; height: 88rpx; border-radius: 50%;
-  background: #8f8779;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(143,135,121,0.3);
-}
-.play-icon { font-size: 40rpx; color: #f7f5f0; }
-
-/* 蜕变故事网格 */
-.stories-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24rpx;
-}
-.story-card {
-  height: 280rpx; border-radius: 48rpx; overflow: hidden;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 12rpx; padding: 32rpx 24rpx; position: relative;
-}
-.story-bg1 { background: linear-gradient(135deg, #c8b89a, #a89070); }
-.story-bg2 { background: linear-gradient(135deg, #a5b5a0, #7d9878); }
-.story-bg3 { background: linear-gradient(135deg, #b0a8c8, #8878a8); }
-.story-bg4 { background: linear-gradient(135deg, #c0a898, #9a7868); }
-.story-icon-wrap {
-  width: 96rpx; height: 96rpx; border-radius: 50%;
-  background: rgba(255,255,255,0.3);
+  width: 80rpx; height: 80rpx; border-radius: 50%;
+  background: #2b2720;
   display: flex; align-items: center; justify-content: center;
 }
-.story-title {
-  display: block; font-size: 28rpx; color: #ffffff;
-  text-align: center; line-height: 1.3;
-}
-.story-sub {
-  display: block; font-size: 22rpx; color: rgba(255,255,255,0.7);
-  text-align: center;
-}
-.story-tag {
-  display: block; font-size: 20rpx; color: rgba(255,255,255,0.6);
-  background: rgba(0,0,0,0.2); padding: 4rpx 16rpx; border-radius: 20rpx;
-  position: absolute; bottom: 20rpx;
-}
 
-/* 功能卡网格 */
+/* ── 功能网格 ── */
 .categories-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24rpx;
+  gap: 20rpx;
 }
 .cat-card {
-  border-radius: 48rpx; padding: 36rpx;
-  height: 240rpx;
+  border-radius: 40rpx; padding: 32rpx;
+  height: 220rpx;
   display: flex; flex-direction: column; justify-content: space-between;
 }
 .cat-bg1 { background: #ede7df; }
@@ -206,11 +143,43 @@
 .cat-bg5 { background: #e8e6ee; }
 .cat-bg6 { background: #e3e8ec; }
 .cat-icon-wrap {
-  width: 72rpx; height: 72rpx; border-radius: 50%;
-  background: rgba(255,255,255,0.7);
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.65);
   display: flex; align-items: center; justify-content: center;
 }
-.cat-emoji { font-size: 36rpx; }
 .cat-title { display: block; font-size: 28rpx; color: #2b2720; font-weight: 600; }
-.cat-desc { display: block; font-size: 22rpx; color: rgba(43,39,32,0.55); margin-top: 4rpx; }
-.cat-cta { display: block; font-size: 22rpx; color: #c08a7d; margin-top: 12rpx; }
+.cat-desc { display: block; font-size: 22rpx; color: rgba(43,39,32,0.5); margin-top: 4rpx; }
+
+/* ── 故事网格 ── */
+.stories-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+.story-card {
+  height: 260rpx; border-radius: 40rpx; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12rpx; padding: 28rpx 20rpx; position: relative;
+}
+.story-bg1 { background: linear-gradient(135deg, #c8b89a, #a89070); }
+.story-bg2 { background: linear-gradient(135deg, #a5b5a0, #7d9878); }
+.story-bg3 { background: linear-gradient(135deg, #b0a8c8, #8878a8); }
+.story-bg4 { background: linear-gradient(135deg, #c0a898, #9a7868); }
+.story-icon-wrap {
+  width: 88rpx; height: 88rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+}
+.story-title {
+  display: block; font-size: 26rpx; color: #ffffff;
+  text-align: center; line-height: 1.3;
+}
+.story-sub {
+  display: block; font-size: 20rpx; color: rgba(255,255,255,0.7); text-align: center;
+}
+.story-tag {
+  display: block; font-size: 18rpx; color: rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.18); padding: 4rpx 16rpx; border-radius: 20rpx;
+  position: absolute; bottom: 18rpx;
+}
