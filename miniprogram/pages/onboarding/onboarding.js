@@ -25,7 +25,7 @@ Page({
       this.setData({ step: step + 1 })
     } else {
       this.savePrefs()
-      wx.navigateTo({ url: '/pages/scan/scan' })
+      wx.switchTab({ url: '/pages/home/home' })
     }
   },
 

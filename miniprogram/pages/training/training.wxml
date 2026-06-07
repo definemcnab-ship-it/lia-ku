@@ -52,15 +52,15 @@
         <!-- 元信息标签 -->
         <view class="course-meta">
           <view class="meta-tag">
-            <mp-icon name="schedule" size="14" color="#8f8779" />
+            <mp-icon name="calendar_month" size="14" color="#8f8779" />
             <text class="meta-tag-text">{{item.duration}}</text>
           </view>
           <view class="meta-tag">
-            <mp-icon name="format_list_numbered" size="14" color="#8f8779" />
+            <mp-icon name="analytics" size="14" color="#8f8779" />
             <text class="meta-tag-text">{{item.moves}}个动作</text>
           </view>
           <view class="meta-tag">
-            <mp-icon name="signal_cellular_alt" size="14" color="#8f8779" />
+            <mp-icon name="trending_up" size="14" color="#8f8779" />
             <text class="meta-tag-text">{{item.level}}</text>
           </view>
         </view>
