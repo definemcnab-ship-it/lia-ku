@@ -15,14 +15,14 @@
     <text class="subtitle">科学矫正 · 8 周挺拔如模特</text>
 
     <view class="buttons">
-      <button class="btn-phone" bindtap="openPhoneSheet">
+      <view class="btn-phone" bindtap="openPhoneSheet">
         <mp-icon name="phone_wave" size="26" color="#ffffff" />
         <text>手机号登录 / 注册</text>
-      </button>
-      <button class="btn-wechat" bindtap="wechatLogin">
+      </view>
+      <view class="btn-wechat" bindtap="wechatLogin">
         <mp-icon name="wechat_bubble" size="26" color="#07C160" />
         <text>微信一键登录</text>
-      </button>
+      </view>
     </view>
 
     <text class="skip-link" bindtap="skipLogin">暂不登录，先体验 →</text>
@@ -55,9 +55,9 @@
           {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
         </text>
       </view>
-      <button class="btn-phone {{canSubmit ? '' : 'disabled'}}" bindtap="doLogin">
-        登录 / 注册
-      </button>
+      <view class="btn-phone {{canSubmit ? '' : 'disabled'}}" bindtap="doLogin">
+        <text>登录 / 注册</text>
+      </view>
     </view>
   </view>
 </view>
