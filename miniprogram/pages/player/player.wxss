@@ -1,6 +1,260 @@
-.page { min-height: 100vh; background: #fbfaf8; }
-.navbar { display: flex; align-items: center; gap: 16rpx; padding: 80rpx 48rpx 32rpx; background: #fff; }
-.back-icon { font-size: 60rpx; color: #8f8779; line-height: 1; }
-.nav-title { font-size: 36rpx; color: #2b2720; }
-.placeholder { display: flex; align-items: center; justify-content: center; height: 60vh; }
-.placeholder-text { font-size: 32rpx; color: #9e9688; }
+/* ── Page ── */
+.page {
+  min-height: 100vh;
+  background: #f7f5f0;
+  padding-bottom: 80rpx;
+  box-sizing: border-box;
+}
+
+/* ── Navbar ── */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 80rpx 48rpx 24rpx;
+}
+.back-icon {
+  font-size: 64rpx;
+  color: #8f8779;
+  line-height: 1;
+}
+.nav-title {
+  font-size: 32rpx;
+  color: #8f8779;
+}
+
+/* ── Course title ── */
+.course-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2b2720;
+  padding: 0 48rpx 32rpx;
+  letter-spacing: 1rpx;
+}
+
+/* ── Visual card ── */
+.visual-card {
+  margin: 0 48rpx;
+  height: 380rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #ece8e0, #a89f90);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.visual-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160rpx;
+  height: 160rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 80rpx;
+  margin-bottom: 16rpx;
+}
+.visual-name-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24rpx 32rpx;
+  background: linear-gradient(to top, rgba(43, 39, 32, 0.55), transparent);
+  border-radius: 0 0 40rpx 40rpx;
+}
+.visual-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1rpx;
+}
+
+/* ── Progress dots ── */
+.dots-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16rpx;
+  margin: 36rpx 0 8rpx;
+}
+.dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 8rpx;
+  background: #d5cfc6;
+  transition: background 0.3s;
+}
+.dot-active {
+  background: #c08a7d;
+  width: 40rpx;
+}
+
+/* ── Timer ── */
+.timer-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 20rpx 0 8rpx;
+  gap: 8rpx;
+}
+.timer-num {
+  font-size: 120rpx;
+  font-weight: 700;
+  color: #2b2720;
+  line-height: 1;
+}
+.timer-unit {
+  font-size: 36rpx;
+  color: #8f8779;
+  padding-bottom: 20rpx;
+}
+
+/* ── Move description ── */
+.move-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #8f8779;
+  font-style: italic;
+  text-align: center;
+  padding: 0 72rpx 40rpx;
+  line-height: 1.6;
+}
+
+/* ── Controls ── */
+.controls-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 48rpx;
+  margin-bottom: 48rpx;
+}
+.ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.ctrl-side {
+  width: 96rpx;
+  height: 96rpx;
+  background: #fff;
+  box-shadow: 0 4rpx 20rpx rgba(43, 39, 32, 0.08);
+}
+.ctrl-play {
+  width: 136rpx;
+  height: 136rpx;
+  background: #2b2720;
+  box-shadow: 0 8rpx 32rpx rgba(43, 39, 32, 0.25);
+}
+
+/* ── Step list ── */
+.step-list {
+  margin: 0 48rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(43, 39, 32, 0.06);
+}
+.step-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 28rpx 36rpx;
+  border-bottom: 1rpx solid #f0ede8;
+  gap: 24rpx;
+}
+.step-row:last-child { border-bottom: none; }
+.step-num {
+  font-size: 28rpx;
+  font-weight: 700;
+  width: 40rpx;
+  text-align: center;
+}
+.step-info { flex: 1; }
+.step-name {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+.step-dur {
+  font-size: 26rpx;
+}
+.step-active .step-num,
+.step-active .step-name {
+  color: #c08a7d;
+}
+.step-active .step-dur { color: #c08a7d; }
+.step-active { background: #fdf8f7; }
+.step-muted .step-num,
+.step-muted .step-name,
+.step-muted .step-dur {
+  color: #b8b2a8;
+}
+
+/* ── Completion overlay ── */
+.done-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(43, 39, 32, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.done-card {
+  background: #fff;
+  border-radius: 40rpx;
+  margin: 0 60rpx;
+  padding: 64rpx 48rpx 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 16rpx 64rpx rgba(43, 39, 32, 0.18);
+}
+.done-check {
+  margin-bottom: 8rpx;
+}
+.done-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #2b2720;
+  letter-spacing: 2rpx;
+}
+.done-sub {
+  font-size: 30rpx;
+  color: #8f8779;
+  margin-bottom: 16rpx;
+}
+.done-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 24rpx;
+  width: 100%;
+  margin-top: 16rpx;
+}
+.done-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+.done-btn-outline {
+  border: 2rpx solid #c08a7d;
+  color: #c08a7d;
+}
+.done-btn-fill {
+  background: #2b2720;
+  color: #fff;
+}
