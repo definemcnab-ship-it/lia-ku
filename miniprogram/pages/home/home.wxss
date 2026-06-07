@@ -9,13 +9,13 @@
 .hero-card {
   background: #ffffff;
   border-radius: 48rpx;
-  padding: 40rpx 44rpx 48rpx;
+  padding: 20rpx 44rpx 24rpx;
   margin-bottom: 28rpx;
 }
 .hero-top {
   display: flex;
   align-items: center;
-  margin-bottom: 40rpx;
+  margin-bottom: 20rpx;
 }
 .hero-avatar {
   width: 64rpx; height: 64rpx; border-radius: 50%;
