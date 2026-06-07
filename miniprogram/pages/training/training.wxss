@@ -92,13 +92,13 @@
   overflow: hidden;
 }
 .course-banner-bg1 {
-  background: linear-gradient(135deg, #e9e2d4, #c8b89a);
+  background: linear-gradient(135deg, #e9e2d4, #a89f90);
 }
 .course-banner-bg2 {
-  background: linear-gradient(135deg, #dde3da, #a5b5a0);
+  background: linear-gradient(135deg, #dde3da, #8fa88a);
 }
 .course-banner-bg3 {
-  background: linear-gradient(135deg, #ebe1da, #c0a898);
+  background: linear-gradient(135deg, #e8e0eb, #a090b8);
 }
 .banner-deco-circle {
   position: absolute;
