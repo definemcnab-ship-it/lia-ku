@@ -15,4 +15,6 @@ Page({
     }
   },
   addMeal() { wx.showToast({ title:'记录餐食功能即将上线', icon:'none' }) },
+  navBack() { wx.navigateBack() },
 })
+

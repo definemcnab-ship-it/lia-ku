@@ -1,8 +1,13 @@
 <view class="page">
   <!-- Navbar -->
   <view class="navbar">
-    <text class="page-title">斯俪等级</text>
-    <text class="page-subtitle">积累经验，解锁专属特权</text>
+    <view class="nav-back" bindtap="navBack">
+      <mp-icon name="arrow_back" size="22" color="#2b2720" />
+    </view>
+    <view class="nav-titles">
+      <text class="page-title">斯俪等级</text>
+      <text class="page-subtitle">积累经验，解锁专属特权</text>
+    </view>
   </view>
 
   <scroll-view class="scroll-area" scroll-y>

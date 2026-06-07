@@ -15,4 +15,5 @@ Page({
   },
   switchTab(e) { this.setData({ activeTab: e.currentTarget.dataset.idx }) },
   likePost(e) { wx.showToast({ title:'已点赞', icon:'none' }) },
+  navBack() { wx.navigateBack() },
 })

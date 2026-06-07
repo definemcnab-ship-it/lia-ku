@@ -22,4 +22,5 @@ Page({
       this.getTabBar().setData({ selected: 1 })
     }
   },
+  navBack() { wx.navigateBack() },
 })

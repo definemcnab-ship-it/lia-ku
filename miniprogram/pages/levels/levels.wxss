@@ -257,3 +257,6 @@ page { background: #f7f5f0; }
 .locked-tag .reward-status-text { color: #8f8779; }
 
 .bottom-spacer { height: 60rpx; }
+.nav-back { width:64rpx; height:64rpx; display:flex; align-items:center; justify-content:center; margin-right:16rpx; flex-shrink:0; }
+.nav-titles { display:flex; flex-direction:column; }
+.navbar { display:flex; flex-direction:row; align-items:center; padding:48rpx 40rpx 24rpx; }
