@@ -86,6 +86,7 @@
   letter-spacing: 2rpx;
   display: flex; align-items: center; justify-content: center; gap: 20rpx;
   border: none; white-space: nowrap;
+  margin: 0; padding: 0; box-sizing: border-box;
 }
 .btn-wechat {
   width: 100%; height: 108rpx;
@@ -94,6 +95,7 @@
   letter-spacing: 2rpx;
   display: flex; align-items: center; justify-content: center; gap: 20rpx;
   border: 1.5rpx solid #dcd6cc; white-space: nowrap;
+  margin: 0; padding: 0; box-sizing: border-box;
 }
 .wechat-logo {
   width: 44rpx; height: 44rpx; border-radius: 50%;
