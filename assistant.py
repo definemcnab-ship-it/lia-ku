@@ -992,11 +992,13 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
 #  飞书推送
 # ============================================================
 def send_feishu(report):
-    """向所有配置的飞书 webhook 推送今日新会员 + 课时不足摘要"""
+    """向所有配置的飞书 webhook 推送今日新会员 + 昨日体验课 + 课时不足摘要"""
     if not FEISHU_WEBHOOKS:
         return
 
+    from datetime import date as _d, timedelta
     today = report.date
+    yesterday = (_d.today() - timedelta(days=1)).isoformat()
 
     # ── 今日新会员 ──
     new_lines = []
@@ -1010,6 +1012,16 @@ def send_feishu(report):
             f"  【私教】{m['name']}  {m.get('time','')}  教练:{m.get('coach','')}  "
             f"会籍:{m.get('consultant','')}"
         )
+
+    # ── 昨日体验课（从本月新会员中筛选首课日期=昨天的）──
+    yesterday_lines = []
+    for m in report.monthly_new_members:
+        if m.get("first_date") == yesterday:
+            yesterday_lines.append(
+                f"  【{m.get('type','')}】{m['name']}  {m.get('first_course','')}  "
+                f"教练:{m.get('first_coach','')}  会籍:{m.get('consultant','')}  "
+                f"{m.get('conversion','')}"
+            )
 
     # ── 课时不足 ──
     low_lines = []
@@ -1026,6 +1038,12 @@ def send_feishu(report):
         parts.extend(new_lines)
     else:
         parts.append("\n🆕 今日新会员：0人")
+
+    if yesterday_lines:
+        parts.append(f"\n📋 昨日体验课（{len(yesterday_lines)}人）")
+        parts.extend(yesterday_lines)
+    else:
+        parts.append(f"\n📋 昨日体验课：0人")
 
     if low_lines:
         parts.append(f"\n⚠️ 私教课时不足（{len(low_lines)}人）")
