@@ -649,10 +649,10 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             phone = member.get("memberPhone", "")
             consultant = member.get("sellerName", "")
 
-            # 私教新会员：体验课 + (首次=签到0 或 备注含"二次体验")
-            # 注意：不使用 pt_sessions <= 1，避免将已上过1节课的老会员误判为新会员
+            # 私教新会员：体验课 + (首次上私教 pt_sessions<=1 或 备注含"二次体验")
+            # 用私教节数而非总签到数，避免遗漏已有小班记录但首次上私教体验的会员
             is_second = "二次体验" in course_remark
-            is_new = (total_checkins <= 0) or is_second
+            is_new = (pt_sessions <= 1) or is_second
             is_trial = is_trial_course(course_name, remark=course_remark)
             remark_hint = f" 备注={course_remark[:20]}" if course_remark else ""
             if is_new and is_trial and tname not in seen_new:
