@@ -988,7 +988,20 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
         else:
             entry["conversion"] = "未转化"
 
-    report.monthly_new_members = sorted(monthly.values(), key=lambda x: x["first_date"])
+    # 过滤掉明显老会员：已购5节以上非体验课 或 出勤超过10次
+    # （这些成员虽然上了体验课，但显然是已有大量历史的老会员）
+    filtered_monthly = []
+    for m in monthly.values():
+        details = pt_detail.get(m["name"], [])
+        real_details = [d for d in details if "体验" not in (d.get("courseName") or "")]
+        real_buy_total = sum(d["buyCount"] for d in real_details)
+        checkins = m.get("total_checkins", 0)
+        if real_buy_total >= 5 or checkins > 10:
+            print(f"  [本月新会员] 过滤老会员: {m['name']} (正式购课{real_buy_total}节, 出勤{checkins}次)")
+            continue
+        filtered_monthly.append(m)
+
+    report.monthly_new_members = sorted(filtered_monthly, key=lambda x: x["first_date"])
     converted = sum(1 for m in report.monthly_new_members if m.get("has_pt_course"))
     print(f"  [本月新会员] 总计 {len(report.monthly_new_members)} 人, "
           f"已转化 {converted} 人, 未转化 {len(report.monthly_new_members) - converted} 人")
