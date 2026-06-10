@@ -694,7 +694,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             low_sessions_detail[tname] = t
 
     for tname, total_remain in low_sessions_agg.items():
-        if 0 < total_remain < 5:
+        if 1 < total_remain < 5:
             member = member_lookup.get(tname, {})
             if member.get("has_valid_card"):
                 t = low_sessions_detail[tname]
