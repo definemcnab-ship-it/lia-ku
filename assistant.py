@@ -958,13 +958,18 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
         sessions = pt_used.get(name, 0)
         details = pt_detail.get(name, [])
         entry["pt_sessions_used"] = sessions
-        entry["has_pt_course"] = sessions > 0 or len(details) > 0
 
-        # 汇总已购私教课程信息
+        # 汇总已购私教课程信息（全部，含体验）
         pt_buy_total = sum(d["buyCount"] for d in details)
         pt_remain_total = sum(d["remainCount"] for d in details)
         entry["pt_buy_total"] = pt_buy_total
         entry["pt_remain_total"] = pt_remain_total
+
+        # 转化判断：只统计非体验课的正式购买（体验课本身不算转化）
+        real_details = [d for d in details if "体验" not in (d.get("courseName") or "")]
+        real_buy_total = sum(d["buyCount"] for d in real_details)
+        real_remain_total = sum(d["remainCount"] for d in real_details)
+        entry["has_pt_course"] = real_buy_total > 0
 
         # 私教课程名和教练（合并去重）
         pt_courses = list(set(d["courseName"] for d in details if d["courseName"]))
@@ -975,11 +980,11 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
         entry["pt_trainers"] = " / ".join(pt_trainers)
 
         # 转化状态文字
-        if sessions > 0 or pt_buy_total > 0:
-            if pt_remain_total > 0:
-                entry["conversion"] = f"已转化（购{pt_buy_total}节/剩{pt_remain_total}节）"
+        if real_buy_total > 0:
+            if real_remain_total > 0:
+                entry["conversion"] = f"已转化（购{real_buy_total}节/剩{real_remain_total}节）"
             else:
-                entry["conversion"] = f"已转化（已用完{pt_buy_total}节）"
+                entry["conversion"] = f"已转化（已用完{real_buy_total}节）"
         else:
             entry["conversion"] = "未转化"
 
