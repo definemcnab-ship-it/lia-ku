@@ -997,6 +997,8 @@ def send_feishu(report):
         return
 
     import urllib.request
+    import ssl
+    ssl_ctx = ssl._create_unverified_context()
     today = report.date
 
     # ── 今日新会员 ──
@@ -1045,7 +1047,7 @@ def send_feishu(report):
                 headers={"Content-Type": "application/json; charset=utf-8"},
                 method="POST"
             )
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            with urllib.request.urlopen(req, timeout=10, context=ssl_ctx) as resp:
                 result = json.loads(resp.read().decode())
                 if result.get("code") == 0:
                     print(f"  ✅ 飞书推送成功: {url[:50]}...")
