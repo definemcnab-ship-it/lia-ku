@@ -36,7 +36,7 @@ MILESTONES = {
 #  留空列表则不推送
 # ============================================================
 FEISHU_WEBHOOKS = [
-    # "https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxx",
+    "https://open.feishu.cn/open-apis/bot/v2/hook/3d9c504d-e3da-430b-9c00-5c5d54309749",
 ]
 
 

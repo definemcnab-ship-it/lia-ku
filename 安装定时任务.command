@@ -2,7 +2,7 @@
 # 安装每日定时推送任务
 # 默认每天 09:00 自动运行，修改下方 HOUR/MINUTE 可调整时间
 
-HOUR=9
+HOUR=11
 MINUTE=0
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
