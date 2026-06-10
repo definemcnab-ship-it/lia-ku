@@ -1738,7 +1738,7 @@ def save_and_open(report):
 # ============================================================
 #  主流程
 # ============================================================
-def run(show_browser=True):
+def run(show_browser=True, push_feishu=False):
     print("智能助理启动中...")
 
     with sync_playwright() as pw:
@@ -1817,8 +1817,8 @@ def run(show_browser=True):
             print("[5/5] 生成报告...")
             filepath = save_and_open(report)
 
-            # 6. 飞书推送
-            if FEISHU_WEBHOOKS:
+            # 6. 飞书推送（仅定时任务模式）
+            if push_feishu and FEISHU_WEBHOOKS:
                 print("\n[推送] 发送飞书通知...")
                 send_feishu(report)
 
@@ -1858,7 +1858,7 @@ if __name__ == "__main__":
                 timeout=5)
         except Exception:
             pass
-        report = run(show_browser=False)
+        report = run(show_browser=False, push_feishu=True)
         if report:
             s = report.summary()
             total = (s["new_small_group"] + s["new_personal"] +
