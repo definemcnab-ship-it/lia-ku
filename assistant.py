@@ -30,6 +30,15 @@ MILESTONES = {
     25: "第三轮体测", 30: "第三轮案例",
 }
 
+# ============================================================
+#  飞书推送配置
+#  填入飞书机器人 webhook 地址，可填多个（发给多人/多群）
+#  留空列表则不推送
+# ============================================================
+FEISHU_WEBHOOKS = [
+    # "https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxx",
+]
+
 
 # ============================================================
 #  登录处理
@@ -670,17 +679,29 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                 print(f"    ⏭  [非首次-私教] {tname} 总签到={total_checkins} 私教节数={pt_sessions}{remark_hint}")
 
     # ---- 规则3: 私教课时不足（低于5节）----
+    # 同一学员可能有多个课包，按学员聚合剩余课时后再判断，避免重复提醒
+    low_sessions_agg = {}  # name -> 剩余总节数
+    low_sessions_detail = {}  # name -> 课程/教练信息
     for t in trainees:
+        tname = t.get("traineeName", "")
+        if not tname:
+            continue
         remain = t.get("remainCount", 0) or 0
-        # 仅提醒还有剩余课时但不足5节的活跃学员
-        if 0 < remain < 5:
-            tname = t.get("traineeName", "")
+        if remain <= 0:
+            continue
+        low_sessions_agg[tname] = low_sessions_agg.get(tname, 0) + remain
+        if tname not in low_sessions_detail:
+            low_sessions_detail[tname] = t
+
+    for tname, total_remain in low_sessions_agg.items():
+        if 0 < total_remain < 5:
             member = member_lookup.get(tname, {})
             if member.get("has_valid_card"):
+                t = low_sessions_detail[tname]
                 report.low_sessions.append({
                     "name": tname,
                     "phone": t.get("phone", ""),
-                    "remaining": remain,
+                    "remaining": total_remain,
                     "course": t.get("courseName", ""),
                     "trainer": t.get("courseTrainers", ""),
                     "consultant": member.get("sellerName", ""),
@@ -725,6 +746,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                         "milestone": ms, "action": action,
                         "consultant": consultant,
                     })
+                break  # 只提醒最近的里程碑
 
     # ---- 规则5: 教练空闲时间（整周）----
     from datetime import date as dt_date, timedelta
@@ -965,6 +987,73 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
     converted = sum(1 for m in report.monthly_new_members if m.get("has_pt_course"))
     print(f"  [本月新会员] 总计 {len(report.monthly_new_members)} 人, "
           f"已转化 {converted} 人, 未转化 {len(report.monthly_new_members) - converted} 人")
+
+# ============================================================
+#  飞书推送
+# ============================================================
+def send_feishu(report):
+    """向所有配置的飞书 webhook 推送今日新会员 + 课时不足摘要"""
+    if not FEISHU_WEBHOOKS:
+        return
+
+    import urllib.request
+    today = report.date
+
+    # ── 今日新会员 ──
+    new_lines = []
+    for m in report.new_small_group:
+        new_lines.append(
+            f"  【小班】{m['name']}  {m.get('time','')}  教练:{m.get('coach','')}  "
+            f"会籍:{m.get('consultant','')}"
+        )
+    for m in report.new_personal:
+        new_lines.append(
+            f"  【私教】{m['name']}  {m.get('time','')}  教练:{m.get('coach','')}  "
+            f"会籍:{m.get('consultant','')}"
+        )
+
+    # ── 课时不足 ──
+    low_lines = []
+    for m in report.low_sessions:
+        low_lines.append(
+            f"  {m['name']}  剩余{m['remaining']}节  {m.get('course','')}  "
+            f"教练:{m.get('trainer','')}  会籍:{m.get('consultant','')}"
+        )
+
+    parts = [f"📅 {today} 每日提醒"]
+
+    if new_lines:
+        parts.append(f"\n🆕 今日新会员（{len(new_lines)}人）")
+        parts.extend(new_lines)
+    else:
+        parts.append("\n🆕 今日新会员：0人")
+
+    if low_lines:
+        parts.append(f"\n⚠️ 私教课时不足（{len(low_lines)}人）")
+        parts.extend(low_lines)
+
+    text = "\n".join(parts)
+    payload = json.dumps({
+        "msg_type": "text",
+        "content": {"text": text}
+    }, ensure_ascii=False).encode("utf-8")
+
+    for url in FEISHU_WEBHOOKS:
+        try:
+            req = urllib.request.Request(
+                url, data=payload,
+                headers={"Content-Type": "application/json; charset=utf-8"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                result = json.loads(resp.read().decode())
+                if result.get("code") == 0:
+                    print(f"  ✅ 飞书推送成功: {url[:50]}...")
+                else:
+                    print(f"  ⚠️ 飞书推送返回异常: {result}")
+        except Exception as e:
+            print(f"  ❌ 飞书推送失败 ({url[:50]}...): {e}")
+
 
 # ============================================================
 #  HTML 报告
@@ -1691,6 +1780,11 @@ def run(show_browser=True):
             # 5. 生成报告
             print("[5/5] 生成报告...")
             filepath = save_and_open(report)
+
+            # 6. 飞书推送
+            if FEISHU_WEBHOOKS:
+                print("\n[推送] 发送飞书通知...")
+                send_feishu(report)
 
             s = report.summary()
             print("\n" + "=" * 50)
