@@ -998,7 +998,8 @@ def generate_html(report):
         "low_sessions": [],
         "milestones": [],
         "coaches": [],
-        "monthly_new": [],
+        "monthly_converted": [],    # 本月新会员·已转化
+        "monthly_unconverted": [],  # 本月新会员·未转化
     }
 
     for m in report.new_small_group:
@@ -1079,7 +1080,7 @@ def generate_html(report):
         })
 
     for m in report.monthly_new_members:
-        # 构建信息行：类型 | 首课日期 | 首课课程 | 教练 | 会籍 | 转化状态 | 出勤
+        # 构建信息行：类型 | 首课日期 | 首课课程 | 教练 | 会籍 | 出勤 | 转化状态
         info_parts = [f"{m.get('type','')} | 首课:{m.get('first_date','')}"]
         if m.get("first_course"):
             info_parts.append(m["first_course"])
@@ -1087,7 +1088,6 @@ def generate_html(report):
             info_parts.append(f"教练:{m['first_coach']}")
         if m.get("consultant"):
             info_parts.append(f"会籍:{m['consultant']}")
-        # 出勤与转化
         conv = m.get("conversion", "")
         checkins = m.get("total_checkins", 0)
         pt_used_num = m.get("pt_sessions_used", 0)
@@ -1096,7 +1096,7 @@ def generate_html(report):
             info_parts.append(conv)
         info = " | ".join(info_parts)
 
-        sections_data["monthly_new"].append({
+        entry = {
             "id": f"mn_{m['name']}",
             "name": m["name"],
             "phone": m.get("phone", ""),
@@ -1106,7 +1106,12 @@ def generate_html(report):
             "consultant": m.get("consultant", ""),
             "course": m.get("first_course", ""),
             "time": m.get("first_date", ""),
-        })
+        }
+        # 按转化状态分组
+        if m.get("has_pt_course") or (m.get("pt_buy_total", 0) > 0):
+            sections_data["monthly_converted"].append(entry)
+        else:
+            sections_data["monthly_unconverted"].append(entry)
 
     # 教练数据加入 sections_data 供 CSV 导出
     for day_str in sorted(report.coaches.keys()):
@@ -1217,6 +1222,13 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
 .follow .save-hint {{font-size:10px;color:#10b981;opacity:0;transition:opacity .3s}}
 .follow .save-hint.show {{opacity:1}}
 .footer {{text-align:center;padding:20px;color:#999;font-size:11px}}
+/* 子区块（本月新会员已/未转化） */
+.subsec {{border-top:1px solid #f0f0f0}}
+.subsh {{padding:10px 20px;font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fafafa;user-select:none}}
+.subsh:hover {{background:#f3f4f6}}
+.subsec.collapsed .sub-arrow {{transform:rotate(-90deg)}}
+.subsec.collapsed .subrows {{display:none}}
+.subrows .r {{padding-left:28px}}
 @media (max-width:768px) {{
   .sidebar {{width:50px;padding:12px 0}}
   .sidebar h3,.sidebar nav a span:not(.dot),.sidebar .export-area span {{display:none}}
@@ -1259,7 +1271,7 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
     <span onclick="scrollToSec('sec3')">课时不足 {s['low_sessions']}人</span>
     <span onclick="scrollToSec('sec4')">里程碑 {s['milestones']}人</span>
     <span onclick="scrollToSec('sec5')">教练空闲 {s['coaches']}位</span>
-    <span onclick="scrollToSec('sec6')">本月新会员 {s['monthly_new']}人</span>
+    <span onclick="scrollToSec('sec6')">本月新会员 {len(sections_data['monthly_converted']) + len(sections_data['monthly_unconverted'])}人（转化{len(sections_data['monthly_converted'])} 未转化{len(sections_data['monthly_unconverted'])}）</span>
   </div>
 </div>
 
@@ -1291,8 +1303,35 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
 </div>
 
 <div class="sec collapsed" id="sec6">
-  <div class="sh" onclick="toggleSec('sec6')"><span>六、{_month_label}新会员（含转化）</span><span style="display:flex;gap:8px;align-items:center"><span class="badge c4">{len(sections_data['monthly_new'])}人</span><span class="arrow">&#9660;</span></span></div>
-  <div class="rows" id="rows_sec6"></div>
+  <div class="sh" onclick="toggleSec('sec6')">
+    <span>六、{_month_label}新会员</span>
+    <span style="display:flex;gap:8px;align-items:center">
+      <span class="badge c4">共{len(sections_data['monthly_converted']) + len(sections_data['monthly_unconverted'])}人</span>
+      <span class="arrow">&#9660;</span>
+    </span>
+  </div>
+  <div class="rows" id="rows_sec6">
+    <div class="subsec" id="subsec6a">
+      <div class="subsh" onclick="toggleSubsec('subsec6a')">
+        <span>✅ 已转化</span>
+        <span style="display:flex;gap:8px;align-items:center">
+          <span class="badge c4">{len(sections_data['monthly_converted'])}人</span>
+          <span class="arrow sub-arrow">&#9660;</span>
+        </span>
+      </div>
+      <div class="subrows" id="subrows_subsec6a"></div>
+    </div>
+    <div class="subsec" id="subsec6b">
+      <div class="subsh" onclick="toggleSubsec('subsec6b')">
+        <span>⏳ 未转化</span>
+        <span style="display:flex;gap:8px;align-items:center">
+          <span class="badge c2">{len(sections_data['monthly_unconverted'])}人</span>
+          <span class="arrow sub-arrow">&#9660;</span>
+        </span>
+      </div>
+      <div class="subrows" id="subrows_subsec6b"></div>
+    </div>
+  </div>
 </div>
 
 <div class="footer">智能助理自动生成 · 跟进记录自动保存至浏览器本地存储</div>
@@ -1367,6 +1406,11 @@ function buildRow(item, cls, secKey) {{
   </div>`;
 }}
 
+// 子区块折叠
+function toggleSubsec(id) {{
+  document.getElementById(id).classList.toggle('collapsed');
+}}
+
 // 渲染所有区域
 function renderAll() {{
   const secMap = {{
@@ -1374,7 +1418,6 @@ function renderAll() {{
     sec2: {{key:'second_class', cls:'c5'}},
     sec3: {{key:'low_sessions', cls:'c2'}},
     sec4: {{key:'milestones', cls:'c3'}},
-    sec6: {{key:'monthly_new', cls:'c4'}},
   }};
   Object.entries(secMap).forEach(([secId, cfg]) => {{
     const rowsEl = document.getElementById('rows_'+secId);
@@ -1385,6 +1428,22 @@ function renderAll() {{
       rowsEl.innerHTML = items.map(function(item) {{ return buildRow(item, cfg.cls, cfg.key); }}).join('');
     }}
   }});
+
+  // sec6：本月新会员分已转化/未转化两个子区块
+  const subMap = {{
+    subsec6a: {{key:'monthly_converted', cls:'c4'}},
+    subsec6b: {{key:'monthly_unconverted', cls:'c2'}},
+  }};
+  Object.entries(subMap).forEach(([subId, cfg]) => {{
+    const rowsEl = document.getElementById('subrows_'+subId);
+    const items = DATA[cfg.key] || [];
+    if (items.length === 0) {{
+      rowsEl.innerHTML = '<div style="padding:16px 28px;color:#999;font-size:13px">暂无数据</div>';
+    }} else {{
+      rowsEl.innerHTML = items.map(function(item) {{ return buildRow(item, cfg.cls, cfg.key); }}).join('');
+    }}
+  }});
+
   // sec5 (教练空闲) 已预渲染为按天分组，无需JS动态构建
 }}
 
@@ -1447,7 +1506,7 @@ function exportCSV() {{
   const secNames = {{
     new_members:'今日新会员', second_class:'第2节小班课',
     low_sessions:'课时不足', milestones:'里程碑', coaches:'教练空闲',
-    monthly_new:'本月新会员'
+    monthly_converted:'本月新会员·已转化', monthly_unconverted:'本月新会员·未转化'
   }};
   Object.entries(secNames).forEach(function(kv) {{
     const key = kv[0], secName = kv[1];
@@ -1477,23 +1536,24 @@ function exportJSON() {{
   a.click(); URL.revokeObjectURL(url);
 }}
 
-// 单独导出本月新会员CSV
+// 单独导出本月新会员CSV（已转化+未转化合并，含转化分组列）
 function exportMonthlyNewCSV() {{
   const followups = loadFollowups();
   const statusText = {{pending:'待跟进', doing:'跟进中', done:'已完成'}};
-  let csv = '\\uFEFF姓名,电话,类型,首课日期,首课课程,教练,会籍顾问,转化状态,出勤次数,私教节数,备注,跟进状态,跟进备注\\n';
-  (DATA['monthly_new'] || []).forEach(function(item) {{
+  let csv = '\\uFEFF姓名,电话,类型,转化分组,首课日期,首课课程,教练,会籍顾问,转化状态,出勤次数,私教节数,跟进状态,跟进备注\\n';
+  const allItems = (DATA['monthly_converted'] || []).map(function(i) {{ return {{...i, _group:'已转化'}}; }})
+    .concat((DATA['monthly_unconverted'] || []).map(function(i) {{ return {{...i, _group:'未转化'}}; }}));
+  allItems.forEach(function(item) {{
     const f = followups[item.id] || {{}};
-    // 从 info 中提取出勤/私教数据（已在 info 字段中）
     const infoMatch = item.info.match(/出勤(\\d+)次.*?私教(\\d+)节/);
     const checkins = infoMatch ? infoMatch[1] : '';
     const pt = infoMatch ? infoMatch[2] : '';
     const typeStr = item.label.split(' ')[0] || '';
     csv += '"' + (item.name||'') + '","' + (item.phone||'') + '","' +
-      typeStr + '","' + (item.time||'') + '","' +
+      typeStr + '","' + item._group + '","' + (item.time||'') + '","' +
       (item.course||'') + '","' + (item.coach||'') + '","' +
       (item.consultant||'') + '","' + (item.label||'') + '","' +
-      checkins + '","' + pt + '","' + '' + '","' +
+      checkins + '","' + pt + '","' +
       (statusText[f.status]||'') + '","' + (f.note||'') + '"\\n';
   }});
   const blob = new Blob([csv], {{type:'text/csv;charset=utf-8'}});
