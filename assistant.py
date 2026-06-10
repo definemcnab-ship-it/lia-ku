@@ -887,11 +887,11 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
                     card_name = member.get("cardName", "")
 
                     # 私教和小班均统一检查：课程名/卡名/备注"二次体验"
+                    # 注意：月度筛选不使用 has_trial_card，避免老会员历史体验卡误判
                     if key == "private":
                         is_trial = is_trial_course(course_name, remark=course_remark)
                     else:
-                        has_trial = member.get("has_trial_card", False)
-                        is_trial = is_trial_course(course_name, card_name, has_trial, remark=course_remark)
+                        is_trial = is_trial_course(course_name, card_name, remark=course_remark)
 
                     if not is_trial:
                         continue
