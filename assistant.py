@@ -996,9 +996,6 @@ def send_feishu(report):
     if not FEISHU_WEBHOOKS:
         return
 
-    import urllib.request
-    import ssl
-    ssl_ctx = ssl._create_unverified_context()
     today = report.date
 
     # ── 今日新会员 ──
@@ -1040,19 +1037,20 @@ def send_feishu(report):
         "content": {"text": text}
     }, ensure_ascii=False).encode("utf-8")
 
+    payload_str = payload.decode("utf-8")
     for url in FEISHU_WEBHOOKS:
         try:
-            req = urllib.request.Request(
-                url, data=payload,
-                headers={"Content-Type": "application/json; charset=utf-8"},
-                method="POST"
+            result = subprocess.run(
+                ["curl", "-s", "-k", "-X", "POST", url,
+                 "-H", "Content-Type: application/json; charset=utf-8",
+                 "--data-raw", payload_str],
+                capture_output=True, text=True, timeout=15
             )
-            with urllib.request.urlopen(req, timeout=10, context=ssl_ctx) as resp:
-                result = json.loads(resp.read().decode())
-                if result.get("code") == 0:
-                    print(f"  ✅ 飞书推送成功: {url[:50]}...")
-                else:
-                    print(f"  ⚠️ 飞书推送返回异常: {result}")
+            resp = json.loads(result.stdout)
+            if resp.get("code") == 0:
+                print(f"  ✅ 飞书推送成功: {url[:50]}...")
+            else:
+                print(f"  ⚠️ 飞书推送返回异常: {resp}")
         except Exception as e:
             print(f"  ❌ 飞书推送失败 ({url[:50]}...): {e}")
 
