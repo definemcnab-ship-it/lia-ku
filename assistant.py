@@ -388,6 +388,7 @@ class DailyReport:
     new_personal: list = field(default_factory=list)
     second_class: list = field(default_factory=list)
     low_sessions: list = field(default_factory=list)
+    low_group_points: list = field(default_factory=list)
     milestones: list = field(default_factory=list)
     coaches: dict = field(default_factory=dict)
     monthly_new_members: list = field(default_factory=list)
@@ -715,6 +716,24 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                     "trainer": t.get("courseTrainers", ""),
                     "consultant": member.get("sellerName", ""),
                 })
+
+    # ---- 规则3b: 小班课权益点不足（剩余 ≤ 6 元）----
+    # 权益点卡 unit=="元"，remain 即剩余元数；仅统计有效卡
+    for m in members:
+        if (m.get("unit") or "") != "元":
+            continue
+        if not _is_card_valid(m):
+            continue
+        remain = m.get("remain", 0) or 0
+        if 0 < remain <= 6:
+            report.low_group_points.append({
+                "name": m.get("displayName", ""),
+                "phone": m.get("memberPhone", ""),
+                "remaining": remain,
+                "card": m.get("cardName", ""),
+                "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
+            })
+    print(f"\n  [小班权益点不足] 剩余≤6元: {len(report.low_group_points)} 人")
 
     # ---- 规则4: 会员里程碑（仅私教课会员）----
     # 收集今日私教学员名
@@ -1058,6 +1077,14 @@ def send_feishu(report):
             f"教练:{m.get('trainer','')}  会籍:{m.get('consultant','')}"
         )
 
+    # ── 小班课权益点不足（剩余≤6元）──
+    group_lines = []
+    for m in report.low_group_points:
+        group_lines.append(
+            f"  {m['name']}  剩余{m['remaining']}元  {m.get('card','')}  "
+            f"会籍:{m.get('consultant','')}"
+        )
+
     parts = [f"📅 {today} 每日提醒"]
 
     if new_lines:
@@ -1075,6 +1102,10 @@ def send_feishu(report):
     if low_lines:
         parts.append(f"\n⚠️ 私教课时不足（{len(low_lines)}人）")
         parts.extend(low_lines)
+
+    if group_lines:
+        parts.append(f"\n⚠️ 小班课权益点不足（{len(group_lines)}人）")
+        parts.extend(group_lines)
 
     text = "\n".join(parts)
     payload = json.dumps({
@@ -1196,6 +1227,22 @@ def generate_html(report):
             "coach": m.get("trainer", ""),
             "consultant": m.get("consultant", ""),
             "course": m.get("course", ""),
+        })
+
+    # 小班课权益点不足并入"课时不足"区
+    for m in report.low_group_points:
+        info = f'小班权益点 剩余{m["remaining"]}元 | {m.get("card","")}'
+        if m.get("consultant"):
+            info += f' 会籍:{m["consultant"]}'
+        sections_data["low_sessions"].append({
+            "id": f"lg_{m['name']}",
+            "name": m["name"],
+            "phone": m.get("phone", ""),
+            "info": info,
+            "label": f'剩{m["remaining"]}元',
+            "coach": "",
+            "consultant": m.get("consultant", ""),
+            "course": m.get("card", ""),
         })
 
     for m in report.milestones:
@@ -1733,6 +1780,7 @@ def save_and_open(report):
         "new_personal": report.new_personal,
         "second_class": report.second_class,
         "low_sessions": report.low_sessions,
+        "low_group_points": report.low_group_points,
         "milestones": report.milestones,
         "coaches": {k: {"weekday": v["weekday"], "trainers": v["trainers"]}
                     for k, v in report.coaches.items()},
