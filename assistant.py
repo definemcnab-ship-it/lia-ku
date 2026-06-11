@@ -378,6 +378,92 @@ def fetch_month_courses(page):
     return {"group": unique_group, "private": unique_private}
 
 
+def fetch_upcoming_courses(page, weeks=2):
+    """抓取从今天起未来 N 周的课程，用于查找会员下一节已约未上的课"""
+    import time as _time
+    from datetime import date as dt_date, timedelta
+
+    today = dt_date.today()
+    ranges = []
+    for i in range(weeks):
+        ws = today + timedelta(days=i * 7)
+        we = ws + timedelta(days=6)
+        ranges.append((ws.isoformat(), we.isoformat()))
+
+    print(f"  未来约课需抓取 {len(ranges)} 段: "
+          f"{' | '.join(f'{ws}~{we}' for ws, we in ranges)}")
+
+    all_group = []
+    all_private = []
+
+    for idx, (ws, we) in enumerate(ranges):
+        _ts = int(_time.time())
+        seg = {"group": [], "private": []}
+
+        def on_response(response):
+            url = response.url
+            if "reserved_instances" in url:
+                try:
+                    data = response.json()
+                    if "isWebPage=true" in url:
+                        seg["group"] = data.get("data", [])
+                    elif "isTraining" not in url and "isWebPage" not in url:
+                        seg["private"] = data.get("data", [])
+                except Exception:
+                    pass
+
+        page.on("response", on_response)
+        try:
+            page_url = f"{BASE_URL}/home/manage/course/reservations?startDate={ws}&endDate={we}&_t={_ts}"
+            page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(1500)
+            page.reload(wait_until="networkidle")
+            page.wait_for_timeout(4000)
+            if "login" in page.url.lower():
+                page.remove_listener("response", on_response)
+                break
+            print(f"  未来第{idx+1}段 ({ws}~{we}): 团体{len(seg['group'])}节 私教{len(seg['private'])}节")
+            all_group.extend(seg["group"])
+            all_private.extend(seg["private"])
+        except Exception as e:
+            print(f"  ⚠️ 未来第{idx+1}段 ({ws}~{we}) 失败: {e}")
+        finally:
+            page.remove_listener("response", on_response)
+
+    return {"group": all_group, "private": all_private}
+
+
+def build_next_booking_lookup(upcoming_courses):
+    """构建 会员名 -> 下一节已约未上课程 (date, time, courseName, trainer, 类型) 的查找表。
+    取日期>=今天中最早的一节。"""
+    from datetime import date as dt_date
+    today_iso = dt_date.today().isoformat()
+    bookings = {}  # name -> list of (date, startTime, courseName, trainer, type)
+    for key, type_label in [("group", "小班"), ("private", "私教")]:
+        for c in upcoming_courses.get(key, []):
+            cdate = c.get("date", "")
+            if not cdate or cdate < today_iso:
+                continue
+            stime = c.get("startTime", "")
+            cname = c.get("courseName", "")
+            trainer = c.get("trainerName", "")
+            for tname in parse_trainee_names(c.get("traineeNames", "")):
+                if not tname:
+                    continue
+                bookings.setdefault(tname, []).append(
+                    (cdate, stime, cname, trainer, type_label))
+    # 每人取最早的一节
+    lookup = {}
+    for name, lst in bookings.items():
+        lst.sort(key=lambda x: (x[0], x[1]))
+        d, st, cn, tr, tp = lst[0]
+        lookup[name] = {
+            "date": d, "time": st, "course": cn,
+            "trainer": tr, "type": tp,
+        }
+    return lookup
+
+
 # ============================================================
 #  规则引擎
 # ============================================================
@@ -527,10 +613,12 @@ def _is_card_valid(member_card):
     return True
 
 
-def apply_rules(courses, members, trainees, week_courses=None, month_courses=None):
+def apply_rules(courses, members, trainees, week_courses=None, month_courses=None,
+                next_booking=None):
     """应用5大提醒规则。week_courses用于整周教练空闲，month_courses用于月度新会员"""
     report = DailyReport(date=today_str())
     today = today_str()
+    next_booking = next_booking or {}
     member_lookup = build_member_lookup(members)
 
     # 诊断：有效卡统计
@@ -708,6 +796,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             member = member_lookup.get(tname, {})
             if member.get("has_valid_card"):
                 t = low_sessions_detail[tname]
+                nb = next_booking.get(tname, {})
                 report.low_sessions.append({
                     "name": tname,
                     "phone": t.get("phone", ""),
@@ -715,6 +804,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                     "course": t.get("courseName", ""),
                     "trainer": t.get("courseTrainers", ""),
                     "consultant": member.get("sellerName", ""),
+                    "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
                 })
 
     # ---- 规则3b: 小班课权益点不足（剩余 ≤ 6 元）----
@@ -730,12 +820,15 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             continue
         remain = m.get("remain", 0) or 0
         if 0 < remain <= 6:
+            gname = m.get("displayName", "")
+            nb = next_booking.get(gname, {})
             report.low_group_points.append({
-                "name": m.get("displayName", ""),
+                "name": gname,
                 "phone": m.get("memberPhone", ""),
                 "remaining": remain,
                 "card": m.get("cardName", ""),
                 "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
+                "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
             })
     print(f"\n  [小班权益点不足] 剩余≤6元: {len(report.low_group_points)} 人")
 
@@ -1076,17 +1169,21 @@ def send_feishu(report):
     # ── 课时不足 ──
     low_lines = []
     for m in report.low_sessions:
+        nb = m.get("next_booking", "")
+        nb_str = f"  下次约课:{nb}" if nb else "  下次约课:无"
         low_lines.append(
             f"  {m['name']}  剩余{m['remaining']}节  {m.get('course','')}  "
-            f"教练:{m.get('trainer','')}  会籍:{m.get('consultant','')}"
+            f"教练:{m.get('trainer','')}  会籍:{m.get('consultant','')}{nb_str}"
         )
 
     # ── 小班课权益点不足（剩余≤6元）──
     group_lines = []
     for m in report.low_group_points:
+        nb = m.get("next_booking", "")
+        nb_str = f"  下次约课:{nb}" if nb else "  下次约课:无"
         group_lines.append(
             f"  {m['name']}  剩余{m['remaining']}元  {m.get('card','')}  "
-            f"会籍:{m.get('consultant','')}"
+            f"会籍:{m.get('consultant','')}{nb_str}"
         )
 
     parts = [f"📅 {today} 每日提醒"]
@@ -1222,6 +1319,7 @@ def generate_html(report):
         info = f'剩余{m["remaining"]}节 | {m.get("course","")} 教练:{m.get("trainer","")}'
         if m.get("consultant"):
             info += f' 会籍:{m["consultant"]}'
+        info += f' | 下次约课:{m.get("next_booking") or "无"}'
         sections_data["low_sessions"].append({
             "id": f"ls_{m['name']}",
             "name": m["name"],
@@ -1238,6 +1336,7 @@ def generate_html(report):
         info = f'小班权益点 剩余{m["remaining"]}元 | {m.get("card","")}'
         if m.get("consultant"):
             info += f' 会籍:{m["consultant"]}'
+        info += f' | 下次约课:{m.get("next_booking") or "无"}'
         sections_data["low_sessions"].append({
             "id": f"lg_{m['name']}",
             "name": m["name"],
@@ -1862,6 +1961,11 @@ def run(show_browser=True, push_feishu=False):
                 month_courses = {"group": list(courses["group"]),
                                  "private": list(courses["private"])}
 
+            # 获取未来两周课程，用于查找会员下一节已约未上的课
+            upcoming_courses = fetch_upcoming_courses(page, weeks=2)
+            next_booking = build_next_booking_lookup(upcoming_courses)
+            print(f"  [下次约课] 已建立 {len(next_booking)} 名会员的下次约课索引")
+
             # 2. 获取全部会员数据
             print("[2/5] 获取会员数据...")
             members = fetch_all_members(page)
@@ -1870,9 +1974,10 @@ def run(show_browser=True, push_feishu=False):
             print("[3/5] 获取私教数据...")
             trainees = fetch_all_trainees(page)
 
-            # 4. 应用规则（传入整周课程、整月课程）
+            # 4. 应用规则（传入整周课程、整月课程、下次约课）
             print("[4/5] 应用提醒规则...")
-            report = apply_rules(courses, members, trainees, week_courses, month_courses)
+            report = apply_rules(courses, members, trainees, week_courses, month_courses,
+                                 next_booking=next_booking)
 
             # 5. 生成报告
             print("[5/5] 生成报告...")
