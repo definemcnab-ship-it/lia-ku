@@ -129,6 +129,15 @@ def fetch_all_members(page):
             if key in first:
                 print(f"    {key} = {first[key]}")
 
+    # 诊断：打印一张"艾莉卡"权益点卡的全部字段，找出剩余金额(元)的字段名
+    for m in all_members:
+        cn = (m.get("cardName", "") or "") + (m.get("cardTypeName", "") or "")
+        if "艾莉卡" in cn:
+            print(f"  [诊断-权益点] 艾莉卡卡种 displayName={m.get('displayName','')} 全部字段:")
+            for k, v in m.items():
+                print(f"      {k} = {v}")
+            break
+
     return all_members
 
 
