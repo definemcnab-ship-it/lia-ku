@@ -1,13 +1,10 @@
 const app = getApp()
+const { courses } = require('../training/trainingData')
+
 Page({
   data: {
     courseN: '颈线 · 养成',
-    moves: [
-      { name:'颈线 · 舒展', duration:30, desc:'缓慢低头，下巴触向胸口，保持呼吸', icon:'self_improvement' },
-      { name:'侧颈 · 打开', duration:30, desc:'耳朵向肩膀靠近，对侧手轻按头顶辅助舒展', icon:'accessibility_new' },
-      { name:'颈部 · 松弛', duration:20, desc:'缓慢转头看左肩，停顿后转向右肩', icon:'self_improvement' },
-      { name:'颈背 · 唤醒', duration:40, desc:'双手交叉置于后脑，头向后顶手掌，保持6秒放松', icon:'fitness_center' },
-    ],
+    moves: [],
     currentIdx: 0,
     timeLeft: 30,
     playing: false,
@@ -18,9 +15,15 @@ Page({
 
   onUnload() { clearInterval(this._timer) },
 
-  onLoad() {
-    const m = this.data.moves[0]
-    this.setData({ timeLeft: m.duration })
+  onLoad(options) {
+    const courseId = options.courseId || 'c1'
+    const course = courses.find(c => c.id === courseId) || courses[0]
+    const moves = course.moves || []
+    this.setData({
+      courseN: course.name,
+      moves: moves,
+      timeLeft: moves[0] ? moves[0].duration : 30,
+    })
   },
 
   togglePlay() {

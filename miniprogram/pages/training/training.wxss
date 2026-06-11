@@ -296,3 +296,185 @@
   color: #f7f5f0;
   letter-spacing: 2rpx;
 }
+
+/* ── 顶部 Tab ── */
+.top-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28rpx;
+  background: #ede9e1;
+  border-radius: 48rpx;
+  padding: 8rpx;
+}
+.top-tab {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+  transition: background 0.2s;
+}
+.top-tab-active {
+  background: #2b2720;
+}
+.top-tab-text {
+  font-size: 28rpx;
+  color: #8f8779;
+  letter-spacing: 2rpx;
+}
+.top-tab-active .top-tab-text {
+  color: #f7f5f0;
+}
+
+/* ── 课程数量标签 ── */
+.section-label {
+  display: block;
+  font-size: 24rpx;
+  color: #8f8779;
+  letter-spacing: 2rpx;
+  margin-bottom: 24rpx;
+  margin-top: 8rpx;
+}
+
+/* ── 循证徽章 ── */
+.evidence-badge {
+  position: absolute;
+  bottom: 20rpx;
+  right: 24rpx;
+  background: rgba(255,255,255,0.35);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+.evidence-badge-text {
+  font-size: 18rpx;
+  color: #2b2720;
+  opacity: 0.85;
+}
+
+/* ── banner bg 4,5,6 ── */
+.course-banner-bg4 {
+  background: linear-gradient(135deg, #e2ddd5, #9b9080);
+}
+.course-banner-bg5 {
+  background: linear-gradient(135deg, #d9e4de, #7a9e8a);
+}
+.course-banner-bg6 {
+  background: linear-gradient(135deg, #e4dbd3, #b89080);
+}
+
+/* ── difficulty advanced ── */
+.difficulty-badge-advanced {
+  background: rgba(120,80,60,0.3);
+}
+
+/* ── 计划卡片 ── */
+.program-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  margin-bottom: 48rpx;
+}
+.program-card {
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+.program-icon-wrap {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.program-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+.program-name {
+  font-size: 36rpx;
+  color: #2b2720;
+  font-weight: 300;
+}
+.program-desc {
+  font-size: 22rpx;
+  color: #8f8779;
+  line-height: 1.5;
+}
+.program-meta {
+  display: flex;
+  gap: 16rpx;
+  flex-wrap: wrap;
+  margin-top: 8rpx;
+}
+.program-meta-tag {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+.program-meta-text {
+  font-size: 20rpx;
+  color: #8f8779;
+}
+.program-arrow {
+  flex-shrink: 0;
+}
+
+/* ── 年度规划卡片 ── */
+.annual-plan-card {
+  background: #2b2720;
+  border-radius: 32rpx;
+  padding: 44rpx;
+  margin-bottom: 40rpx;
+}
+.annual-plan-title {
+  display: block;
+  font-size: 36rpx;
+  color: #f7f5f0;
+  font-weight: 300;
+  margin-bottom: 36rpx;
+  letter-spacing: 2rpx;
+}
+.annual-plan-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+.phase-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+}
+.phase-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 8rpx;
+}
+.phase-dot-1 { background: #c08a7d; }
+.phase-dot-2 { background: #8fa88a; }
+.phase-dot-3 { background: #a090b8; }
+.phase-dot-4 { background: #c4beb4; }
+.phase-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.phase-label {
+  font-size: 26rpx;
+  color: #f7f5f0;
+  font-weight: 400;
+}
+.phase-desc {
+  font-size: 22rpx;
+  color: #8f8779;
+  line-height: 1.5;
+}

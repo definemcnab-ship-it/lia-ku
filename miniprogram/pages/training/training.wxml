@@ -11,101 +11,188 @@
     </view>
   </view>
 
-  <!-- 筛选 Tabs -->
-  <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
-    <view class="filter-row">
-      <view
-        wx:for="{{filters}}"
-        wx:key="index"
-        class="filter-tab {{activeFilter === index ? 'filter-tab-active' : ''}}"
-        bindtap="switchFilter"
-        data-idx="{{index}}"
-      >
-        <text class="filter-tab-text {{activeFilter === index ? 'filter-tab-text-active' : ''}}">{{item}}</text>
-      </view>
+  <!-- 顶部 Tab：课程 / 计划 -->
+  <view class="top-tabs">
+    <view class="top-tab {{activeTab === 0 ? 'top-tab-active' : ''}}"
+      bindtap="switchTab" data-idx="0">
+      <text class="top-tab-text">课程</text>
     </view>
-  </scroll-view>
+    <view class="top-tab {{activeTab === 1 ? 'top-tab-active' : ''}}"
+      bindtap="switchTab" data-idx="1">
+      <text class="top-tab-text">计划</text>
+    </view>
+  </view>
 
-  <!-- 今日推荐 -->
-  <text class="section-label">今日推荐</text>
-  <view class="recommend-card">
-    <view class="recommend-banner">
-      <view class="recommend-banner-deco"></view>
-      <view class="recommend-tag">
-        <text class="recommend-tag-text">TODAY</text>
+  <!-- ───── 课程 Tab ───── -->
+  <view wx:if="{{activeTab === 0}}">
+    <!-- 筛选 Tabs -->
+    <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="filter-row">
+        <view
+          wx:for="{{filters}}"
+          wx:key="index"
+          class="filter-tab {{activeFilter === index ? 'filter-tab-active' : ''}}"
+          bindtap="switchFilter"
+          data-idx="{{index}}"
+        >
+          <text class="filter-tab-text {{activeFilter === index ? 'filter-tab-text-active' : ''}}">{{item}}</text>
+        </view>
       </view>
-      <view class="recommend-icon-wrap">
-        <mp-icon name="self_improvement" size="48" color="rgba(255,255,255,0.9)" />
+    </scroll-view>
+
+    <!-- 今日推荐 -->
+    <text class="section-label">今日推荐</text>
+    <view class="recommend-card">
+      <view class="recommend-banner">
+        <view class="recommend-banner-deco"></view>
+        <view class="recommend-tag">
+          <text class="recommend-tag-text">TODAY</text>
+        </view>
+        <view class="recommend-icon-wrap">
+          <mp-icon name="self_improvement" size="48" color="rgba(255,255,255,0.9)" />
+        </view>
+      </view>
+      <view class="recommend-body">
+        <text class="recommend-name">颈线 · 养成</text>
+        <text class="recommend-desc">颈线向上 · 轻盈生长</text>
+        <view class="recommend-meta">
+          <view class="recommend-meta-tag">
+            <mp-icon name="calendar_month" size="14" color="#8f8779" />
+            <text class="recommend-meta-text">15分钟</text>
+          </view>
+          <view class="recommend-meta-tag">
+            <mp-icon name="analytics" size="14" color="#8f8779" />
+            <text class="recommend-meta-text">5个动作</text>
+          </view>
+          <view class="recommend-meta-tag">
+            <mp-icon name="trending_up" size="14" color="#8f8779" />
+            <text class="recommend-meta-text">初级</text>
+          </view>
+        </view>
+        <view class="recommend-btn" bindtap="startCourse" data-id="c1">
+          <mp-icon name="play_arrow" size="20" color="#fff" />
+          <text class="recommend-btn-text">立即开始</text>
+        </view>
       </view>
     </view>
-    <view class="recommend-body">
-      <text class="recommend-name">颈线 · 养成</text>
-      <text class="recommend-desc">颈线向上 · 轻盈生长</text>
-      <view class="recommend-meta">
-        <view class="recommend-meta-tag">
-          <mp-icon name="calendar_month" size="14" color="#8f8779" />
-          <text class="recommend-meta-text">15分钟</text>
+
+    <!-- 全部课程 -->
+    <text class="section-label">全部课程（{{filteredCourses.length}}节）</text>
+    <view class="course-list">
+      <view
+        wx:for="{{filteredCourses}}"
+        wx:key="id"
+        class="course-card"
+      >
+        <!-- 渐变 Banner -->
+        <view class="course-banner course-banner-bg{{item.bg}}">
+          <view class="banner-deco-circle"></view>
+          <view class="course-banner-icon-wrap">
+            <mp-icon name="{{item.icon}}" size="44" color="rgba(255,255,255,0.9)" />
+          </view>
+          <view class="difficulty-badge difficulty-badge-{{item.level === '初级' ? 'beginner' : item.level === '中级' ? 'intermediate' : 'advanced'}}">
+            <text class="difficulty-badge-text">{{item.level}}</text>
+          </view>
+          <view class="evidence-badge">
+            <text class="evidence-badge-text">循证{{item.evidence}}级</text>
+          </view>
         </view>
-        <view class="recommend-meta-tag">
-          <mp-icon name="analytics" size="14" color="#8f8779" />
-          <text class="recommend-meta-text">4个动作</text>
+
+        <!-- 卡片内容 -->
+        <view class="course-body">
+          <text class="course-name font-headline">{{item.name}}</text>
+          <text class="course-desc">{{item.desc}}</text>
+
+          <!-- 元信息标签 -->
+          <view class="course-meta">
+            <view class="meta-tag">
+              <mp-icon name="calendar_month" size="14" color="#8f8779" />
+              <text class="meta-tag-text">{{item.duration}}分钟</text>
+            </view>
+            <view class="meta-tag">
+              <mp-icon name="analytics" size="14" color="#8f8779" />
+              <text class="meta-tag-text">{{item.moves.length}}个动作</text>
+            </view>
+            <view class="meta-tag">
+              <mp-icon name="trending_up" size="14" color="#8f8779" />
+              <text class="meta-tag-text">{{item.level}}</text>
+            </view>
+          </view>
+
+          <!-- 开始按钮 -->
+          <view class="start-btn" bindtap="startCourse" data-id="{{item.id}}">
+            <mp-icon name="play_arrow" size="20" color="#f7f5f0" />
+            <text class="start-btn-text">开始训练</text>
+          </view>
         </view>
-        <view class="recommend-meta-tag">
-          <mp-icon name="trending_up" size="14" color="#8f8779" />
-          <text class="recommend-meta-text">初级</text>
-        </view>
-      </view>
-      <view class="recommend-btn" bindtap="startCourse" data-id="c1">
-        <mp-icon name="play_arrow" size="20" color="#fff" />
-        <text class="recommend-btn-text">立即开始</text>
       </view>
     </view>
   </view>
 
-  <!-- 全部课程 -->
-  <text class="section-label">全部课程</text>
-  <view class="course-list">
-    <view
-      wx:for="{{courses}}"
-      wx:key="id"
-      class="course-card"
-    >
-      <!-- 渐变 Banner -->
-      <view class="course-banner course-banner-bg{{item.bg}}">
-        <view class="banner-deco-circle"></view>
-        <view class="course-banner-icon-wrap">
-          <mp-icon name="{{item.icon}}" size="44" color="rgba(255,255,255,0.9)" />
+  <!-- ───── 计划 Tab ───── -->
+  <view wx:if="{{activeTab === 1}}">
+    <text class="section-label">养成计划</text>
+    <view class="program-list">
+      <view wx:for="{{programs}}" wx:key="id" class="program-card"
+        bindtap="startProgram" data-id="{{item.id}}">
+        <view class="program-icon-wrap" style="background: {{item.color}}20;">
+          <mp-icon name="{{item.icon}}" size="32" color="{{item.color}}" />
         </view>
-        <view class="difficulty-badge difficulty-badge-{{item.level === '初级' ? 'beginner' : 'intermediate'}}">
-          <text class="difficulty-badge-text">{{item.level}}</text>
+        <view class="program-info">
+          <text class="program-name font-headline">{{item.name}}</text>
+          <text class="program-desc">{{item.desc}}</text>
+          <view class="program-meta">
+            <view class="program-meta-tag">
+              <mp-icon name="calendar_month" size="13" color="#8f8779" />
+              <text class="program-meta-text">{{item.duration}}天</text>
+            </view>
+            <view class="program-meta-tag">
+              <mp-icon name="trending_up" size="13" color="#8f8779" />
+              <text class="program-meta-text">{{item.level}}</text>
+            </view>
+            <view class="program-meta-tag">
+              <mp-icon name="analytics" size="13" color="#8f8779" />
+              <text class="program-meta-text">{{item.sessionsPerWeek || 4}}次/周</text>
+            </view>
+          </view>
+        </view>
+        <view class="program-arrow">
+          <mp-icon name="arrow_forward" size="20" color="#c4beb4" />
         </view>
       </view>
+    </view>
 
-      <!-- 卡片内容 -->
-      <view class="course-body">
-        <text class="course-name font-headline">{{item.name}}</text>
-        <text class="course-desc">{{item.desc}}</text>
-
-        <!-- 元信息标签 -->
-        <view class="course-meta">
-          <view class="meta-tag">
-            <mp-icon name="calendar_month" size="14" color="#8f8779" />
-            <text class="meta-tag-text">{{item.duration}}</text>
-          </view>
-          <view class="meta-tag">
-            <mp-icon name="analytics" size="14" color="#8f8779" />
-            <text class="meta-tag-text">{{item.moves}}个动作</text>
-          </view>
-          <view class="meta-tag">
-            <mp-icon name="trending_up" size="14" color="#8f8779" />
-            <text class="meta-tag-text">{{item.level}}</text>
+    <!-- 年度规划说明 -->
+    <view class="annual-plan-card">
+      <text class="annual-plan-title font-headline">年度体态归位路径</text>
+      <view class="annual-plan-phases">
+        <view class="phase-item">
+          <view class="phase-dot phase-dot-1"></view>
+          <view class="phase-content">
+            <text class="phase-label">第1季（1-3月）</text>
+            <text class="phase-desc">七日焕新 × 4轮，建立运动习惯与身体觉知</text>
           </view>
         </view>
-
-        <!-- 开始按钮 -->
-        <view class="start-btn" bindtap="startCourse" data-id="{{item.id}}">
-          <mp-icon name="play_arrow" size="20" color="#f7f5f0" />
-          <text class="start-btn-text">开始训练</text>
+        <view class="phase-item">
+          <view class="phase-dot phase-dot-2"></view>
+          <view class="phase-content">
+            <text class="phase-label">第2季（4-6月）</text>
+            <text class="phase-desc">八周·立，系统强化颈肩、骨盆与核心</text>
+          </view>
+        </view>
+        <view class="phase-item">
+          <view class="phase-dot phase-dot-3"></view>
+          <view class="phase-content">
+            <text class="phase-label">第3季（7-9月）</text>
+            <text class="phase-desc">十二周·归位，全面重塑体态秩序</text>
+          </view>
+        </view>
+        <view class="phase-item">
+          <view class="phase-dot phase-dot-4"></view>
+          <view class="phase-content">
+            <text class="phase-label">第4季（10-12月）</text>
+            <text class="phase-desc">自由组合专项课程，维持与精进</text>
+          </view>
         </view>
       </view>
     </view>
