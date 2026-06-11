@@ -11,8 +11,8 @@
 
   <!-- 内容区 -->
   <view class="content">
-    <text class="title">优雅体态，从这里开始</text>
-    <text class="subtitle">科学矫正 · 8 周挺拔如模特</text>
+    <text class="title">让身体，重新立住</text>
+    <text class="subtitle">舒展 · 生长 · 归位</text>
 
     <view class="buttons">
       <view class="btn-phone" bindtap="openPhoneSheet">

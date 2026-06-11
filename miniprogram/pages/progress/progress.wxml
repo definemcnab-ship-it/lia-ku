@@ -13,7 +13,7 @@
     <view class="score-main">
       <text class="score-number font-headline">{{postureScore}}</text>
       <view class="score-meta">
-        <text class="score-label">体态评分</text>
+        <text class="score-label">挺拔度</text>
         <text class="score-diff">较上次提升 4 分 ↑</text>
       </view>
     </view>

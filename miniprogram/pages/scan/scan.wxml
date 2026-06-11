@@ -2,8 +2,8 @@
   <!-- Custom navbar -->
   <view class="navbar">
     <view class="navbar-inner">
-      <text class="page-title">AI 姿态扫描</text>
-      <text class="page-subtitle">上传照片，智能分析你的体态</text>
+      <text class="page-title">体态档案</text>
+      <text class="page-subtitle">一张照片，看见身体的秩序</text>
     </view>
   </view>
 
@@ -41,7 +41,7 @@
             </view>
           </view>
           <view class="score-label-wrap">
-            <text class="score-title">体态评分</text>
+            <text class="score-title">挺拔度参考</text>
             <text class="score-desc">整体体态良好，有改进空间</text>
             <view class="score-badge">
               <mp-icon icon="trending_up" size="22" color="#c08a7d" />

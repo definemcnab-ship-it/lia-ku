@@ -4,7 +4,7 @@
   <view class="page-header">
     <view class="header-text">
       <text class="header-title font-headline">训练课程</text>
-      <text class="header-subtitle">专业矫正动作库</text>
+      <text class="header-subtitle">舒展 · 唤醒 · 归位</text>
     </view>
     <view class="header-icon-wrap">
       <mp-icon name="fitness_center" size="24" color="#8f8779" />
@@ -39,8 +39,8 @@
       </view>
     </view>
     <view class="recommend-body">
-      <text class="recommend-name">天鹅颈塑形</text>
-      <text class="recommend-desc">改善头前引·颈部纤长训练</text>
+      <text class="recommend-name">颈线 · 养成</text>
+      <text class="recommend-desc">颈线向上 · 轻盈生长</text>
       <view class="recommend-meta">
         <view class="recommend-meta-tag">
           <mp-icon name="calendar_month" size="14" color="#8f8779" />

@@ -14,8 +14,8 @@
       <view class="slide-icon-wrap">
         <mp-icon name="self_improvement" size="72" color="#8f8779" />
       </view>
-      <text class="slide-title">科学矫正，优雅体态</text>
-      <text class="slide-body">专注女性体态的 AI 矫正方案，让改变肉眼可见。</text>
+      <text class="slide-title">松而不塌</text>
+      <text class="slide-body">专注女性体态，让身体重新立住。</text>
     </view>
 
     <!-- Step 1：功能介绍 -->
@@ -23,8 +23,8 @@
       <view class="slide-icon-wrap slide-icon-wrap2">
         <mp-icon name="auto_awesome" size="72" color="#8f8779" />
       </view>
-      <text class="slide-title">3 分钟看见专属计划</text>
-      <text class="slide-body">AI 体态评估 → 专属矫正计划 → 肉眼可见的改变。</text>
+      <text class="slide-title">3 分钟，建立你的体态档案</text>
+      <text class="slide-body">体态档案 → 专属养成计划 → 肉眼可见的改变。</text>
     </view>
 
     <!-- Step 2：偏好设置 -->
@@ -49,13 +49,13 @@
       </view>
     </view>
 
-    <!-- Step 3：体态评估引导 -->
+    <!-- Step 3：体态档案引导 -->
     <view class="slide {{step === 3 ? 'visible' : 'hidden'}}">
       <view class="slide-icon-wrap slide-icon-wrap3">
         <mp-icon name="photo_camera" size="64" color="#8f8779" />
       </view>
-      <text class="slide-title">免费体态评估</text>
-      <text class="slide-body">拍摄正面 / 侧面 / 背面 3 张照片，AI 即可生成你的「斯俪体态健康报告」。</text>
+      <text class="slide-title">建立体态档案</text>
+      <text class="slide-body">拍摄正面 / 侧面 / 背面 3 张照片，即可生成你的「体态档案」与挺拔度参考。</text>
       <view class="privacy-tip">
         <mp-icon name="lock" size="20" color="#8f8779" />
         <text class="privacy-text">照片加密存储，仅用于体态分析，可随时删除。</text>
@@ -66,7 +66,7 @@
   <!-- 底部按钮 -->
   <view class="footer">
     <button class="btn-primary" bindtap="nextStep">
-      {{step === 3 ? '立即免费评估' : '继续'}}
+      {{step === 3 ? '建立档案' : '继续'}}
     </button>
     <button wx:if="{{step === 3}}" class="btn-ghost" bindtap="skipToHome">稍后再说</button>
   </view>

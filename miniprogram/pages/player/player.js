@@ -1,12 +1,12 @@
 const app = getApp()
 Page({
   data: {
-    courseN: '天鹅颈塑形课',
+    courseN: '颈线 · 养成',
     moves: [
-      { name:'颈部前屈拉伸', duration:30, desc:'缓慢低头，下巴触向胸口，保持呼吸', icon:'self_improvement' },
-      { name:'颈部侧屈拉伸', duration:30, desc:'耳朵向肩膀靠近，对侧手轻按头顶辅助拉伸', icon:'accessibility_new' },
-      { name:'颈部旋转放松', duration:20, desc:'缓慢转头看左肩，停顿后转向右肩', icon:'self_improvement' },
-      { name:'颈背肌激活', duration:40, desc:'双手交叉置于后脑，头向后顶手掌，保持6秒放松', icon:'fitness_center' },
+      { name:'颈线 · 舒展', duration:30, desc:'缓慢低头，下巴触向胸口，保持呼吸', icon:'self_improvement' },
+      { name:'侧颈 · 打开', duration:30, desc:'耳朵向肩膀靠近，对侧手轻按头顶辅助舒展', icon:'accessibility_new' },
+      { name:'颈部 · 松弛', duration:20, desc:'缓慢转头看左肩，停顿后转向右肩', icon:'self_improvement' },
+      { name:'颈背 · 唤醒', duration:40, desc:'双手交叉置于后脑，头向后顶手掌，保持6秒放松', icon:'fitness_center' },
     ],
     currentIdx: 0,
     timeLeft: 30,
