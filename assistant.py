@@ -832,6 +832,10 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             })
     print(f"\n  [小班权益点不足] 剩余≤6元: {len(report.low_group_points)} 人")
 
+    # 按下次约课时间从近到远排序（无约课的排最后）
+    report.low_sessions.sort(key=lambda x: x.get("next_booking") or "9999")
+    report.low_group_points.sort(key=lambda x: x.get("next_booking") or "9999")
+
     # ---- 规则4: 会员里程碑（仅私教课会员）----
     # 收集今日私教学员名
     today_pt_trainees = set()
