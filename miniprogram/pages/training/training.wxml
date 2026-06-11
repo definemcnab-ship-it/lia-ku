@@ -14,11 +14,11 @@
   <!-- 顶部 Tab：课程 / 计划 -->
   <view class="top-tabs">
     <view class="top-tab {{activeTab === 0 ? 'top-tab-active' : ''}}"
-      bindtap="switchTab" data-idx="0">
+      bindtap="switchTopTab" data-idx="0">
       <text class="top-tab-text">课程</text>
     </view>
     <view class="top-tab {{activeTab === 1 ? 'top-tab-active' : ''}}"
-      bindtap="switchTab" data-idx="1">
+      bindtap="switchTopTab" data-idx="1">
       <text class="top-tab-text">计划</text>
     </view>
   </view>
@@ -90,7 +90,7 @@
           <view class="course-banner-icon-wrap">
             <mp-icon name="{{item.icon}}" size="44" color="rgba(255,255,255,0.9)" />
           </view>
-          <view class="difficulty-badge difficulty-badge-{{item.level === '初级' ? 'beginner' : item.level === '中级' ? 'intermediate' : 'advanced'}}">
+          <view class="difficulty-badge difficulty-badge-{{item.levelClass}}">
             <text class="difficulty-badge-text">{{item.level}}</text>
           </view>
           <view class="evidence-badge">
@@ -111,7 +111,7 @@
             </view>
             <view class="meta-tag">
               <mp-icon name="analytics" size="14" color="#8f8779" />
-              <text class="meta-tag-text">{{item.moves.length}}个动作</text>
+              <text class="meta-tag-text">{{item.movesCount}}个动作</text>
             </view>
             <view class="meta-tag">
               <mp-icon name="trending_up" size="14" color="#8f8779" />
@@ -152,7 +152,7 @@
             </view>
             <view class="program-meta-tag">
               <mp-icon name="analytics" size="13" color="#8f8779" />
-              <text class="program-meta-text">{{item.sessionsPerWeek || 4}}次/周</text>
+              <text class="program-meta-text">{{item.sessionsPerWeek}}次/周</text>
             </view>
           </view>
         </view>
