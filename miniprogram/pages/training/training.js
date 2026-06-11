@@ -1,15 +1,15 @@
 const app = getApp()
 const { courses, programs } = require('./trainingData')
 
-const FILTER_CATEGORIES = ['全部', '颈部', '肩背', '腰腹', '脊背', '膝部', '足弓', '全身']
+const FILTER_CATEGORIES = ['全部', '颈部', '肩背', '腰腹', '脊背', '下肢', '产后', '全身']
 const CATEGORY_MAP = {
-  '颈部': 'neck',
-  '肩背': 'shoulder',
-  '腰腹': 'pelvis',
-  '脊背': 'back',
-  '膝部': 'knee',
-  '足弓': 'foot',
-  '全身': 'full',
+  '颈部': ['neck'],
+  '肩背': ['shoulder'],
+  '腰腹': ['pelvis'],
+  '脊背': ['back'],
+  '下肢': ['knee', 'foot'],
+  '产后': ['postpartum'],
+  '全身': ['full'],
 }
 const LEVEL_CLASS = { '初级': 'beginner', '中级': 'intermediate', '进阶': 'advanced' }
 
@@ -57,8 +57,8 @@ Page({
   },
   switchFilter(e) {
     const idx = Number(e.currentTarget.dataset.idx)
-    const cat = CATEGORY_MAP[FILTER_CATEGORIES[idx]]
-    const filtered = cat ? courseList.filter(c => c.category === cat) : courseList
+    const cats = CATEGORY_MAP[FILTER_CATEGORIES[idx]]
+    const filtered = cats ? courseList.filter(c => cats.indexOf(c.category) !== -1) : courseList
     this.setData({ activeFilter: idx, filteredCourses: filtered })
   },
   startCourse(e) {
