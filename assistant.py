@@ -724,6 +724,10 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             continue
         if not _is_card_valid(m):
             continue
+        # 排除权益点赠送包（赠送包/赠送包2等）
+        card_nm = m.get("cardName", "") or ""
+        if "赠送包" in card_nm:
+            continue
         remain = m.get("remain", 0) or 0
         if 0 < remain <= 6:
             report.low_group_points.append({
