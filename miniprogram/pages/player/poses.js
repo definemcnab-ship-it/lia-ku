@@ -147,7 +147,7 @@ function poseKey(move) {
 // 例如 images/poses/bridge.png 生效后，所有臀桥类动作自动使用该图
 // 也可填远程 URL：IMG.bridge = 'https://...'
 const IMG = {
-  // chin_tuck: '/images/poses/chin_tuck.png',
+  chin_tuck: '/images/poses/chin_tuck.png',
   // neck_side: '/images/poses/neck_side.png',
   // supine_rest: '/images/poses/supine_rest.png',
   // prone_ytw: '/images/poses/prone_ytw.png',
