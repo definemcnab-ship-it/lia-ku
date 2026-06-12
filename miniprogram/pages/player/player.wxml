@@ -9,14 +9,26 @@
     <view class="nav-spacer"></view>
   </view>
 
-  <!-- Move visual card -->
+  <!-- Move visual card：视频 > 视频号 > 示范插图 -->
   <view class="visual-card">
-    <view class="visual-icon-wrap">
-      <mp-icon name="{{moves[currentIdx].icon}}" size="72" color="#fff" />
-    </view>
+    <video wx:if="{{moves[currentIdx].video}}"
+      class="visual-video" src="{{moves[currentIdx].video}}"
+      autoplay loop muted object-fit="cover" show-center-play-btn="{{false}}" controls="{{false}}" />
+    <channel-video wx:elif="{{moves[currentIdx].feedId}}"
+      class="visual-video" feed-id="{{moves[currentIdx].feedId}}"
+      finder-user-name="{{moves[currentIdx].finderUserName}}"
+      autoplay loop object-fit="cover" />
+    <image wx:else class="visual-pose" src="{{moves[currentIdx].pose}}" mode="aspectFit" />
     <view class="visual-name-bar">
       <text class="visual-name">{{moves[currentIdx].name}}</text>
+      <text wx:if="{{moves[currentIdx].reps}}" class="visual-reps">{{moves[currentIdx].reps}}</text>
     </view>
+  </view>
+
+  <!-- 动作要点 -->
+  <view wx:if="{{moves[currentIdx].tip}}" class="tip-row">
+    <mp-icon name="lightbulb" size="16" color="#c08a7d" />
+    <text class="tip-text">{{moves[currentIdx].tip}}</text>
   </view>
 
   <!-- Progress dots -->

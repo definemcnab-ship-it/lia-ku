@@ -1,5 +1,6 @@
 const app = getApp()
 const { courses } = require('../training/trainingData')
+const { poseSrc } = require('./poses')
 
 Page({
   data: {
@@ -18,7 +19,9 @@ Page({
   onLoad(options) {
     const courseId = options.courseId || 'c1'
     const course = courses.find(c => c.id === courseId) || courses[0]
-    const moves = course.moves || []
+    // 每个动作补充示范插图；以后拍好视频后给 move 加 video(mp4地址) 或
+    // feedId+finderUserName(视频号) 字段即可自动切换为视频示范
+    const moves = (course.moves || []).map(m => Object.assign({}, m, { pose: poseSrc(m) }))
     this.setData({
       courseN: course.name,
       moves: moves,
