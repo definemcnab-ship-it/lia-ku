@@ -143,10 +143,41 @@ function poseKey(move) {
   return 'chin_tuck'
 }
 
+// 真实插图：放进 /images/poses/<姿势名>.png 即自动替换对应线条图
+// 例如 images/poses/bridge.png 生效后，所有臀桥类动作自动使用该图
+// 也可填远程 URL：IMG.bridge = 'https://...'
+const IMG = {
+  // chin_tuck: '/images/poses/chin_tuck.png',
+  // neck_side: '/images/poses/neck_side.png',
+  // supine_rest: '/images/poses/supine_rest.png',
+  // prone_ytw: '/images/poses/prone_ytw.png',
+  // wall_angel: '/images/poses/wall_angel.png',
+  // doorway: '/images/poses/doorway.png',
+  // band_pull: '/images/poses/band_pull.png',
+  // side_lying: '/images/poses/side_lying.png',
+  // bridge: '/images/poses/bridge.png',
+  // dead_bug: '/images/poses/dead_bug.png',
+  // bird_dog: '/images/poses/bird_dog.png',
+  // quadruped: '/images/poses/quadruped.png',
+  // plank: '/images/poses/plank.png',
+  // squat: '/images/poses/squat.png',
+  // lunge: '/images/poses/lunge.png',
+  // balance: '/images/poses/balance.png',
+  // foot: '/images/poses/foot.png',
+  // foam_roll: '/images/poses/foam_roll.png',
+}
+
 function poseSrc(move) {
-  const inner = POSES[poseKey(move)]
+  const key = poseKey(move)
+  if (IMG[key]) return IMG[key]
+  const inner = POSES[key]
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140">${inner}</svg>`
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg)
 }
 
-module.exports = { poseSrc }
+// 真实图片是照片/插画，铺满卡片比居中悬浮更好看
+function poseMode(move) {
+  return IMG[poseKey(move)] ? 'cover' : 'fit'
+}
+
+module.exports = { poseSrc, poseMode }
