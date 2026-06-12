@@ -5,6 +5,7 @@
     "pages/home/home",
     "pages/training/training",
     "pages/player/player",
+    "pages/plan/plan",
     "pages/progress/progress",
     "pages/profile/profile",
     "pages/scan/scan",
@@ -25,11 +26,26 @@
     "selectedColor": "#8f8779",
     "backgroundColor": "#ffffff",
     "list": [
-      { "pagePath": "pages/home/home",       "text": "首页" },
-      { "pagePath": "pages/training/training","text": "训练" },
-      { "pagePath": "pages/scan/scan",        "text": "扫描" },
-      { "pagePath": "pages/progress/progress","text": "数据" },
-      { "pagePath": "pages/profile/profile",  "text": "我的" }
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/training/training",
+        "text": "训练"
+      },
+      {
+        "pagePath": "pages/scan/scan",
+        "text": "扫描"
+      },
+      {
+        "pagePath": "pages/progress/progress",
+        "text": "数据"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
     ]
   },
   "usingComponents": {},

@@ -1,0 +1,72 @@
+<view class="page">
+  <!-- Navbar -->
+  <view class="navbar">
+    <view class="nav-back" bindtap="navBack">
+      <mp-icon name="arrow_back" size="22" color="#2b2720" />
+    </view>
+    <view class="nav-titles">
+      <text class="page-title font-headline">{{name}}</text>
+      <text class="page-subtitle">{{desc}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y>
+
+    <!-- 计划概览卡片 -->
+    <view class="hero-card">
+      <view class="hero-icon-wrap" style="background: {{color}}22;">
+        <mp-icon name="{{icon}}" size="36" color="{{color}}" />
+      </view>
+      <view class="hero-stats">
+        <view class="hero-stat">
+          <text class="hero-stat-num font-headline">{{durationLabel}}</text>
+          <text class="hero-stat-label">周期</text>
+        </view>
+        <view class="hero-stat-divider"></view>
+        <view class="hero-stat">
+          <text class="hero-stat-num font-headline">{{totalSessions}}</text>
+          <text class="hero-stat-label">节训练</text>
+        </view>
+        <view class="hero-stat-divider"></view>
+        <view class="hero-stat">
+          <text class="hero-stat-num font-headline">{{level}}</text>
+          <text class="hero-stat-label">难度</text>
+        </view>
+      </view>
+      <view class="hero-start-btn" bindtap="startPlan">
+        <mp-icon name="play_arrow" size="20" color="#f7f5f0" />
+        <text class="hero-start-text">开始第一天</text>
+      </view>
+    </view>
+
+    <!-- 每周安排 -->
+    <view class="weeks">
+      <view wx:for="{{weeks}}" wx:for-item="w" wx:key="week" class="week-block">
+        <view class="week-header">
+          <text class="week-label font-headline">{{w.label}}</text>
+          <text wx:if="{{w.phase}}" class="week-phase">{{w.phase}}</text>
+        </view>
+        <view class="day-list">
+          <view wx:for="{{w.days}}" wx:for-item="d" wx:key="day"
+            class="day-row" bindtap="startDay" data-course-id="{{d.courseId}}">
+            <view class="day-num">
+              <text class="day-num-text">D{{d.day}}</text>
+            </view>
+            <view class="day-icon-wrap">
+              <mp-icon name="{{d.icon}}" size="20" color="#8f8779" />
+            </view>
+            <view class="day-info">
+              <text class="day-course">{{d.courseName}}</text>
+              <text class="day-focus">{{d.focus}} · {{d.duration}}分钟 · {{d.level}}</text>
+            </view>
+            <view class="day-play">
+              <mp-icon name="play_arrow" size="18" color="#c4beb4" />
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 80rpx"></view>
+  </scroll-view>
+</view>

@@ -65,7 +65,8 @@ Page({
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/player/player?courseId=${id}` })
   },
-  startProgram() {
-    wx.showToast({ title: '计划功能即将上线', icon: 'none' })
+  startProgram(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/plan/plan?planId=${id}` })
   },
 })

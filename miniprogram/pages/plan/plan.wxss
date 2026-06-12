@@ -1,0 +1,183 @@
+.page {
+  background: #f7f5f0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* ── Navbar ── */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 110rpx 40rpx 24rpx;
+}
+.nav-back {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.nav-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.page-title {
+  font-size: 44rpx;
+  color: #2b2720;
+  font-weight: 300;
+}
+.page-subtitle {
+  font-size: 22rpx;
+  color: #8f8779;
+}
+
+.scroll-area {
+  flex: 1;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+}
+
+/* ── 概览卡片 ── */
+.hero-card {
+  background: #fff;
+  border-radius: 36rpx;
+  padding: 40rpx;
+  margin-top: 16rpx;
+  margin-bottom: 40rpx;
+}
+.hero-icon-wrap {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+.hero-stats {
+  display: flex;
+  align-items: center;
+  margin-bottom: 36rpx;
+}
+.hero-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+.hero-stat-num {
+  font-size: 40rpx;
+  color: #2b2720;
+  font-weight: 300;
+}
+.hero-stat-label {
+  font-size: 20rpx;
+  color: #8f8779;
+  letter-spacing: 2rpx;
+}
+.hero-stat-divider {
+  width: 2rpx;
+  height: 48rpx;
+  background: #ede9e1;
+}
+.hero-start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: #2b2720;
+  border-radius: 60rpx;
+  height: 96rpx;
+}
+.hero-start-text {
+  font-size: 28rpx;
+  color: #f7f5f0;
+  letter-spacing: 2rpx;
+}
+
+/* ── 每周安排 ── */
+.week-block {
+  margin-bottom: 40rpx;
+}
+.week-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+  padding-left: 8rpx;
+}
+.week-label {
+  font-size: 34rpx;
+  color: #2b2720;
+  font-weight: 300;
+}
+.week-phase {
+  font-size: 20rpx;
+  color: #8f8779;
+  background: #ede9e1;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+.day-list {
+  background: #fff;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx 28rpx;
+  border-bottom: 2rpx solid #f4f1ec;
+}
+.day-row:last-child {
+  border-bottom: none;
+}
+.day-num {
+  width: 64rpx;
+  flex-shrink: 0;
+}
+.day-num-text {
+  font-size: 22rpx;
+  color: #c4beb4;
+  letter-spacing: 1rpx;
+}
+.day-icon-wrap {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 20rpx;
+  background: #f4f1ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.day-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+.day-course {
+  font-size: 28rpx;
+  color: #2b2720;
+}
+.day-focus {
+  font-size: 20rpx;
+  color: #8f8779;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.day-play {
+  flex-shrink: 0;
+}
