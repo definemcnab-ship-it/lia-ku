@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   height: 80rpx;
-  padding-bottom: 75rpx;
+  padding-bottom: 38rpx;
   background: #ffffff;
   display: flex;
   flex-direction: row;
