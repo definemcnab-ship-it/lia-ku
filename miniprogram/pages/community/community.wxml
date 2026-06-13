@@ -26,9 +26,15 @@
   </view>
 
   <scroll-view class="scroll-area" scroll-y>
+    <!-- Empty state -->
+    <view wx:if="{{viewPosts.length === 0}}" class="empty-state">
+      <text class="empty-emoji">🌱</text>
+      <text class="empty-text">这里还没有内容，来发表第一条吧</text>
+    </view>
+
     <!-- Post list -->
     <view class="section">
-      <view class="post-card card" wx:for="{{posts}}" wx:key="id">
+      <view class="post-card card" wx:for="{{viewPosts}}" wx:key="id">
         <!-- Post header -->
         <view class="post-header">
           <view class="avatar-circle">
