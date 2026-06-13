@@ -77,7 +77,7 @@ Page({
 
   navTo(e) {
     const url = e.currentTarget.dataset.url
-    const tabPages = ['/pages/home/home', '/pages/training/training', '/pages/scan/scan', '/pages/progress/progress', '/pages/profile/profile']
+    const tabPages = ['/pages/home/home', '/pages/community/community', '/pages/scan/scan', '/pages/progress/progress', '/pages/profile/profile']
     if (tabPages.includes(url)) wx.switchTab({ url })
     else wx.navigateTo({ url })
   },

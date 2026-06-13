@@ -31,8 +31,8 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/training/training",
-        "text": "训练"
+        "pagePath": "pages/community/community",
+        "text": "圈子"
       },
       {
         "pagePath": "pages/scan/scan",

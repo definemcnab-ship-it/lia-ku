@@ -6,9 +6,9 @@
     <text class="tab-label">首页</text>
   </view>
 
-  <view class="tab-item {{selected === 1 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/training/training" data-index="1">
-    <mp-icon name="fitness_center" size="24" color="{{selected === 1 ? '#8f8779' : '#bbb4ac'}}" />
-    <text class="tab-label">训练</text>
+  <view class="tab-item {{selected === 1 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/community/community" data-index="1">
+    <mp-icon name="group" size="24" color="{{selected === 1 ? '#8f8779' : '#bbb4ac'}}" />
+    <text class="tab-label">圈子</text>
   </view>
 
   <!-- 中间扫描按钮 -->

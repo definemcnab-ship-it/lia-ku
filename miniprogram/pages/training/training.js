@@ -47,11 +47,7 @@ Page({
     programs: programList,
     filteredCourses: courseList,
   },
-  onShow() {
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 1 })
-    }
-  },
+  onShow() {},
   switchTopTab(e) {
     this.setData({ activeTab: Number(e.currentTarget.dataset.idx) })
   },
