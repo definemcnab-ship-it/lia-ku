@@ -5,7 +5,10 @@
     <view class="back-btn" bindtap="goTraining">
       <text class="back-icon">‹</text>
     </view>
-    <text class="nav-title">{{courseN || '训练'}}</text>
+    <view class="nav-title-wrap">
+      <text class="nav-title">{{courseN || '训练'}}</text>
+      <text wx:if="{{sceneTag}}" class="nav-scene-tag">{{sceneTag}}</text>
+    </view>
     <view class="nav-spacer"></view>
   </view>
 

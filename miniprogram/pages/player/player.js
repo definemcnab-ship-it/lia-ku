@@ -1,10 +1,12 @@
 const app = getApp()
 const { courses } = require('../training/trainingData')
 const { poseSrc, poseMode } = require('./poses')
+const { sceneAdapt, sceneLabel } = require('./sceneAdapt')
 
 Page({
   data: {
     courseN: '颈线 · 养成',
+    sceneTag: '',
     moves: [],
     currentIdx: 0,
     timeLeft: 30,
@@ -18,15 +20,17 @@ Page({
 
   onLoad(options) {
     const courseId = options.courseId || 'c1'
+    const scene = options.scene || ''
     const course = courses.find(c => c.id === courseId) || courses[0]
-    // 每个动作补充示范插图；以后拍好视频后给 move 加 video(mp4地址) 或
-    // feedId+finderUserName(视频号) 字段即可自动切换为视频示范
-    const moves = (course.moves || []).map(m => Object.assign({}, m, {
+    // 先按场景改编动作（办公室缩短/筛选、健身房加器械提示），再补示范插图
+    const adapted = sceneAdapt(course.moves || [], scene)
+    const moves = adapted.map(m => Object.assign({}, m, {
       pose: poseSrc(m),
       poseMode: poseMode(m),
     }))
     this.setData({
       courseN: course.name,
+      sceneTag: sceneLabel(scene),
       moves: moves,
       timeLeft: moves[0] ? moves[0].duration : 30,
     })

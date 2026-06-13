@@ -102,7 +102,9 @@ Page({
   },
   startCourse(e) {
     const id = e.currentTarget.dataset.id
-    wx.navigateTo({ url: `/pages/player/player?courseId=${id}` })
+    const scene = SCENE_KEY[SCENES[this.data.activeScene]]
+    const q = scene ? `&scene=${scene}` : ''
+    wx.navigateTo({ url: `/pages/player/player?courseId=${id}${q}` })
   },
   startProgram(e) {
     const id = e.currentTarget.dataset.id
