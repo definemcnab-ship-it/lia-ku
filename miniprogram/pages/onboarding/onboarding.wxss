@@ -1,3 +1,4 @@
+page { background: #ffffff; }
 .page {
   min-height: 100vh;
   background: #ffffff;
@@ -5,98 +6,211 @@
   flex-direction: column;
 }
 
+/* ── Header ── */
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 80rpx 48rpx 32rpx;
+  gap: 20rpx;
+  padding: 72rpx 40rpx 28rpx;
 }
-.dots { display: flex; gap: 12rpx; }
-.dot {
-  width: 12rpx; height: 12rpx; border-radius: 50%;
-  background: #ece8e0; transition: all 0.3s;
+.back-wrap {
+  width: 60rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
-.dot-active { width: 48rpx; border-radius: 6rpx; background: #8f8779; }
-.skip { font-size: 28rpx; color: #9e9688; }
+.back-icon {
+  font-size: 48rpx;
+  color: #8f8779;
+  line-height: 1;
+}
+.progress-bar-track {
+  flex: 1;
+  height: 6rpx;
+  background: #ece8e0;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #c08a7d;
+  border-radius: 999rpx;
+  transition: width 0.4s ease;
+}
+.skip {
+  font-size: 26rpx;
+  color: #9e9688;
+  flex-shrink: 0;
+}
 
+/* ── Main scroll ── */
 .main {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40rpx 48rpx;
-  position: relative;
+  padding: 32rpx 44rpx 0;
 }
 
 .slide {
-  width: 100%;
+  padding-bottom: 40rpx;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
 }
-.visible { display: flex; }
-.hidden { display: none; }
 
-.slide-icon-wrap {
-  width: 240rpx; height: 240rpx; border-radius: 50%;
-  background: #ece8e0;
+/* ── S0 brand ── */
+.slide-icon-circle {
+  width: 200rpx; height: 200rpx; border-radius: 50%;
+  background: #f4f1ec;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 60rpx;
+  margin-bottom: 48rpx;
+  align-self: center;
 }
-.slide-icon-wrap2 { background: #ece8e0; }
-.slide-icon-wrap3 { background: #ece8e0; border-radius: 40rpx; }
-.slide-emoji { font-size: 100rpx; }
-
+.slide-tag {
+  font-size: 22rpx; color: #c08a7d; font-weight: 600;
+  letter-spacing: 2rpx; margin-bottom: 16rpx;
+}
 .slide-title {
   font-family: "Songti SC", Georgia, serif;
-  font-size: 52rpx; color: #2b2720; font-weight: 400;
-  display: block; margin-bottom: 24rpx; line-height: 1.3;
+  font-size: 56rpx; color: #2b2720; font-weight: 400;
+  display: block; margin-bottom: 20rpx; line-height: 1.2;
 }
 .slide-body {
   font-size: 30rpx; color: #6e675b; line-height: 1.8;
-  display: block;
+  display: block; margin-bottom: 48rpx;
 }
+.feature-list { display: flex; flex-direction: column; gap: 20rpx; }
+.feature-row { display: flex; align-items: center; gap: 16rpx; }
+.feature-text { font-size: 28rpx; color: #4a443c; line-height: 1.5; }
 
-/* 偏好步骤 */
-.slide-prefs { align-items: flex-start; text-align: left; }
-.prefs-title {
-  font-family: "Songti SC", Georgia, serif;
-  font-size: 48rpx; color: #2b2720; display: block; margin-bottom: 12rpx;
+/* ── Q header ── */
+.q-step { font-size: 22rpx; color: #c08a7d; font-weight: 700; letter-spacing: 2rpx; margin-bottom: 16rpx; }
+.q-title { font-family: "Songti SC", Georgia, serif; font-size: 48rpx; color: #2b2720; display: block; margin-bottom: 12rpx; }
+.q-sub { font-size: 27rpx; color: #9e9688; display: block; margin-bottom: 40rpx; line-height: 1.6; }
+.q-label { font-size: 28rpx; color: #3f3a32; display: block; margin-bottom: 20rpx; font-weight: 600; }
+.mt { margin-top: 40rpx; }
+
+/* ── S1 体态检测方式 ── */
+.method-card {
+  display: flex; align-items: flex-start; gap: 24rpx;
+  background: #f7f5f0; border-radius: 24rpx;
+  padding: 32rpx; margin-bottom: 20rpx;
+  border: 3rpx solid transparent;
 }
-.prefs-sub { font-size: 26rpx; color: #9e9688; display: block; margin-bottom: 48rpx; }
-.prefs-label { font-size: 28rpx; color: #3f3a32; display: block; margin-bottom: 20rpx; font-weight: 500; }
-.chips { display: flex; flex-wrap: wrap; gap: 20rpx; margin-bottom: 48rpx; }
+.method-active {
+  background: #2b2720;
+  border-color: #2b2720;
+}
+.method-icon-wrap {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.method-info { flex: 1; }
+.method-name {
+  display: block; font-size: 30rpx; font-weight: 700;
+  color: #2b2720; margin-bottom: 8rpx;
+}
+.method-active .method-name { color: #ffffff; }
+.method-desc { display: block; font-size: 25rpx; color: #8f8779; line-height: 1.6; }
+.method-active .method-desc { color: rgba(255,255,255,0.7); }
+.privacy-row {
+  display: flex; align-items: center; gap: 12rpx;
+  margin-top: 28rpx;
+}
+.privacy-text { font-size: 24rpx; color: #bbb4ac; }
+
+/* ── S2 运动历史 ── */
+.radio-group { display: flex; flex-direction: column; gap: 16rpx; margin-bottom: 0; }
+.radio-item {
+  display: flex; align-items: center; gap: 24rpx;
+  background: #f7f5f0; border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  border: 3rpx solid transparent;
+}
+.radio-active { border-color: #c08a7d; background: rgba(192,138,125,0.06); }
+.radio-dot {
+  width: 32rpx; height: 32rpx; border-radius: 50%;
+  border: 4rpx solid #c4beb4; flex-shrink: 0;
+}
+.radio-active .radio-dot { border-color: #c08a7d; background: #c08a7d; }
+.radio-content { flex: 1; }
+.radio-title { display: block; font-size: 29rpx; font-weight: 600; color: #2b2720; margin-bottom: 4rpx; }
+.radio-desc { display: block; font-size: 24rpx; color: #8f8779; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 16rpx; }
 .chip {
-  padding: 16rpx 40rpx; border-radius: 60rpx;
+  padding: 16rpx 32rpx; border-radius: 999rpx;
   background: #f4f1ec; color: #6e675b;
-  font-size: 28rpx; border: 2rpx solid #dcd6cc;
+  font-size: 27rpx; border: 2rpx solid transparent;
 }
-.chip-active { background: #8f8779; color: #f7f5f0; border-color: #8f8779; }
+.chip-active { background: #2b2720; color: #f7f5f0; }
 
-/* 隐私提示 */
-.privacy-tip {
-  display: flex; align-items: flex-start; gap: 16rpx;
-  background: #f4f1ec; border-radius: 20rpx;
-  padding: 24rpx 32rpx; margin-top: 40rpx; width: 100%;
-  box-sizing: border-box;
+/* ── S3 健康筛查 ── */
+.health-section { margin-bottom: 8rpx; }
+.health-section-title {
+  display: block; font-size: 26rpx; color: #6e675b;
+  margin-bottom: 20rpx; line-height: 1.6;
 }
-.privacy-icon { font-size: 36rpx; flex-shrink: 0; }
-.privacy-text { font-size: 26rpx; color: #6e675b; line-height: 1.6; flex: 1; }
+.health-item {
+  display: flex; align-items: flex-start; gap: 20rpx;
+  padding: 24rpx 28rpx; border-radius: 20rpx;
+  margin-bottom: 12rpx;
+  background: #fdf6f4;
+  border: 2rpx solid transparent;
+}
+.health-item-active { border-color: #e85a3a; background: rgba(232,90,58,0.06); }
+.health-item-mod { border-color: #c08a7d; background: rgba(192,138,125,0.06); }
+.health-check {
+  width: 44rpx; height: 44rpx; border-radius: 10rpx;
+  border: 3rpx solid #dcd6cc; background: #ffffff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.health-item-active .health-check { background: #e85a3a; border-color: #e85a3a; }
+.health-item-mod .health-check { background: #c08a7d; border-color: #c08a7d; }
+.health-check-mark { font-size: 28rpx; color: #ffffff; font-weight: 700; }
+.health-info { flex: 1; }
+.health-name { display: block; font-size: 28rpx; font-weight: 600; color: #2b2720; margin-bottom: 4rpx; }
+.health-desc { display: block; font-size: 23rpx; color: #8f8779; line-height: 1.5; }
 
-/* 底部 */
-.footer { padding: 0 48rpx 80rpx; }
+/* ── S4 高危拦截 ── */
+.blocked-icon { text-align: center; margin-bottom: 32rpx; }
+.blocked-emoji { font-size: 110rpx; }
+.blocked-title { font-family: "Songti SC", Georgia, serif; font-size: 48rpx; color: #2b2720; display: block; margin-bottom: 20rpx; }
+.blocked-body { font-size: 29rpx; color: #6e675b; line-height: 1.8; display: block; margin-bottom: 40rpx; }
+.blocked-tips { background: #f7f5f0; border-radius: 24rpx; padding: 32rpx; margin-bottom: 32rpx; }
+.blocked-tips-title { display: block; font-size: 27rpx; font-weight: 700; color: #3f3a32; margin-bottom: 16rpx; }
+.blocked-tip-row { display: flex; gap: 12rpx; margin-bottom: 14rpx; }
+.blocked-tip-bullet { font-size: 28rpx; color: #c08a7d; flex-shrink: 0; }
+.blocked-tip-text { font-size: 26rpx; color: #6e675b; line-height: 1.6; flex: 1; }
+.blocked-continue { padding: 20rpx 0; }
+.blocked-continue-text { font-size: 25rpx; color: #bbb4ac; text-decoration: underline; }
+
+/* ── S5 场景 ── */
+.scene-cards { display: flex; flex-direction: column; gap: 16rpx; margin-bottom: 0; }
+.scene-card {
+  display: flex; flex-direction: row; align-items: center;
+  gap: 28rpx; padding: 28rpx 32rpx; border-radius: 24rpx;
+  background: #f7f5f0; border: 3rpx solid transparent;
+}
+.scene-card-active { border-color: #c08a7d; background: rgba(192,138,125,0.07); }
+.scene-card-emoji { font-size: 48rpx; flex-shrink: 0; }
+.scene-card-name { display: block; font-size: 30rpx; font-weight: 700; color: #2b2720; margin-bottom: 4rpx; }
+.scene-card-desc { display: block; font-size: 24rpx; color: #8f8779; line-height: 1.5; }
+
+/* ── S6 完成 ── */
+.done-circle { text-align: center; margin-bottom: 40rpx; }
+.done-summary { background: #f7f5f0; border-radius: 24rpx; padding: 32rpx; margin-top: 32rpx; display: flex; flex-direction: column; gap: 20rpx; }
+.done-row { display: flex; align-items: center; gap: 16rpx; }
+.done-text { font-size: 27rpx; color: #4a443c; }
+
+/* ── Footer ── */
+.footer {
+  padding: 24rpx 44rpx calc(60rpx + env(safe-area-inset-bottom));
+}
 .btn-primary {
-  width: 100%; height: 100rpx;
-  background: #8f8779; color: #f7f5f0;
+  width: 100%; height: 96rpx;
+  background: #2b2720; color: #f7f5f0;
   border-radius: 24rpx; font-size: 32rpx;
   display: flex; align-items: center; justify-content: center;
-  border: none; margin-bottom: 20rpx;
-}
-.btn-ghost {
-  width: 100%; height: 80rpx;
-  background: transparent; color: #9e9688;
-  font-size: 28rpx; border: none;
-  display: flex; align-items: center; justify-content: center;
+  border: none;
 }

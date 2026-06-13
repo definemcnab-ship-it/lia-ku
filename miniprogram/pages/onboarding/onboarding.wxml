@@ -1,73 +1,380 @@
 <view class="page">
-  <!-- 顶部进度条 + 跳过 -->
+
+  <!-- 顶部进度 + 返回 -->
   <view class="header">
-    <view class="dots">
-      <view wx:for="{{4}}" wx:key="index"
-        class="dot {{index === step ? 'dot-active' : ''}}"></view>
+    <view class="back-wrap" bindtap="prevStep">
+      <text class="back-icon" wx:if="{{step > 0}}">‹</text>
+    </view>
+    <view class="progress-bar-track">
+      <view class="progress-bar-fill" style="width:{{(step/6)*100}}%"></view>
     </view>
     <text class="skip" bindtap="skipToHome">跳过</text>
   </view>
 
-  <!-- Step 0：品牌介绍 -->
-  <view class="main">
-    <view class="slide {{step === 0 ? 'visible' : 'hidden'}}">
-      <view class="slide-icon-wrap">
+  <scroll-view class="main" scroll-y>
+
+    <!-- ─── S0：品牌介绍 ─── -->
+    <view class="slide" wx:if="{{step === 0}}">
+      <view class="slide-icon-circle">
         <mp-icon name="self_improvement" size="72" color="#8f8779" />
       </view>
+      <text class="slide-tag">专业体态养成</text>
       <text class="slide-title">松而不塌</text>
-      <text class="slide-body">专注女性体态，让身体重新立住。</text>
-    </view>
-
-    <!-- Step 1：功能介绍 -->
-    <view class="slide {{step === 1 ? 'visible' : 'hidden'}}">
-      <view class="slide-icon-wrap slide-icon-wrap2">
-        <mp-icon name="auto_awesome" size="72" color="#8f8779" />
-      </view>
-      <text class="slide-title">3 分钟，建立你的体态档案</text>
-      <text class="slide-body">体态档案 → 专属养成计划 → 肉眼可见的改变。</text>
-    </view>
-
-    <!-- Step 2：偏好设置 -->
-    <view class="slide slide-prefs {{step === 2 ? 'visible' : 'hidden'}}">
-      <text class="prefs-title">完善基础信息</text>
-      <text class="prefs-sub">用于体态分对照标准，可稍后在设置中补充。</text>
-      <text class="prefs-label">训练场景（可多选）</text>
-      <view class="chips">
-        <view wx:for="{{scenes}}" wx:key="item"
-          class="chip {{sceneSelected[item] ? 'chip-active' : ''}}"
-          bindtap="toggleScene" data-val="{{item}}">
-          <text>{{item}}</text>
+      <text class="slide-body">专注女性六大体态问题，结合运动医学与神经肌肉控制，真正从根源改善。</text>
+      <view class="feature-list">
+        <view class="feature-row">
+          <mp-icon name="check_circle" size="20" color="#c08a7d" />
+          <text class="feature-text">AI 体态检测 · 精准定位失衡肌群</text>
         </view>
-      </view>
-      <text class="prefs-label">可用器械（可多选）</text>
-      <view class="chips">
-        <view wx:for="{{gears}}" wx:key="item"
-          class="chip {{gearSelected[item] ? 'chip-active' : ''}}"
-          bindtap="toggleGear" data-val="{{item}}">
-          <text>{{item}}</text>
+        <view class="feature-row">
+          <mp-icon name="check_circle" size="20" color="#c08a7d" />
+          <text class="feature-text">循证动作库 · 300+ 专业康复动作</text>
+        </view>
+        <view class="feature-row">
+          <mp-icon name="check_circle" size="20" color="#c08a7d" />
+          <text class="feature-text">场景适配 · 居家 / 办公室 / 健身房</text>
+        </view>
+        <view class="feature-row">
+          <mp-icon name="check_circle" size="20" color="#c08a7d" />
+          <text class="feature-text">阶梯进阶 · 从入门到运动表现</text>
         </view>
       </view>
     </view>
 
-    <!-- Step 3：体态档案引导 -->
-    <view class="slide {{step === 3 ? 'visible' : 'hidden'}}">
-      <view class="slide-icon-wrap slide-icon-wrap3">
-        <mp-icon name="photo_camera" size="64" color="#8f8779" />
+    <!-- ─── S1：体态检测方式 ─── -->
+    <view class="slide" wx:if="{{step === 1}}">
+      <text class="q-step">01 / 06</text>
+      <text class="q-title">建立你的体态档案</text>
+      <text class="q-sub">选择适合你的方式，我们会生成专属改善方案。</text>
+      <view class="method-card {{postureMethod === 'scan' ? 'method-active' : ''}}"
+        bindtap="selectPostureMethod" data-val="scan">
+        <view class="method-icon-wrap">
+          <mp-icon name="camera" size="36" color="{{postureMethod === 'scan' ? '#ffffff' : '#8f8779'}}" />
+        </view>
+        <view class="method-info">
+          <text class="method-name">AI 实时检测（推荐）</text>
+          <text class="method-desc">用前置摄像头站立拍摄，AI 自动识别头前引、圆肩等问题，2 分钟内完成</text>
+        </view>
       </view>
-      <text class="slide-title">建立体态档案</text>
-      <text class="slide-body">拍摄正面 / 侧面 / 背面 3 张照片，即可生成你的「体态档案」与挺拔度参考。</text>
-      <view class="privacy-tip">
-        <mp-icon name="lock" size="20" color="#8f8779" />
-        <text class="privacy-text">照片加密存储，仅用于体态分析，可随时删除。</text>
+      <view class="method-card {{postureMethod === 'photo' ? 'method-active' : ''}}"
+        bindtap="selectPostureMethod" data-val="photo">
+        <view class="method-icon-wrap">
+          <mp-icon name="photo_camera" size="36" color="{{postureMethod === 'photo' ? '#ffffff' : '#8f8779'}}" />
+        </view>
+        <view class="method-info">
+          <text class="method-name">选择图片</text>
+          <text class="method-desc">从相册选择正面 / 侧面照片，进行离线分析</text>
+        </view>
+      </view>
+      <view class="method-card {{postureMethod === 'skip' ? 'method-active' : ''}}"
+        bindtap="selectPostureMethod" data-val="skip">
+        <view class="method-icon-wrap">
+          <mp-icon name="arrow_forward" size="36" color="{{postureMethod === 'skip' ? '#ffffff' : '#8f8779'}}" />
+        </view>
+        <view class="method-info">
+          <text class="method-name">先跳过</text>
+          <text class="method-desc">稍后在「扫描」页建立档案，先体验训练课程</text>
+        </view>
+      </view>
+      <view class="privacy-row">
+        <mp-icon name="lock" size="18" color="#bbb4ac" />
+        <text class="privacy-text">照片加密存储，仅用于体态分析，不对外共享</text>
       </view>
     </view>
-  </view>
+
+    <!-- ─── S2：运动历史 ─── -->
+    <view class="slide" wx:if="{{step === 2}}">
+      <text class="q-step">02 / 06</text>
+      <text class="q-title">你的运动背景</text>
+      <text class="q-sub">帮助我们为你选择合适的起点。</text>
+
+      <text class="q-label">目前运动频率</text>
+      <view class="radio-group">
+        <view class="radio-item {{exerciseFreq === 'none' ? 'radio-active' : ''}}"
+          bindtap="selectFreq" data-val="none">
+          <view class="radio-dot"></view>
+          <view class="radio-content">
+            <text class="radio-title">几乎不运动</text>
+            <text class="radio-desc">久坐为主，每周运动不足1次</text>
+          </view>
+        </view>
+        <view class="radio-item {{exerciseFreq === 'light' ? 'radio-active' : ''}}"
+          bindtap="selectFreq" data-val="light">
+          <view class="radio-dot"></view>
+          <view class="radio-content">
+            <text class="radio-title">偶尔运动</text>
+            <text class="radio-desc">每周1-2次，以散步/拉伸为主</text>
+          </view>
+        </view>
+        <view class="radio-item {{exerciseFreq === 'moderate' ? 'radio-active' : ''}}"
+          bindtap="selectFreq" data-val="moderate">
+          <view class="radio-dot"></view>
+          <view class="radio-content">
+            <text class="radio-title">规律运动</text>
+            <text class="radio-desc">每周3-4次，有一定运动基础</text>
+          </view>
+        </view>
+        <view class="radio-item {{exerciseFreq === 'active' ? 'radio-active' : ''}}"
+          bindtap="selectFreq" data-val="active">
+          <view class="radio-dot"></view>
+          <view class="radio-content">
+            <text class="radio-title">运动达人</text>
+            <text class="radio-desc">每周5次以上，有系统训练经验</text>
+          </view>
+        </view>
+      </view>
+
+      <text class="q-label mt">曾经有过（可多选）</text>
+      <view class="chips">
+        <view class="chip {{exerciseTypes['yoga'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="yoga"><text>瑜伽 / 普拉提</text></view>
+        <view class="chip {{exerciseTypes['gym'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="gym"><text>健身房力量</text></view>
+        <view class="chip {{exerciseTypes['rehab'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="rehab"><text>康复训练</text></view>
+        <view class="chip {{exerciseTypes['dance'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="dance"><text>舞蹈</text></view>
+        <view class="chip {{exerciseTypes['run'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="run"><text>跑步</text></view>
+        <view class="chip {{exerciseTypes['swim'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="swim"><text>游泳</text></view>
+        <view class="chip {{exerciseTypes['none'] ? 'chip-active' : ''}}"
+          bindtap="toggleExerciseType" data-val="none"><text>都没有</text></view>
+      </view>
+    </view>
+
+    <!-- ─── S3：健康筛查 ─── -->
+    <view class="slide" wx:if="{{step === 3}}">
+      <text class="q-step">03 / 06</text>
+      <text class="q-title">健康与损伤筛查</text>
+      <text class="q-sub">这是安全训练的必要步骤，请如实填写。</text>
+
+      <view class="health-section">
+        <text class="health-section-title">⚠️ 以下情况如果存在，请勾选</text>
+        <view class="health-item {{healthFlags['fracture'] ? 'health-item-active' : ''}}"
+          bindtap="toggleHealth" data-val="fracture">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['fracture']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">骨折 / 骨裂未完全愈合</text>
+            <text class="health-desc">近6个月内</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['surgery3m'] ? 'health-item-active' : ''}}"
+          bindtap="toggleHealth" data-val="surgery3m">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['surgery3m']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">手术后未满3个月</text>
+            <text class="health-desc">脊柱、关节、腹部等部位手术</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['cardio'] ? 'health-item-active' : ''}}"
+          bindtap="toggleHealth" data-val="cardio">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['cardio']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">心脏病 / 未控制的高血压</text>
+            <text class="health-desc">或医生建议限制运动</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['neuro'] ? 'health-item-active' : ''}}"
+          bindtap="toggleHealth" data-val="neuro">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['neuro']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">活动期神经系统疾病</text>
+            <text class="health-desc">如多发性硬化、帕金森中重度、脑卒中急性期</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['cancer'] ? 'health-item-active' : ''}}"
+          bindtap="toggleHealth" data-val="cancer">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['cancer']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">活动期肿瘤 / 正在化疗放疗</text>
+            <text class="health-desc">未获主治医生运动许可</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="health-section mt">
+        <text class="health-section-title">📋 其他情况（方便我们调整方案）</text>
+        <view class="health-item {{healthFlags['disc'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="disc">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['disc']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">椎间盘突出 / 颈腰椎问题</text>
+            <text class="health-desc">我们会避开高风险动作</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['osteo'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="osteo">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['osteo']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">骨质疏松</text>
+            <text class="health-desc">我们会避免高冲击动作</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['postpartum'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="postpartum">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['postpartum']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">产后（6个月内）</text>
+            <text class="health-desc">我们会推荐产后专属恢复方案</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['pregnant'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="pregnant">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['pregnant']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">当前怀孕</text>
+            <text class="health-desc">动作方案会做出相应调整</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['joint'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="joint">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['joint']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">关节疼痛 / 炎症</text>
+            <text class="health-desc">膝关节、肩关节、髋关节等</text>
+          </view>
+        </view>
+        <view class="health-item {{healthFlags['none'] ? 'health-item-mod' : ''}}"
+          bindtap="toggleHealth" data-val="none">
+          <view class="health-check">
+            <text wx:if="{{healthFlags['none']}}" class="health-check-mark">✓</text>
+          </view>
+          <view class="health-info">
+            <text class="health-name">以上均无</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ─── S4：高危拦截 ─── -->
+    <view class="slide" wx:if="{{step === 4}}">
+      <view class="blocked-icon">
+        <text class="blocked-emoji">🏥</text>
+      </view>
+      <text class="blocked-title">请先咨询医生</text>
+      <text class="blocked-body">根据你填写的信息，你目前的身体状况存在一定风险，我们建议在获得医生的运动许可后再开始训练计划。</text>
+      <view class="blocked-tips">
+        <text class="blocked-tips-title">你可以先做这些：</text>
+        <view class="blocked-tip-row">
+          <text class="blocked-tip-bullet">·</text>
+          <text class="blocked-tip-text">将此 App 推荐给你的康复医生，让专业人士为你制定方案</text>
+        </view>
+        <view class="blocked-tip-row">
+          <text class="blocked-tip-bullet">·</text>
+          <text class="blocked-tip-text">获得医生许可后，重新填写健康问卷即可解锁全部课程</text>
+        </view>
+        <view class="blocked-tip-row">
+          <text class="blocked-tip-bullet">·</text>
+          <text class="blocked-tip-text">现在仍可以浏览课程内容，但请在专业指导下进行</text>
+        </view>
+      </view>
+      <view class="blocked-continue" bindtap="nextStep">
+        <text class="blocked-continue-text">我了解风险，仍想继续了解</text>
+      </view>
+    </view>
+
+    <!-- ─── S5：场景偏好 ─── -->
+    <view class="slide" wx:if="{{step === 5}}">
+      <text class="q-step">{{isHighRisk ? '参考' : '04'}} / 06</text>
+      <text class="q-title">你通常在哪里训练？</text>
+      <text class="q-sub">可多选，之后可以在设置里调整</text>
+
+      <view class="scene-cards">
+        <view class="scene-card {{sceneSelected['居家'] ? 'scene-card-active' : ''}}"
+          bindtap="toggleScene" data-val="居家">
+          <text class="scene-card-emoji">🏠</text>
+          <text class="scene-card-name">居家</text>
+          <text class="scene-card-desc">瑜伽垫 / 弹力带即可，随时开始</text>
+        </view>
+        <view class="scene-card {{sceneSelected['办公室'] ? 'scene-card-active' : ''}}"
+          bindtap="toggleScene" data-val="办公室">
+          <text class="scene-card-emoji">💼</text>
+          <text class="scene-card-name">办公室</text>
+          <text class="scene-card-desc">工位即可，5-10分钟微训练</text>
+        </view>
+        <view class="scene-card {{sceneSelected['健身房'] ? 'scene-card-active' : ''}}"
+          bindtap="toggleScene" data-val="健身房">
+          <text class="scene-card-emoji">🏋️</text>
+          <text class="scene-card-name">健身房</text>
+          <text class="scene-card-desc">结合器械深度强化，进阶优选</text>
+        </view>
+      </view>
+
+      <text class="q-label mt">常用器械（可多选）</text>
+      <view class="chips">
+        <view class="chip {{gearSelected['yoga_mat'] ? 'chip-active' : ''}}"
+          bindtap="toggleGear" data-val="yoga_mat"><text>瑜伽垫</text></view>
+        <view class="chip {{gearSelected['band'] ? 'chip-active' : ''}}"
+          bindtap="toggleGear" data-val="band"><text>弹力带</text></view>
+        <view class="chip {{gearSelected['dumbbell'] ? 'chip-active' : ''}}"
+          bindtap="toggleGear" data-val="dumbbell"><text>哑铃</text></view>
+        <view class="chip {{gearSelected['foam_roll'] ? 'chip-active' : ''}}"
+          bindtap="toggleGear" data-val="foam_roll"><text>泡沫轴</text></view>
+        <view class="chip {{gearSelected['none'] ? 'chip-active' : ''}}"
+          bindtap="toggleGear" data-val="none"><text>无器械</text></view>
+      </view>
+    </view>
+
+    <!-- ─── S6：完成 ─── -->
+    <view class="slide" wx:if="{{step === 6}}">
+      <view class="done-circle">
+        <mp-icon name="check_circle" size="80" color="#c08a7d" />
+      </view>
+      <text class="slide-title">档案建立完成</text>
+      <text class="slide-body">我们已为你生成专属体态改善方案，训练课程已按你的情况排好。</text>
+      <view class="done-summary">
+        <view class="done-row" wx:if="{{postureMethod === 'scan'}}">
+          <mp-icon name="camera" size="20" color="#c08a7d" />
+          <text class="done-text">将为你进行 AI 体态实时检测</text>
+        </view>
+        <view class="done-row" wx:if="{{postureMethod === 'photo'}}">
+          <mp-icon name="photo_camera" size="20" color="#c08a7d" />
+          <text class="done-text">可在「扫描」页上传照片完成体态分析</text>
+        </view>
+        <view class="done-row" wx:if="{{isHighRisk}}">
+          <mp-icon name="lightbulb" size="20" color="#c08a7d" />
+          <text class="done-text">已标记特殊健康情况，动作方案将适度调整</text>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
 
   <!-- 底部按钮 -->
   <view class="footer">
-    <button class="btn-primary" bindtap="nextStep">
-      {{step === 3 ? '建立档案' : '继续'}}
+    <button class="btn-primary" wx:if="{{step < 6}}" bindtap="nextStep">
+      <text wx:if="{{step === 0}}">开始了解</text>
+      <text wx:elif="{{step === 1 && !postureMethod}}">稍后再说，继续</text>
+      <text wx:elif="{{step === 4}}">我了解，继续填写</text>
+      <text wx:else>下一步</text>
     </button>
-    <button wx:if="{{step === 3}}" class="btn-ghost" bindtap="skipToHome">稍后再说</button>
+    <button class="btn-primary" wx:if="{{step === 6 && postureMethod === 'scan'}}" bindtap="goScan">
+      立即开始体态检测
+    </button>
+    <button class="btn-primary" wx:if="{{step === 6 && postureMethod !== 'scan'}}" bindtap="goHome">
+      进入斯俪
+    </button>
   </view>
+
 </view>

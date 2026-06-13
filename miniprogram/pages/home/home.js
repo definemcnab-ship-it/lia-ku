@@ -44,6 +44,12 @@ Page({
 
   onShow() {
     const app = getApp()
+    // 首次启动引导问卷
+    if (app.globalData.needOnboarding) {
+      app.globalData.needOnboarding = false
+      wx.navigateTo({ url: '/pages/onboarding/onboarding' })
+      return
+    }
     const score = app.globalData.postureScore
     const last = app.globalData.lastScore
     const diff = score - last

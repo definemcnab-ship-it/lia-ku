@@ -6,6 +6,12 @@ App({
   },
 
   onLaunch() {
+    // 首次启动跳问卷（TabBar 页无法用 navigateTo，用 onShow 里的路由守卫）
+    const done = wx.getStorageSync('onboardingDone')
+    if (!done) {
+      // 记录需要跳转，home/onShow 里处理（onLaunch 时页面还未挂载，无法直接跳）
+      this.globalData.needOnboarding = true
+    }
     // 加载思源宋体，用于 font-headline（与网页版一致）
     wx.loadFontFace({
       family: 'NotoSerifSC',
