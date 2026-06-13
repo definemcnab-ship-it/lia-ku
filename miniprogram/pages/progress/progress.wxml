@@ -14,7 +14,7 @@
       <text class="score-number font-headline">{{postureScore}}</text>
       <view class="score-meta">
         <text class="score-label">挺拔度</text>
-        <text class="score-diff">较上次提升 4 分 ↑</text>
+        <text class="score-diff">{{diffText}} {{diffUp ? '↑' : '↓'}}</text>
       </view>
     </view>
     <view class="score-ring">
@@ -22,24 +22,24 @@
     </view>
   </view>
 
-  <!-- 本周趋势 -->
+  <!-- 近七天评分趋势 -->
   <view class="section">
-    <text class="section-title font-headline">本周趋势</text>
+    <text class="section-title font-headline">近七天趋势</text>
     <view class="chart-card">
       <view class="bar-chart">
         <view
-          wx:for="{{weekData}}"
+          wx:for="{{bars}}"
           wx:key="index"
           class="bar-col"
         >
-          <text class="bar-value">{{item}}</text>
+          <text class="bar-value">{{item.value}}</text>
           <view class="bar-track">
             <view
-              class="bar-fill {{index === 6 ? 'bar-fill-today' : ''}}"
-              style="height: {{(item - 50) * 4}}rpx;"
+              class="bar-fill {{item.isToday ? 'bar-fill-today' : ''}}"
+              style="height: {{item.h}}rpx;"
             ></view>
           </view>
-          <text class="bar-label">{{weekLabels[index]}}</text>
+          <text class="bar-label">{{item.label}}</text>
         </view>
       </view>
     </view>
@@ -52,14 +52,21 @@
         <mp-icon name="calendar_month" size="24" color="#c08a7d" />
       </view>
       <text class="stat-value font-headline">{{checkInDays}}天</text>
-      <text class="stat-label">打卡天数</text>
+      <text class="stat-label">累计打卡</text>
     </view>
     <view class="stat-card">
       <view class="stat-icon-wrap">
         <mp-icon name="fitness_center" size="24" color="#8f8779" />
       </view>
-      <text class="stat-value font-headline">3次</text>
+      <text class="stat-value font-headline">{{weekSessions}}次</text>
       <text class="stat-label">本周训练</text>
+    </view>
+    <view class="stat-card">
+      <view class="stat-icon-wrap">
+        <mp-icon name="auto_awesome" size="24" color="#8d7dc0" />
+      </view>
+      <text class="stat-value font-headline">{{totalSessions}}次</text>
+      <text class="stat-label">累计训练</text>
     </view>
   </view>
 
@@ -89,21 +96,34 @@
 
   <!-- 本月打卡日历 -->
   <view class="section">
-    <text class="section-title font-headline">本月打卡日历</text>
+    <text class="section-title font-headline">{{monthLabel}}打卡日历</text>
     <view class="calendar-card">
-      <view class="cal-week">
-        <view
-          wx:for="{{calendarDays}}"
-          wx:key="date"
-          class="cal-day"
-        >
-          <text class="cal-day-label">{{item.label}}</text>
-          <view class="cal-dot-wrap">
-            <view class="cal-dot {{item.checked ? 'cal-dot-on' : 'cal-dot-off'}}"></view>
-          </view>
-          <text class="cal-date-num {{item.checked ? 'cal-date-on' : ''}}">{{item.num}}</text>
+      <view class="cal-head-row">
+        <view wx:for="{{weekHeads}}" wx:key="*this" class="cal-head-cell">
+          <text class="cal-head-text">{{item}}</text>
         </view>
       </view>
+      <view class="cal-grid">
+        <view
+          wx:for="{{monthCells}}"
+          wx:key="key"
+          class="cal-cell"
+        >
+          <block wx:if="{{!item.blank}}">
+            <view class="cal-cell-inner {{item.checked ? 'cal-cell-on' : ''}} {{item.isToday ? 'cal-cell-today' : ''}}">
+              <text class="cal-cell-num {{item.checked ? 'cal-num-on' : ''}}">{{item.num}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态引导 -->
+  <view wx:if="{{!hasData}}" class="empty-hint">
+    <text class="empty-text">还没有训练记录，完成第一次训练即可点亮这里</text>
+    <view class="empty-btn" bindtap="goTraining">
+      <text class="empty-btn-text">去训练</text>
     </view>
   </view>
 

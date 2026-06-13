@@ -3,6 +3,8 @@ App({
     postureScore: 72,
     lastScore: 68,
     checkIns: [],
+    scoreHistory: [], // [{ date: 'YYYY-MM-DD', score }]
+    sessions: [],     // [{ date, courseId, courseName, category, scene }]
   },
 
   onLaunch() {
@@ -24,9 +26,13 @@ App({
     const score = wx.getStorageSync('postureScore')
     const lastScore = wx.getStorageSync('lastScore')
     const checkIns = wx.getStorageSync('checkIns')
+    const scoreHistory = wx.getStorageSync('scoreHistory')
+    const sessions = wx.getStorageSync('sessions')
     if (score) this.globalData.postureScore = score
     if (lastScore) this.globalData.lastScore = lastScore
     if (checkIns) this.globalData.checkIns = checkIns
+    if (scoreHistory) this.globalData.scoreHistory = scoreHistory
+    if (sessions) this.globalData.sessions = sessions
   },
 
   saveScore(score) {
@@ -34,6 +40,12 @@ App({
     this.globalData.postureScore = score
     wx.setStorageSync('lastScore', this.globalData.lastScore)
     wx.setStorageSync('postureScore', score)
+    // 记录评分历史（同一天覆盖为最新一次）
+    const today = this.todayStr()
+    const hist = this.globalData.scoreHistory.filter(h => h.date !== today)
+    hist.push({ date: today, score })
+    this.globalData.scoreHistory = hist
+    wx.setStorageSync('scoreHistory', hist)
   },
 
   addCheckIn(dateStr) {
@@ -41,6 +53,12 @@ App({
       this.globalData.checkIns.push(dateStr)
       wx.setStorageSync('checkIns', this.globalData.checkIns)
     }
+  },
+
+  addSession(session) {
+    const rec = Object.assign({ date: this.todayStr() }, session)
+    this.globalData.sessions.push(rec)
+    wx.setStorageSync('sessions', this.globalData.sessions)
   },
 
   todayStr() {

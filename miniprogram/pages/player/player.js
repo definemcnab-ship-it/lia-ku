@@ -28,6 +28,8 @@ Page({
       pose: poseSrc(m),
       poseMode: poseMode(m),
     }))
+    this._course = course
+    this._scene = scene
     this.setData({
       courseN: course.name,
       sceneTag: sceneLabel(scene),
@@ -62,6 +64,15 @@ Page({
     if (next >= this.data.moves.length) {
       this.setData({ done: true, playing: false })
       app.addCheckIn(app.todayStr())
+      const c = this._course
+      if (c) {
+        app.addSession({
+          courseId: c.id,
+          courseName: c.name,
+          category: c.category,
+          scene: this._scene || '',
+        })
+      }
       return
     }
     this.setData({

@@ -145,12 +145,13 @@
 }
 .stat-card {
   flex: 1;
+  min-width: 0;
   background: #ffffff;
-  border-radius: 40rpx;
-  padding: 36rpx 32rpx;
+  border-radius: 32rpx;
+  padding: 30rpx 22rpx;
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
+  gap: 10rpx;
 }
 .stat-icon-wrap {
   width: 72rpx;
@@ -163,7 +164,7 @@
 }
 .stat-value {
   display: block;
-  font-size: 52rpx;
+  font-size: 44rpx;
   color: #2b2720;
   font-weight: 200;
   line-height: 1.1;
@@ -241,43 +242,76 @@
   border-radius: 40rpx;
   padding: 40rpx 32rpx;
 }
-.cal-week {
+.cal-head-row {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  margin-bottom: 16rpx;
 }
-.cal-day {
+.cal-head-cell {
+  width: 14.285%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12rpx;
-  flex: 1;
+  justify-content: center;
 }
-.cal-day-label {
+.cal-head-text {
   font-size: 20rpx;
-  color: #8f8779;
+  color: #b8b0a4;
 }
-.cal-dot-wrap {
+.cal-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cal-cell {
+  width: 14.285%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 0;
+}
+.cal-cell-inner {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.cal-dot {
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 50%;
-}
-.cal-dot-on {
+.cal-cell-on {
   background: #c08a7d;
 }
-.cal-dot-off {
-  background: #ece8e3;
+.cal-cell-today {
+  border: 2rpx solid #c08a7d;
 }
-.cal-date-num {
+.cal-cell-num {
   font-size: 24rpx;
   color: #b8b0a4;
 }
-.cal-date-on {
-  color: #c08a7d;
+.cal-num-on {
+  color: #ffffff;
   font-weight: 600;
+}
+
+/* ── 空状态 ── */
+.empty-hint {
+  margin: 8rpx 0 0;
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 56rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28rpx;
+}
+.empty-text {
+  font-size: 26rpx;
+  color: #8f8779;
+  text-align: center;
+  line-height: 1.6;
+}
+.empty-btn {
+  background: #2b2720;
+  border-radius: 24rpx;
+  padding: 20rpx 56rpx;
+}
+.empty-btn-text {
+  color: #f7f5f0;
+  font-size: 28rpx;
 }
