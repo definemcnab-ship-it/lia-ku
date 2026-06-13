@@ -34,6 +34,7 @@ const programList = programs.map(p => ({
   id: p.id,
   name: p.name,
   desc: p.desc,
+  scenes: p.scenes || ['home'],
   duration: p.duration,
   sessionsPerWeek: p.sessionsPerWeek || 4,
   level: p.level,
@@ -54,6 +55,12 @@ function applyFilters(scene, category) {
   return list
 }
 
+function filterPrograms(scene) {
+  if (scene === '全部') return programList
+  const key = SCENE_KEY[scene]
+  return programList.filter(p => p.scenes.indexOf(key) !== -1)
+}
+
 Page({
   data: {
     activeFilter: 0,
@@ -64,6 +71,15 @@ Page({
     programs: programList,
     filteredCourses: courseList,
   },
+  _applyScene(sceneIdx) {
+    const scene = SCENES[sceneIdx]
+    const category = FILTER_CATEGORIES[this.data.activeFilter]
+    this.setData({
+      activeScene: sceneIdx,
+      filteredCourses: applyFilters(scene, category),
+      programs: filterPrograms(scene),
+    })
+  },
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 })
@@ -73,13 +89,7 @@ Page({
     this.setData({ activeTab: Number(e.currentTarget.dataset.idx) })
   },
   switchScene(e) {
-    const sceneIdx = Number(e.currentTarget.dataset.idx)
-    const scene = SCENES[sceneIdx]
-    const category = FILTER_CATEGORIES[this.data.activeFilter]
-    this.setData({
-      activeScene: sceneIdx,
-      filteredCourses: applyFilters(scene, category),
-    })
+    this._applyScene(Number(e.currentTarget.dataset.idx))
   },
   switchFilter(e) {
     const idx = Number(e.currentTarget.dataset.idx)

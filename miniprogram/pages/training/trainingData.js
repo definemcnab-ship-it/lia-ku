@@ -1242,6 +1242,7 @@ const programs = [
     level: '初级',
     icon: 'auto_awesome',
     color: '#c08a7d',
+    scenes: ['home','office'],
     weeks: [
       {
         week: 1,
@@ -1270,6 +1271,7 @@ const programs = [
     level: '中级',
     icon: 'trending_up',
     color: '#7d9fc0',
+    scenes: ['home','gym'],
     weeks: [
       // Week 1 — 基础激活
       {
@@ -1358,6 +1360,7 @@ const programs = [
     level: '进阶',
     icon: 'workspace_premium',
     color: '#8d7dc0',
+    scenes: ['home','gym'],
     weeks: [
       // ── Phase 1: 基础期 W1-4 ────────────────────────────────
       {

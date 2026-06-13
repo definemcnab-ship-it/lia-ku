@@ -23,21 +23,21 @@
     </view>
   </view>
 
+  <!-- 场景切换（课程 / 计划 共用） -->
+  <view class="scene-row">
+    <view
+      wx:for="{{scenes}}"
+      wx:key="index"
+      class="scene-chip {{activeScene === index ? 'scene-chip-active' : ''}}"
+      bindtap="switchScene"
+      data-idx="{{index}}"
+    >
+      <text class="scene-chip-text">{{item}}</text>
+    </view>
+  </view>
+
   <!-- ───── 课程 Tab ───── -->
   <view wx:if="{{activeTab === 0}}">
-    <!-- 场景切换 -->
-    <view class="scene-row">
-      <view
-        wx:for="{{scenes}}"
-        wx:key="index"
-        class="scene-chip {{activeScene === index ? 'scene-chip-active' : ''}}"
-        bindtap="switchScene"
-        data-idx="{{index}}"
-      >
-        <text class="scene-chip-text">{{item}}</text>
-      </view>
-    </view>
-
     <!-- 筛选 Tabs -->
     <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="filter-row">
@@ -144,7 +144,10 @@
 
   <!-- ───── 计划 Tab ───── -->
   <view wx:if="{{activeTab === 1}}">
-    <text class="section-label">养成计划</text>
+    <text class="section-label">养成计划（{{programs.length}}套）</text>
+    <view wx:if="{{programs.length === 0}}" class="scene-empty">
+      <text class="scene-empty-text">该场景下暂无适配计划，试试切换其他场景</text>
+    </view>
     <view class="program-list">
       <view wx:for="{{programs}}" wx:key="id" class="program-card"
         bindtap="startProgram" data-id="{{item.id}}">

@@ -66,6 +66,15 @@
   color: #ffffff;
 }
 
+.scene-empty {
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+.scene-empty-text {
+  font-size: 27rpx;
+  color: #bbb4ac;
+}
+
 .filter-scroll {
   width: 100%;
   margin-bottom: 36rpx;
