@@ -49,11 +49,11 @@
         <!-- Post footer -->
         <view class="post-footer">
           <view class="post-action" data-id="{{item.id}}" bindtap="likePost">
-            <mp-icon icon="like" size="32" color="#8f8779" />
+            <mp-icon name="thumb_up" size="32" color="#8f8779" />
             <text class="action-count">{{item.likes}}</text>
           </view>
           <view class="post-action">
-            <mp-icon icon="comment" size="32" color="#8f8779" />
+            <mp-icon name="chat_bubble" size="32" color="#8f8779" />
             <text class="action-count">{{item.comments}}</text>
           </view>
         </view>
@@ -64,7 +64,39 @@
   </scroll-view>
 
   <!-- Floating post button -->
-  <view class="fab">
-    <mp-icon icon="add" size="48" color="#ffffff" />
+  <view class="fab" bindtap="openComposer">
+    <mp-icon name="add" size="48" color="#ffffff" />
+  </view>
+
+  <!-- 发表动态 -->
+  <view wx:if="{{composerOpen}}" class="composer-mask" bindtap="closeComposer">
+    <view class="composer-sheet" catchtap="noop">
+      <view class="composer-head">
+        <text class="composer-cancel" bindtap="closeComposer">取消</text>
+        <text class="composer-title">发表动态</text>
+        <text class="composer-submit" bindtap="submitPost">发布</text>
+      </view>
+      <textarea
+        class="composer-input"
+        placeholder="分享你的蜕变之路、训练心得或想问的问题…"
+        placeholder-class="composer-ph"
+        value="{{draft}}"
+        bindinput="onDraftInput"
+        maxlength="500"
+        auto-height
+        focus
+      />
+      <view class="composer-tags">
+        <view
+          class="composer-tag {{draftTag === item ? 'composer-tag-active' : ''}}"
+          wx:for="{{tagOptions}}"
+          wx:key="*this"
+          data-tag="{{item}}"
+          bindtap="selectDraftTag"
+        >
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

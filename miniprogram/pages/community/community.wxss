@@ -173,6 +173,70 @@ page { background: #f7f5f0; }
   z-index: 100;
 }
 
+/* 发表动态 */
+.composer-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,39,32,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+.composer-sheet {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 36rpx 44rpx calc(48rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -8rpx 40rpx rgba(43,39,32,0.12);
+}
+.composer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+.composer-cancel {
+  font-size: 30rpx;
+  color: #8f8779;
+}
+.composer-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2b2720;
+}
+.composer-submit {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #c08a7d;
+}
+.composer-input {
+  width: 100%;
+  min-height: 200rpx;
+  font-size: 30rpx;
+  line-height: 1.7;
+  color: #2b2720;
+}
+.composer-ph {
+  color: #bbb4ac;
+}
+.composer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+.composer-tag {
+  background: #f4f1ec;
+  border-radius: 999rpx;
+  padding: 12rpx 28rpx;
+  font-size: 24rpx;
+  color: #8f8779;
+}
+.composer-tag-active {
+  background: #2b2720;
+  color: #ffffff;
+}
+
 .bottom-spacer { height: 60rpx; }
 .nav-back { width:64rpx; height:64rpx; display:flex; align-items:center; justify-content:center; margin-right:16rpx; flex-shrink:0; }
 .nav-titles { display:flex; flex-direction:column; }
