@@ -95,8 +95,8 @@
         <view class="done-btn done-btn-outline" bindtap="goTraining">
           <text>返回训练</text>
         </view>
-        <view class="done-btn done-btn-fill" bindtap="goHome">
-          <text>回到首页</text>
+        <view class="done-btn done-btn-fill" bindtap="goProgress">
+          <text>查看进步</text>
         </view>
       </view>
     </view>

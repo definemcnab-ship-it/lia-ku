@@ -95,4 +95,5 @@ Page({
 
   goHome() { wx.switchTab({ url: '/pages/home/home' }) },
   goTraining() { wx.navigateBack() },
+  goProgress() { wx.navigateTo({ url: '/pages/progress/progress' }) },
 })
