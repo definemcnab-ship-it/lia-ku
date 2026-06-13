@@ -25,6 +25,19 @@
 
   <!-- ───── 课程 Tab ───── -->
   <view wx:if="{{activeTab === 0}}">
+    <!-- 场景切换 -->
+    <view class="scene-row">
+      <view
+        wx:for="{{scenes}}"
+        wx:key="index"
+        class="scene-chip {{activeScene === index ? 'scene-chip-active' : ''}}"
+        bindtap="switchScene"
+        data-idx="{{index}}"
+      >
+        <text class="scene-chip-text">{{item}}</text>
+      </view>
+    </view>
+
     <!-- 筛选 Tabs -->
     <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="filter-row">

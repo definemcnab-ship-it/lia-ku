@@ -16,6 +16,7 @@ const courses = [
     icon: 'self_improvement',
     bg: '1',
     evidence: 'A',
+    scenes: ['home','office'],
     targetMuscles: {
       activate: ['深颈屈肌', '菱形肌'],
       release: ['上斜方肌', '胸锁乳突肌'],
@@ -92,6 +93,7 @@ const courses = [
     icon: 'self_improvement',
     bg: '1',
     evidence: 'A',
+    scenes: ['home','office'],
     targetMuscles: {
       activate: ['深颈屈肌', '中下斜方肌', '菱形肌'],
       release: ['上斜方肌', '肩胛提肌', '胸小肌'],
@@ -179,6 +181,7 @@ const courses = [
     icon: 'accessibility_new',
     bg: '2',
     evidence: 'A',
+    scenes: ['home','office'],
     targetMuscles: {
       activate: ['中下斜方肌', '菱形肌', '冈下肌'],
       release: ['胸大肌', '胸小肌', '前锯肌紧张部'],
@@ -266,6 +269,7 @@ const courses = [
     icon: 'fitness_center',
     bg: '2',
     evidence: 'A',
+    scenes: ['home','office'],
     targetMuscles: {
       activate: ['中下斜方肌', '菱形肌', '前锯肌', '冈下肌'],
       release: ['胸小肌', '上斜方肌'],
@@ -353,6 +357,7 @@ const courses = [
     icon: 'accessibility_new',
     bg: '3',
     evidence: 'A',
+    scenes: ['home','gym'],
     targetMuscles: {
       activate: ['臀大肌', '臀中肌', '腹横肌'],
       release: ['髂腰肌', '股直肌', '阔筋膜张肌'],
@@ -440,6 +445,7 @@ const courses = [
     icon: 'fitness_center',
     bg: '3',
     evidence: 'A',
+    scenes: ['home','gym'],
     targetMuscles: {
       activate: ['腹横肌', '臀大肌', '臀中肌', '多裂肌'],
       release: ['阔筋膜张肌', '髂腰肌'],
@@ -527,6 +533,7 @@ const courses = [
     icon: 'spa',
     bg: '4',
     evidence: 'A',
+    scenes: ['home'],
     targetMuscles: {
       activate: ['腹横肌', '多裂肌', '臀大肌'],
       release: ['竖脊肌', '腰方肌'],
@@ -614,6 +621,7 @@ const courses = [
     icon: 'fitness_center',
     bg: '4',
     evidence: 'A',
+    scenes: ['home'],
     targetMuscles: {
       activate: ['多裂肌', '腹横肌', '臀大肌', '腘绳肌'],
       release: ['竖脊肌', '腰方肌'],
@@ -701,6 +709,7 @@ const courses = [
     icon: 'directions_walk',
     bg: '5',
     evidence: 'A',
+    scenes: ['home','gym'],
     targetMuscles: {
       activate: ['股四头肌VMO', '腘绳肌', '臀中肌'],
       release: ['腓肠肌', '比目鱼肌', '股二头肌'],
@@ -788,6 +797,7 @@ const courses = [
     icon: 'fitness_center',
     bg: '5',
     evidence: 'A',
+    scenes: ['gym'],
     targetMuscles: {
       activate: ['腘绳肌', '股四头肌', '臀大肌', '小腿三头肌'],
       release: ['股四头肌', '髂胫束'],
@@ -875,6 +885,7 @@ const courses = [
     icon: 'directions_walk',
     bg: '6',
     evidence: 'A',
+    scenes: ['home'],
     targetMuscles: {
       activate: ['足底内在肌', '胫骨后肌', '趾屈肌'],
       release: ['足底筋膜', '腓肠肌', '比目鱼肌'],
@@ -962,6 +973,7 @@ const courses = [
     icon: 'fitness_center',
     bg: '1',
     evidence: 'A',
+    scenes: ['home','gym'],
     targetMuscles: {
       activate: ['深颈屈肌', '中下斜方肌', '腹横肌', '臀大肌', '臀中肌', '足底内在肌'],
       release: ['上斜方肌', '胸肌', '髂腰肌'],
@@ -1049,6 +1061,7 @@ const courses = [
     icon: 'spa',
     bg: '3',
     evidence: 'A',
+    scenes: ['home'],
     targetMuscles: {
       activate: ['腹横肌', '盆底肌', '多裂肌'],
       release: ['腰方肌', '髋屈肌'],
@@ -1136,6 +1149,7 @@ const courses = [
     icon: 'spa',
     bg: '6',
     evidence: 'A',
+    scenes: ['home'],
     targetMuscles: {
       activate: ['臀中肌', '盆底肌', '腹横肌'],
       release: ['髋屈肌', '梨状肌', '腰方肌'],

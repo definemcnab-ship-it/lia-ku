@@ -39,6 +39,33 @@
 }
 
 /* ── 筛选 Tabs ── */
+/* ── 场景切换 ── */
+.scene-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+.scene-chip {
+  flex: 1;
+  padding: 18rpx 0;
+  border-radius: 999rpx;
+  background: #f0ede8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scene-chip-active {
+  background: #2b2720;
+}
+.scene-chip-text {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #8f8779;
+}
+.scene-chip-active .scene-chip-text {
+  color: #ffffff;
+}
+
 .filter-scroll {
   width: 100%;
   margin-bottom: 36rpx;

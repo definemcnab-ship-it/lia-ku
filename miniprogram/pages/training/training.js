@@ -12,13 +12,15 @@ const CATEGORY_MAP = {
   '全身': ['full'],
 }
 const LEVEL_CLASS = { '初级': 'beginner', '中级': 'intermediate', '进阶': 'advanced' }
+const SCENES = ['全部', '居家', '办公室', '健身房']
+const SCENE_KEY = { '居家': 'home', '办公室': 'office', '健身房': 'gym' }
 
-// 列表只需要轻量字段，完整动作数据在播放页按需加载
 const courseList = courses.map(c => ({
   id: c.id,
   name: c.name,
   desc: c.desc,
   category: c.category,
+  scenes: c.scenes || ['home'],
   duration: c.duration,
   level: c.level,
   levelClass: LEVEL_CLASS[c.level] || 'beginner',
@@ -39,11 +41,26 @@ const programList = programs.map(p => ({
   color: p.color,
 }))
 
+function applyFilters(scene, category) {
+  let list = courseList
+  if (scene !== '全部') {
+    const key = SCENE_KEY[scene]
+    list = list.filter(c => c.scenes.indexOf(key) !== -1)
+  }
+  if (category !== '全部') {
+    const cats = CATEGORY_MAP[category]
+    if (cats) list = list.filter(c => cats.indexOf(c.category) !== -1)
+  }
+  return list
+}
+
 Page({
   data: {
     activeFilter: 0,
+    activeScene: 0,
     activeTab: 0,
     filters: FILTER_CATEGORIES,
+    scenes: SCENES,
     programs: programList,
     filteredCourses: courseList,
   },
@@ -55,11 +72,23 @@ Page({
   switchTopTab(e) {
     this.setData({ activeTab: Number(e.currentTarget.dataset.idx) })
   },
+  switchScene(e) {
+    const sceneIdx = Number(e.currentTarget.dataset.idx)
+    const scene = SCENES[sceneIdx]
+    const category = FILTER_CATEGORIES[this.data.activeFilter]
+    this.setData({
+      activeScene: sceneIdx,
+      filteredCourses: applyFilters(scene, category),
+    })
+  },
   switchFilter(e) {
     const idx = Number(e.currentTarget.dataset.idx)
-    const cats = CATEGORY_MAP[FILTER_CATEGORIES[idx]]
-    const filtered = cats ? courseList.filter(c => cats.indexOf(c.category) !== -1) : courseList
-    this.setData({ activeFilter: idx, filteredCourses: filtered })
+    const category = FILTER_CATEGORIES[idx]
+    const scene = SCENES[this.data.activeScene]
+    this.setData({
+      activeFilter: idx,
+      filteredCourses: applyFilters(scene, category),
+    })
   },
   startCourse(e) {
     const id = e.currentTarget.dataset.id
