@@ -186,7 +186,7 @@ page { background: #f7f5f0; }
   width: 100%;
   background: #ffffff;
   border-radius: 40rpx 40rpx 0 0;
-  padding: 36rpx 44rpx calc(163rpx + env(safe-area-inset-bottom));
+  padding: 36rpx 44rpx calc(105rpx + env(safe-area-inset-bottom));
   box-shadow: 0 -8rpx 40rpx rgba(43,39,32,0.12);
 }
 .composer-head {
