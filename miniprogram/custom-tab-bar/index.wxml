@@ -6,9 +6,9 @@
     <text class="tab-label">首页</text>
   </view>
 
-  <view class="tab-item {{selected === 1 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/community/community" data-index="1">
-    <mp-icon name="group" size="24" color="{{selected === 1 ? '#8f8779' : '#bbb4ac'}}" />
-    <text class="tab-label">圈子</text>
+  <view class="tab-item {{selected === 1 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/training/training" data-index="1">
+    <mp-icon name="fitness_center" size="24" color="{{selected === 1 ? '#8f8779' : '#bbb4ac'}}" />
+    <text class="tab-label">训练</text>
   </view>
 
   <!-- 中间扫描按钮 -->
@@ -19,9 +19,9 @@
     <text class="tab-label tab-label-center">扫描</text>
   </view>
 
-  <view class="tab-item {{selected === 3 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/progress/progress" data-index="3">
-    <mp-icon name="analytics" size="24" color="{{selected === 3 ? '#8f8779' : '#bbb4ac'}}" />
-    <text class="tab-label">数据</text>
+  <view class="tab-item {{selected === 3 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/community/community" data-index="3">
+    <mp-icon name="group" size="24" color="{{selected === 3 ? '#8f8779' : '#bbb4ac'}}" />
+    <text class="tab-label">圈子</text>
   </view>
 
   <view class="tab-item {{selected === 4 ? 'active' : ''}}" bindtap="switchTab" data-path="/pages/profile/profile" data-index="4">

@@ -31,16 +31,16 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/community/community",
-        "text": "圈子"
+        "pagePath": "pages/training/training",
+        "text": "训练"
       },
       {
         "pagePath": "pages/scan/scan",
         "text": "扫描"
       },
       {
-        "pagePath": "pages/progress/progress",
-        "text": "数据"
+        "pagePath": "pages/community/community",
+        "text": "圈子"
       },
       {
         "pagePath": "pages/profile/profile",
