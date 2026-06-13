@@ -289,6 +289,57 @@
   font-weight: 600;
 }
 
+/* ── 最近训练 ── */
+.recent-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  overflow: hidden;
+}
+.recent-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 40rpx;
+  border-bottom: 1rpx solid #f4f1ec;
+}
+.recent-row:last-child {
+  border-bottom: none;
+}
+.recent-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #fdf0ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.recent-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.recent-name {
+  font-size: 28rpx;
+  color: #2b2720;
+}
+.recent-scene {
+  font-size: 20rpx;
+  color: #8f8779;
+  background: #f4f1ec;
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+.recent-when {
+  font-size: 24rpx;
+  color: #b8b0a4;
+  flex-shrink: 0;
+}
+
 /* ── 空状态 ── */
 .empty-hint {
   margin: 8rpx 0 0;

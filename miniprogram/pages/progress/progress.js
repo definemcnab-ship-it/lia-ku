@@ -68,6 +68,34 @@ function buildWeekTrend(scoreHistory, currentScore) {
   return { days, labels }
 }
 
+const CAT_ICON = {
+  neck: 'self_improvement', shoulder: 'accessibility_new', pelvis: 'fitness_center',
+  back: 'spa', knee: 'directions_walk', foot: 'directions_walk',
+  postpartum: 'spa', full: 'fitness_center',
+}
+const SCENE_LABEL = { home: '居家', office: '办公室', gym: '健身房' }
+
+// 相对日期：今天 / 昨天 / M月D日
+function relDate(dateStr) {
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const d = new Date(dateStr); d.setHours(0, 0, 0, 0)
+  const diff = Math.round((today - d) / 86400000)
+  if (diff === 0) return '今天'
+  if (diff === 1) return '昨天'
+  return (d.getMonth() + 1) + '月' + d.getDate() + '日'
+}
+
+// 最近训练记录（倒序取最多6条）
+function buildRecent(sessions) {
+  return sessions.slice(-6).reverse().map((s, i) => ({
+    key: s.date + '_' + i,
+    name: s.courseName || '训练',
+    icon: CAT_ICON[s.category] || 'fitness_center',
+    when: relDate(s.date),
+    scene: SCENE_LABEL[s.scene] || '',
+  }))
+}
+
 function buildMilestones(checkInDays, score, maxStreak) {
   return [
     { label: '首次打卡', done: checkInDays >= 1, icon: checkInDays >= 1 ? 'check_circle' : 'star' },
@@ -106,6 +134,7 @@ Page({
     monthLabel: '',
     weekHeads: ['一', '二', '三', '四', '五', '六', '日'],
     monthCells: [],
+    recent: [],
     hasData: false,
   },
 
@@ -149,6 +178,7 @@ Page({
       milestones: buildMilestones(checkIns.length, score, streak),
       monthLabel: (today.getMonth() + 1) + '月',
       monthCells: buildMonthGrid(checkIns),
+      recent: buildRecent(sessions),
       hasData: checkIns.length > 0 || sessions.length > 0,
     })
   },
