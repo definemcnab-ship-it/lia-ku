@@ -156,6 +156,60 @@ page { background: #f7f5f0; }
   font-size: 28rpx;
   color: #8f8779;
 }
+.action-count-on {
+  color: #c08a7d;
+  font-weight: 600;
+}
+
+/* 评论区 */
+.comment-block {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #f4f1ec;
+}
+.comment-row {
+  display: flex;
+  gap: 12rpx;
+  font-size: 27rpx;
+  line-height: 1.7;
+  margin-bottom: 12rpx;
+}
+.comment-name {
+  color: #c08a7d;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.comment-text {
+  color: #4a443c;
+  flex: 1;
+}
+.comment-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+.comment-input {
+  flex: 1;
+  height: 68rpx;
+  background: #f4f1ec;
+  border-radius: 999rpx;
+  padding: 0 28rpx;
+  font-size: 27rpx;
+  color: #2b2720;
+}
+.comment-ph {
+  color: #bbb4ac;
+}
+.comment-send {
+  background: #2b2720;
+  border-radius: 999rpx;
+  padding: 14rpx 30rpx;
+  font-size: 26rpx;
+  color: #ffffff;
+  font-weight: 600;
+  flex-shrink: 0;
+}
 
 /* FAB */
 .fab {

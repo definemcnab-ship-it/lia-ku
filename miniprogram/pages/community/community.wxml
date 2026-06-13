@@ -49,12 +49,35 @@
         <!-- Post footer -->
         <view class="post-footer">
           <view class="post-action" data-id="{{item.id}}" bindtap="likePost">
-            <mp-icon name="thumb_up" size="32" color="#8f8779" />
-            <text class="action-count">{{item.likes}}</text>
+            <mp-icon name="thumb_up" size="32" color="{{item.liked ? '#c08a7d' : '#8f8779'}}" />
+            <text class="action-count {{item.liked ? 'action-count-on' : ''}}">{{item.likes}}</text>
           </view>
-          <view class="post-action">
-            <mp-icon name="chat_bubble" size="32" color="#8f8779" />
-            <text class="action-count">{{item.comments}}</text>
+          <view class="post-action" data-id="{{item.id}}" bindtap="toggleComments">
+            <mp-icon name="chat_bubble" size="32" color="{{item.showComments ? '#c08a7d' : '#8f8779'}}" />
+            <text class="action-count {{item.showComments ? 'action-count-on' : ''}}">{{item.comments}}</text>
+          </view>
+        </view>
+
+        <!-- 评论区 -->
+        <view wx:if="{{item.showComments}}" class="comment-block">
+          <view class="comment-row" wx:for="{{item.commentList}}" wx:for-item="c" wx:key="id">
+            <text class="comment-name">{{c.name}}</text>
+            <text class="comment-text">{{c.content}}</text>
+          </view>
+          <view class="comment-input-row">
+            <input
+              class="comment-input"
+              placeholder="友善地说点什么…"
+              placeholder-class="comment-ph"
+              value="{{commentDraft}}"
+              bindinput="onCommentInput"
+              confirm-type="send"
+              data-id="{{item.id}}"
+              bindconfirm="submitComment"
+            />
+            <view class="comment-send" data-id="{{item.id}}" bindtap="submitComment">
+              <text>发送</text>
+            </view>
           </view>
         </view>
       </view>
