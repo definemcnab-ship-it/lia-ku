@@ -183,6 +183,8 @@ Page({
     })
   },
 
+  goBack() { wx.navigateBack() },
+
   goTraining() {
     wx.switchTab({ url: '/pages/training/training' })
   },

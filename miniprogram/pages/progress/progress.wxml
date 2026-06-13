@@ -2,6 +2,9 @@
 
   <!-- 页面标题 -->
   <view class="page-header">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
     <text class="page-title font-headline">进步追踪</text>
     <view class="header-icon-wrap">
       <mp-icon name="trending_up" size="22" color="#8f8779" />

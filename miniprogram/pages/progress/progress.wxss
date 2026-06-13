@@ -9,13 +9,31 @@
 .page-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16rpx;
   margin-bottom: 32rpx;
+}
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.back-icon {
+  font-size: 52rpx;
+  color: #2b2720;
+  line-height: 1;
+  margin-top: -4rpx;
+}
+.page-title {
+  flex: 1;
 }
 .page-title {
   font-size: 52rpx;
   color: #2b2720;
   font-weight: 300;
+  flex: 1;
 }
 .header-icon-wrap {
   width: 72rpx;
