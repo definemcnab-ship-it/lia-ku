@@ -1,111 +1,161 @@
 <view class="page">
-  <!-- Custom navbar -->
+
+  <!-- Navbar -->
   <view class="navbar">
     <view class="navbar-inner">
-      <text class="page-title">体态档案</text>
+      <text class="page-title font-headline">体态档案</text>
       <text class="page-subtitle">一张照片，看见身体的秩序</text>
     </view>
   </view>
 
   <scroll-view class="scroll-area" scroll-y>
-    <!-- Camera upload zone -->
-    <view class="section">
+
+    <!-- 扫描入口 -->
+    <view class="section" wx:if="{{!result && !scanning}}">
       <view class="upload-card" bindtap="startScan">
         <view class="upload-inner">
           <view class="camera-icon-wrap">
-            <mp-icon icon="camera" size="64" color="#c08a7d" />
+            <mp-icon name="photo_camera" size="52" color="#c08a7d" />
           </view>
-          <text class="upload-label">点击上传照片</text>
-          <text class="upload-hint">支持拍照或从相册选择</text>
+          <text class="upload-label">点击检测体态</text>
+          <text class="upload-hint">支持拍照或从相册选择 · AI 分析</text>
         </view>
       </view>
     </view>
 
-    <!-- Scanning state -->
+    <!-- 分析中 -->
     <view class="section" wx:if="{{scanning}}">
       <view class="card loading-card">
         <view class="spinner"></view>
-        <text class="loading-text">AI 分析中...</text>
+        <text class="loading-text">AI 分析中…</text>
         <text class="loading-sub">正在识别你的体态特征</text>
       </view>
     </view>
 
-    <!-- Result card -->
-    <view class="section" wx:if="{{result && !scanning}}">
-      <view class="card result-card">
-        <view class="score-row">
-          <view class="score-circle-outer">
-            <view class="score-circle">
-              <text class="score-number">{{result.score}}</text>
-              <text class="score-unit">分</text>
+    <!-- 分析结果 -->
+    <view wx:if="{{result && !scanning}}">
+
+      <!-- 评分卡 -->
+      <view class="section">
+        <view class="card score-card">
+          <view class="score-row">
+            <view class="score-circle-outer">
+              <view class="score-circle">
+                <text class="score-number">{{result.score}}</text>
+                <text class="score-unit">分</text>
+              </view>
             </view>
-          </view>
-          <view class="score-label-wrap">
-            <text class="score-title">挺拔度参考</text>
-            <text class="score-desc">整体体态良好，有改进空间</text>
-            <view class="score-badge">
-              <mp-icon icon="trending_up" size="22" color="#c08a7d" />
-              <text class="score-badge-text">持续进步中</text>
+            <view class="score-label-wrap">
+              <text class="score-title font-headline">挺拔度参考</text>
+              <text class="score-desc">{{result.score >= 80 ? '整体体态良好，继续保持' : result.score >= 70 ? '整体良好，有提升空间' : '建议系统训练改善'}}</text>
+              <view class="score-badge">
+                <mp-icon name="trending_up" size="18" color="#c08a7d" />
+                <text class="score-badge-text">较上次 +{{result.score - (history.length >= 2 ? history[history.length-2].score : result.score - 0)}} 分</text>
+              </view>
             </view>
-          </view>
-        </view>
-
-        <view class="divider"></view>
-
-        <view class="issues-section">
-          <text class="section-label">发现问题</text>
-          <view class="issue-item" wx:for="{{result.issues}}" wx:key="index">
-            <view class="issue-dot"></view>
-            <text class="issue-text">{{item}}</text>
-          </view>
-        </view>
-
-        <view class="divider"></view>
-
-        <view class="suggestions-section">
-          <text class="section-label">改善建议</text>
-          <view class="suggestion-item" wx:for="{{result.suggestions}}" wx:key="index">
-            <mp-icon icon="arrow_forward" size="28" color="#c08a7d" />
-            <text class="suggestion-text">{{item}}</text>
-          </view>
-        </view>
-
-        <view class="reset-btn-wrap">
-          <view class="reset-btn" bindtap="reset">
-            <text class="reset-btn-text">重新扫描</text>
           </view>
         </view>
       </view>
+
+      <!-- 发现问题 -->
+      <view class="section">
+        <text class="section-title font-headline">发现的体态特征</text>
+        <view class="card issues-card">
+          <view
+            wx:for="{{result.issues}}"
+            wx:key="key"
+            class="issue-item"
+          >
+            <view class="issue-icon-wrap">
+              <mp-icon name="{{item.icon}}" size="22" color="#c08a7d" />
+            </view>
+            <view class="issue-info">
+              <text class="issue-name">{{item.issue}}</text>
+              <text class="issue-detail">{{item.detail}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 改善建议 → 跳转课程 -->
+      <view class="section">
+        <text class="section-title font-headline">针对性改善课程</text>
+        <view class="suggestions-wrap">
+          <view
+            wx:for="{{result.issues}}"
+            wx:key="key"
+            class="suggestion-card"
+            bindtap="goToCourse"
+            data-course-id="{{item.courseId}}"
+          >
+            <view class="suggestion-icon-wrap">
+              <mp-icon name="{{item.icon}}" size="24" color="#8f8779" />
+            </view>
+            <view class="suggestion-info">
+              <text class="suggestion-name">{{item.courseName}}</text>
+              <text class="suggestion-sub">针对 · {{item.issue}}</text>
+            </view>
+            <mp-icon name="arrow_forward" size="20" color="#b8b0a4" />
+          </view>
+        </view>
+      </view>
+
+      <!-- 重新检测 -->
+      <view class="section">
+        <view class="rescan-btn" bindtap="reset">
+          <text class="rescan-text">重新检测</text>
+        </view>
+      </view>
+
     </view>
 
-    <!-- Tips section (shown when no result) -->
+    <!-- 拍摄小贴士（无结果时） -->
     <view class="section" wx:if="{{!result && !scanning}}">
+      <text class="section-title font-headline">拍摄小贴士</text>
       <view class="card tips-card">
-        <text class="tips-title font-headline">拍摄小贴士</text>
         <view class="tip-item">
           <view class="tip-index">1</view>
           <view class="tip-content">
             <text class="tip-text">全身正面站立</text>
-            <text class="tip-desc">确保全身都在画面内，双脚自然分开</text>
+            <text class="tip-desc">确保全身都在画面内，双脚自然分开与肩同宽</text>
           </view>
         </view>
         <view class="tip-item">
           <view class="tip-index">2</view>
           <view class="tip-content">
             <text class="tip-text">保持自然站姿</text>
-            <text class="tip-desc">放松身体，避免刻意挺胸或弯腰</text>
+            <text class="tip-desc">放松身体，不要刻意挺胸或弯腰，展示平时的状态</text>
           </view>
         </view>
         <view class="tip-item">
           <view class="tip-index">3</view>
           <view class="tip-content">
-            <text class="tip-text">光线充足</text>
-            <text class="tip-desc">选择明亮环境，避免逆光拍摄</text>
+            <text class="tip-text">光线充足 · 侧面备选</text>
+            <text class="tip-desc">选择明亮环境，也可拍侧面照以检测骨盆和腰椎曲线</text>
           </view>
         </view>
       </view>
     </view>
 
-    <view class="bottom-spacer"></view>
+    <!-- 检测历史 -->
+    <view class="section" wx:if="{{history.length}}">
+      <text class="section-title font-headline">历史档案</text>
+      <view class="card history-card">
+        <view
+          wx:for="{{history}}"
+          wx:key="date"
+          class="history-row"
+        >
+          <view class="history-dot {{item.score >= 80 ? 'dot-good' : item.score >= 70 ? 'dot-ok' : 'dot-low'}}"></view>
+          <view class="history-info">
+            <text class="history-date">{{item.date}}</text>
+            <text class="history-issues">{{item.issueCount}} 项体态特征</text>
+          </view>
+          <text class="history-score">{{item.score}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 140rpx"></view>
   </scroll-view>
 </view>
