@@ -1,4 +1,5 @@
 const app = getApp()
+const postureApi = require('../../utils/postureApi')
 
 const ANGLES = [
   {
@@ -115,6 +116,19 @@ function simulate(prefs, lastScore) {
   return { score, issues }
 }
 
+// 后端返回的 issues 仅含 {key, issue, detail}，用 POSTURE_MAP 补全图标与课程
+function enrichIssues(rawIssues, prefs) {
+  const scene = (prefs && prefs.scene && prefs.scene[0]) || 'home'
+  return (rawIssues || []).map(raw => {
+    const base = POSTURE_MAP.find(p => p.key === raw.key) || {}
+    const merged = Object.assign({}, base, {
+      issue: raw.issue || base.issue,
+      detail: raw.detail || base.detail,
+    })
+    return adaptScene(merged, scene)
+  })
+}
+
 Page({
   data: {
     // step: 'guide' | 'angle' | 'checking' | 'fail' | 'analyzing' | 'result'
@@ -128,6 +142,8 @@ Page({
     history: [],
     prefs: null,
   },
+
+  _fileIds: { front: '', side: '', back: '' }, // 后端模式下各角度文件标识
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
@@ -164,39 +180,83 @@ Page({
           wx.showToast({ title: '获取照片失败，请重试', icon: 'none' })
         }
       },
-      success: () => {
+      success: (res) => {
+        const filePath = res.tempFiles && res.tempFiles[0] && res.tempFiles[0].tempFilePath
         this.setData({ step: 'checking' })
-        // 模拟校验：20% 概率不通过
-        setTimeout(() => {
-          const pass = Math.random() > 0.2
-          if (!pass) {
-            const reason = FAIL_REASONS[Math.floor(Math.random() * FAIL_REASONS.length)]
-            this.setData({ step: 'fail', failReason: reason })
-          } else {
-            const passed = this.data.passed.slice()
-            passed[this.data.angleIdx] = true
-            const next = this.data.angleIdx + 1
-            if (next >= ANGLES.length) {
-              // 全部通过 → 综合分析
-              this.setData({ passed, step: 'analyzing' })
-              setTimeout(() => this._finishAnalysis(), 2500)
-            } else {
-              this.setData({ passed, step: 'angle', angleIdx: next })
-            }
-          }
-        }, 1800)
+        if (postureApi.isEnabled()) {
+          this._validateReal(filePath)
+        } else {
+          this._validateSimulated()
+        }
       },
     })
+  },
+
+  // ── 真实后端校验 ──
+  _validateReal(filePath) {
+    const angle = ANGLES[this.data.angleIdx]
+    postureApi.validateAngle(filePath, angle.key)
+      .then((data) => {
+        if (!data || !data.pass) {
+          this.setData({ step: 'fail', failReason: (data && data.reason) || '照片不符合要求，请重新拍摄' })
+          return
+        }
+        this._fileIds[angle.key] = data.fileId || ''
+        this._advance()
+      })
+      .catch(() => {
+        this.setData({ step: 'fail', failReason: '网络异常，照片校验失败，请重试' })
+      })
+  },
+
+  // ── 模拟校验（无后端时降级）──
+  _validateSimulated() {
+    setTimeout(() => {
+      const pass = Math.random() > 0.2
+      if (!pass) {
+        const reason = FAIL_REASONS[Math.floor(Math.random() * FAIL_REASONS.length)]
+        this.setData({ step: 'fail', failReason: reason })
+      } else {
+        this._advance()
+      }
+    }, 1800)
+  },
+
+  // 通过当前角度 → 进入下一角度或综合分析
+  _advance() {
+    const passed = this.data.passed.slice()
+    passed[this.data.angleIdx] = true
+    const next = this.data.angleIdx + 1
+    if (next >= ANGLES.length) {
+      this.setData({ passed, step: 'analyzing' })
+      if (postureApi.isEnabled()) this._analyzeReal()
+      else setTimeout(() => this._finishAnalysis(simulate(this.data.prefs, app.globalData.postureScore)), 2500)
+    } else {
+      this.setData({ passed, step: 'angle', angleIdx: next })
+    }
+  },
+
+  // ── 真实后端综合分析 ──
+  _analyzeReal() {
+    postureApi.analyze(this._fileIds)
+      .then((data) => {
+        const result = {
+          score: data.score,
+          issues: enrichIssues(data.issues, this.data.prefs),
+        }
+        this._finishAnalysis(result)
+      })
+      .catch(() => {
+        wx.showToast({ title: '分析失败，请重试', icon: 'none' })
+        this.setData({ step: 'angle', angleIdx: 0, passed: [false, false, false] })
+      })
   },
 
   retry() {
     this.setData({ step: 'angle' })
   },
 
-  _finishAnalysis() {
-    const { prefs } = this.data
-    const lastScore = app.globalData.postureScore
-    const result = simulate(prefs, lastScore)
+  _finishAnalysis(result) {
     app.saveScore(result.score)
     const today = new Date().toISOString().slice(0, 10)
     const history = (wx.getStorageSync('scanHistory') || [])
@@ -211,6 +271,7 @@ Page({
   },
 
   resetAll() {
+    this._fileIds = { front: '', side: '', back: '' }
     this.setData({ step: 'guide', angleIdx: 0, passed: [false, false, false], result: null })
   },
 })
