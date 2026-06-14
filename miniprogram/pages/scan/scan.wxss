@@ -232,6 +232,26 @@ page { background: #f7f5f0; }
   color: #8f8779;
 }
 
+/* ── 结果顶部操作栏 ── */
+.result-topbar {
+  padding: 0 40rpx 8rpx;
+}
+.result-back {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+.result-back-icon {
+  font-size: 52rpx;
+  color: #2b2720;
+  line-height: 1;
+  margin-top: -4rpx;
+}
+.result-back-text {
+  font-size: 28rpx;
+  color: #2b2720;
+}
+
 /* ── 重新检测 ── */
 .rescan-btn {
   background: #f4f1ec;

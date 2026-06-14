@@ -35,6 +35,14 @@
     <!-- 分析结果 -->
     <view wx:if="{{result && !scanning}}">
 
+      <!-- 结果顶部操作栏 -->
+      <view class="result-topbar">
+        <view class="result-back" bindtap="reset">
+          <text class="result-back-icon">‹</text>
+          <text class="result-back-text">重新检测</text>
+        </view>
+      </view>
+
       <!-- 评分卡 -->
       <view class="section">
         <view class="card score-card">
@@ -97,13 +105,6 @@
             </view>
             <mp-icon name="arrow_forward" size="20" color="#b8b0a4" />
           </view>
-        </view>
-      </view>
-
-      <!-- 重新检测 -->
-      <view class="section">
-        <view class="rescan-btn" bindtap="reset">
-          <text class="rescan-text">重新检测</text>
         </view>
       </view>
 
