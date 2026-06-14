@@ -147,6 +147,23 @@ Page({
       count: 1,
       mediaType: ['image'],
       sourceType: ['camera', 'album'],
+      fail: (err) => {
+        const msg = (err && err.errMsg) || ''
+        // 用户主动取消：静默返回
+        if (msg.indexOf('cancel') > -1) return
+        // 权限被拒绝：引导前往设置开启
+        if (msg.indexOf('auth') > -1 || msg.indexOf('permission') > -1 || msg.indexOf('deny') > -1) {
+          wx.showModal({
+            title: '需要相机/相册权限',
+            content: '体态检测需要拍摄或选择照片，请在设置中开启权限',
+            confirmText: '去设置',
+            cancelText: '暂不',
+            success: (r) => { if (r.confirm) wx.openSetting() },
+          })
+        } else {
+          wx.showToast({ title: '获取照片失败，请重试', icon: 'none' })
+        }
+      },
       success: () => {
         this.setData({ step: 'checking' })
         // 模拟校验：20% 概率不通过
