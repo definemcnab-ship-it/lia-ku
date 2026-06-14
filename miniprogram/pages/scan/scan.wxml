@@ -2,7 +2,10 @@
 
   <!-- Navbar -->
   <view class="navbar">
-    <view class="navbar-inner">
+    <view wx:if="{{step !== 'guide' && step !== 'result'}}" class="back-btn" bindtap="resetAll">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="navbar-text">
       <text class="page-title font-headline">体态档案</text>
       <text class="page-subtitle">一张照片，看见身体的秩序</text>
     </view>
@@ -10,38 +13,153 @@
 
   <scroll-view class="scroll-area" scroll-y>
 
-    <!-- 扫描入口 -->
-    <view class="section" wx:if="{{!result && !scanning}}">
-      <view class="upload-card" bindtap="startScan">
-        <view class="upload-inner">
-          <view class="camera-icon-wrap">
-            <mp-icon name="photo_camera" size="52" color="#c08a7d" />
+    <!-- ── 引导页 ── -->
+    <block wx:if="{{step === 'guide'}}">
+      <view class="section">
+        <view class="guide-card">
+          <text class="guide-heading font-headline">需要三个角度</text>
+          <text class="guide-sub">三面检测才能准确分析你的全身体态</text>
+          <view class="angle-list">
+            <view wx:for="{{angles}}" wx:key="key" class="angle-preview-row">
+              <view class="angle-num">{{index + 1}}</view>
+              <view class="angle-preview-info">
+                <text class="angle-preview-label">{{item.label}}</text>
+                <text class="angle-preview-desc">{{item.desc}}</text>
+              </view>
+            </view>
           </view>
-          <text class="upload-label">点击检测体态</text>
-          <text class="upload-hint">支持拍照或从相册选择 · AI 分析</text>
+          <view class="guide-tips">
+            <text class="guide-tips-title">拍摄前检查</text>
+            <view class="guide-tip-row">
+              <text class="guide-tip-dot">·</text>
+              <text class="guide-tip-text">穿贴身衣物，避免宽松遮体</text>
+            </view>
+            <view class="guide-tip-row">
+              <text class="guide-tip-dot">·</text>
+              <text class="guide-tip-text">选择光线均匀的明亮室内</text>
+            </view>
+            <view class="guide-tip-row">
+              <text class="guide-tip-dot">·</text>
+              <text class="guide-tip-text">背景简单，距相机约1.5-2米</text>
+            </view>
+            <view class="guide-tip-row">
+              <text class="guide-tip-dot">·</text>
+              <text class="guide-tip-text">建议请他人帮助拍摄</text>
+            </view>
+          </view>
+          <view class="primary-btn" bindtap="startGuide">
+            <text class="primary-btn-text">开始检测</text>
+          </view>
         </view>
       </view>
-    </view>
 
-    <!-- 分析中 -->
-    <view class="section" wx:if="{{scanning}}">
-      <view class="card loading-card">
-        <view class="spinner"></view>
-        <text class="loading-text">AI 分析中…</text>
-        <text class="loading-sub">正在识别你的体态特征</text>
-      </view>
-    </view>
-
-    <!-- 分析结果 -->
-    <view wx:if="{{result && !scanning}}">
-
-      <!-- 结果顶部操作栏 -->
-      <view class="result-topbar">
-        <view class="result-back" bindtap="reset">
-          <text class="result-back-icon">‹</text>
-          <text class="result-back-text">重新检测</text>
+      <!-- 历史档案 -->
+      <view class="section" wx:if="{{history.length}}">
+        <text class="section-title font-headline">历史档案</text>
+        <view class="card history-card">
+          <view wx:for="{{history}}" wx:key="date" class="history-row">
+            <view class="history-dot {{item.score >= 80 ? 'dot-good' : item.score >= 70 ? 'dot-ok' : 'dot-low'}}"></view>
+            <view class="history-info">
+              <text class="history-date">{{item.date}}</text>
+              <text class="history-issues">{{item.issueCount}} 项体态特征</text>
+            </view>
+            <text class="history-score">{{item.score}}</text>
+          </view>
         </view>
       </view>
+    </block>
+
+    <!-- ── 拍摄角度页 ── -->
+    <block wx:if="{{step === 'angle'}}">
+      <!-- 进度条 -->
+      <view class="section">
+        <view class="progress-row">
+          <view wx:for="{{angles}}" wx:key="key" class="progress-step">
+            <view class="progress-circle {{index < angleIdx ? 'circle-done' : index === angleIdx ? 'circle-active' : 'circle-idle'}}">
+              <text wx:if="{{index < angleIdx}}" class="progress-check">✓</text>
+              <text wx:else class="progress-num">{{index + 1}}</text>
+            </view>
+            <text class="progress-label {{index === angleIdx ? 'label-active' : ''}}">{{item.label}}</text>
+            <view wx:if="{{index < angles.length - 1}}" class="progress-line {{index < angleIdx ? 'line-done' : ''}}"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 拍摄要求 -->
+      <view class="section">
+        <view class="angle-card">
+          <text class="angle-label font-headline">{{angles[angleIdx].label}}拍摄要求</text>
+          <text class="angle-tip">{{angles[angleIdx].tip}}</text>
+          <view class="req-list">
+            <view wx:for="{{angles[angleIdx].reqs}}" wx:key="index" class="req-row">
+              <view class="req-check-wrap">
+                <text class="req-check">✓</text>
+              </view>
+              <text class="req-text">{{item}}</text>
+            </view>
+          </view>
+          <text class="angle-desc-badge">{{angles[angleIdx].desc}}</text>
+        </view>
+      </view>
+
+      <!-- 上传按钮 -->
+      <view class="section">
+        <view class="upload-btn" bindtap="uploadAngle">
+          <view class="upload-icon-wrap">
+            <mp-icon name="photo_camera" size="36" color="#ffffff" />
+          </view>
+          <text class="upload-btn-text">拍摄 / 从相册选择{{angles[angleIdx].label}}照片</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- ── 校验中 ── -->
+    <block wx:if="{{step === 'checking'}}">
+      <view class="section">
+        <view class="card loading-card">
+          <view class="spinner"></view>
+          <text class="loading-text">照片校验中…</text>
+          <text class="loading-sub">检查角度与拍摄质量</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- ── 校验不通过 ── -->
+    <block wx:if="{{step === 'fail'}}">
+      <view class="section">
+        <view class="card fail-card">
+          <view class="fail-icon">✗</view>
+          <text class="fail-title">照片不符合要求</text>
+          <text class="fail-reason">{{failReason}}</text>
+          <view class="req-list" style="margin-top:32rpx;">
+            <view wx:for="{{angles[angleIdx].reqs}}" wx:key="index" class="req-row">
+              <view class="req-check-wrap">
+                <text class="req-check">✓</text>
+              </view>
+              <text class="req-text">{{item}}</text>
+            </view>
+          </view>
+          <view class="primary-btn" bindtap="retry" style="margin-top:40rpx;">
+            <text class="primary-btn-text">重新拍摄</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- ── 综合分析中 ── -->
+    <block wx:if="{{step === 'analyzing'}}">
+      <view class="section">
+        <view class="card loading-card">
+          <view class="spinner"></view>
+          <text class="loading-text">AI 综合分析中…</text>
+          <text class="loading-sub">正面 · 侧面 · 背面三维建模</text>
+          <text class="loading-sub" style="margin-top:8rpx;">识别体态模式与肌肉失衡</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- ── 结果 ── -->
+    <block wx:if="{{step === 'result'}}">
 
       <!-- 评分卡 -->
       <view class="section">
@@ -58,7 +176,7 @@
               <text class="score-desc">{{result.score >= 80 ? '整体体态良好，继续保持' : result.score >= 70 ? '整体良好，有提升空间' : '建议系统训练改善'}}</text>
               <view class="score-badge">
                 <mp-icon name="trending_up" size="18" color="#c08a7d" />
-                <text class="score-badge-text">较上次 +{{result.score - (history.length >= 2 ? history[history.length-2].score : result.score - 0)}} 分</text>
+                <text class="score-badge-text">三维综合评分</text>
               </view>
             </view>
           </view>
@@ -69,11 +187,7 @@
       <view class="section">
         <text class="section-title font-headline">发现的体态特征</text>
         <view class="card issues-card">
-          <view
-            wx:for="{{result.issues}}"
-            wx:key="key"
-            class="issue-item"
-          >
+          <view wx:for="{{result.issues}}" wx:key="key" class="issue-item">
             <view class="issue-icon-wrap">
               <mp-icon name="{{item.icon}}" size="22" color="#c08a7d" />
             </view>
@@ -85,7 +199,7 @@
         </view>
       </view>
 
-      <!-- 改善建议 → 跳转课程 -->
+      <!-- 课程建议 -->
       <view class="section">
         <text class="section-title font-headline">针对性改善课程</text>
         <view class="suggestions-wrap">
@@ -108,54 +222,14 @@
         </view>
       </view>
 
-    </view>
-
-    <!-- 拍摄小贴士（无结果时） -->
-    <view class="section" wx:if="{{!result && !scanning}}">
-      <text class="section-title font-headline">拍摄小贴士</text>
-      <view class="card tips-card">
-        <view class="tip-item">
-          <view class="tip-index">1</view>
-          <view class="tip-content">
-            <text class="tip-text">全身正面站立</text>
-            <text class="tip-desc">确保全身都在画面内，双脚自然分开与肩同宽</text>
-          </view>
-        </view>
-        <view class="tip-item">
-          <view class="tip-index">2</view>
-          <view class="tip-content">
-            <text class="tip-text">保持自然站姿</text>
-            <text class="tip-desc">放松身体，不要刻意挺胸或弯腰，展示平时的状态</text>
-          </view>
-        </view>
-        <view class="tip-item">
-          <view class="tip-index">3</view>
-          <view class="tip-content">
-            <text class="tip-text">光线充足 · 侧面备选</text>
-            <text class="tip-desc">选择明亮环境，也可拍侧面照以检测骨盆和腰椎曲线</text>
-          </view>
+      <!-- 重新检测 -->
+      <view class="section">
+        <view class="rescan-btn" bindtap="resetAll">
+          <text class="rescan-text">重新检测</text>
         </view>
       </view>
-    </view>
 
-    <!-- 检测历史 -->
-    <view class="section" wx:if="{{history.length}}">
-      <text class="section-title font-headline">历史档案</text>
-      <view class="card history-card">
-        <view
-          wx:for="{{history}}"
-          wx:key="date"
-          class="history-row"
-        >
-          <view class="history-dot {{item.score >= 80 ? 'dot-good' : item.score >= 70 ? 'dot-ok' : 'dot-low'}}"></view>
-          <view class="history-info">
-            <text class="history-date">{{item.date}}</text>
-            <text class="history-issues">{{item.issueCount}} 项体态特征</text>
-          </view>
-          <text class="history-score">{{item.score}}</text>
-        </view>
-      </view>
-    </view>
+    </block>
 
     <view style="height: 140rpx"></view>
   </scroll-view>

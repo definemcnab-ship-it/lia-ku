@@ -1,6 +1,54 @@
 const app = getApp()
 
-// 体态问题 → 对应课程映射（居家为默认）
+const ANGLES = [
+  {
+    key: 'front',
+    label: '正面',
+    emoji: '⬜',
+    desc: '用于检测头前引、圆肩、骨盆倾斜',
+    reqs: [
+      '全身完整入镜（头顶到脚踝）',
+      '双脚与肩同宽，脚尖朝前',
+      '手臂自然垂落于体侧',
+      '目视正前方，表情放松',
+    ],
+    tip: '距相机约1.5-2米，背景简单，光线均匀',
+  },
+  {
+    key: 'side',
+    label: '侧面',
+    emoji: '⬜',
+    desc: '用于检测骨盆前倾、腰椎曲线、膝超伸',
+    reqs: [
+      '全身完整入镜',
+      '侧身站立，耳、肩、髋、踝成一线',
+      '手臂自然垂落，不交叉抱胸',
+      '自然呼吸，不要刻意挺胸或收腹',
+    ],
+    tip: '左侧或右侧均可，侧面照是骨盆检测的关键',
+  },
+  {
+    key: 'back',
+    label: '背面',
+    emoji: '⬜',
+    desc: '用于检测脊柱侧弯、肩膀高低、足外翻',
+    reqs: [
+      '全身完整入镜',
+      '双脚与肩同宽，脚尖朝前',
+      '手臂自然垂落',
+      '头部正直，不偏转',
+    ],
+    tip: '背对相机，请他人辅助拍摄效果更佳',
+  },
+]
+
+const FAIL_REASONS = [
+  '全身未完全入镜，请后退调整距离',
+  '光线不足，请在明亮处重新拍摄',
+  '角度偏差过大，请重新摆好姿势',
+  '图像模糊，请保持稳定后重拍',
+]
+
 const POSTURE_MAP = [
   {
     key: 'neck',
@@ -25,7 +73,7 @@ const POSTURE_MAP = [
   },
   {
     key: 'back',
-    issue: '腰背存在代偿性紧张',
+    issue: '腰背代偿性紧张',
     detail: '多裂肌稳定性不足，竖脊肌过度用力',
     courseId: 'c10', courseName: '腰背 · 安放（居家）',
     icon: 'spa',
@@ -46,50 +94,36 @@ const POSTURE_MAP = [
   },
 ]
 
-// 根据场景偏好调整建议课程
-function adaptScene(item, scene) {
-  const sceneMap = {
-    neck:     { office: 'c2', gym: 'c3', officeName: '颈线 · 唤醒（办公室）', gymName: '颈背 · 强化（健身房）' },
-    shoulder: { office: 'c5', gym: 'c6', officeName: '肩背 · 减压（办公室）', gymName: '肩背 · 重塑（健身房）' },
-    pelvis:   { office: 'c8', gym: 'c9', officeName: '骨盆 · 立（办公室）',   gymName: '核心 · 立（健身房）' },
-  }
-  const m = sceneMap[item.key]
-  if (!m) return item
-  if (scene === 'office' && m.office) return Object.assign({}, item, { courseId: m.office, courseName: m.officeName })
-  if (scene === 'gym' && m.gym) return Object.assign({}, item, { courseId: m.gym, courseName: m.gymName })
-  return item
+const SCENE_REMAP = {
+  neck:     { office: ['c2', '颈线 · 唤醒（办公室）'], gym: ['c3', '颈背 · 强化（健身房）'] },
+  shoulder: { office: ['c5', '肩背 · 减压（办公室）'], gym: ['c6', '肩背 · 重塑（健身房）'] },
+  pelvis:   { office: ['c8', '骨盆 · 立（办公室）'],   gym: ['c9', '核心 · 立（健身房）'] },
 }
 
-// 模拟AI分析：随机选2-3个问题 + 评分略高于上次
+function adaptScene(item, scene) {
+  const m = SCENE_REMAP[item.key]
+  if (!m || !m[scene]) return item
+  return Object.assign({}, item, { courseId: m[scene][0], courseName: m[scene][1] })
+}
+
 function simulate(prefs, lastScore) {
   const shuffled = POSTURE_MAP.slice().sort(() => Math.random() - 0.5)
   const count = Math.random() < 0.5 ? 2 : 3
-  const selected = shuffled.slice(0, count)
   const scene = (prefs && prefs.scene && prefs.scene[0]) || 'home'
-  const adapted = selected.map(item => adaptScene(item, scene))
-  const score = Math.min(100, lastScore + Math.floor(Math.random() * 5))
-  return { score, issues: adapted }
-}
-
-function scoreLabel(score) {
-  if (score >= 90) return '姿态非常好'
-  if (score >= 80) return '整体姿态良好'
-  if (score >= 70) return '有改善空间'
-  return '建议系统训练'
-}
-
-function relDate(dateStr) {
-  const today = new Date(); today.setHours(0,0,0,0)
-  const d = new Date(dateStr); d.setHours(0,0,0,0)
-  const diff = Math.round((today - d) / 86400000)
-  if (diff === 0) return '今天'
-  if (diff === 1) return '昨天'
-  return (d.getMonth()+1) + '月' + d.getDate() + '日'
+  const issues = shuffled.slice(0, count).map(item => adaptScene(item, scene))
+  const score = Math.min(100, lastScore + Math.floor(Math.random() * 5) + 1)
+  return { score, issues }
 }
 
 Page({
   data: {
-    scanning: false,
+    // step: 'guide' | 'angle' | 'checking' | 'fail' | 'analyzing' | 'result'
+    step: 'guide',
+    angleIdx: 0,          // 当前拍摄角度 0/1/2
+    angles: ANGLES,
+    passed: [false, false, false], // 各角度是否通过
+    failReason: '',
+    analyzing: false,
     result: null,
     history: [],
     prefs: null,
@@ -104,36 +138,54 @@ Page({
     this.setData({ prefs, history })
   },
 
-  startScan() {
+  startGuide() {
+    this.setData({ step: 'angle', angleIdx: 0, passed: [false, false, false] })
+  },
+
+  uploadAngle() {
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
       sourceType: ['camera', 'album'],
       success: () => {
-        this.setData({ scanning: true, result: null })
+        this.setData({ step: 'checking' })
+        // 模拟校验：20% 概率不通过
         setTimeout(() => {
-          const { prefs } = this.data
-          const lastScore = app.globalData.postureScore
-          const result = simulate(prefs, lastScore)
-
-          // 更新评分并记录历史
-          app.saveScore(result.score)
-
-          // 保存扫描档案
-          const today = new Date().toISOString().slice(0, 10)
-          const rec = {
-            date: today,
-            score: result.score,
-            issueCount: result.issues.length,
+          const pass = Math.random() > 0.2
+          if (!pass) {
+            const reason = FAIL_REASONS[Math.floor(Math.random() * FAIL_REASONS.length)]
+            this.setData({ step: 'fail', failReason: reason })
+          } else {
+            const passed = this.data.passed.slice()
+            passed[this.data.angleIdx] = true
+            const next = this.data.angleIdx + 1
+            if (next >= ANGLES.length) {
+              // 全部通过 → 综合分析
+              this.setData({ passed, step: 'analyzing' })
+              setTimeout(() => this._finishAnalysis(), 2500)
+            } else {
+              this.setData({ passed, step: 'angle', angleIdx: next })
+            }
           }
-          const history = (wx.getStorageSync('scanHistory') || [])
-          history.push(rec)
-          wx.setStorageSync('scanHistory', history)
-
-          this.setData({ scanning: false, result, history })
-        }, 2200)
+        }, 1800)
       },
     })
+  },
+
+  retry() {
+    this.setData({ step: 'angle' })
+  },
+
+  _finishAnalysis() {
+    const { prefs } = this.data
+    const lastScore = app.globalData.postureScore
+    const result = simulate(prefs, lastScore)
+    app.saveScore(result.score)
+    const today = new Date().toISOString().slice(0, 10)
+    const history = (wx.getStorageSync('scanHistory') || [])
+    history.push({ date: today, score: result.score, issueCount: result.issues.length })
+    wx.setStorageSync('scanHistory', history)
+    this.setData({ step: 'result', result, history })
   },
 
   goToCourse(e) {
@@ -141,7 +193,7 @@ Page({
     wx.navigateTo({ url: '/pages/player/player?courseId=' + courseId })
   },
 
-  reset() {
-    this.setData({ result: null })
+  resetAll() {
+    this.setData({ step: 'guide', angleIdx: 0, passed: [false, false, false], result: null })
   },
 })
