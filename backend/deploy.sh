@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# 斯俪 Slique 体态 AI 后端 · 一键部署脚本
-# 在全新的 Ubuntu 22.04 服务器上以 root 运行：
-#   bash <(curl -fsSL https://raw.githubusercontent.com/definemcnab-ship-it/lia-ku/claude/optimistic-maxwell-mArMz/backend/deploy.sh)
-# 或：把本仓库 clone 下来后 cd backend && bash deploy.sh
+# 斯俪 Slique 体态 AI 后端 · 一键部署脚本（国内服务器优化版）
+# 在全新的 Ubuntu 22.04 服务器上以 root / sudo 运行：
+#   curl -fsSL https://raw.githubusercontent.com/definemcnab-ship-it/lia-ku/claude/optimistic-maxwell-mArMz/backend/deploy.sh -o deploy.sh
+#   sudo bash deploy.sh
 
 set -euo pipefail
 
@@ -11,23 +11,37 @@ DOMAIN="api.slique.cn"
 API_KEY="c1d5bcaabe4f6c3238be522803ff4388"
 REPO="https://github.com/definemcnab-ship-it/lia-ku.git"
 BRANCH="claude/optimistic-maxwell-mArMz"
+# 国内 pip / docker 镜像
+PIP_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"
 
-echo "==> [1/6] 安装基础工具与 Docker ..."
+echo "==> [1/6] 安装基础工具与 Docker（系统源）..."
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y -qq git curl ca-certificates >/dev/null
-if ! command -v docker >/dev/null 2>&1; then
-  curl -fsSL https://get.docker.com | sh
-fi
+apt-get install -y -qq git curl ca-certificates docker.io >/dev/null
 systemctl enable --now docker
+
+echo "==> [1.5] 配置 Docker 国内镜像加速 ..."
+mkdir -p /etc/docker
+cat > /etc/docker/daemon.json <<'DJSON'
+{
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://dockerproxy.com",
+    "https://docker.1panel.live",
+    "https://hub.rat.dev"
+  ]
+}
+DJSON
+systemctl restart docker
+sleep 3
 
 echo "==> [2/6] 拉取代码 ..."
 rm -rf /opt/slique
 git clone --depth 1 -b "$BRANCH" "$REPO" /opt/slique
 cd /opt/slique/backend
 
-echo "==> [3/6] 构建镜像（首次约 3-5 分钟）..."
-docker build -t slique-posture .
+echo "==> [3/6] 构建镜像（首次约 3-8 分钟，走清华 pip 源）..."
+docker build --build-arg PIP_INDEX="$PIP_INDEX" -t slique-posture .
 
 echo "==> [4/6] 启动容器 ..."
 docker rm -f slique >/dev/null 2>&1 || true
@@ -52,12 +66,12 @@ CADDY
 systemctl restart caddy
 
 echo "==> [6/6] 等待证书签发并自检 ..."
-sleep 8
+sleep 10
 echo "本地健康检查："
 curl -s http://localhost:8000/health || echo "(本地 8000 未响应，检查 docker logs slique)"
 echo ""
 echo "HTTPS 健康检查："
-curl -s "https://$DOMAIN/health" || echo "(HTTPS 未通：确认域名已解析到本机、防火墙放通 80/443)"
+curl -s "https://$DOMAIN/health" || echo "(HTTPS 未通：确认域名已解析、防火墙放通 80/443)"
 echo ""
 echo "==================================================="
 echo "部署完成。访问 https://$DOMAIN/health 应返回 {\"ok\":true}"

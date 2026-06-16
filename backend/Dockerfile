@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /srv
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 国内构建可传入 pip 镜像源：--build-arg PIP_INDEX=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG PIP_INDEX=https://pypi.org/simple
+RUN pip install --no-cache-dir -i "$PIP_INDEX" -r requirements.txt
 
 COPY app ./app
 
