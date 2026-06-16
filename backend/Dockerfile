@@ -19,5 +19,7 @@ RUN pip install --no-cache-dir -i "$PIP_INDEX" -r requirements.txt
 COPY app ./app
 
 EXPOSE 8000
-# 生产建议用多 worker；MediaPipe 单次推理较重，按 CPU 核数调整
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# 单 worker：fileId 关键点缓存是进程内内存，validate 与 analyze 必须落在
+# 同一进程才能凑齐三张照片。多 worker 会让 fileId 散落在不同进程导致 analyze
+# 报 400。要横向扩容时需先把 store.py 换成 Redis 等共享存储。
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
