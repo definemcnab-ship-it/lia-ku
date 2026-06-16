@@ -14,16 +14,34 @@ MIN_BLUR = 60.0          # 拉普拉斯方差下限（越小越糊）
 
 
 def _classify_angle(kp: Keypoints) -> str:
-    """根据肩宽 / 人脸推断角度：front / side / back。"""
+    """根据身体关键点推断角度：front / side / back。
+
+    - 侧面：双肩水平方向几乎重叠 → 肩宽相对躯干很小。
+    - 正/背面：用「左右肩的 x 坐标顺序」判定，不依赖人脸——
+      MediaPipe 关键点按人体解剖学左右标注，面对镜头时本人左肩(11)
+      位于画面右侧(x 更大)，背对时左右调换。脸部信息仅作辅助投票，
+      因此口罩、低头、遮挡均不影响正反面判断。
+    """
     sw = geo.shoulder_width(kp)
     th = geo.torso_height(kp)
-    # 侧面：双肩在水平方向几乎重叠 → 肩宽相对躯干很小
     if th > 0 and sw / th < 0.45:
         return "side"
-    # 正面 vs 背面：有正脸 → 正面；无脸但有躯干 → 背面
-    if kp.face_count >= 1 and kp.visible(NOSE, 0.6):
-        return "front"
-    return "back"
+
+    ls, rs = kp.lm(L_SHOULDER), kp.lm(R_SHOULDER)
+    if ls and rs and abs(ls.x - rs.x) > 0.02:
+        # 身体投票：本人左肩在画面右侧 → 正面
+        body_front = ls.x > rs.x
+    else:
+        body_front = None
+
+    # 脸部辅助投票（有正脸且鼻子清晰 → 倾向正面）
+    face_front = kp.face_count >= 1 and kp.visible(NOSE, 0.6)
+
+    if body_front is None:
+        # 身体信号不足时退回人脸
+        return "front" if face_front else "back"
+    # 身体信号为主；与人脸一致时更可信，不一致时仍信身体
+    return "front" if body_front else "back"
 
 
 def validate(kp: Keypoints, angle: str) -> dict:
