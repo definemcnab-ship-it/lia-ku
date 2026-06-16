@@ -54,12 +54,14 @@ SHOULDER_DIFF_FLAG = 1.0 / 38.0     # ≈0.026
 SHOULDER_DIFF_SIGNIF = 2.0 / 38.0   # ≈0.053
 
 # [近似] 圆肩前肩角 FSA 正常≥52°；2D 用「髋→肩」相对竖直的前倾量近似
-FSA_FWD_RATIO = 0.18                # 肩相对髋前移 / 躯干高
-FSA_FWD_RATIO_SEVERE = 0.28
+FSA_FWD_RATIO = 0.11                # 肩相对髋前移 / 躯干高（收紧：肉眼可见圆肩约 0.10-0.12）
+FSA_FWD_RATIO_SEVERE = 0.20
 
-# [近似] 骨盆前倾：无 ASIS/PSIS，用肩-髋-膝躯干-大腿夹角偏离直立近似
+# [近似] 骨盆前倾：躯干-大腿夹角偏小
 APT_TRUNK_THIGH = 168.0
 APT_TRUNK_THIGH_SEVERE = 158.0
+# [近似] 骨盆后倾：躯干-大腿夹角偏大（臀部后移，腰椎变平）
+APT_POSTERIOR = 178.0
 
 # [近似] 腰椎前凸：无脊柱中段点，用骨盆相对「肩-踝」竖线的前推量近似（与前凸正相关）
 LORDOSIS_HIP_FWD = 0.10            # 髋前移 / 身高近似
@@ -118,7 +120,7 @@ def _analyze_side(kp: Keypoints, issues: list):
             })
             penalty += 9 if fwd > FSA_FWD_RATIO_SEVERE else 6
 
-    # [近似] 骨盆前倾：躯干-大腿夹角偏离直立
+    # [近似] 骨盆前倾 / 后倾：躯干-大腿夹角
     if sh and hip and knee:
         trunk_thigh = geo.angle(sh.x, sh.y, hip.x, hip.y, knee.x, knee.y)
         if trunk_thigh < APT_TRUNK_THIGH:
@@ -128,6 +130,13 @@ def _analyze_side(kp: Keypoints, issues: list):
                 "detail": "髂腰肌缩短，臀大肌激活不足",
             })
             penalty += 9 if trunk_thigh < APT_TRUNK_THIGH_SEVERE else 5
+        elif trunk_thigh > APT_POSTERIOR:
+            issues.append({
+                "key": "pelvis",
+                "issue": "骨盆后倾趋势",
+                "detail": "臀肌过度紧张，腰椎曲度减小，核心稳定不足",
+            })
+            penalty += 6
 
     # [近似] 腰椎过度前凸：骨盆相对「肩-踝」竖线前推（参考，需专业评估确认）
     if sh and hip and ank:
@@ -142,20 +151,22 @@ def _analyze_side(kp: Keypoints, issues: list):
             })
             penalty += 5
 
-    # [可测] 膝超伸：髋-膝-踝矢状面反向偏离 >5°
+    # [可测] 膝超伸：髋-膝-踝夹角 >180° 即反弓，用膝点偏向「背侧」确认
     if hip and knee and ank:
         knee_ang = geo.angle(hip.x, hip.y, knee.x, knee.y, ank.x, ank.y)
-        deficit = 180.0 - knee_ang
-        # 膝在「髋-踝连线」后方（远离朝向）才算超伸，排除正常屈膝
+        # geo.angle 返回 0-180，超伸时膝点向身体背侧偏移，夹角接近 180 且膝「后凸」
+        # 用 signed_offset 判断膝是否在「髋-踝连线」背侧（超伸方向）
         off = geo.signed_offset(knee.x, knee.y, hip.x, hip.y, ank.x, ank.y)
-        knee_back = (off * face) < 0
-        if knee_back and deficit > KNEE_HYPEREXT:
+        # 人面朝 +x 时，背侧在 -x，膝后偏则 off 为正（叉积方向）
+        knee_back = (off * face) > 0
+        overext_deg = knee_ang - 175.0   # >175° 开始计入（等效 >5° 超伸）
+        if knee_back and overext_deg > 0:
             issues.append({
                 "key": "knee",
                 "issue": "膝关节存在超伸趋势",
                 "detail": "VMO 与腘绳肌离心控制不足",
             })
-            penalty += 8 if deficit > KNEE_HYPEREXT_SEVERE else 5
+            penalty += 8 if overext_deg > KNEE_HYPEREXT_SEVERE else 5
     return penalty
 
 
