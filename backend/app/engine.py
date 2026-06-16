@@ -75,11 +75,21 @@ def warmup():
     _face.process(blank)
 
 
+_MAX_SIDE = 1024  # 推理前将长边缩放到此尺寸，手机大图提速数倍且不损精度
+
+
 def detect(image_bytes: bytes) -> Keypoints:
     """对一张图片做人体关键点 + 人脸 + 画质检测。"""
     img = _decode(image_bytes)
     if img is None:
         return Keypoints(has_pose=False)
+
+    # 缩放大图（关键点为归一化坐标，缩放不影响后续几何计算）
+    h0, w0 = img.shape[:2]
+    scale = _MAX_SIDE / max(h0, w0)
+    if scale < 1.0:
+        img = cv2.resize(img, (int(w0 * scale), int(h0 * scale)),
+                         interpolation=cv2.INTER_AREA)
 
     h, w = img.shape[:2]
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
