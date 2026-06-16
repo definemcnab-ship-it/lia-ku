@@ -19,6 +19,12 @@ MAX_BYTES = 10 * 1024 * 1024
 app = FastAPI(title="Slique Posture API", version="1.0")
 
 
+@app.on_event("startup")
+def _startup():
+    # 进程启动即预热模型，避免首张图片请求超时
+    engine.warmup()
+
+
 def _check_auth(authorization: str):
     if not API_KEY:
         return

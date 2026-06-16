@@ -18,7 +18,7 @@ const POSTURE_API = {
   enabled: true,
   baseUrl: 'https://api.slique.cn',
   apiKey: 'c1d5bcaabe4f6c3238be522803ff4388',
-  timeout: 15000,
+  timeout: 40000,
 }
 
 module.exports = { POSTURE_API }

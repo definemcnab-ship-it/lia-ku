@@ -59,6 +59,22 @@ def _decode(image_bytes: bytes) -> Optional[np.ndarray]:
     return img
 
 
+# ── 模型单例 ──
+# MediaPipe 模型加载较慢；每次请求都重建会导致严重超时。
+# 这里在进程内只加载一次并复用（FastAPI 同步端点串行执行，单例线程安全）。
+# model_complexity=1 在精度与速度间平衡，2 核机器上单图推理 ~1-2s。
+_pose = mp_pose.Pose(static_image_mode=True, model_complexity=1,
+                     min_detection_confidence=0.5)
+_face = mp_face.FaceDetection(model_selection=1, min_detection_confidence=0.6)
+
+
+def warmup():
+    """启动时预热：用一张空白图跑一次推理，触发模型加载。"""
+    blank = np.zeros((256, 256, 3), dtype=np.uint8)
+    _pose.process(blank)
+    _face.process(blank)
+
+
 def detect(image_bytes: bytes) -> Keypoints:
     """对一张图片做人体关键点 + 人脸 + 画质检测。"""
     img = _decode(image_bytes)
@@ -73,21 +89,18 @@ def detect(image_bytes: bytes) -> Keypoints:
 
     # 人脸数量（用于判断多人 / 正背面）
     face_count = 0
-    with mp_face.FaceDetection(model_selection=1, min_detection_confidence=0.6) as fd:
-        fres = fd.process(rgb)
-        if fres.detections:
-            face_count = len(fres.detections)
+    fres = _face.process(rgb)
+    if fres.detections:
+        face_count = len(fres.detections)
 
     # 人体关键点
     landmarks = []
     has_pose = False
-    with mp_pose.Pose(static_image_mode=True, model_complexity=2,
-                      min_detection_confidence=0.5) as pose:
-        pres = pose.process(rgb)
-        if pres.pose_landmarks:
-            has_pose = True
-            for p in pres.pose_landmarks.landmark:
-                landmarks.append(Landmark(p.x, p.y, p.z, p.visibility))
+    pres = _pose.process(rgb)
+    if pres.pose_landmarks:
+        has_pose = True
+        for p in pres.pose_landmarks.landmark:
+            landmarks.append(Landmark(p.x, p.y, p.z, p.visibility))
 
     return Keypoints(
         has_pose=has_pose,
