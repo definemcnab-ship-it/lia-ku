@@ -1,108 +1,350 @@
 <view class="page">
+
   <!-- Navbar -->
   <view class="navbar">
     <view class="nav-back" bindtap="navBack">
-      <mp-icon name="arrow_back" size="22" color="#2b2720" />
+      <text class="back-icon">‹</text>
     </view>
     <view class="nav-titles">
-      <text class="page-title">饮食建议</text>
-      <text class="page-subtitle">科学饮食，助力体态改善</text>
+      <text class="page-title">饮食方案</text>
+      <text class="page-subtitle">体态修复·精准营养</text>
+    </view>
+  </view>
+
+  <!-- Tabs -->
+  <view class="tabs">
+    <view class="tab-item {{activeTab===0?'tab-active':''}}" bindtap="switchTab" data-tab="0">
+      <text class="tab-text">今日记录</text>
+    </view>
+    <view class="tab-item {{activeTab===1?'tab-active':''}}" bindtap="switchTab" data-tab="1">
+      <text class="tab-text">营养方案</text>
     </view>
   </view>
 
   <scroll-view class="scroll-area" scroll-y>
-    <!-- Calorie ring card -->
-    <view class="section">
-      <view class="card calorie-card">
-        <view class="calorie-header">
-          <text class="calorie-card-title">今日热量</text>
-          <text class="calorie-date">今天</text>
-        </view>
-        <view class="calorie-body">
-          <!-- Arc visual -->
-          <view class="ring-wrap">
-            <view class="ring-outer">
-              <view class="ring-fill" style="transform: rotate({{todayCalories / targetCalories * 180}}deg);"></view>
-              <view class="ring-cover">
-                <text class="ring-number">{{todayCalories}}</text>
-                <text class="ring-unit">千卡</text>
+
+    <!-- ========= TAB 0: 今日记录 ========= -->
+    <view wx:if="{{activeTab===0}}">
+
+      <!-- Calorie ring card -->
+      <view class="section">
+        <view class="card calorie-card">
+          <view class="calorie-header">
+            <text class="calorie-card-title">今日热量</text>
+            <text class="calorie-date">{{todayCalories===0?'暂无记录':'进行中'}}</text>
+          </view>
+          <view class="calorie-body">
+            <view class="ring-wrap">
+              <view class="ring-outer" style="background: conic-gradient(#c08a7d 0% {{todayCalories/targetCalories*100}}%, #f4f1ec {{todayCalories/targetCalories*100}}% 100%);">
+                <view class="ring-cover">
+                  <text class="ring-number">{{todayCalories}}</text>
+                  <text class="ring-unit">千卡</text>
+                </view>
+              </view>
+            </view>
+            <view class="calorie-stats">
+              <view class="stat-row">
+                <view class="stat-dot eaten"></view>
+                <text class="stat-label">已摄入</text>
+                <text class="stat-value eaten-val">{{todayCalories}} kcal</text>
+              </view>
+              <view class="stat-row">
+                <view class="stat-dot target"></view>
+                <text class="stat-label">目标</text>
+                <text class="stat-value">{{targetCalories}} kcal</text>
+              </view>
+              <view class="stat-row">
+                <view class="stat-dot remain"></view>
+                <text class="stat-label">剩余</text>
+                <text class="stat-value remain-val">{{targetCalories - todayCalories}} kcal</text>
               </view>
             </view>
           </view>
-          <view class="calorie-stats">
-            <view class="stat-row">
-              <view class="stat-dot eaten"></view>
-              <text class="stat-label">已摄入</text>
-              <text class="stat-value eaten-val">{{todayCalories}} kcal</text>
+          <view class="progress-bar-bg">
+            <view class="progress-bar-fill" style="width: {{todayCalories/targetCalories*100 > 100 ? 100 : todayCalories/targetCalories*100}}%;"></view>
+          </view>
+          <text class="progress-pct">已达成 {{todayCalories===0?0:Math.round(todayCalories/targetCalories*100)}}%</text>
+        </view>
+      </view>
+
+      <!-- Meal type quick-add buttons -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">快速记录</text>
+        </view>
+        <view class="meal-quick-row">
+          <view class="quick-btn" bindtap="openAddMeal" data-type="front">
+            <text class="quick-icon">☀️</text>
+            <text class="quick-label">早餐</text>
+          </view>
+          <view class="quick-btn" bindtap="openAddMeal" data-type="lunch">
+            <text class="quick-icon">🌤</text>
+            <text class="quick-label">午餐</text>
+          </view>
+          <view class="quick-btn" bindtap="openAddMeal" data-type="dinner">
+            <text class="quick-icon">🌙</text>
+            <text class="quick-label">晚餐</text>
+          </view>
+          <view class="quick-btn" bindtap="openAddMeal" data-type="snack">
+            <text class="quick-icon">🫐</text>
+            <text class="quick-label">加餐</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Meal log -->
+      <view class="section" wx:if="{{meals.length > 0}}">
+        <view class="section-header">
+          <text class="section-title">今日饮食</text>
+        </view>
+        <view class="card meal-list-card">
+          <view class="meal-item" wx:for="{{meals}}" wx:key="id">
+            <view class="meal-icon-wrap">
+              <text class="meal-emoji">{{item.icon}}</text>
             </view>
-            <view class="stat-row">
-              <view class="stat-dot target"></view>
-              <text class="stat-label">目标</text>
-              <text class="stat-value">{{targetCalories}} kcal</text>
+            <view class="meal-info">
+              <view class="meal-top-row">
+                <text class="meal-type">{{item.type}}</text>
+                <text class="meal-time">{{item.time}}</text>
+              </view>
+              <text class="meal-items">{{item.items}}</text>
             </view>
-            <view class="stat-row">
-              <view class="stat-dot remain"></view>
-              <text class="stat-label">剩余</text>
-              <text class="stat-value remain-val">{{targetCalories - todayCalories}} kcal</text>
+            <view class="meal-right">
+              <view class="meal-cal-wrap">
+                <text class="meal-calories">{{item.calories}}</text>
+                <text class="meal-cal-unit">kcal</text>
+              </view>
+              <view class="meal-del" bindtap="deleteMeal" data-id="{{item.id}}">
+                <text class="del-icon">×</text>
+              </view>
             </view>
           </view>
         </view>
-        <!-- Progress bar -->
-        <view class="progress-bar-bg">
-          <view class="progress-bar-fill" style="width: {{todayCalories / targetCalories * 100}}%;"></view>
-        </view>
-        <text class="progress-pct">已达成 {{Math.round(todayCalories / targetCalories * 100)}}%</text>
       </view>
+
+      <!-- Empty state -->
+      <view class="section empty-state" wx:else>
+        <view class="card empty-card">
+          <text class="empty-icon">🥗</text>
+          <text class="empty-text">今天还没有饮食记录</text>
+          <text class="empty-sub">点击上方按钮记录餐食</text>
+        </view>
+      </view>
+
+      <!-- Diet tips -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">体态饮食原则</text>
+        </view>
+        <view class="card tips-card">
+          <view class="tip-item" wx:for="{{dietTips}}" wx:key="index">
+            <text class="tip-emoji">{{item.icon}}</text>
+            <text class="tip-text">{{item.tip}}</text>
+          </view>
+        </view>
+      </view>
+
     </view>
 
-    <!-- Meal log -->
-    <view class="section">
-      <view class="section-header">
-        <text class="section-title">今日饮食</text>
+    <!-- ========= TAB 1: 营养方案 ========= -->
+    <view wx:if="{{activeTab===1}}">
+
+      <!-- Header note -->
+      <view class="section">
+        <view class="plan-note card">
+          <text class="plan-note-title">🎯 体态修复营养重点</text>
+          <text class="plan-note-sub">以下5大营养素经研究证实对骨骼肌肉修复、减轻慢性炎症最为关键，建议每日保证摄入。</text>
+        </view>
       </view>
-      <view class="card meal-list-card">
-        <view class="meal-item" wx:for="{{meals}}" wx:key="type">
-          <view class="meal-icon-wrap">
-            <text class="meal-emoji">{{item.icon}}</text>
-          </view>
-          <view class="meal-info">
-            <view class="meal-top-row">
-              <text class="meal-type">{{item.type}}</text>
-              <text class="meal-time">{{item.time}}</text>
+
+      <!-- Nutrient cards (expandable) -->
+      <view class="section">
+        <view class="nutrient-list">
+          <view
+            class="nutrient-card card {{expandedNutrient===item.key?'nutrient-expanded':''}}"
+            wx:for="{{nutrientCards}}"
+            wx:key="key"
+            bindtap="toggleNutrient"
+            data-key="{{item.key}}"
+          >
+            <view class="nutrient-header">
+              <view class="nutrient-icon-wrap" style="background:{{item.color}};">
+                <text class="nutrient-icon">{{item.icon}}</text>
+              </view>
+              <view class="nutrient-title-col">
+                <text class="nutrient-name">{{item.name}}</text>
+                <text class="nutrient-benefit">{{item.benefit}}</text>
+              </view>
+              <view class="nutrient-daily-badge">
+                <text class="nutrient-daily-text">{{item.daily}}</text>
+              </view>
+              <text class="expand-arrow">{{expandedNutrient===item.key?'∧':'∨'}}</text>
             </view>
-            <text class="meal-items">{{item.items}}</text>
-          </view>
-          <view class="meal-cal-wrap">
-            <text class="meal-calories">{{item.calories}}</text>
-            <text class="meal-cal-unit">kcal</text>
+
+            <!-- Expanded content -->
+            <view class="nutrient-body" wx:if="{{expandedNutrient===item.key}}">
+              <text class="nutrient-why">{{item.why}}</text>
+              <view class="food-tags">
+                <view class="food-tag" wx:for="{{item.foods}}" wx:key="*this" wx:for-item="food">
+                  <text class="food-tag-text">{{food}}</text>
+                </view>
+              </view>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- Add meal button -->
-    <view class="section">
-      <view class="add-meal-btn" bindtap="addMeal">
-        <mp-icon icon="add" size="36" color="#ffffff" />
-        <text class="add-meal-text">记录餐食</text>
-      </view>
-    </view>
-
-    <!-- Nutrition tips -->
-    <view class="section">
-      <view class="section-header">
-        <text class="section-title">营养小贴士</text>
-      </view>
-      <view class="card tips-card">
-        <view class="tip-item" wx:for="{{tips}}" wx:key="index">
-          <view class="tip-icon-wrap">
-            <mp-icon icon="info" size="32" color="#c08a7d" />
+      <!-- Sample day plan -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">示例全天饮食</text>
+          <text class="section-sub">适合体态修复期</text>
+        </view>
+        <view class="card sample-plan-card">
+          <view class="sample-meal">
+            <view class="sample-meal-head">
+              <text class="sample-icon">☀️</text>
+              <text class="sample-type">早餐</text>
+              <text class="sample-cal">~450 kcal</text>
+            </view>
+            <text class="sample-content">燕麦粥（50g）+ 水煮蛋×2 + 纯牛奶 250ml + 猕猴桃 1个</text>
+            <view class="sample-nutrients">
+              <text class="sn-tag">蛋白质 ✓</text>
+              <text class="sn-tag">钙质 ✓</text>
+              <text class="sn-tag">维C ✓</text>
+            </view>
           </view>
-          <text class="tip-text">{{item}}</text>
+          <view class="sample-divider"></view>
+          <view class="sample-meal">
+            <view class="sample-meal-head">
+              <text class="sample-icon">🌤</text>
+              <text class="sample-type">午餐</text>
+              <text class="sample-cal">~650 kcal</text>
+            </view>
+            <text class="sample-content">糙米饭（100g）+ 清蒸三文鱼（150g）+ 西兰花炒蒜 + 豆腐汤</text>
+            <view class="sample-nutrients">
+              <text class="sn-tag">Omega-3 ✓</text>
+              <text class="sn-tag">镁 ✓</text>
+              <text class="sn-tag">胶原前体 ✓</text>
+            </view>
+          </view>
+          <view class="sample-divider"></view>
+          <view class="sample-meal">
+            <view class="sample-meal-head">
+              <text class="sample-icon">🫐</text>
+              <text class="sample-type">加餐</text>
+              <text class="sample-cal">~200 kcal</text>
+            </view>
+            <text class="sample-content">希腊酸奶 150g + 混合坚果 20g（核桃/杏仁）</text>
+            <view class="sample-nutrients">
+              <text class="sn-tag">蛋白质 ✓</text>
+              <text class="sn-tag">镁 ✓</text>
+            </view>
+          </view>
+          <view class="sample-divider"></view>
+          <view class="sample-meal">
+            <view class="sample-meal-head">
+              <text class="sample-icon">🌙</text>
+              <text class="sample-type">晚餐</text>
+              <text class="sample-cal">~500 kcal</text>
+            </view>
+            <text class="sample-content">蒸红薯（100g）+ 鸡胸肉（120g）+ 菠菜豆腐汤 + 凉拌黄瓜</text>
+            <view class="sample-nutrients">
+              <text class="sn-tag">蛋白质 ✓</text>
+              <text class="sn-tag">钙镁 ✓</text>
+            </view>
+          </view>
         </view>
       </view>
+
+      <!-- Avoid list -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">体态修复期需控制</text>
+        </view>
+        <view class="card avoid-card">
+          <view class="avoid-item">
+            <text class="avoid-icon">⚠️</text>
+            <view class="avoid-info">
+              <text class="avoid-name">精制糖 / 含糖饮料</text>
+              <text class="avoid-why">促进炎症，加重关节与肌肉疼痛</text>
+            </view>
+          </view>
+          <view class="avoid-item">
+            <text class="avoid-icon">⚠️</text>
+            <view class="avoid-info">
+              <text class="avoid-name">深度加工食品 / 反式脂肪</text>
+              <text class="avoid-why">增加全身性炎症，阻碍肌肉修复</text>
+            </view>
+          </view>
+          <view class="avoid-item">
+            <text class="avoid-icon">⚠️</text>
+            <view class="avoid-info">
+              <text class="avoid-name">过量咖啡因（>400mg/天）</text>
+              <text class="avoid-why">抑制钙吸收，影响骨密度长期维护</text>
+            </view>
+          </view>
+          <view class="avoid-item">
+            <text class="avoid-icon">⚠️</text>
+            <view class="avoid-info">
+              <text class="avoid-name">酒精</text>
+              <text class="avoid-why">抑制蛋白质合成，干扰睡眠中的肌肉修复</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
     </view>
 
     <view class="bottom-spacer"></view>
   </scroll-view>
+
+  <!-- Add meal modal -->
+  <view class="modal-mask" wx:if="{{showAddModal}}" bindtap="closeAddMeal"></view>
+  <view class="add-modal card" wx:if="{{showAddModal}}">
+    <text class="modal-title">记录{{mealTemplates[addMealType].label}}</text>
+
+    <!-- Suggestions -->
+    <text class="modal-label">快选推荐</text>
+    <scroll-view class="suggestion-scroll" scroll-x>
+      <view class="suggestion-row">
+        <view
+          class="suggestion-chip {{selectedSuggestion===item?'chip-active':''}}"
+          wx:for="{{mealTemplates[addMealType].suggestions}}"
+          wx:key="*this"
+          bindtap="pickSuggestion"
+          data-text="{{item}}"
+        >
+          <text class="chip-text">{{item}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <text class="modal-label">食物描述</text>
+    <input
+      class="modal-input"
+      placeholder="如：鸡胸肉沙拉、燕麦粥..."
+      value="{{addMealInput}}"
+      bindinput="onMealInput"
+    />
+
+    <text class="modal-label">热量估算（kcal，可留空）</text>
+    <input
+      class="modal-input"
+      placeholder="如：380"
+      type="number"
+      value="{{addMealCalInput}}"
+      bindinput="onCalInput"
+    />
+
+    <view class="modal-actions">
+      <view class="modal-cancel" bindtap="closeAddMeal">
+        <text>取消</text>
+      </view>
+      <view class="modal-confirm" bindtap="confirmAddMeal">
+        <text>记录</text>
+      </view>
+    </view>
+  </view>
+
 </view>
