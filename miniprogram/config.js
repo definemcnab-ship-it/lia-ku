@@ -15,9 +15,9 @@
 // enabled=false 时，前端自动降级为本地模拟（demo 占位），保证可运行。
 
 const POSTURE_API = {
-  enabled: false,
-  baseUrl: '', // 例如 'https://api.your-domain.com'
-  apiKey: '',
+  enabled: true,
+  baseUrl: 'https://api.slique.cn',
+  apiKey: 'c1d5bcaabe4f6c3238be522803ff4388',
   timeout: 15000,
 }
 
