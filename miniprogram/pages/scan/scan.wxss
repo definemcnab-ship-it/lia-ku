@@ -352,6 +352,20 @@ page { background: #f7f5f0; }
 .issue-name { display: block; font-size: 28rpx; font-weight: 600; color: #2b2720; margin-bottom: 6rpx; }
 .issue-detail { display: block; font-size: 24rpx; color: #8f8779; line-height: 1.6; }
 
+/* 建议人工复核（低置信，弱化呈现） */
+.reviews-card { padding: 12rpx 40rpx 28rpx; background: #faf8f4; }
+.review-item {
+  display: flex; align-items: flex-start; gap: 24rpx;
+  padding: 28rpx 0; border-bottom: 1rpx solid #f0ece5;
+}
+.review-icon-wrap {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #f0ece4; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.review-name { display: block; font-size: 28rpx; font-weight: 600; color: #6f685c; margin-bottom: 6rpx; }
+.review-foot { display: block; font-size: 22rpx; color: #b0a899; line-height: 1.6; margin-top: 20rpx; }
+
 .suggestions-wrap { display: flex; flex-direction: column; gap: 16rpx; }
 .suggestion-card {
   background: #ffffff; border-radius: 28rpx; padding: 32rpx 36rpx;

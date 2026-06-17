@@ -199,6 +199,23 @@
         </view>
       </view>
 
+      <!-- 建议人工复核（低置信提示，不计入评分） -->
+      <view class="section" wx:if="{{result.reviews.length > 0}}">
+        <text class="section-title font-headline">建议人工复核</text>
+        <view class="card reviews-card">
+          <view wx:for="{{result.reviews}}" wx:key="issue" class="review-item">
+            <view class="review-icon-wrap">
+              <mp-icon name="{{item.icon}}" size="20" color="#a99f93" />
+            </view>
+            <view class="issue-info">
+              <text class="review-name">{{item.issue}}</text>
+              <text class="issue-detail">{{item.detail}}</text>
+            </view>
+          </view>
+          <text class="review-foot">以上项目受 2D 照片限制无法精确判定，仅作提示，建议线下专业评估</text>
+        </view>
+      </view>
+
       <!-- 课程建议 -->
       <view class="section">
         <text class="section-title font-headline">针对性改善课程</text>

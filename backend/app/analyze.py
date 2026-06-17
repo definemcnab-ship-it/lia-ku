@@ -76,7 +76,8 @@ W_SH_FWD = 0.06           # 肩相对髋向前 / 躯干高，>0.06 含胸圆肩
 W_SH_FWD_SEVERE = 0.13
 W_APT_ANT = 168.0         # 躯干-大腿矢状夹角，<168° 骨盆前倾
 W_APT_ANT_SEVERE = 158.0
-W_APT_POST = 177.0        # >177° 骨盆后倾趋势
+W_APT_POST = 177.0        # >177° 骨盆后倾趋势（仅用于 _reviews 低置信提示）
+W_APT_POST_REVIEW = 176.0 # 躯干-大腿夹角≥176°（近乎成直线）→ 骨盆或有后倾，建议人工复核
 W_KNEE_HYPEREXT = 3.0     # 髋-膝-踝矢状偏离 180° 的反向角，>3° 超伸（按侧面实测标定）
 W_KNEE_HYPEREXT_SEVERE = 12.0
 
@@ -157,24 +158,17 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
         penalty += 9 if m["sh_fwd"] > W_SH_FWD_SEVERE else 6
         seen.add("shoulder")
 
-    if "pelvis" not in seen:
+    # 仅骨盆「前倾」可置信判定（夹角明显偏小）；「后倾」因夹角上限 180° 且
+    # 混入髋屈曲，无法可靠确诊，转入 _reviews 做「建议人工复核」低置信提示。
+    if "pelvis" not in seen and m["trunk_thigh"] < W_APT_ANT:
         tt = m["trunk_thigh"]
-        if tt < W_APT_ANT:
-            issues.append({
-                "key": "pelvis",
-                "issue": "骨盆轻微前倾",
-                "detail": "髂腰肌缩短，臀大肌激活不足",
-            })
-            penalty += 9 if tt < W_APT_ANT_SEVERE else 5
-            seen.add("pelvis")
-        elif tt > W_APT_POST:
-            issues.append({
-                "key": "pelvis",
-                "issue": "骨盆后倾趋势",
-                "detail": "臀肌过度紧张，腰椎曲度减小，核心稳定不足",
-            })
-            penalty += 6
-            seen.add("pelvis")
+        issues.append({
+            "key": "pelvis",
+            "issue": "骨盆轻微前倾",
+            "detail": "髂腰肌缩短，臀大肌激活不足",
+        })
+        penalty += 9 if tt < W_APT_ANT_SEVERE else 5
+        seen.add("pelvis")
 
     if "knee" not in seen and m["knee_post"] and m["knee_hyperext"] > W_KNEE_HYPEREXT:
         issues.append({
@@ -185,6 +179,32 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
         penalty += 8 if m["knee_hyperext"] > W_KNEE_HYPEREXT_SEVERE else 5
         seen.add("knee")
     return penalty
+
+
+def _reviews(m: dict, issue_keys: set) -> list:
+    """低置信「建议人工复核」提示：不计入评分，不与确诊项混淆。
+
+    覆盖两类 2D/姿态关键点本质上测不准的项：
+      骨盆后倾——躯干-大腿夹角混入髋屈曲、且上限 180°，无法确诊；
+      肋廓外翻——姿态关键点无肋廓标志点，完全无法测量，仅在常伴随的
+                上/下交叉综合征姿态征象（圆肩 / 骨盆前倾）出现时提示复核。
+    """
+    reviews = []
+    if not m:
+        return reviews
+    if "pelvis" not in issue_keys and m["trunk_thigh"] >= W_APT_POST_REVIEW:
+        reviews.append({
+            "key": "pelvis",
+            "issue": "骨盆中立偏后（建议人工复核）",
+            "detail": "躯干-大腿近乎成直线，或存在骨盆后倾；2D 无法定位 ASIS/PSIS，建议专业评估确认",
+        })
+    if m["sh_fwd"] > W_SH_FWD or m["trunk_thigh"] < W_APT_ANT:
+        reviews.append({
+            "key": "rib",
+            "issue": "肋廓外翻倾向（建议人工复核）",
+            "detail": "常伴随圆肩 / 骨盆前倾出现；2D 照片无肋廓标志点，无法自动判定，建议专业评估确认",
+        })
+    return reviews
 
 
 def _facing_sign(kp: Keypoints) -> float:
@@ -385,9 +405,12 @@ def analyze(kps: Dict[str, Keypoints]) -> dict:
         used.add(it["issue"])
         uniq.append(it)
 
+    # 低置信「建议人工复核」提示（骨盆后倾 / 肋廓外翻）：不计入评分
+    reviews = _reviews(sag_metrics, {it["key"] for it in uniq})
+
     score = max(40, min(100, 100 - penalty))
     # _debug：回传各视角实测矢状面几何量，用于按真实样本标定阈值（前端忽略）
-    return {"score": score, "issues": uniq[:5], "_debug": {
+    return {"score": score, "issues": uniq[:5], "reviews": reviews, "_debug": {
         "sag_view": sag_view,
         "metrics": debug,
     }}

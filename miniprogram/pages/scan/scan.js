@@ -129,6 +129,15 @@ function enrichIssues(rawIssues, prefs) {
   })
 }
 
+// 后端返回的 reviews 为低置信「建议人工复核」提示，不计入评分、不映射课程
+function enrichReviews(rawReviews) {
+  return (rawReviews || []).map(raw => ({
+    issue: raw.issue,
+    detail: raw.detail,
+    icon: 'info',
+  }))
+}
+
 Page({
   data: {
     // step: 'guide' | 'angle' | 'checking' | 'fail' | 'analyzing' | 'result'
@@ -243,6 +252,7 @@ Page({
         const result = {
           score: data.score,
           issues: enrichIssues(data.issues, this.data.prefs),
+          reviews: enrichReviews(data.reviews),
         }
         this._finishAnalysis(result)
       })
