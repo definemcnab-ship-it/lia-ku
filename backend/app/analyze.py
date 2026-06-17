@@ -77,7 +77,7 @@ W_SH_FWD_SEVERE = 0.13
 W_APT_ANT = 168.0         # 躯干-大腿矢状夹角，<168° 骨盆前倾
 W_APT_ANT_SEVERE = 158.0
 W_APT_POST = 177.0        # >177° 骨盆后倾趋势
-W_KNEE_HYPEREXT = 4.0     # 髋-膝-踝矢状偏离 180° 的反向角，>4° 超伸
+W_KNEE_HYPEREXT = 3.0     # 髋-膝-踝矢状偏离 180° 的反向角，>3° 超伸（按侧面实测标定）
 W_KNEE_HYPEREXT_SEVERE = 12.0
 
 
@@ -347,51 +347,47 @@ def _analyze_front(kp: Keypoints, issues: list, seen: set):
 def analyze(kps: Dict[str, Keypoints]) -> dict:
     """kps: {'front':Keypoints, 'side':Keypoints, 'back':Keypoints}"""
     issues = []
-    seen = set()
     penalty = 0
 
-    side = kps.get("side")
     front = kps.get("front")
     back = kps.get("back")
 
-    # 1) 侧面 2D 矢状面判断（清晰侧面照下最直接），优先处理
-    if side and side.has_pose:
-        penalty += _analyze_side(side, issues)
-        seen.update(i["key"] for i in issues)
-
-    # 2) 3D 矢状面补充：用世界坐标深度恢复前后向问题，填补 2D 未命中的项。
-    #    侧面照人体侧朝镜头、世界坐标 z 噪声大，故优先用正面、其次背面/侧面。
+    # 1) 3D 矢状面（头前引/圆肩/骨盆/膝超伸）：优先用侧面照。
+    #    侧面照是矢状面体态的正确数据源；正面照前后深度 z 为模型估计值，
+    #    常出现假象（如膝角被估成大幅弯曲），故仅在缺侧面时退用正面/背面。
     debug = {}
-    sag_used = None
-    for tag, kp in (("front", front), ("side", side), ("back", back)):
+    sag_metrics, sag_view = None, None
+    for tag in ("side", "front", "back"):
+        kp = kps.get(tag)
         if kp and kp.has_pose:
             m = _sagittal_metrics(kp)
             if m:
                 debug[tag] = m
-                if sag_used is None and tag in ("front", "back"):
-                    sag_used = (tag, m)
-    if sag_used:
-        penalty += _analyze_sagittal_3d(sag_used[1], issues, seen)
+                if sag_metrics is None:
+                    sag_metrics, sag_view = m, tag
+    if sag_metrics:
+        penalty += _analyze_sagittal_3d(sag_metrics, issues, set())
 
-    # 3) 正面额状面判断（高低肩/膝内扣/足）
+    # 2) 额状面（高低肩/膝内扣/足）：正面优先、背面补充。
+    #    用独立去重集，与矢状面互不遮挡——圆肩内扣(矢状)与高低肩(额状)
+    #    虽同属「shoulder」，是两类不同问题，应同时呈现。
+    front_seen = set()
     if front and front.has_pose:
-        penalty += _analyze_front(front, issues, seen)
-
-    # 4) 背面作正面的补充（同 key 不重复）
+        penalty += _analyze_front(front, issues, front_seen)
     if back and back.has_pose:
-        penalty += _analyze_front(back, issues, seen)
+        penalty += _analyze_front(back, issues, front_seen)
 
-    # 同 key 去重，保留首个（侧面优先）
+    # 按「问题描述」去重：正/背面同一发现合并，不同发现保留
     uniq, used = [], set()
     for it in issues:
-        if it["key"] in used:
+        if it["issue"] in used:
             continue
-        used.add(it["key"])
+        used.add(it["issue"])
         uniq.append(it)
 
     score = max(40, min(100, 100 - penalty))
     # _debug：回传各视角实测矢状面几何量，用于按真实样本标定阈值（前端忽略）
     return {"score": score, "issues": uniq[:5], "_debug": {
-        "sag_view": sag_used[0] if sag_used else None,
+        "sag_view": sag_view,
         "metrics": debug,
     }}
