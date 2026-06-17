@@ -236,7 +236,7 @@ if __name__ == "__main__":
     # ===== 背面 =====
     head_y.clear()
     head_y.update({
-        ("L","scapula"):300, ("L","pelvis"):560, ("L","foot"):1180,
+        ("L","scapula"):300, ("L","pelvis"):560, ("L","foot"):1165,
         ("R","femur"):760, ("R","tibia"):1100,
     })
     build(
