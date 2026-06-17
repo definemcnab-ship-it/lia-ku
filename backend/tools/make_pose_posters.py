@@ -237,7 +237,7 @@ if __name__ == "__main__":
     head_y.clear()
     head_y.update({
         ("L","scapula"):300, ("L","pelvis"):560, ("L","foot"):1090,
-        ("R","femur"):560, ("R","tibia"):900,
+        ("R","femur"):700, ("R","tibia"):1040,
     })
     build(
         "back",
