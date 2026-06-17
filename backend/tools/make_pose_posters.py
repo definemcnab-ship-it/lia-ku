@@ -7,12 +7,15 @@ FB = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 FR = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
 FM = "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc"
 
-BLUE = (47, 107, 224)
-DARK = (34, 34, 34)
-GREY = (58, 66, 80)
-RED  = (226, 69, 58)
-BG   = (244, 248, 253)
-CARD = (234, 241, 251)
+# 统一暖色极简风（与 App 主题一致），去蓝
+BLUE = (192, 138, 125)   # 主强调色：暖陶土（沿用变量名）
+DARK = (43, 39, 32)      # 标题深褐
+GREY = (122, 114, 102)   # 正文暖灰
+RED  = (188, 112, 96)    # 标志点：陶土红
+BG   = (247, 245, 240)   # 背景暖白
+CARD = (240, 236, 228)   # 卡片暖灰底
+CONN = (198, 184, 168)   # 连线暖灰
+GOLD = (200, 168, 120)   # 侧面对齐线（暖金）
 
 def font(path, sz): return ImageFont.truetype(path, sz)
 
@@ -89,7 +92,7 @@ def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
     if align_pts:
         pts=[to_cv(*p) for p in align_pts]
         for a,b in zip(pts,pts[1:]):
-            dashed_line(d,a,b,(255,200,60),3,4,8)
+            dashed_line(d,a,b,GOLD,3,4,8)
 
     # ---- 标题 + 评估要点框（header=False 时整块省略并裁掉顶部）----
     if header:
@@ -116,7 +119,7 @@ def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
         else:
             tx=772; cardx=792; ax=cardx
         # connector
-        dashed_line(d,c,(ax, c[1]),BLUE+(0,) if False else (120,160,230),2,7,7)
+        dashed_line(d,c,(ax, c[1]),CONN,2,7,7)
         # number + head
         hy=head_y[ (side,key) ]
         if num:
