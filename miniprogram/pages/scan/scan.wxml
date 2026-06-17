@@ -194,12 +194,6 @@
         </view>
       </view>
 
-      <!-- 标准示范图 -->
-      <view class="section">
-        <image wx:if="{{angleIdx === 0}}" class="poster-img" src="/images/poses/pose-front.jpg" mode="widthFix"/>
-        <image wx:elif="{{angleIdx === 1}}" class="poster-img" src="/images/poses/pose-side.jpg" mode="widthFix"/>
-        <image wx:else class="poster-img" src="/images/poses/pose-back.jpg" mode="widthFix"/>
-      </view>
 
       <!-- 拍摄要求 -->
       <view class="section">
