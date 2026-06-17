@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # ===== 正面 =====
     head_y.clear()
     head_y.update({
-        ("L","shoulder"):300, ("L","ribs"):500, ("L","knee"):860, ("L","foot"):1110,
+        ("L","shoulder"):300, ("L","ribs"):500, ("L","knee"):860, ("L","foot"):1170,
         ("R","head"):300, ("R","pelvis"):700, ("R","leg"):1000,
     })
     build(
