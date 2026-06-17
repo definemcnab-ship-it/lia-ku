@@ -268,6 +268,48 @@
         </view>
       </view>
 
+      <!-- 标准示范图 -->
+      <view class="section">
+        <view class="card demo-card">
+          <text class="demo-title">标准示范 · {{angles[angleIdx].label}}</text>
+          <view class="demo-grid-wrap">
+            <view class="pose-grid">
+              <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
+              <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
+              <view class="pose-center-line"/>
+            </view>
+            <!-- 正面 / 背面 人形 -->
+            <block wx:if="{{angleIdx !== 1}}">
+              <view class="fig fig-front">
+                <view class="fig-head"/><view class="fig-neck"/>
+                <view class="fig-torso"/>
+                <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
+                <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
+              </view>
+              <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
+              <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
+              <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
+              <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
+            </block>
+            <!-- 侧面 人形 -->
+            <block wx:else>
+              <view class="fig fig-side">
+                <view class="fig-head"/><view class="fig-neck"/>
+                <view class="fig-torso-s"/>
+                <view class="fig-arm fig-arm-s"/>
+                <view class="fig-leg fig-leg-s"/>
+              </view>
+              <view class="pose-dot pose-dot-ear"/>
+              <view class="pose-dot pose-dot-shoulder-s"/>
+              <view class="pose-dot pose-dot-hip-s"/>
+              <view class="pose-dot pose-dot-knee-s"/>
+              <view class="pose-dot pose-dot-ankle-s"/>
+            </block>
+          </view>
+          <text class="demo-plane">{{angleIdx === 1 ? '矢状面 · 耳·肩·髋·踝成一线' : '冠状面 · 左右对称参考中轴线'}}</text>
+        </view>
+      </view>
+
       <!-- 拍摄要求 -->
       <view class="section">
         <view class="angle-card">
