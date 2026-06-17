@@ -119,30 +119,9 @@
         <view class="card prep-card">
           <text class="prep-card-title font-headline">三视角示范</text>
           <text class="prep-card-sub">自然站立，双脚与肩同宽，双手自然垂放</text>
-          <view class="pose-demo-row">
-            <!-- 正面 -->
-            <view class="pose-demo-col">
-              <image class="pose-demo-img" src="/images/poses/pose-front.svg" mode="aspectFit"/>
-              <text class="pose-label">正面</text>
-              <text class="pose-plane">冠状面</text>
-            </view>
-            <!-- 侧面 -->
-            <view class="pose-demo-col">
-              <image class="pose-demo-img" src="/images/poses/pose-side.svg" mode="aspectFit"/>
-              <text class="pose-label">侧面</text>
-              <text class="pose-plane">矢状面</text>
-            </view>
-            <!-- 背面 -->
-            <view class="pose-demo-col">
-              <image class="pose-demo-img" src="/images/poses/pose-back.svg" mode="aspectFit"/>
-              <text class="pose-label">背面</text>
-              <text class="pose-plane">冠状面</text>
-            </view>
-          </view>
-          <view class="pose-legend">
-            <view class="pose-legend-row"><view class="pose-dot-mini"/><text class="pose-legend-text">关键点（系统自动识别）</text></view>
-            <view class="pose-legend-row"><view class="pose-center-mini"/><text class="pose-legend-text">中轴参考线</text></view>
-          </view>
+          <image class="poster-img" src="/images/poses/pose-front.jpg" mode="widthFix"/>
+          <image class="poster-img" src="/images/poses/pose-side.jpg" mode="widthFix"/>
+          <image class="poster-img" src="/images/poses/pose-back.jpg" mode="widthFix"/>
         </view>
         <view class="card prep-tip-card">
           <view class="prep-tip-row"><text class="prep-tip-dot">↑</text><text class="prep-tip-text">评估从<text class="prep-tip-em">足底向上</text>逐段分析：足弓→踝→膝→骨盆→腰椎→肩→颈</text></view>
@@ -217,13 +196,9 @@
 
       <!-- 标准示范图 -->
       <view class="section">
-        <view class="card demo-card">
-          <text class="demo-title">标准示范 · {{angles[angleIdx].label}}</text>
-          <image wx:if="{{angleIdx === 0}}" class="demo-pose-img" src="/images/poses/pose-front.svg" mode="aspectFit"/>
-          <image wx:elif="{{angleIdx === 1}}" class="demo-pose-img" src="/images/poses/pose-side.svg" mode="aspectFit"/>
-          <image wx:else class="demo-pose-img" src="/images/poses/pose-back.svg" mode="aspectFit"/>
-          <text class="demo-plane">{{angleIdx === 1 ? '矢状面 · 耳·肩·髋·踝成一线' : '冠状面 · 左右对称参考中轴线'}}</text>
-        </view>
+        <image wx:if="{{angleIdx === 0}}" class="poster-img" src="/images/poses/pose-front.jpg" mode="widthFix"/>
+        <image wx:elif="{{angleIdx === 1}}" class="poster-img" src="/images/poses/pose-side.jpg" mode="widthFix"/>
+        <image wx:else class="poster-img" src="/images/poses/pose-back.jpg" mode="widthFix"/>
       </view>
 
       <!-- 拍摄要求 -->
