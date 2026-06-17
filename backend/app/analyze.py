@@ -78,8 +78,9 @@ W_APT_ANT = 168.0         # 躯干-大腿矢状夹角，<168° 骨盆前倾
 W_APT_ANT_SEVERE = 158.0
 W_APT_POST = 177.0        # >177° 骨盆后倾趋势（仅用于 _reviews 低置信提示）
 W_APT_POST_REVIEW = 176.0 # 躯干-大腿夹角≥176°（近乎成直线）→ 骨盆或有后倾，建议人工复核
-W_KNEE_HYPEREXT = 3.0     # 髋-膝-踝矢状偏离 180° 的反向角，>3° 超伸（按侧面实测标定）
-W_KNEE_HYPEREXT_SEVERE = 12.0
+W_KNEE_HYPEREXT = 1.5     # 髋-膝-踝矢状偏离 180° 的反向角，>1.5° 超伸（按侧面实测标定）
+W_KNEE_HYPEREXT_SEVERE = 10.0
+W_HIP_SWAY = 0.08         # 髋相对「肩-踝连线」向前偏移 / 躯干高，>0.08 骨盆前移（Swayback）
 
 
 def _sagittal_metrics(kp: Keypoints) -> dict:
@@ -125,6 +126,9 @@ def _sagittal_metrics(kp: Keypoints) -> dict:
     knee_off = geo.signed_offset(ku, kv, hu, hv, au, av)
     knee_post = knee_off < 0
     knee_hyperext = max(0.0, 180.0 - knee_ang) if knee_post else 0.0
+    # 骨盆前移（Swayback）：髋相对「肩-踝连线」的矢状前移量 / 躯干高
+    hip_sway_off = geo.signed_offset(hu, hv, su, sv, au, av)
+    hip_sway = hip_sway_off / (torso * torso) if torso > 0 else 0.0   # 叉积量纲≈长度²
 
     return {
         "cva": round(cva, 1),
@@ -133,6 +137,7 @@ def _sagittal_metrics(kp: Keypoints) -> dict:
         "knee_ang": round(knee_ang, 1),
         "knee_post": knee_post,
         "knee_hyperext": round(knee_hyperext, 1),
+        "hip_sway": round(hip_sway, 3),
         "anterior_sign": a,
     }
 
@@ -168,6 +173,17 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
             "detail": "髂腰肌缩短，臀大肌激活不足",
         })
         penalty += 9 if tt < W_APT_ANT_SEVERE else 5
+        seen.add("pelvis")
+
+    # 骨盆前移（Swayback）：髋在矢状面相对「肩-踝连线」明显前推
+    # 与骨盆前倾不同：前倾 = 骨盆绕股骨头旋转；前移 = 整个骨盆向前平移
+    if "pelvis" not in seen and m.get("hip_sway", 0) > W_HIP_SWAY:
+        issues.append({
+            "key": "pelvis",
+            "issue": "骨盆前移（重心前推）",
+            "detail": "臀大肌离心控制不足，髋屈肌与腘绳肌协同失衡",
+        })
+        penalty += 7
         seen.add("pelvis")
 
     if "knee" not in seen and m["knee_post"] and m["knee_hyperext"] > W_KNEE_HYPEREXT:
