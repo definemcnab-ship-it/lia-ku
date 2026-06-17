@@ -200,15 +200,9 @@
         <view class="angle-card">
           <text class="angle-label font-headline">{{angles[angleIdx].label}}拍摄要求</text>
           <text class="angle-tip">{{angles[angleIdx].tip}}</text>
-          <view class="req-list">
-            <view wx:for="{{angles[angleIdx].reqs}}" wx:key="index" class="req-row">
-              <view class="req-check-wrap">
-                <text class="req-check">✓</text>
-              </view>
-              <text class="req-text">{{item}}</text>
-            </view>
-          </view>
-          <text class="angle-desc-badge">{{angles[angleIdx].desc}}</text>
+          <image wx:if="{{angleIdx === 0}}" class="poster-img" src="/images/poses/pose-front.jpg" mode="widthFix"/>
+          <image wx:elif="{{angleIdx === 1}}" class="poster-img" src="/images/poses/pose-side.jpg" mode="widthFix"/>
+          <image wx:else class="poster-img" src="/images/poses/pose-back.jpg" mode="widthFix"/>
         </view>
       </view>
 
