@@ -130,6 +130,179 @@ page { background: #f7f5f0; }
   gap: 0;
   padding: 8rpx 0;
 }
+/* ═══════════════════════════════════
+   前置教学页 (prep)
+═══════════════════════════════════ */
+.prep-tabs {
+  display: flex; flex-direction: row;
+  background: #f7f5f0; border-bottom: 1rpx solid #e8e2d8;
+  padding: 0 32rpx;
+}
+.prep-tab {
+  flex: 1; text-align: center;
+  font-size: 26rpx; color: #8f8779;
+  padding: 24rpx 0 20rpx;
+  border-bottom: 4rpx solid transparent;
+}
+.prep-tab-active { color: #c08a7d; border-bottom-color: #c08a7d; font-weight: 600; }
+
+.prep-card { padding: 40rpx; }
+.prep-card-title { display: block; font-size: 32rpx; font-weight: 700; color: #2b2720; margin-bottom: 8rpx; }
+.prep-card-sub { display: block; font-size: 24rpx; color: #8f8779; margin-bottom: 36rpx; }
+
+.prep-check-row {
+  display: flex; align-items: flex-start; gap: 24rpx;
+  padding: 24rpx 0; border-bottom: 1rpx solid #f4f1ec;
+}
+.prep-check-row:last-child { border-bottom: none; }
+.prep-check-pass { opacity: 1; }
+.prep-check-fail { opacity: 0.85; }
+.prep-check-icon {
+  width: 52rpx; height: 52rpx; border-radius: 50%;
+  background: #e8f5e9; color: #5b9e6a;
+  font-size: 28rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.prep-check-icon-x { background: #fdecea; color: #c0504d; }
+.prep-check-info { flex: 1; }
+.prep-check-name { display: block; font-size: 28rpx; font-weight: 600; color: #2b2720; margin-bottom: 6rpx; }
+.prep-check-desc { display: block; font-size: 24rpx; color: #8f8779; line-height: 1.6; }
+
+/* 示范图 */
+.pose-demo-row { display: flex; flex-direction: row; gap: 16rpx; margin-bottom: 32rpx; }
+.pose-demo-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10rpx; }
+.pose-grid-wrap {
+  position: relative; width: 100%; padding-bottom: 160%;
+  background: #f0ece4; border-radius: 12rpx; overflow: hidden;
+}
+.pose-grid { position: absolute; inset: 0; }
+.grid-line { position: absolute; background: rgba(192,138,125,0.18); }
+.grid-v1 { left: 33%; top: 0; bottom: 0; width: 1rpx; }
+.grid-v2 { left: 67%; top: 0; bottom: 0; width: 1rpx; }
+.grid-h1 { top: 12%; left: 0; right: 0; height: 1rpx; }
+.grid-h2 { top: 30%; left: 0; right: 0; height: 1rpx; }
+.grid-h3 { top: 56%; left: 0; right: 0; height: 1rpx; }
+.grid-h4 { top: 78%; left: 0; right: 0; height: 1rpx; }
+.pose-center-line {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2rpx; background: rgba(192,138,125,0.5);
+  transform: translateX(-50%);
+}
+.pose-silhouette { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* 关键点圆点 */
+.pose-dot {
+  position: absolute; width: 14rpx; height: 14rpx; border-radius: 50%;
+  background: #c08a7d; border: 2rpx solid #fff;
+}
+.pose-dot-shoulder-l { top: 22%; left: 22%; }
+.pose-dot-shoulder-r { top: 22%; right: 22%; }
+.pose-dot-hip-l { top: 52%; left: 26%; }
+.pose-dot-hip-r { top: 52%; right: 26%; }
+.pose-dot-knee-l { top: 68%; left: 28%; }
+.pose-dot-knee-r { top: 68%; right: 28%; }
+.pose-dot-ankle-l { top: 86%; left: 30%; }
+.pose-dot-ankle-r { top: 86%; right: 30%; }
+.pose-dot-ear { top: 10%; left: 55%; }
+.pose-dot-shoulder-s { top: 22%; left: 42%; }
+.pose-dot-hip-s { top: 52%; left: 52%; }
+.pose-dot-knee-s { top: 68%; left: 48%; }
+.pose-dot-ankle-s { top: 86%; left: 46%; }
+
+/* CSS 人形轮廓 */
+.fig { position: absolute; inset: 0; }
+.fig-head {
+  position: absolute; left: 50%; top: 6%;
+  width: 36rpx; height: 36rpx; border-radius: 50%;
+  background: #c9b8ae; transform: translateX(-50%);
+}
+.fig-neck {
+  position: absolute; left: 50%; top: 17%;
+  width: 12rpx; height: 10%;
+  background: #c9b8ae; transform: translateX(-50%);
+}
+.fig-torso {
+  position: absolute; left: 50%; top: 26%;
+  width: 48rpx; height: 28%;
+  background: #c9b8ae; border-radius: 8rpx; transform: translateX(-50%);
+}
+.fig-arm-l {
+  position: absolute; left: 28%; top: 27%;
+  width: 10rpx; height: 26%;
+  background: #c9b8ae; border-radius: 5rpx;
+  transform: rotate(8deg);
+}
+.fig-arm-r {
+  position: absolute; right: 28%; top: 27%;
+  width: 10rpx; height: 26%;
+  background: #c9b8ae; border-radius: 5rpx;
+  transform: rotate(-8deg);
+}
+.fig-leg-l {
+  position: absolute; left: 40%; top: 54%;
+  width: 18rpx; height: 40%;
+  background: #c9b8ae; border-radius: 6rpx;
+}
+.fig-leg-r {
+  position: absolute; right: 40%; top: 54%;
+  width: 18rpx; height: 40%;
+  background: #c9b8ae; border-radius: 6rpx;
+}
+/* 侧面 */
+.fig-torso-s {
+  position: absolute; left: 42%; top: 26%;
+  width: 28rpx; height: 28%;
+  background: #c9b8ae; border-radius: 8rpx;
+}
+.fig-arm-s {
+  position: absolute; left: 62%; top: 27%;
+  width: 10rpx; height: 26%;
+  background: #c9b8ae; border-radius: 5rpx;
+  transform: rotate(6deg);
+}
+.fig-leg-s {
+  position: absolute; left: 46%; top: 54%;
+  width: 18rpx; height: 40%;
+  background: #c9b8ae; border-radius: 6rpx;
+}
+
+.pose-label { font-size: 26rpx; font-weight: 600; color: #2b2720; }
+.pose-plane { font-size: 22rpx; color: #a09890; }
+.pose-legend { display: flex; flex-direction: column; gap: 12rpx; margin-top: 8rpx; }
+.pose-legend-row { display: flex; align-items: center; gap: 12rpx; }
+.pose-dot-mini { width: 14rpx; height: 14rpx; border-radius: 50%; background: #c08a7d; flex-shrink: 0; }
+.pose-center-mini { width: 22rpx; height: 2rpx; background: rgba(192,138,125,0.5); flex-shrink: 0; }
+.pose-legend-text { font-size: 22rpx; color: #8f8779; }
+
+.prep-tip-card { padding: 32rpx 40rpx; }
+.prep-tip-row { display: flex; align-items: flex-start; gap: 20rpx; margin-bottom: 22rpx; }
+.prep-tip-row:last-child { margin-bottom: 0; }
+.prep-tip-dot { font-size: 28rpx; color: #c08a7d; flex-shrink: 0; margin-top: 2rpx; }
+.prep-tip-text { font-size: 26rpx; color: #6e675b; line-height: 1.7; }
+.prep-tip-em { color: #c08a7d; font-weight: 600; }
+
+/* 评估说明 */
+.explain-row { display: flex; align-items: flex-start; gap: 28rpx; padding: 28rpx 0; border-bottom: 1rpx solid #f4f1ec; }
+.explain-row:last-child { border-bottom: none; }
+.explain-num {
+  width: 56rpx; height: 56rpx; border-radius: 50%;
+  background: #fdf0ed; color: #c08a7d;
+  font-size: 22rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.explain-info { flex: 1; }
+.explain-name { display: block; font-size: 28rpx; font-weight: 600; color: #2b2720; margin-bottom: 8rpx; }
+.explain-desc { display: block; font-size: 24rpx; color: #8f8779; line-height: 1.6; }
+
+/* 底部按钮组 */
+.prep-btn-row { display: flex; flex-direction: row; gap: 24rpx; }
+.secondary-btn {
+  flex: 0 0 160rpx; height: 88rpx; border-radius: 44rpx;
+  background: #f0ece4; display: flex; align-items: center; justify-content: center;
+}
+.secondary-btn-text { font-size: 28rpx; color: #6e675b; }
+.prep-start-btn { flex: 1; }
+
 .progress-step {
   display: flex;
   flex-direction: column;

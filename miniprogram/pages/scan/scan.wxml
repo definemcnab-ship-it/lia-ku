@@ -69,6 +69,189 @@
       </view>
     </block>
 
+    <!-- ── 前置教学页 ── -->
+    <block wx:if="{{step === 'prep'}}">
+      <!-- Tab 栏 -->
+      <view class="prep-tabs">
+        <view class="prep-tab {{prepTab===0?'prep-tab-active':''}}" bindtap="setPrepTab" data-tab="0">着装要求</view>
+        <view class="prep-tab {{prepTab===1?'prep-tab-active':''}}" bindtap="setPrepTab" data-tab="1">示范姿势</view>
+        <view class="prep-tab {{prepTab===2?'prep-tab-active':''}}" bindtap="setPrepTab" data-tab="2">评估说明</view>
+      </view>
+
+      <!-- Tab 0：着装要求 -->
+      <view class="section" wx:if="{{prepTab === 0}}">
+        <view class="card prep-card">
+          <text class="prep-card-title font-headline">着装要求</text>
+          <text class="prep-card-sub">以下条件未达到时，请勿开始评估</text>
+          <view class="prep-check-row prep-check-pass">
+            <text class="prep-check-icon">✓</text>
+            <view class="prep-check-info">
+              <text class="prep-check-name">上半身</text>
+              <text class="prep-check-desc">运动内衣 / 紧身背心 / 贴身上衣，需露出肩颈与腰腹轮廓</text>
+            </view>
+          </view>
+          <view class="prep-check-row prep-check-pass">
+            <text class="prep-check-icon">✓</text>
+            <view class="prep-check-info">
+              <text class="prep-check-name">下半身</text>
+              <text class="prep-check-desc">瑜伽裤 / 紧身裤 / 运动短裤，需露出膝关节至踝关节轮廓</text>
+            </view>
+          </view>
+          <view class="prep-check-row prep-check-pass">
+            <text class="prep-check-icon">✓</text>
+            <view class="prep-check-info">
+              <text class="prep-check-name">足部</text>
+              <text class="prep-check-desc">光脚，不穿鞋袜，以便观察足弓与踝关节对位</text>
+            </view>
+          </view>
+          <view class="prep-check-row prep-check-fail">
+            <text class="prep-check-icon prep-check-icon-x">✗</text>
+            <view class="prep-check-info">
+              <text class="prep-check-name">不符合条件</text>
+              <text class="prep-check-desc">宽松衣物、厚底鞋、穿袜将影响关键点识别，系统将拒绝评估</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Tab 1：三视角示范图 -->
+      <view class="section" wx:if="{{prepTab === 1}}">
+        <view class="card prep-card">
+          <text class="prep-card-title font-headline">三视角示范</text>
+          <text class="prep-card-sub">自然站立，双脚与肩同宽，双手自然垂放</text>
+          <view class="pose-demo-row">
+            <!-- 正面 -->
+            <view class="pose-demo-col">
+              <view class="pose-grid-wrap">
+                <view class="pose-grid">
+                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
+                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
+                  <view class="pose-center-line"/>
+                </view>
+                <!-- 正面人形 SVG -->
+                <!-- 正面人形（CSS 绘制） -->
+                <view class="fig fig-front">
+                  <view class="fig-head"/><view class="fig-neck"/>
+                  <view class="fig-torso"/>
+                  <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
+                  <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
+                </view>
+                <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
+                <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
+                <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
+                <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
+              </view>
+              <text class="pose-label">正面</text>
+              <text class="pose-plane">冠状面</text>
+            </view>
+            <!-- 侧面 -->
+            <view class="pose-demo-col">
+              <view class="pose-grid-wrap">
+                <view class="pose-grid">
+                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
+                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
+                  <view class="pose-center-line"/>
+                </view>
+                <!-- 侧面人形（CSS 绘制） -->
+                <view class="fig fig-side">
+                  <view class="fig-head"/><view class="fig-neck"/>
+                  <view class="fig-torso-s"/>
+                  <view class="fig-arm fig-arm-s"/>
+                  <view class="fig-leg fig-leg-s"/>
+                </view>
+                <view class="pose-dot pose-dot-ear"/>
+                <view class="pose-dot pose-dot-shoulder-s"/>
+                <view class="pose-dot pose-dot-hip-s"/>
+                <view class="pose-dot pose-dot-knee-s"/>
+                <view class="pose-dot pose-dot-ankle-s"/>
+              </view>
+              <text class="pose-label">侧面</text>
+              <text class="pose-plane">矢状面</text>
+            </view>
+            <!-- 背面 -->
+            <view class="pose-demo-col">
+              <view class="pose-grid-wrap">
+                <view class="pose-grid">
+                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
+                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
+                  <view class="pose-center-line"/>
+                </view>
+                <!-- 背面人形（CSS 绘制，与正面相同） -->
+                <view class="fig fig-front">
+                  <view class="fig-head"/><view class="fig-neck"/>
+                  <view class="fig-torso"/>
+                  <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
+                  <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
+                </view>
+                <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
+                <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
+                <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
+                <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
+              </view>
+              <text class="pose-label">背面</text>
+              <text class="pose-plane">冠状面</text>
+            </view>
+          </view>
+          <view class="pose-legend">
+            <view class="pose-legend-row"><view class="pose-dot-mini"/><text class="pose-legend-text">关键点（系统自动识别）</text></view>
+            <view class="pose-legend-row"><view class="pose-center-mini"/><text class="pose-legend-text">中轴参考线</text></view>
+          </view>
+        </view>
+        <view class="card prep-tip-card">
+          <view class="prep-tip-row"><text class="prep-tip-dot">↑</text><text class="prep-tip-text">评估从<text class="prep-tip-em">足底向上</text>逐段分析：足弓→踝→膝→骨盆→腰椎→肩→颈</text></view>
+          <view class="prep-tip-row"><text class="prep-tip-dot">▦</text><text class="prep-tip-text">系统同时在<text class="prep-tip-em">三个平面</text>分析：矢状面（前后）、冠状面（左右）、水平面（旋转）</text></view>
+          <view class="prep-tip-row"><text class="prep-tip-dot">◎</text><text class="prep-tip-text">建议背景简洁，距相机 <text class="prep-tip-em">1.5–2 米</text>，全身入镜</text></view>
+        </view>
+      </view>
+
+      <!-- Tab 2：评估说明 -->
+      <view class="section" wx:if="{{prepTab === 2}}">
+        <view class="card prep-card">
+          <text class="prep-card-title font-headline">评估说明</text>
+          <view class="explain-row">
+            <view class="explain-num">01</view>
+            <view class="explain-info">
+              <text class="explain-name">AI 辅助筛查，非临床诊断</text>
+              <text class="explain-desc">本系统基于 2D/3D 关键点估算体态偏差，结果供参考，不替代专业物理治疗师评估</text>
+            </view>
+          </view>
+          <view class="explain-row">
+            <view class="explain-num">02</view>
+            <view class="explain-info">
+              <text class="explain-name">三视角综合分析</text>
+              <text class="explain-desc">正面检测高低肩与膝内扣，侧面检测头前引、圆肩、骨盆与膝超伸，背面作为正面补充</text>
+            </view>
+          </view>
+          <view class="explain-row">
+            <view class="explain-num">03</view>
+            <view class="explain-info">
+              <text class="explain-name">挺拔度评分</text>
+              <text class="explain-desc">100 分起，每项确认问题按严重程度扣分，部分项目无法精确判定时仅作「建议人工复核」提示</text>
+            </view>
+          </view>
+          <view class="explain-row">
+            <view class="explain-num">04</view>
+            <view class="explain-info">
+              <text class="explain-name">定期复测追踪变化</text>
+              <text class="explain-desc">建议每 4 周复测一次，配合针对性课程训练，体态改善通常在 8–12 周内可见</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 底部按钮 -->
+      <view class="section">
+        <view class="prep-btn-row">
+          <view class="secondary-btn" bindtap="resetAll">
+            <text class="secondary-btn-text">返回</text>
+          </view>
+          <view class="primary-btn prep-start-btn" bindtap="startScan">
+            <text class="primary-btn-text">我已准备好，开始检测</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
     <!-- ── 拍摄角度页 ── -->
     <block wx:if="{{step === 'angle'}}">
       <!-- 进度条 -->

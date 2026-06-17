@@ -140,8 +140,9 @@ function enrichReviews(rawReviews) {
 
 Page({
   data: {
-    // step: 'guide' | 'angle' | 'checking' | 'fail' | 'analyzing' | 'result'
+    // step: 'guide' | 'prep' | 'angle' | 'checking' | 'fail' | 'analyzing' | 'result'
     step: 'guide',
+    prepTab: 0,            // prep 页当前 tab 0=着装 1=示范 2=说明
     angleIdx: 0,          // 当前拍摄角度 0/1/2
     angles: ANGLES,
     passed: [false, false, false], // 各角度是否通过
@@ -164,6 +165,14 @@ Page({
   },
 
   startGuide() {
+    this.setData({ step: 'prep', prepTab: 0 })
+  },
+
+  setPrepTab(e) {
+    this.setData({ prepTab: e.currentTarget.dataset.tab })
+  },
+
+  startScan() {
     this.setData({ step: 'angle', angleIdx: 0, passed: [false, false, false] })
   },
 
