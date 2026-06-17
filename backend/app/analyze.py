@@ -69,6 +69,124 @@ LORDOSIS_HIP_FWD = 0.10            # 髋前移 / 身高近似
 FOOT_PRONATION_RATIO = 0.35
 
 
+# ── 3D 矢状面阈值（基于世界坐标，米；首版为保守取值，按 _debug 实测标定）──
+W_CVA_FHP = 60.0          # 肩→耳矢状仰角，<60° 头前引（世界坐标比 2D 更陡）
+W_CVA_SEVERE = 52.0
+W_SH_FWD = 0.06           # 肩相对髋向前 / 躯干高，>0.06 含胸圆肩
+W_SH_FWD_SEVERE = 0.13
+W_APT_ANT = 168.0         # 躯干-大腿矢状夹角，<168° 骨盆前倾
+W_APT_ANT_SEVERE = 158.0
+W_APT_POST = 177.0        # >177° 骨盆后倾趋势
+W_KNEE_HYPEREXT = 4.0     # 髋-膝-踝矢状偏离 180° 的反向角，>4° 超伸
+W_KNEE_HYPEREXT_SEVERE = 12.0
+
+
+def _sagittal_metrics(kp: Keypoints) -> dict:
+    """用 3D 世界坐标在矢状面重建头前引/圆肩/骨盆/膝超伸的几何量。
+
+    世界坐标为相机系（x 右、y 下、z 深度，米，髋中心原点）。前后(腹背)信息
+    在 z 轴上，正面/背面照也能恢复——这是 2D 平面照拿不到的关键维度。
+    返回 None 表示世界坐标不全。
+    """
+    nose = kp.wlm(NOSE)
+    lsh, rsh = kp.wlm(L_SHOULDER), kp.wlm(R_SHOULDER)
+    lear, rear = kp.wlm(L_EAR), kp.wlm(R_EAR)
+    lhip, rhip = kp.wlm(L_HIP), kp.wlm(R_HIP)
+    lkn, rkn = kp.wlm(L_KNEE), kp.wlm(R_KNEE)
+    lank, rank = kp.wlm(L_ANKLE), kp.wlm(R_ANKLE)
+    if not all([nose, lsh, rsh, lhip, rhip, lkn, rkn, lank, rank]):
+        return None
+
+    sh = geo.wmid(lsh, rsh)
+    hip = geo.wmid(lhip, rhip)
+    kn = geo.wmid(lkn, rkn)
+    ank = geo.wmid(lank, rank)
+    ear = geo.wmid(lear, rear) if (lear and rear) else (nose.x, nose.y, nose.z)
+
+    # 前后朝向符号：鼻应比肩更靠前（腹侧）。sh.z - nose.z >= 0 → 腹侧 = z 更小
+    a = 1.0 if (sh[2] - nose.z) >= 0 else -1.0
+
+    def uv(p):
+        return geo.sag_uv(p, a)
+
+    su, sv = uv(sh)
+    hu, hv = uv(hip)
+    ku, kv = uv(kn)
+    au, av = uv(ank)
+    eu, ev = uv(ear)
+    torso = abs(hv - sv) or 1.0
+
+    cva = geo.elevation_deg(su, sv, eu, ev)          # 越小越头前引
+    sh_fwd = (su - hu) / torso                        # 肩相对髋向前 / 躯干高
+    trunk_thigh = geo.angle(su, sv, hu, hv, ku, kv)   # 躯干-大腿矢状夹角
+    knee_ang = geo.angle(hu, hv, ku, kv, au, av)      # 髋-膝-踝
+    # 膝相对髋-踝连线的前后：腹侧为正。超伸时膝向背侧(后) → 偏移为负
+    knee_off = geo.signed_offset(ku, kv, hu, hv, au, av)
+    knee_post = knee_off < 0
+    knee_hyperext = max(0.0, 180.0 - knee_ang) if knee_post else 0.0
+
+    return {
+        "cva": round(cva, 1),
+        "sh_fwd": round(sh_fwd, 3),
+        "trunk_thigh": round(trunk_thigh, 1),
+        "knee_ang": round(knee_ang, 1),
+        "knee_post": knee_post,
+        "knee_hyperext": round(knee_hyperext, 1),
+        "anterior_sign": a,
+    }
+
+
+def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
+    """基于 3D 矢状面几何量补充矢状面问题（仅填补 2D 未命中的 key）。"""
+    penalty = 0
+    if "neck" not in seen and m["cva"] < W_CVA_FHP:
+        issues.append({
+            "key": "neck",
+            "issue": "颈线前移，头前引趋势",
+            "detail": "深颈屈肌激活不足，上斜方肌代偿过度",
+        })
+        penalty += 12 if m["cva"] < W_CVA_SEVERE else 7
+        seen.add("neck")
+
+    if "shoulder" not in seen and m["sh_fwd"] > W_SH_FWD:
+        issues.append({
+            "key": "shoulder",
+            "issue": "双肩含胸内扣趋势",
+            "detail": "胸小肌紧张，中下斜方肌偏弱",
+        })
+        penalty += 9 if m["sh_fwd"] > W_SH_FWD_SEVERE else 6
+        seen.add("shoulder")
+
+    if "pelvis" not in seen:
+        tt = m["trunk_thigh"]
+        if tt < W_APT_ANT:
+            issues.append({
+                "key": "pelvis",
+                "issue": "骨盆轻微前倾",
+                "detail": "髂腰肌缩短，臀大肌激活不足",
+            })
+            penalty += 9 if tt < W_APT_ANT_SEVERE else 5
+            seen.add("pelvis")
+        elif tt > W_APT_POST:
+            issues.append({
+                "key": "pelvis",
+                "issue": "骨盆后倾趋势",
+                "detail": "臀肌过度紧张，腰椎曲度减小，核心稳定不足",
+            })
+            penalty += 6
+            seen.add("pelvis")
+
+    if "knee" not in seen and m["knee_post"] and m["knee_hyperext"] > W_KNEE_HYPEREXT:
+        issues.append({
+            "key": "knee",
+            "issue": "膝关节存在超伸趋势",
+            "detail": "VMO 与腘绳肌离心控制不足",
+        })
+        penalty += 8 if m["knee_hyperext"] > W_KNEE_HYPEREXT_SEVERE else 5
+        seen.add("knee")
+    return penalty
+
+
 def _facing_sign(kp: Keypoints) -> float:
     """侧面照朝向：返回 +1（面朝 +x）或 -1，用于判断「前方」。"""
     ear = kp.lm(L_EAR) or kp.lm(R_EAR)
@@ -232,19 +350,34 @@ def analyze(kps: Dict[str, Keypoints]) -> dict:
     seen = set()
     penalty = 0
 
-    # 侧面承担矢状面判断（头前引/圆肩/骨盆/腰椎/膝超伸），优先处理
     side = kps.get("side")
+    front = kps.get("front")
+    back = kps.get("back")
+
+    # 1) 侧面 2D 矢状面判断（清晰侧面照下最直接），优先处理
     if side and side.has_pose:
         penalty += _analyze_side(side, issues)
         seen.update(i["key"] for i in issues)
 
-    # 正面承担额状面判断（高低肩/膝内扣/足）
-    front = kps.get("front")
+    # 2) 3D 矢状面补充：用世界坐标深度恢复前后向问题，填补 2D 未命中的项。
+    #    侧面照人体侧朝镜头、世界坐标 z 噪声大，故优先用正面、其次背面/侧面。
+    debug = {}
+    sag_used = None
+    for tag, kp in (("front", front), ("side", side), ("back", back)):
+        if kp and kp.has_pose:
+            m = _sagittal_metrics(kp)
+            if m:
+                debug[tag] = m
+                if sag_used is None and tag in ("front", "back"):
+                    sag_used = (tag, m)
+    if sag_used:
+        penalty += _analyze_sagittal_3d(sag_used[1], issues, seen)
+
+    # 3) 正面额状面判断（高低肩/膝内扣/足）
     if front and front.has_pose:
         penalty += _analyze_front(front, issues, seen)
 
-    # 背面作正面的补充（同 key 不重复）
-    back = kps.get("back")
+    # 4) 背面作正面的补充（同 key 不重复）
     if back and back.has_pose:
         penalty += _analyze_front(back, issues, seen)
 
@@ -257,4 +390,8 @@ def analyze(kps: Dict[str, Keypoints]) -> dict:
         uniq.append(it)
 
     score = max(40, min(100, 100 - penalty))
-    return {"score": score, "issues": uniq[:5]}
+    # _debug：回传各视角实测矢状面几何量，用于按真实样本标定阈值（前端忽略）
+    return {"score": score, "issues": uniq[:5], "_debug": {
+        "sag_view": sag_used[0] if sag_used else None,
+        "metrics": debug,
+    }}

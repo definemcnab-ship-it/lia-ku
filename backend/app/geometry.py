@@ -48,6 +48,23 @@ def signed_offset(px, py, ax, ay, bx, by) -> float:
     return vx * (py - ay) - vy * (px - ax)
 
 
+def wmid(a: Landmark, b: Landmark):
+    """两个 3D 世界坐标点的中点，返回 (x, y, z)。"""
+    return ((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2)
+
+
+def sag_uv(p, anterior_sign: float):
+    """把 3D 世界坐标点投影到矢状面 (u, v)。
+
+    u：前后轴，已统一为「向前(腹侧)为正」；v：竖直轴（y 向下）。
+    anterior_sign 由「鼻比肩更靠前」推出，使不同朝向的照片符号一致。
+    p 可为 Landmark 或 (x, y, z) 元组。
+    """
+    z = p.z if hasattr(p, "z") else p[2]
+    y = p.y if hasattr(p, "y") else p[1]
+    return (-anterior_sign * z, y)
+
+
 def torso_height(kp: Keypoints) -> float:
     """肩到髋的垂直距离（归一化），用于归一化其他偏移量。"""
     ls, rs = kp.lm(11), kp.lm(12)

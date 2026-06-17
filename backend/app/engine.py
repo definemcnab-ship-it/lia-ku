@@ -36,7 +36,8 @@ class Landmark:
 @dataclass
 class Keypoints:
     has_pose: bool
-    landmarks: list = field(default_factory=list)  # 33 个 Landmark，无则空
+    landmarks: list = field(default_factory=list)  # 33 个 Landmark（2D 归一化），无则空
+    world: list = field(default_factory=list)      # 33 个 Landmark（3D 世界坐标，米，髋中心原点）
     face_count: int = 0
     brightness: float = 0.0   # 0..255 平均亮度
     blur: float = 0.0         # 拉普拉斯方差，越小越糊
@@ -47,6 +48,12 @@ class Keypoints:
         if not self.landmarks or idx >= len(self.landmarks):
             return None
         return self.landmarks[idx]
+
+    def wlm(self, idx: int) -> Optional[Landmark]:
+        """3D 世界坐标关键点（米，髋中心原点；x 右、y 下、z 深度）。"""
+        if not self.world or idx >= len(self.world):
+            return None
+        return self.world[idx]
 
     def visible(self, idx: int, thr: float = 0.5) -> bool:
         lm = self.lm(idx)
@@ -103,18 +110,23 @@ def detect(image_bytes: bytes) -> Keypoints:
     if fres.detections:
         face_count = len(fres.detections)
 
-    # 人体关键点
+    # 人体关键点（2D 归一化 + 3D 世界坐标）
     landmarks = []
+    world = []
     has_pose = False
     pres = _pose.process(rgb)
     if pres.pose_landmarks:
         has_pose = True
         for p in pres.pose_landmarks.landmark:
             landmarks.append(Landmark(p.x, p.y, p.z, p.visibility))
+    if pres.pose_world_landmarks:
+        for p in pres.pose_world_landmarks.landmark:
+            world.append(Landmark(p.x, p.y, p.z, p.visibility))
 
     return Keypoints(
         has_pose=has_pose,
         landmarks=landmarks,
+        world=world,
         face_count=face_count,
         brightness=brightness,
         blur=blur,
