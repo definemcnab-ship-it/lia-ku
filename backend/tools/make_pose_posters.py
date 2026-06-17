@@ -52,7 +52,7 @@ def numcircle(d, c, n, r=20):
 
 # ---------- 通用海报骨架 ----------
 def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
-          title, eval_pts, center_line=True, align_pts=None, header=True):
+          title, eval_pts, center_line=True, align_pts=None, header=True, center_x=None):
     W,H = 1200,1500
     cv = Image.new("RGB",(W,H),BG)
     d = ImageDraw.Draw(cv)
@@ -84,9 +84,9 @@ def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
         # frac of original photo -> canvas
         return (px + (fx*pw - cx0)*scale, py + (fy*phh - cy0)*scale)
 
-    # 中轴线
+    # 中轴线（center_x 指定鼻尖/中线横坐标，否则取图形中心）
     if center_line:
-        midx = px+new_w/2
+        midx = to_cv(center_x,0)[0] if center_x is not None else px+new_w/2
         dashed_line(d,(midx,py-20),(midx,py+target_h+10),RED,3,10,9)
     # 对齐连线（侧面 耳肩髋踝）
     if align_pts:
@@ -176,10 +176,11 @@ if __name__ == "__main__":
         os.path.join(base,"photo-front.jpg"),
         os.path.join(base,"pose-front.jpg"),
         crop=(0.29,0.0,0.71,1.0),
+        center_x=0.495,
         dots={
-            "head":(0.50,0.115), "shoulder":(0.405,0.255), "ribs":(0.50,0.37),
-            "pelvis":(0.50,0.455), "knee":(0.45,0.67), "leg":(0.55,0.71),
-            "foot":(0.50,0.875),
+            "head":(0.495,0.115), "shoulder":(0.405,0.255), "ribs":(0.495,0.37),
+            "pelvis":(0.495,0.455), "knee":(0.45,0.67), "leg":(0.55,0.71),
+            "foot":(0.495,0.875),
         },
         left_cards=[
             (1,"shoulder","肩",["锁骨呈柔和的小倒「八」字，两侧肩","峰等高；据此观察有无高低肩、圆肩。"]),
