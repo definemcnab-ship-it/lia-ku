@@ -49,7 +49,7 @@ def numcircle(d, c, n, r=20):
 
 # ---------- 通用海报骨架 ----------
 def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
-          title, eval_pts, center_line=True, align_pts=None):
+          title, eval_pts, center_line=True, align_pts=None, header=True):
     W,H = 1200,1500
     cv = Image.new("RGB",(W,H),BG)
     d = ImageDraw.Draw(cv)
@@ -91,20 +91,19 @@ def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
         for a,b in zip(pts,pts[1:]):
             dashed_line(d,a,b,(255,200,60),3,4,8)
 
-    # ---- 标题 ----
-    d.text((48,40), title[0], font=font(FB,76), fill=DARK)
-    tw=d.textlength(title[0],font=font(FB,76))
-    rounded(d,(48,138,48+430,138+50),10,BLUE)
-    sb=font(FM,26); w=d.textlength(title[1],font=sb)
-    d.text((48+215-w/2,150), title[1], font=sb, fill=(255,255,255))
+    # ---- 标题 + 评估要点框（header=False 时整块省略并裁掉顶部）----
+    if header:
+        d.text((48,40), title[0], font=font(FB,76), fill=DARK)
+        rounded(d,(48,138,48+430,138+50),10,BLUE)
+        sb=font(FM,26); w=d.textlength(title[1],font=sb)
+        d.text((48+215-w/2,150), title[1], font=sb, fill=(255,255,255))
 
-    # 评估要点框
-    rounded(d,(770,40,1160,190),18,CARD)
-    d.text((806,62), "☆ 评估要点", font=font(FB,30), fill=BLUE)
-    yy=116
-    for t in eval_pts:
-        d.ellipse([812,yy,828,yy+16],fill=BLUE)
-        d.text((842,yy-4), t, font=font(FR,24), fill=GREY); yy+=40
+        rounded(d,(770,40,1160,190),18,CARD)
+        d.text((806,62), "☆ 评估要点", font=font(FB,30), fill=BLUE)
+        yy=116
+        for t in eval_pts:
+            d.ellipse([812,yy,828,yy+16],fill=BLUE)
+            d.text((842,yy-4), t, font=font(FR,24), fill=GREY); yy+=40
 
     # ---- 标志点 + 连线 ----
     cvdots={k:to_cv(*v) for k,v in dots.items()}
@@ -150,6 +149,8 @@ def build(view, photo_path, out_path, *, crop, dots, left_cards, right_cards,
         d.text((x,1412), sub[0], font=font(FR,21), fill=GREY)
         d.text((x,1440), sub[1], font=font(FR,21), fill=GREY)
 
+    if not header:
+        cv = cv.crop((0, 196, W, H))
     cv.save(out_path, quality=92)
     print("saved", out_path)
 
@@ -190,6 +191,7 @@ if __name__ == "__main__":
         ],
         title=("正面体态评估","科学评估体态 · 精准改善问题"),
         eval_pts=["自然站立，放松身体","观察各标志点位置"],
+        header=False,
     )
 
     # ===== 侧面 =====
@@ -224,6 +226,7 @@ if __name__ == "__main__":
         ],
         title=("侧面体态评估","科学评估体态 · 精准改善问题"),
         eval_pts=["自然站立，放松身体","从侧面观察各标志点位置"],
+        header=False,
     )
 
     # ===== 背面 =====
@@ -253,4 +256,5 @@ if __name__ == "__main__":
         ],
         title=("背面体态评估","科学评估体态 · 精准改善问题"),
         eval_pts=["自然站立，放松身体","观察各标志点位置"],
+        header=False,
     )
