@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 420" width="240" height="420">
+  <defs>
+    <linearGradient id="skinF" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5C5A3"/>
+      <stop offset="100%" stop-color="#E8A87C"/>
+    </linearGradient>
+    <linearGradient id="topF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2D2D3A"/>
+      <stop offset="100%" stop-color="#1A1A24"/>
+    </linearGradient>
+    <linearGradient id="pantsF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3D3D5C"/>
+      <stop offset="100%" stop-color="#252540"/>
+    </linearGradient>
+    <linearGradient id="gridFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7ECAFF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7ECAFF" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background grid -->
+  <rect width="240" height="420" fill="#0D1117" rx="12"/>
+  <rect width="240" height="420" fill="url(#gridFade)" rx="12"/>
+
+  <!-- Grid lines vertical -->
+  <line x1="60" y1="0" x2="60" y2="420" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.2"/>
+  <line x1="120" y1="0" x2="120" y2="420" stroke="#7ECAFF" stroke-width="0.8" stroke-opacity="0.35"/>
+  <line x1="180" y1="0" x2="180" y2="420" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.2"/>
+
+  <!-- Grid lines horizontal -->
+  <line x1="0" y1="70" x2="240" y2="70" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.15"/>
+  <line x1="0" y1="140" x2="240" y2="140" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.15"/>
+  <line x1="0" y1="210" x2="240" y2="210" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.15"/>
+  <line x1="0" y1="280" x2="240" y2="280" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.15"/>
+  <line x1="0" y1="350" x2="240" y2="350" stroke="#7ECAFF" stroke-width="0.4" stroke-opacity="0.15"/>
+
+  <!-- Center axis -->
+  <line x1="120" y1="10" x2="120" y2="410" stroke="#FF6B6B" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="4,4"/>
+
+  <!-- === FIGURE === -->
+
+  <!-- Hair -->
+  <ellipse cx="120" cy="40" rx="26" ry="18" fill="#2A1810"/>
+  <ellipse cx="120" cy="34" rx="22" ry="12" fill="#2A1810"/>
+  <!-- Ponytail -->
+  <path d="M138 36 Q150 28 148 42 Q144 50 140 46 Z" fill="#2A1810"/>
+
+  <!-- Head -->
+  <ellipse cx="120" cy="44" rx="22" ry="24" fill="url(#skinF)"/>
+
+  <!-- Face features -->
+  <ellipse cx="113" cy="42" rx="3" ry="3.5" fill="#4A2C1A" opacity="0.8"/>
+  <ellipse cx="127" cy="42" rx="3" ry="3.5" fill="#4A2C1A" opacity="0.8"/>
+  <path d="M114 54 Q120 58 126 54" stroke="#C07050" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- Eyebrows -->
+  <path d="M110 38 Q113 36 116 37" stroke="#4A2C1A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M124 37 Q127 36 130 38" stroke="#4A2C1A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Neck -->
+  <rect x="114" y="65" width="12" height="14" rx="4" fill="url(#skinF)"/>
+
+  <!-- Sports bra / tight top -->
+  <!-- Torso base -->
+  <path d="M98 79 Q98 76 100 75 L140 75 Q142 76 142 79 L145 155 Q145 158 142 158 L98 158 Q95 158 95 155 Z" fill="url(#topF)"/>
+  <!-- Bra strap left -->
+  <path d="M108 75 L104 68 Q102 65 106 64 L110 64 Q113 65 112 68 L110 75 Z" fill="url(#topF)"/>
+  <!-- Bra strap right -->
+  <path d="M132 75 L136 68 Q138 65 134 64 L130 64 Q127 65 128 68 L130 75 Z" fill="url(#topF)"/>
+
+  <!-- Shoulders (skin) -->
+  <ellipse cx="94" cy="82" rx="8" ry="6" fill="url(#skinF)"/>
+  <ellipse cx="146" cy="82" rx="8" ry="6" fill="url(#skinF)"/>
+
+  <!-- Arms -->
+  <!-- Left arm upper -->
+  <path d="M88 82 Q82 95 80 118 Q79 124 82 126 Q86 128 88 122 L92 100 Q93 88 90 82 Z" fill="url(#skinF)"/>
+  <!-- Left arm lower -->
+  <path d="M82 124 Q79 136 80 152 Q80 160 84 162 Q88 163 89 155 L88 138 Q86 130 84 126 Z" fill="url(#skinF)"/>
+  <!-- Left hand -->
+  <ellipse cx="84" cy="164" rx="5" ry="7" fill="url(#skinF)"/>
+
+  <!-- Right arm upper -->
+  <path d="M152 82 Q158 95 160 118 Q161 124 158 126 Q154 128 152 122 L148 100 Q147 88 150 82 Z" fill="url(#skinF)"/>
+  <!-- Right arm lower -->
+  <path d="M158 124 Q161 136 160 152 Q160 160 156 162 Q152 163 151 155 L152 138 Q154 130 156 126 Z" fill="url(#skinF)"/>
+  <!-- Right hand -->
+  <ellipse cx="156" cy="164" rx="5" ry="7" fill="url(#skinF)"/>
+
+  <!-- Waistband -->
+  <rect x="95" y="154" width="50" height="8" rx="3" fill="#4A4A6A"/>
+
+  <!-- Yoga pants -->
+  <!-- Left leg -->
+  <path d="M95 160 Q93 190 90 230 Q88 260 87 290 Q86 310 89 330 L99 330 Q102 310 103 290 Q104 260 106 230 Q108 200 110 162 Z" fill="url(#pantsF)"/>
+  <!-- Right leg -->
+  <path d="M145 160 Q147 190 150 230 Q152 260 153 290 Q154 310 151 330 L141 330 Q138 310 137 290 Q136 260 134 230 Q132 200 130 162 Z" fill="url(#pantsF)"/>
+  <!-- Crotch -->
+  <path d="M110 162 Q118 175 130 162" fill="url(#pantsF)" stroke="url(#pantsF)" stroke-width="1"/>
+
+  <!-- Calves (skin - below pants) -->
+  <path d="M89 330 Q88 348 89 362 Q90 370 94 372 L98 372 Q101 370 100 362 L99 330 Z" fill="url(#skinF)"/>
+  <path d="M151 330 Q152 348 151 362 Q150 370 146 372 L142 372 Q139 370 140 362 L141 330 Z" fill="url(#skinF)"/>
+
+  <!-- Ankles -->
+  <ellipse cx="94" cy="373" rx="6" ry="3" fill="url(#skinF)"/>
+  <ellipse cx="146" cy="373" rx="6" ry="3" fill="url(#skinF)"/>
+
+  <!-- Feet (bare) -->
+  <ellipse cx="93" cy="380" rx="10" ry="5" fill="url(#skinF)"/>
+  <ellipse cx="147" cy="380" rx="10" ry="5" fill="url(#skinF)"/>
+  <!-- Toes -->
+  <ellipse cx="84" cy="381" rx="3" ry="2" fill="url(#skinF)"/>
+  <ellipse cx="102" cy="381" rx="3" ry="2" fill="url(#skinF)"/>
+  <ellipse cx="138" cy="381" rx="3" ry="2" fill="url(#skinF)"/>
+  <ellipse cx="156" cy="381" rx="3" ry="2" fill="url(#skinF)"/>
+
+  <!-- === MEASUREMENT DOTS === -->
+  <!-- Head top -->
+  <circle cx="120" cy="22" r="4" fill="#FF6B6B" stroke="#fff" stroke-width="1.5"/>
+  <!-- Ear left -->
+  <circle cx="98" cy="46" r="4" fill="#FFD93D" stroke="#fff" stroke-width="1.5"/>
+  <!-- Ear right -->
+  <circle cx="142" cy="46" r="4" fill="#FFD93D" stroke="#fff" stroke-width="1.5"/>
+  <!-- Shoulder left -->
+  <circle cx="94" cy="80" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Shoulder right -->
+  <circle cx="146" cy="80" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Hip left -->
+  <circle cx="100" cy="170" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Hip right -->
+  <circle cx="140" cy="170" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Knee left -->
+  <circle cx="92" cy="255" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+  <!-- Knee right -->
+  <circle cx="148" cy="255" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+  <!-- Ankle left -->
+  <circle cx="92" cy="370" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+  <!-- Ankle right -->
+  <circle cx="148" cy="370" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+
+  <!-- Shoulder level line -->
+  <line x1="60" y1="80" x2="180" y2="80" stroke="#6BCB77" stroke-width="0.8" stroke-opacity="0.5" stroke-dasharray="3,3"/>
+  <!-- Hip level line -->
+  <line x1="60" y1="170" x2="180" y2="170" stroke="#6BCB77" stroke-width="0.8" stroke-opacity="0.5" stroke-dasharray="3,3"/>
+
+  <!-- Label -->
+  <rect x="8" y="396" width="60" height="18" rx="4" fill="#7ECAFF" fill-opacity="0.15"/>
+  <text x="38" y="409" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7ECAFF" font-weight="600">冠状面 · 正面</text>
+</svg>

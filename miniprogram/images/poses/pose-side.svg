@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 420" width="240" height="420">
+  <defs>
+    <linearGradient id="skinS" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5C5A3"/>
+      <stop offset="100%" stop-color="#E8A87C"/>
+    </linearGradient>
+    <linearGradient id="topS" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2D2D3A"/>
+      <stop offset="100%" stop-color="#1A1A24"/>
+    </linearGradient>
+    <linearGradient id="pantsS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3D3D5C"/>
+      <stop offset="100%" stop-color="#252540"/>
+    </linearGradient>
+    <linearGradient id="gridFadeS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD93D" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FFD93D" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="240" height="420" fill="#0D1117" rx="12"/>
+  <rect width="240" height="420" fill="url(#gridFadeS)" rx="12"/>
+
+  <!-- Grid lines vertical -->
+  <line x1="60" y1="0" x2="60" y2="420" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.15"/>
+  <line x1="120" y1="0" x2="120" y2="420" stroke="#FFD93D" stroke-width="0.8" stroke-opacity="0.30"/>
+  <line x1="180" y1="0" x2="180" y2="420" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.15"/>
+
+  <!-- Grid lines horizontal -->
+  <line x1="0" y1="70" x2="240" y2="70" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.12"/>
+  <line x1="0" y1="140" x2="240" y2="140" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.12"/>
+  <line x1="0" y1="210" x2="240" y2="210" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.12"/>
+  <line x1="0" y1="280" x2="240" y2="280" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.12"/>
+  <line x1="0" y1="350" x2="240" y2="350" stroke="#FFD93D" stroke-width="0.4" stroke-opacity="0.12"/>
+
+  <!-- Vertical plumb line (alignment reference) -->
+  <line x1="118" y1="10" x2="118" y2="410" stroke="#FF6B6B" stroke-width="1.2" stroke-opacity="0.65" stroke-dasharray="5,4"/>
+
+  <!-- === SIDE VIEW FIGURE === -->
+
+  <!-- Hair (seen from side - bun/ponytail) -->
+  <ellipse cx="118" cy="38" rx="20" ry="18" fill="#2A1810"/>
+  <!-- Bun at back -->
+  <circle cx="102" cy="34" r="10" fill="#2A1810"/>
+
+  <!-- Head (side profile) -->
+  <path d="M108 24 Q130 24 134 40 Q136 52 132 62 Q128 70 116 70 Q104 70 102 60 Q98 48 100 38 Q102 24 108 24 Z" fill="url(#skinS)"/>
+
+  <!-- Ear -->
+  <ellipse cx="104" cy="50" rx="5" ry="6" fill="#E0A070"/>
+
+  <!-- Eye -->
+  <ellipse cx="122" cy="44" rx="3" ry="3.5" fill="#4A2C1A" opacity="0.85"/>
+  <!-- Nose tip -->
+  <path d="M134 52 Q137 54 135 57" stroke="#C07050" stroke-width="1" fill="none"/>
+
+  <!-- Neck -->
+  <path d="M112 68 Q118 68 122 70 L120 84 Q116 85 112 84 Z" fill="url(#skinS)"/>
+
+  <!-- Shoulder / upper chest area -->
+  <!-- Back shoulder (further) -->
+  <ellipse cx="108" cy="90" rx="12" ry="7" fill="#26263A"/>
+  <!-- Front shoulder -->
+  <ellipse cx="128" cy="86" rx="10" ry="6" fill="url(#skinS)"/>
+
+  <!-- Torso (tight top) - side view shows slight curve -->
+  <path d="M104 85 Q106 82 110 80 L124 78 Q130 78 132 82 L134 100 Q135 120 133 145 Q131 158 128 160 L106 160 Q102 158 100 145 Q98 120 100 100 Z" fill="url(#topS)"/>
+
+  <!-- Back of torso (slight curve for natural posture) -->
+  <path d="M100 100 Q97 120 98 145 Q99 156 102 160" stroke="#1A1A24" stroke-width="1" fill="none"/>
+
+  <!-- Chest highlight / curve -->
+  <path d="M128 82 Q134 90 134 105 Q133 120 130 130" stroke="#3A3A5A" stroke-width="1" fill="none"/>
+
+  <!-- Arm (visible, right side) - hanging naturally slightly behind -->
+  <path d="M126 86 Q132 95 133 115 Q134 132 132 148 Q131 158 128 162 Q123 164 121 156 Q120 145 122 130 Q124 112 122 95 Z" fill="url(#skinS)"/>
+  <!-- Hand -->
+  <ellipse cx="125" cy="165" rx="5" ry="7" fill="url(#skinS)"/>
+
+  <!-- Waistband -->
+  <rect x="100" y="156" width="34" height="8" rx="3" fill="#4A4A6A"/>
+
+  <!-- Yoga pants - side view -->
+  <!-- Front of leg -->
+  <path d="M116 162 Q120 180 121 210 Q121 240 120 270 Q119 295 118 320 Q117 338 118 355 L126 355 Q127 338 128 320 Q129 295 130 270 Q131 240 132 210 Q133 180 134 162 Z" fill="url(#pantsS)"/>
+  <!-- Back of leg (slightly behind, natural posture) -->
+  <path d="M103 162 Q103 185 103 210 Q103 240 103 270 Q104 295 106 320 Q107 338 108 355 L116 355 Q117 338 118 320 Q119 295 120 270 Q121 240 121 210 Q120 180 118 162 Z" fill="url(#pantsS)"/>
+
+  <!-- Knee cap area (subtle) -->
+  <ellipse cx="115" cy="270" rx="7" ry="5" fill="#2E2E4A" opacity="0.6"/>
+
+  <!-- Calf (skin below pants) -->
+  <path d="M108 355 Q107 368 108 378 Q109 386 113 388 L119 388 Q123 386 122 378 Q121 368 120 355 Z" fill="url(#skinS)"/>
+  <!-- Back of calf (slight curve) -->
+  <path d="M106 356 Q104 368 106 380 Q107 388 110 390 L116 390 Q113 388 113 388" fill="url(#skinS)"/>
+
+  <!-- Foot (side view, bare) -->
+  <!-- Heel -->
+  <ellipse cx="108" cy="394" rx="8" ry="5" fill="url(#skinS)"/>
+  <!-- Foot arc -->
+  <path d="M100 392 Q112 398 126 392 Q130 390 130 394 Q130 398 124 400 L104 400 Q98 398 100 392 Z" fill="url(#skinS)"/>
+  <!-- Toes -->
+  <ellipse cx="126" cy="394" rx="5" ry="3" fill="url(#skinS)"/>
+
+  <!-- === ALIGNMENT LINE: ear-shoulder-hip-ankle === -->
+  <line x1="118" y1="46" x2="118" y2="395" stroke="#FFD93D" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2,4"/>
+
+  <!-- === MEASUREMENT DOTS === -->
+  <!-- Ear -->
+  <circle cx="104" cy="50" r="5" fill="#FFD93D" stroke="#fff" stroke-width="1.5"/>
+  <!-- Shoulder (acromion) -->
+  <circle cx="118" cy="85" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Hip (greater trochanter) -->
+  <circle cx="115" cy="168" r="5" fill="#6BCB77" stroke="#fff" stroke-width="1.5"/>
+  <!-- Knee -->
+  <circle cx="116" cy="270" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+  <!-- Ankle -->
+  <circle cx="112" cy="380" r="4" fill="#4ECDC4" stroke="#fff" stroke-width="1.5"/>
+
+  <!-- Alignment dot connector hint -->
+  <polyline points="104,50 118,85 115,168 116,270 112,380" stroke="#FFD93D" stroke-width="0.8" stroke-opacity="0.35" fill="none" stroke-dasharray="2,6"/>
+
+  <!-- Label -->
+  <rect x="8" y="396" width="72" height="18" rx="4" fill="#FFD93D" fill-opacity="0.12"/>
+  <text x="44" y="409" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#FFD93D" font-weight="600">矢状面 · 侧面</text>
+</svg>

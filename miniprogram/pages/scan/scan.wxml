@@ -122,72 +122,19 @@
           <view class="pose-demo-row">
             <!-- 正面 -->
             <view class="pose-demo-col">
-              <view class="pose-grid-wrap">
-                <view class="pose-grid">
-                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
-                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
-                  <view class="pose-center-line"/>
-                </view>
-                <!-- 正面人形 SVG -->
-                <!-- 正面人形（CSS 绘制） -->
-                <view class="fig fig-front">
-                  <view class="fig-head"/><view class="fig-neck"/>
-                  <view class="fig-torso"/>
-                  <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
-                  <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
-                </view>
-                <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
-                <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
-                <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
-                <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
-              </view>
+              <image class="pose-demo-img" src="/images/poses/pose-front.svg" mode="aspectFit"/>
               <text class="pose-label">正面</text>
               <text class="pose-plane">冠状面</text>
             </view>
             <!-- 侧面 -->
             <view class="pose-demo-col">
-              <view class="pose-grid-wrap">
-                <view class="pose-grid">
-                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
-                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
-                  <view class="pose-center-line"/>
-                </view>
-                <!-- 侧面人形（CSS 绘制） -->
-                <view class="fig fig-side">
-                  <view class="fig-head"/><view class="fig-neck"/>
-                  <view class="fig-torso-s"/>
-                  <view class="fig-arm fig-arm-s"/>
-                  <view class="fig-leg fig-leg-s"/>
-                </view>
-                <view class="pose-dot pose-dot-ear"/>
-                <view class="pose-dot pose-dot-shoulder-s"/>
-                <view class="pose-dot pose-dot-hip-s"/>
-                <view class="pose-dot pose-dot-knee-s"/>
-                <view class="pose-dot pose-dot-ankle-s"/>
-              </view>
+              <image class="pose-demo-img" src="/images/poses/pose-side.svg" mode="aspectFit"/>
               <text class="pose-label">侧面</text>
               <text class="pose-plane">矢状面</text>
             </view>
             <!-- 背面 -->
             <view class="pose-demo-col">
-              <view class="pose-grid-wrap">
-                <view class="pose-grid">
-                  <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
-                  <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
-                  <view class="pose-center-line"/>
-                </view>
-                <!-- 背面人形（CSS 绘制，与正面相同） -->
-                <view class="fig fig-front">
-                  <view class="fig-head"/><view class="fig-neck"/>
-                  <view class="fig-torso"/>
-                  <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
-                  <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
-                </view>
-                <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
-                <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
-                <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
-                <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
-              </view>
+              <image class="pose-demo-img" src="/images/poses/pose-back.svg" mode="aspectFit"/>
               <text class="pose-label">背面</text>
               <text class="pose-plane">冠状面</text>
             </view>
@@ -272,40 +219,9 @@
       <view class="section">
         <view class="card demo-card">
           <text class="demo-title">标准示范 · {{angles[angleIdx].label}}</text>
-          <view class="demo-grid-wrap">
-            <view class="pose-grid">
-              <view class="grid-line grid-v1"/><view class="grid-line grid-v2"/>
-              <view class="grid-line grid-h1"/><view class="grid-line grid-h2"/><view class="grid-line grid-h3"/><view class="grid-line grid-h4"/>
-              <view class="pose-center-line"/>
-            </view>
-            <!-- 正面 / 背面 人形 -->
-            <block wx:if="{{angleIdx !== 1}}">
-              <view class="fig fig-front">
-                <view class="fig-head"/><view class="fig-neck"/>
-                <view class="fig-torso"/>
-                <view class="fig-arm fig-arm-l"/><view class="fig-arm fig-arm-r"/>
-                <view class="fig-leg fig-leg-l"/><view class="fig-leg fig-leg-r"/>
-              </view>
-              <view class="pose-dot pose-dot-shoulder-l"/><view class="pose-dot pose-dot-shoulder-r"/>
-              <view class="pose-dot pose-dot-hip-l"/><view class="pose-dot pose-dot-hip-r"/>
-              <view class="pose-dot pose-dot-knee-l"/><view class="pose-dot pose-dot-knee-r"/>
-              <view class="pose-dot pose-dot-ankle-l"/><view class="pose-dot pose-dot-ankle-r"/>
-            </block>
-            <!-- 侧面 人形 -->
-            <block wx:else>
-              <view class="fig fig-side">
-                <view class="fig-head"/><view class="fig-neck"/>
-                <view class="fig-torso-s"/>
-                <view class="fig-arm fig-arm-s"/>
-                <view class="fig-leg fig-leg-s"/>
-              </view>
-              <view class="pose-dot pose-dot-ear"/>
-              <view class="pose-dot pose-dot-shoulder-s"/>
-              <view class="pose-dot pose-dot-hip-s"/>
-              <view class="pose-dot pose-dot-knee-s"/>
-              <view class="pose-dot pose-dot-ankle-s"/>
-            </block>
-          </view>
+          <image wx:if="{{angleIdx === 0}}" class="demo-pose-img" src="/images/poses/pose-front.svg" mode="aspectFit"/>
+          <image wx:elif="{{angleIdx === 1}}" class="demo-pose-img" src="/images/poses/pose-side.svg" mode="aspectFit"/>
+          <image wx:else class="demo-pose-img" src="/images/poses/pose-back.svg" mode="aspectFit"/>
           <text class="demo-plane">{{angleIdx === 1 ? '矢状面 · 耳·肩·髋·踝成一线' : '冠状面 · 左右对称参考中轴线'}}</text>
         </view>
       </view>
