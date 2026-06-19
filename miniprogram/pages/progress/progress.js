@@ -184,6 +184,7 @@ Page({
   },
 
   goBack() { wx.navigateBack() },
+  goScan() { wx.navigateTo({ url: '/pages/scan/scan' }) },
 
   goTraining() {
     wx.switchTab({ url: '/pages/training/training' })

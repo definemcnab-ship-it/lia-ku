@@ -56,12 +56,14 @@ Page({
     const todayStr = app.todayStr()
     const trainedToday = app.globalData.checkIns.includes(todayStr)
 
+    const name = wx.getStorageSync('nickname') || ''
+    const namePart = name ? `，${name}` : ''
     const h = new Date().getHours()
-    let greetingText = '晚上好，若曦'
-    if (h < 6)  greetingText = '夜深了，若曦'
-    else if (h < 11) greetingText = '早安，若曦'
-    else if (h < 14) greetingText = '午好，若曦'
-    else if (h < 18) greetingText = '下午好，若曦'
+    let greetingText = `晚上好${namePart}`
+    if (h < 6)  greetingText = `夜深了${namePart}`
+    else if (h < 11) greetingText = `早安${namePart}`
+    else if (h < 14) greetingText = `午好${namePart}`
+    else if (h < 18) greetingText = `下午好${namePart}`
 
     this.setData({
       postureScore: score,
@@ -93,6 +95,6 @@ Page({
   },
 
   startTraining() {
-    wx.navigateTo({ url: '/pages/player/player' })
+    wx.navigateTo({ url: '/pages/training/training' })
   },
 })

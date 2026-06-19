@@ -15,7 +15,12 @@ Page({
   },
   onShow() {
     const a = getApp()
-    this.setData({ postureScore: a.globalData.postureScore, checkInDays: a.globalData.checkIns.length })
+    const nickname = wx.getStorageSync('nickname') || '斯俪用户'
+    this.setData({
+      nickname,
+      postureScore: a.globalData.postureScore,
+      checkInDays: a.globalData.checkIns.length,
+    })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 4 })
     }

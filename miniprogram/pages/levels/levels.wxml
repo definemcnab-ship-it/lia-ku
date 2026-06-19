@@ -19,7 +19,7 @@
         </view>
         <text class="current-level-name">{{currentLevel}}</text>
         <view class="checkin-row">
-          <mp-icon icon="calendar" size="28" color="#8f8779" />
+          <mp-icon name="calendar_month" size="28" color="#8f8779" />
           <text class="checkin-text">已连续签到 {{checkInDays}} 天</text>
         </view>
         <view class="xp-section">
@@ -68,7 +68,7 @@
       <view class="card rewards-card">
         <view class="reward-item" wx:for="{{rewards}}" wx:key="label">
           <view class="reward-icon-wrap {{item.unlocked ? 'unlocked' : 'locked'}}">
-            <mp-icon icon="{{item.unlocked ? 'success' : 'lock'}}" size="36" color="{{item.unlocked ? '#c08a7d' : '#8f8779'}}" />
+            <mp-icon name="{{item.unlocked ? 'check_circle' : 'lock'}}" size="36" color="{{item.unlocked ? '#c08a7d' : '#8f8779'}}" />
           </view>
           <text class="reward-label {{item.unlocked ? '' : 'locked-label'}}">{{item.label}}</text>
           <view class="reward-status-tag {{item.unlocked ? 'unlocked-tag' : 'locked-tag'}}">

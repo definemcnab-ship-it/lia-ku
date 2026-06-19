@@ -11,8 +11,18 @@
     </view>
   </view>
 
+  <!-- 空状态 -->
+  <view wx:if="{{!hasData}}" class="empty-state">
+    <mp-icon name="trending_up" size="56" color="#d5cfc6" />
+    <text class="empty-title">还没有训练记录</text>
+    <text class="empty-hint">完成第一次训练或体态检测后，进度将在这里呈现</text>
+    <view class="empty-btn" bindtap="goScan">
+      <text class="empty-btn-text">开始体态检测</text>
+    </view>
+  </view>
+
   <!-- 评分卡片 -->
-  <view class="score-card">
+  <view wx:if="{{hasData}}" class="score-card">
     <view class="score-main">
       <text class="score-number font-headline">{{postureScore}}</text>
       <view class="score-meta">
@@ -24,6 +34,9 @@
       <mp-icon name="accessibility_new" size="44" color="#c08a7d" />
     </view>
   </view>
+
+  <!-- 有数据时才显示其余内容 -->
+  <block wx:if="{{hasData}}">
 
   <!-- 近七天评分趋势 -->
   <view class="section">
@@ -152,4 +165,6 @@
   </view>
 
   <view style="height: 140rpx"></view>
+
+  </block><!-- end hasData -->
 </view>

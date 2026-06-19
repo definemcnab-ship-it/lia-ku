@@ -7,7 +7,7 @@
         <mp-icon name="person" size="20" color="#8f8779" />
       </view>
       <text class="hero-brand font-headline">Slique</text>
-      <view class="hero-score-inline" bindtap="navTo" data-url="/pages/report/report">
+      <view class="hero-score-inline" bindtap="navTo" data-url="/pages/progress/progress">
         <text class="hero-score-num font-headline">{{postureScore}}</text>
         <text class="hero-score-unit">分</text>
       </view>

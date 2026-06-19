@@ -177,6 +177,7 @@ Page({
   },
 
   uploadAngle() {
+    if (this.data.step === 'checking' || this.data.step === 'analyzing') return
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
