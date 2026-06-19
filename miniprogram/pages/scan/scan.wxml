@@ -323,6 +323,20 @@
         </view>
       </view>
 
+      <!-- 专属康复计划入口 -->
+      <view class="section">
+        <view class="rehab-plan-card" bindtap="goRehabPlan">
+          <view class="rehab-plan-icon">
+            <mp-icon name="auto_awesome" size="28" color="#c08a7d" />
+          </view>
+          <view class="rehab-plan-info">
+            <text class="rehab-plan-title font-headline">生成专属康复计划</text>
+            <text class="rehab-plan-sub">基于检测结果 · 12周三阶段 · 居家/办公/健身房</text>
+          </view>
+          <mp-icon name="arrow_forward" size="20" color="#c08a7d" />
+        </view>
+      </view>
+
       <!-- 课程建议 -->
       <view class="section">
         <text class="section-title font-headline">针对性改善课程</text>

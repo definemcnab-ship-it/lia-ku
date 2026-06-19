@@ -320,6 +320,13 @@ Page({
     wx.navigateTo({ url: '/pages/player/player?courseId=' + courseId })
   },
 
+  goRehabPlan() {
+    const issues = ((this.data.result && this.data.result.issues) || []).map(i => i.key).join(',')
+    const prefs = this.data.prefs || {}
+    const scene = (prefs.scene && prefs.scene[0]) || 'home'
+    wx.navigateTo({ url: `/pages/rehab/rehab?issues=${issues}&scene=${scene}` })
+  },
+
   resetAll() {
     this._fileIds = { front: '', side: '', back: '' }
     this.setData({ step: 'guide', angleIdx: 0, passed: [false, false, false], result: null })

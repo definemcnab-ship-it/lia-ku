@@ -1,0 +1,185 @@
+<view class="page">
+
+  <scroll-view class="scroll-area" scroll-y>
+
+    <block wx:if="{{primaryPlan}}">
+
+      <!-- ── 顶部计划头 ── -->
+      <view class="hero">
+        <view class="hero-icon">
+          <mp-icon name="{{primaryPlan.icon}}" size="30" color="#ffffff" />
+        </view>
+        <text class="hero-name font-headline">{{primaryPlan.name}}</text>
+        <text class="hero-tagline">{{primaryPlan.tagline}}</text>
+
+        <!-- 体态标签 -->
+        <view class="tag-row">
+          <view wx:for="{{issueLabels}}" wx:key="*this" class="issue-tag">{{item}}</view>
+        </view>
+
+        <!-- 12周三阶段进度弧 -->
+        <view class="arc-row">
+          <view wx:for="{{primaryPlan.phases}}" wx:key="id" class="arc-seg {{index === activePhaseIdx ? 'arc-active' : index < activePhaseIdx ? 'arc-done' : ''}}">
+            <view class="arc-bar"></view>
+            <text class="arc-label">{{item.name}}</text>
+            <text class="arc-weeks">{{item.weeks}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- ── 场景切换 ── -->
+      <view class="section">
+        <view class="scene-chips">
+          <view
+            wx:for="{{scenes}}"
+            wx:key="*this"
+            class="scene-chip {{scene === item ? 'scene-chip-active' : ''}}"
+            bindtap="switchScene"
+            data-scene="{{item}}"
+          >
+            <mp-icon name="{{sceneIcons[item]}}" size="18" color="{{scene === item ? '#ffffff' : '#8f8779'}}" />
+            <text class="scene-chip-text">{{sceneLabels[item]}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- ── 阶段标签页 ── -->
+      <view class="section">
+        <view class="phase-tabs">
+          <view
+            wx:for="{{primaryPlan.phases}}"
+            wx:key="id"
+            class="phase-tab {{index === activePhaseIdx ? 'phase-tab-active' : ''}}"
+            bindtap="switchPhase"
+            data-idx="{{index}}"
+          >
+            <text class="phase-tab-name">{{item.name}}</text>
+            <text class="phase-tab-weeks">{{item.weeks}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- ── 阶段信息卡 ── -->
+      <view class="section" wx:if="{{currentPhase}}">
+        <view class="phase-card">
+          <view class="phase-card-head">
+            <text class="phase-card-title font-headline">{{currentPhase.name}} · 目标</text>
+            <view class="phase-freq" wx:if="{{currentSceneData}}">
+              <mp-icon name="schedule" size="14" color="#c08a7d" />
+              <text class="phase-freq-text">{{currentSceneData.frequency}}</text>
+            </view>
+          </view>
+          <text class="phase-goal">{{currentPhase.goal}}</text>
+          <view class="keyword-row">
+            <view wx:for="{{currentPhase.keyWords}}" wx:key="*this" class="keyword-pill">{{item}}</view>
+            <view class="keyword-pill keyword-days" wx:if="{{currentSceneData}}">每周{{currentSceneData.daysPerWeek}}天</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- ── 训练课表 ── -->
+      <view class="section" wx:if="{{currentSceneData}}">
+        <view class="scene-head">
+          <mp-icon name="{{sceneIcons[scene]}}" size="18" color="#c08a7d" />
+          <text class="scene-head-text font-headline">{{sceneLabels[scene]}}训练安排</text>
+        </view>
+
+        <view wx:for="{{currentSceneData.sessions}}" wx:key="title" wx:for-item="session" class="session-card">
+          <view class="session-head">
+            <text class="session-title">{{session.title}}</text>
+            <view class="session-mins">
+              <mp-icon name="schedule" size="13" color="#8f8779" />
+              <text class="session-mins-text">{{session.totalMins}}min</text>
+            </view>
+          </view>
+
+          <view wx:for="{{session.blocks}}" wx:key="category" wx:for-item="block" class="block">
+            <view class="block-head">
+              <view class="block-dot"></view>
+              <text class="block-category">{{block.category}}</text>
+              <text class="block-note">{{block.note}}</text>
+            </view>
+            <view wx:for="{{block.moves}}" wx:key="name" wx:for-item="move" class="move-row">
+              <view class="move-main">
+                <text class="move-name">{{move.name}}</text>
+                <text class="move-detail">{{move.detail}}</text>
+              </view>
+              <view class="move-equip" wx:if="{{move.equipment && move.equipment !== '无'}}">{{move.equipment}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- ── 协同改善（多问题时）── -->
+      <view class="section" wx:if="{{supplementPlans.length > 0}}">
+        <text class="section-title font-headline">协同改善方向</text>
+        <view class="supp-card">
+          <view wx:for="{{supplementPlans}}" wx:key="name" class="supp-row">
+            <view class="supp-icon">
+              <mp-icon name="{{item.icon}}" size="20" color="#8f8779" />
+            </view>
+            <view class="supp-info">
+              <text class="supp-name">{{item.name}}</text>
+              <text class="supp-tag">{{item.tagline}}</text>
+            </view>
+          </view>
+          <text class="supp-foot">检测到多项体态特征，主计划以首要问题为核心，其余方向建议穿插进行</text>
+        </view>
+      </view>
+
+      <!-- ── 理论基础（可折叠）── -->
+      <view class="section">
+        <view class="science-card">
+          <view class="science-head" bindtap="toggleScience">
+            <view class="science-head-left">
+              <mp-icon name="psychology" size="20" color="#c08a7d" />
+              <text class="science-title font-headline">理论基础 · 多维科学依据</text>
+            </view>
+            <text class="science-toggle">{{showScience ? '收起' : '展开'}}</text>
+          </view>
+
+          <block wx:if="{{showScience}}">
+            <view class="science-item">
+              <text class="science-dim">解剖学</text>
+              <text class="science-text">{{primaryPlan.science.anatomy}}</text>
+            </view>
+            <view class="science-item">
+              <text class="science-dim">筋膜学</text>
+              <text class="science-text">{{primaryPlan.science.fascia}}</text>
+            </view>
+            <view class="science-item">
+              <text class="science-dim">运动神经学</text>
+              <text class="science-text">{{primaryPlan.science.neuro}}</text>
+            </view>
+            <view class="science-item">
+              <text class="science-dim">脑科学</text>
+              <text class="science-text">{{primaryPlan.science.brain}}</text>
+            </view>
+            <view class="science-item">
+              <text class="science-dim">习惯纠正</text>
+              <text class="science-text">{{primaryPlan.science.habit}}</text>
+            </view>
+          </block>
+          <text wx:else class="science-collapsed">从解剖、筋膜、神经、脑科学与习惯五个维度，解释本计划的设计逻辑</text>
+        </view>
+      </view>
+
+      <view style="height: 160rpx"></view>
+    </block>
+
+    <!-- 无数据兜底 -->
+    <view wx:else class="empty">
+      <text class="empty-text">暂无匹配的康复计划</text>
+    </view>
+
+  </scroll-view>
+
+  <!-- ── 底部 CTA ── -->
+  <view class="cta-bar" wx:if="{{primaryPlan}}">
+    <view class="cta-btn" bindtap="startToday">
+      <mp-icon name="play_circle" size="22" color="#ffffff" />
+      <text class="cta-text">开始今日训练</text>
+    </view>
+  </view>
+
+</view>

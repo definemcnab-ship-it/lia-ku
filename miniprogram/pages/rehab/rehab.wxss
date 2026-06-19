@@ -1,0 +1,519 @@
+.page {
+  position: relative;
+  height: 100vh;
+  background: #f7f5f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-area {
+  flex: 1;
+  height: 0;
+}
+
+.font-headline {
+  font-weight: 600;
+  letter-spacing: 0.5rpx;
+}
+
+.section {
+  padding: 0 32rpx;
+  margin-top: 32rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  color: #2b2720;
+  margin-bottom: 20rpx;
+}
+
+/* ── Hero ── */
+.hero {
+  padding: 56rpx 48rpx 40rpx;
+  background: linear-gradient(160deg, #cf9b8e 0%, #c08a7d 100%);
+  border-radius: 0 0 40rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 28rpx;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.hero-name {
+  font-size: 40rpx;
+  color: #ffffff;
+}
+
+.hero-tagline {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 10rpx;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12rpx;
+  margin-top: 24rpx;
+}
+
+.issue-tag {
+  font-size: 22rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 8rpx 22rpx;
+  border-radius: 100rpx;
+}
+
+.arc-row {
+  display: flex;
+  width: 100%;
+  margin-top: 40rpx;
+  gap: 14rpx;
+}
+
+.arc-seg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.55;
+}
+
+.arc-seg.arc-active { opacity: 1; }
+.arc-seg.arc-done { opacity: 0.8; }
+
+.arc-bar {
+  width: 100%;
+  height: 8rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.arc-seg.arc-active .arc-bar,
+.arc-seg.arc-done .arc-bar { background: #ffffff; }
+
+.arc-label {
+  font-size: 22rpx;
+  color: #ffffff;
+  margin-top: 12rpx;
+  font-weight: 500;
+}
+
+.arc-weeks {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2rpx;
+}
+
+/* ── 场景切换 ── */
+.scene-chips {
+  display: flex;
+  gap: 16rpx;
+}
+
+.scene-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  height: 76rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.scene-chip-text {
+  font-size: 26rpx;
+  color: #8f8779;
+}
+
+.scene-chip-active {
+  background: #c08a7d;
+}
+
+.scene-chip-active .scene-chip-text {
+  color: #ffffff;
+}
+
+/* ── 阶段标签页 ── */
+.phase-tabs {
+  display: flex;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 8rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.phase-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+  border-radius: 18rpx;
+}
+
+.phase-tab-active {
+  background: #f3e9e5;
+}
+
+.phase-tab-name {
+  font-size: 27rpx;
+  color: #8f8779;
+  font-weight: 500;
+}
+
+.phase-tab-weeks {
+  font-size: 20rpx;
+  color: #b8b0a4;
+  margin-top: 4rpx;
+}
+
+.phase-tab-active .phase-tab-name { color: #c08a7d; font-weight: 600; }
+.phase-tab-active .phase-tab-weeks { color: #c08a7d; }
+
+/* ── 阶段信息卡 ── */
+.phase-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.phase-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.phase-card-title {
+  font-size: 30rpx;
+  color: #2b2720;
+}
+
+.phase-freq {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  background: #f3e9e5;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+}
+
+.phase-freq-text {
+  font-size: 22rpx;
+  color: #c08a7d;
+}
+
+.phase-goal {
+  display: block;
+  font-size: 28rpx;
+  color: #5a5349;
+  line-height: 1.6;
+  margin-top: 18rpx;
+}
+
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 22rpx;
+}
+
+.keyword-pill {
+  font-size: 22rpx;
+  color: #8f8779;
+  background: #f7f5f0;
+  padding: 8rpx 20rpx;
+  border-radius: 100rpx;
+}
+
+.keyword-days {
+  color: #c08a7d;
+  background: #f3e9e5;
+}
+
+/* ── 课表 ── */
+.scene-head {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.scene-head-text {
+  font-size: 32rpx;
+  color: #2b2720;
+}
+
+.session-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx 28rpx 14rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 24rpx;
+}
+
+.session-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0ece4;
+}
+
+.session-title {
+  font-size: 28rpx;
+  color: #2b2720;
+  font-weight: 600;
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.session-mins {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex-shrink: 0;
+}
+
+.session-mins-text {
+  font-size: 22rpx;
+  color: #8f8779;
+}
+
+.block {
+  padding: 22rpx 0 6rpx;
+}
+
+.block-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.block-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #c08a7d;
+}
+
+.block-category {
+  font-size: 26rpx;
+  color: #2b2720;
+  font-weight: 600;
+}
+
+.block-note {
+  font-size: 20rpx;
+  color: #b8b0a4;
+  background: #f7f5f0;
+  padding: 4rpx 14rpx;
+  border-radius: 100rpx;
+}
+
+.move-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14rpx 0 14rpx 24rpx;
+}
+
+.move-main {
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.move-name {
+  display: block;
+  font-size: 26rpx;
+  color: #2b2720;
+  line-height: 1.5;
+}
+
+.move-detail {
+  display: block;
+  font-size: 23rpx;
+  color: #8f8779;
+  line-height: 1.55;
+  margin-top: 4rpx;
+}
+
+.move-equip {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #a8997f;
+  background: #f6f1e8;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  margin-top: 4rpx;
+}
+
+/* ── 协同改善 ── */
+.supp-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.supp-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 16rpx 0;
+}
+
+.supp-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  background: #f7f5f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.supp-info { flex: 1; }
+
+.supp-name {
+  display: block;
+  font-size: 27rpx;
+  color: #2b2720;
+  font-weight: 500;
+}
+
+.supp-tag {
+  display: block;
+  font-size: 22rpx;
+  color: #8f8779;
+  margin-top: 4rpx;
+}
+
+.supp-foot {
+  display: block;
+  font-size: 21rpx;
+  color: #b8b0a4;
+  line-height: 1.5;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 2rpx solid #f0ece4;
+}
+
+/* ── 理论基础 ── */
+.science-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.science-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.science-head-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.science-title {
+  font-size: 28rpx;
+  color: #2b2720;
+}
+
+.science-toggle {
+  font-size: 24rpx;
+  color: #c08a7d;
+}
+
+.science-collapsed {
+  display: block;
+  font-size: 23rpx;
+  color: #8f8779;
+  line-height: 1.55;
+  margin-top: 18rpx;
+}
+
+.science-item {
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 2rpx solid #f0ece4;
+}
+
+.science-dim {
+  display: inline-block;
+  font-size: 22rpx;
+  color: #c08a7d;
+  font-weight: 600;
+  background: #f3e9e5;
+  padding: 6rpx 18rpx;
+  border-radius: 100rpx;
+  margin-bottom: 12rpx;
+}
+
+.science-text {
+  display: block;
+  font-size: 24rpx;
+  color: #5a5349;
+  line-height: 1.7;
+}
+
+/* ── CTA ── */
+.cta-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: rgba(247, 245, 240, 0.94);
+  backdrop-filter: blur(8px);
+  border-top: 2rpx solid #ece7df;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  height: 92rpx;
+  border-radius: 24rpx;
+  background: #c08a7d;
+  box-shadow: 0 8rpx 24rpx rgba(192, 138, 125, 0.35);
+}
+
+.cta-text {
+  font-size: 30rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ── 兜底 ── */
+.empty {
+  padding: 200rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #8f8779;
+}

@@ -9,6 +9,7 @@
     "pages/progress/progress",
     "pages/profile/profile",
     "pages/scan/scan",
+    "pages/rehab/rehab",
     "pages/diet/diet",
     "pages/levels/levels",
     "pages/community/community"

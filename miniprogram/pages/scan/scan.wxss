@@ -586,3 +586,29 @@ page { background: #f7f5f0; }
 .history-date { display: block; font-size: 28rpx; color: #2b2720; }
 .history-issues { display: block; font-size: 24rpx; color: #8f8779; margin-top: 4rpx; }
 .history-score { font-size: 40rpx; color: #c08a7d; font-weight: 200; }
+
+/* ── 专属康复计划入口卡 ── */
+.rehab-plan-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 32rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #fbf3ef 0%, #f6ece6 100%);
+  border: 2rpx solid #ecdcd5;
+  box-shadow: 0 4rpx 20rpx rgba(192, 138, 125, 0.1);
+}
+.rehab-plan-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 22rpx;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 12rpx rgba(192, 138, 125, 0.15);
+}
+.rehab-plan-info { flex: 1; }
+.rehab-plan-title { display: block; font-size: 30rpx; color: #2b2720; }
+.rehab-plan-sub { display: block; font-size: 22rpx; color: #a8866f; margin-top: 6rpx; }

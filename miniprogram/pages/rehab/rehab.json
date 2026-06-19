@@ -1,0 +1,7 @@
+{
+  "navigationBarBackgroundColor": "#f7f5f0",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "",
+  "backgroundColor": "#f7f5f0",
+  "usingComponents": { "mp-icon": "/components/mp-icon/index" }
+}
