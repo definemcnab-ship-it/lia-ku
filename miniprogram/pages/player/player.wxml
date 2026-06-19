@@ -12,7 +12,15 @@
     <view class="nav-spacer"></view>
   </view>
 
-  <!-- Move visual card：视频 > 视频号 > 示范插图 -->
+  <!-- 总进度条 -->
+  <view class="progress-bar-wrap">
+    <view class="progress-bar-track">
+      <view class="progress-bar-fill" style="width:{{moves.length ? (currentIdx / moves.length * 100) : 0}}%"></view>
+    </view>
+    <text class="progress-label">第 {{currentIdx + 1}} / {{moves.length}} 个动作 · 约 {{totalMinutes}} 分钟</text>
+  </view>
+
+  <!-- Move visual card -->
   <view class="visual-card">
     <video wx:if="{{moves[currentIdx].video}}"
       class="visual-video" src="{{moves[currentIdx].video}}"
@@ -42,14 +50,30 @@
     <view
       wx:for="{{moves}}"
       wx:key="index"
-      class="dot {{index === currentIdx ? 'dot-active' : ''}}"
+      class="dot {{index === currentIdx ? 'dot-active' : ''}} {{index < currentIdx ? 'dot-done' : ''}}"
     ></view>
   </view>
 
-  <!-- Timer -->
+  <!-- 计时区 -->
   <view class="timer-wrap">
-    <text class="timer-num">{{timeLeft}}</text>
-    <text class="timer-unit">秒</text>
+    <view wx:if="{{resting}}" class="timer-rest-block">
+      <text class="timer-rest-label">组间休息</text>
+      <view class="timer-num-row">
+        <text class="timer-num">{{restLeft}}</text>
+        <text class="timer-unit">秒</text>
+      </view>
+      <text class="set-hint">完成第 {{currentSet - 1}} 组，准备第 {{currentSet}} 组</text>
+      <view class="skip-btn" bindtap="skipRest">
+        <text class="skip-text">跳过休息 ›</text>
+      </view>
+    </view>
+    <view wx:else class="timer-main-block">
+      <view class="timer-num-row">
+        <text class="timer-num">{{timeLeft}}</text>
+        <text class="timer-unit">秒</text>
+      </view>
+      <text wx:if="{{totalSets > 1}}" class="set-hint">第 {{currentSet}} / {{totalSets}} 组</text>
+    </view>
   </view>
 
   <!-- Move description -->
@@ -60,7 +84,7 @@
     <view class="ctrl-btn ctrl-side" bindtap="prevMove">
       <mp-icon name="skip_previous" size="28" color="#8f8779" />
     </view>
-    <view class="ctrl-btn ctrl-play" bindtap="togglePlay">
+    <view class="ctrl-btn ctrl-play {{resting ? 'ctrl-play-muted' : ''}}" bindtap="togglePlay">
       <mp-icon name="{{playing ? 'pause' : 'play_arrow'}}" size="44" color="#fff" />
     </view>
     <view class="ctrl-btn ctrl-side" bindtap="nextMove">
@@ -73,11 +97,15 @@
     <view
       wx:for="{{moves}}"
       wx:key="index"
-      class="step-row {{index === currentIdx ? 'step-active' : 'step-muted'}}"
+      class="step-row {{index === currentIdx ? 'step-active' : 'step-muted'}} {{index < currentIdx ? 'step-done' : ''}}"
     >
-      <text class="step-num">{{index + 1}}</text>
+      <view class="step-num-wrap">
+        <mp-icon wx:if="{{index < currentIdx}}" name="check" size="16" color="#c08a7d" />
+        <text wx:else class="step-num">{{index + 1}}</text>
+      </view>
       <view class="step-info">
         <text class="step-name">{{item.name}}</text>
+        <text wx:if="{{item.sets > 1}}" class="step-sets">{{item.sets}} 组</text>
       </view>
       <text class="step-dur">{{item.duration}}秒</text>
     </view>
@@ -90,7 +118,7 @@
         <mp-icon name="check_circle" size="64" color="#c08a7d" />
       </view>
       <text class="done-title">训练完成！</text>
-      <text class="done-sub">今日打卡成功</text>
+      <text class="done-sub">今日打卡成功 · 共 {{totalMinutes}} 分钟</text>
       <view class="done-actions">
         <view class="done-btn done-btn-outline" bindtap="goTraining">
           <text>返回训练</text>

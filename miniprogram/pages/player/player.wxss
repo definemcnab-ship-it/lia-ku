@@ -93,6 +93,31 @@
   letter-spacing: 1rpx;
 }
 
+/* ── 总进度条 ── */
+.progress-bar-wrap {
+  margin: 0 48rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+.progress-bar-track {
+  height: 6rpx;
+  background: #e8e4de;
+  border-radius: 3rpx;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #c08a7d;
+  border-radius: 3rpx;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 22rpx;
+  color: #b8b2a8;
+  text-align: right;
+}
+
 /* ── Progress dots ── */
 .dots-row {
   display: flex;
@@ -112,14 +137,29 @@
   background: #c08a7d;
   width: 40rpx;
 }
+.dot-done {
+  background: rgba(192, 138, 125, 0.35);
+}
 
 /* ── Timer ── */
 .timer-wrap {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   margin: 20rpx 0 8rpx;
+  min-height: 160rpx;
+}
+.timer-main-block,
+.timer-rest-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+.timer-num-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
   gap: 8rpx;
 }
 .timer-num {
@@ -132,6 +172,31 @@
   font-size: 36rpx;
   color: #8f8779;
   padding-bottom: 20rpx;
+}
+.timer-rest-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #c08a7d;
+  letter-spacing: 2rpx;
+  margin-bottom: 4rpx;
+}
+.timer-rest-block .timer-num {
+  color: #c08a7d;
+}
+.set-hint {
+  font-size: 24rpx;
+  color: #b8b2a8;
+  margin-top: 4rpx;
+}
+.skip-btn {
+  margin-top: 12rpx;
+  padding: 10rpx 32rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(192,138,125,0.4);
+}
+.skip-text {
+  font-size: 24rpx;
+  color: #c08a7d;
 }
 
 /* ── Move description ── */
@@ -204,16 +269,32 @@
 .step-dur {
   font-size: 26rpx;
 }
+.step-num-wrap {
+  width: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-sets {
+  font-size: 22rpx;
+  color: #b8b2a8;
+  margin-top: 4rpx;
+}
 .step-active .step-num,
 .step-active .step-name {
   color: #c08a7d;
 }
 .step-active .step-dur { color: #c08a7d; }
+.step-active .step-sets { color: rgba(192,138,125,0.7); }
 .step-active { background: #fdf8f7; }
 .step-muted .step-num,
 .step-muted .step-name,
 .step-muted .step-dur {
   color: #b8b2a8;
+}
+.step-done .step-name { color: #b8b2a8; text-decoration: line-through; }
+.ctrl-play-muted {
+  background: #c08a7d;
 }
 
 /* ── Completion overlay ── */
