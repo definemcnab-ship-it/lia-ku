@@ -61,6 +61,36 @@ function filterPrograms(scene) {
   return programList.filter(p => p.scenes.indexOf(key) !== -1)
 }
 
+// 根据扫描问题 key 推荐首选课程
+const ISSUE_TO_COURSE = {
+  neck: 'c1', shoulder: 'c4', pelvis: 'c7', back: 'c10',
+  knee: 'c11', foot: 'c13',
+}
+
+function getRecommend(scene) {
+  // 从最近扫描结果取第一个问题
+  let courseId = 'c16'
+  try {
+    const history = wx.getStorageSync('scanHistory') || []
+    if (history.length) {
+      const latest = history[history.length - 1]
+      const issues = latest.issues || []
+      if (issues.length) {
+        const key = issues[0].key || issues[0]
+        const mapped = ISSUE_TO_COURSE[key]
+        if (mapped) courseId = mapped
+      }
+    }
+  } catch (e) {}
+  // 按场景偏移
+  const sceneKey = SCENE_KEY[scene] || 'home'
+  const sceneOffset = { home: 0, office: 1, gym: 2 }
+  const idNum = parseInt(courseId.replace('c', ''))
+  const sceneId = `c${idNum + (sceneOffset[sceneKey] || 0)}`
+  const found = courseList.find(c => c.id === sceneId) || courseList.find(c => c.id === courseId) || courseList[0]
+  return found
+}
+
 Page({
   data: {
     activeFilter: 0,
@@ -70,6 +100,7 @@ Page({
     scenes: SCENES,
     programs: programList,
     filteredCourses: courseList,
+    recommend: courseList.find(c => c.id === 'c16') || courseList[0],
   },
   _applyScene(sceneIdx) {
     const scene = SCENES[sceneIdx]
@@ -78,12 +109,15 @@ Page({
       activeScene: sceneIdx,
       filteredCourses: applyFilters(scene, category),
       programs: filterPrograms(scene),
+      recommend: getRecommend(scene),
     })
   },
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 })
     }
+    const scene = SCENES[this.data.activeScene]
+    this.setData({ recommend: getRecommend(scene) })
   },
   switchTopTab(e) {
     this.setData({ activeTab: Number(e.currentTarget.dataset.idx) })

@@ -47,6 +47,10 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 3 })
     }
+    // 合并本地用户发帖到示例帖子
+    const userPosts = wx.getStorageSync('communityPosts') || []
+    const merged = userPosts.concat(ALL_POSTS)
+    this._refresh(merged, this.data.activeTab)
   },
 
   _applyFilter(posts, activeTab) {
@@ -133,6 +137,9 @@ Page({
       commentList: [],
     }
     const posts = [post].concat(this.data.posts)
+    // 持久化用户发帖
+    const userPosts = wx.getStorageSync('communityPosts') || []
+    wx.setStorageSync('communityPosts', [post].concat(userPosts))
     // 发布后自动切到对应分类，确保能看到自己的内容
     this.setData({ composerOpen: false, draft: '' })
     this._refresh(posts, MODULES.indexOf(mod))

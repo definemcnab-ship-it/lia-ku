@@ -61,9 +61,9 @@
             </view>
           </view>
           <view class="progress-bar-bg">
-            <view class="progress-bar-fill" style="width: {{todayCalories/targetCalories*100 > 100 ? 100 : todayCalories/targetCalories*100}}%;"></view>
+            <view class="progress-bar-fill" style="width: {{caloriePct}}%;"></view>
           </view>
-          <text class="progress-pct">已达成 {{todayCalories===0?0:Math.round(todayCalories/targetCalories*100)}}%</text>
+          <text class="progress-pct">已达成 {{caloriePct}}%</text>
         </view>
       </view>
 

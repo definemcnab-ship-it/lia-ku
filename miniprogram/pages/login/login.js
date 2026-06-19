@@ -48,7 +48,15 @@ Page({
 
   openDoc(e) {
     const doc = e.currentTarget.dataset.doc
-    wx.navigateTo({ url: `/pages/doc/doc?key=${doc}` })
+    const titles = { terms: '用户协议', privacy: '隐私政策' }
+    wx.showModal({
+      title: titles[doc] || '协议',
+      content: doc === 'privacy'
+        ? '斯俪严格保护您的隐私，您的体态数据仅用于生成个人训练计划，不会对外共享或出售。'
+        : '使用斯俪即表示您同意遵守平台服务条款，包括合理使用规范及相关法律法规。',
+      showCancel: false,
+      confirmText: '我知道了',
+    })
   },
 
   onPhoneInput(e) {

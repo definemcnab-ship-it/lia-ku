@@ -89,6 +89,7 @@ Page({
     activeTab: 0,
     todayCalories: 0,
     targetCalories: 1800,
+    caloriePct: 0,
     meals: [],
     nutrientCards: NUTRIENT_CARDS,
     expandedNutrient: null,
@@ -114,7 +115,7 @@ Page({
   },
 
   _calcTarget() {
-    const prefs = wx.getStorageSync('onboardingPrefs') || {}
+    const prefs = wx.getStorageSync('prefs') || {}
     // Simple BMR estimate: default 1800, adjust by goal
     let target = 1800
     if (prefs.goal === 'lose') target = 1500
@@ -127,7 +128,9 @@ Page({
     const today = new Date().toDateString()
     const meals = stored.filter(m => new Date(m.timestamp).toDateString() === today)
     const total = meals.reduce((s, m) => s + (m.calories || 0), 0)
-    this.setData({ meals, todayCalories: total })
+    const target = this.data.targetCalories || 1800
+    const caloriePct = total === 0 ? 0 : Math.min(100, Math.round(total / target * 100))
+    this.setData({ meals, todayCalories: total, caloriePct })
   },
 
   switchTab(e) {
