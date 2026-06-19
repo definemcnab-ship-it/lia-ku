@@ -725,6 +725,165 @@ const courses = [
   },
 
   // ─────────────────────────────────────────────────────────────────────────
+  // 腰背强化 — 进阶（居家）
+  // ─────────────────────────────────────────────────────────────────────────
+
+  {
+    id: 'c17',
+    name: '腰背 · 立体强化（进阶）',
+    desc: '多裂肌深层激活 · 脊柱抗旋稳定 · 功能性腰背重塑',
+    category: 'back',
+    duration: 25,
+    level: '中级',
+    icon: 'fitness_center',
+    bg: '2',
+    evidence: 'A',
+    scenes: ['home'],
+    targetMuscles: {
+      activate: ['多裂肌', '腹横肌', '臀大肌', '竖脊肌'],
+      release: ['髂腰肌', '腰方肌', '胸腰筋膜'],
+    },
+    moves: [
+      {
+        id: 'c17-m1', name: '泡沫轴 · 胸腰筋膜松解', duration: 90, sets: 1, reps: '90秒',
+        desc: '泡沫轴纵置于脊柱下，双臂打开呈T字，缓慢向左右各滚动，停留在紧绷点8-10秒。重点松解T10-L2段胸腰筋膜，为后续深层肌激活创造空间。',
+        tip: '滚动幅度小而缓慢；找到痛点停留，不要快速滚过',
+        icon: 'spa', phase: 'release',
+      },
+      {
+        id: 'c17-m2', name: '死虫 · 多裂肌与腹横肌联合激活', duration: 40, sets: 4, reps: '8次/侧',
+        desc: '仰卧，双臂指天，双腿屈髋90°。呼气时腰部轻压地面（激活腹横肌），缓慢伸出一侧手臂+对侧腿，全程腰部不离地。多裂肌与腹横肌协同是腰椎稳定的核心机制（McGill, 2010）。',
+        tip: '腰部离地立即停止；速度越慢激活越精准',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c17-m3', name: '鸟狗 · 脊柱抗旋稳定', duration: 40, sets: 4, reps: '10次/侧',
+        desc: '四点支撑，手腕在肩下、膝在髋下，脊柱中立。缓慢伸出一侧手臂+对侧腿，在最高点停留2秒，感受躯干抵抗重力旋转的力量。是目前循证证据最强的腰背深层稳定动作之一。',
+        tip: '骨盆不要翻转；想象脊柱上放一杯水不能洒',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c17-m4', name: '罗马尼亚硬拉 · 臀腿链激活', duration: 40, sets: 3, reps: '12次',
+        desc: '站姿，双脚与髋同宽，膝微屈，保持脊柱中立，髋关节主导向后推，双手沿大腿前滑至膝盖以下，感受腘绳肌拉伸后用臀部力量站直。臀腿链是减轻腰椎压力的关键。',
+        tip: '背部全程挺直；动作从髋发出，不是从腰弯',
+        icon: 'fitness_center', phase: 'strengthen',
+      },
+      {
+        id: 'c17-m5', name: '脊柱波浪 · 节段流动整合', duration: 120, sets: 2, reps: '60秒',
+        desc: '四点支撑，从尾骨开始做猫牛式脊柱波浪——先逐节后凸（尾骨→腰→胸→颈），再逐节前凸，整条脊柱像波浪一样流动。唤醒每节椎骨的本体感觉。',
+        tip: '动作要慢，感受每一节脊椎的独立运动',
+        icon: 'spa', phase: 'integrate',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 肩颈背 · 联合强化 — 进阶
+  // ─────────────────────────────────────────────────────────────────────────
+
+  {
+    id: 'c18',
+    name: '肩颈背 · 联合强化（进阶）',
+    desc: '肩胛稳定 · 颈背联动 · 上半身整体重塑',
+    category: 'shoulder',
+    duration: 22,
+    level: '中级',
+    icon: 'fitness_center',
+    bg: '3',
+    evidence: 'A',
+    scenes: ['home', 'gym'],
+    targetMuscles: {
+      activate: ['中下斜方肌', '前锯肌', '深颈屈肌', '菱形肌'],
+      release: ['上斜方肌', '胸小肌', '枕下肌群'],
+    },
+    moves: [
+      {
+        id: 'c18-m1', name: '胸小肌 · 门框拉伸', duration: 60, sets: 2, reps: '30秒/侧',
+        desc: '站在门框旁，一侧手肘弯曲90°扶门框，身体缓慢向前转，感受胸前侧（胸小肌）的拉伸。同时主动将肩胛骨向脊柱靠拢，不要耸肩。',
+        tip: '身体前倾幅度以舒适为准；拉伸侧的肩胛主动下沉',
+        icon: 'spa', phase: 'release',
+      },
+      {
+        id: 'c18-m2', name: '俯卧 YTW · 中下斜方肌分级激活', duration: 30, sets: 4, reps: 'Y/T/W 各12次',
+        desc: '俯卧额头枕于毛巾，依次做：Y（臂斜上45°拇指朝天，停3秒），T（臂正侧90°，停3秒），W（肘弯90°贴体外旋，停3秒）。三个动作分别精准激活下斜方肌、中斜方肌、小圆肌，是圆肩含胸的黄金三件套。',
+        tip: '每个姿势停留时感受肩胛向脊柱下方归位；手臂不要高于肩膀',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c18-m3', name: '前锯肌 · 墙壁推压激活', duration: 30, sets: 3, reps: '12次 / 保持5秒',
+        desc: '面向墙站立，双手掌推墙，在推出时主动让肩胛骨向外侧撑开（不要夹紧），感受腋前侧（前锯肌）的收缩。保持5秒后放松。前锯肌负责肩胛骨贴合胸壁，激活不足是翼状肩胛的主因。',
+        tip: '推墙时感受肩胛骨"包裹"胸廓；不是挺胸而是前伸',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c18-m4', name: '弹力带 · 面拉（Face Pull）', duration: 30, sets: 4, reps: '15次',
+        desc: '弹力带固定在与眼睛同高的位置，双手握绳向后拉至耳侧，肘部与肩同高，在终点外旋停2秒。面拉是圆肩改善的核心动作——同时激活中下斜方肌、小圆肌、后三角肌。',
+        tip: '肘部保持与肩同高；不要用上斜方肌耸肩代偿',
+        icon: 'fitness_center', phase: 'strengthen',
+      },
+      {
+        id: 'c18-m5', name: '靠墙天使 · 肩颈整合校准', duration: 60, sets: 3, reps: '10次',
+        desc: '背靠墙站，枕部、上背、腰骶贴墙，双臂弯曲呈W紧贴墙面，缓慢沿墙上滑至Y形再回W，全程手背不离墙。整合肩胛活动度与颈线控制，是最直观的肩颈姿势校准动作。',
+        tip: '腰部保留自然弧度；手背离墙说明胸椎活动度不足，不要强迫',
+        icon: 'accessibility_new', phase: 'integrate',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 骨盆核心 · 功能强化 — 进阶
+  // ─────────────────────────────────────────────────────────────────────────
+
+  {
+    id: 'c19',
+    name: '骨盆核心 · 功能强化（进阶）',
+    desc: '骨盆中立控制 · 髋力激活 · 核心功能整合',
+    category: 'pelvis',
+    duration: 28,
+    level: '中级',
+    icon: 'fitness_center',
+    bg: '4',
+    evidence: 'A',
+    scenes: ['home'],
+    targetMuscles: {
+      activate: ['臀大肌', '臀中肌', '腹横肌', '多裂肌', '盆底肌'],
+      release: ['髂腰肌', '股直肌', '梨状肌'],
+    },
+    moves: [
+      {
+        id: 'c19-m1', name: '髂腰肌 · 半跪深度松解', duration: 90, sets: 2, reps: '45秒/侧',
+        desc: '半跪姿，后腿膝盖垫毛巾，前腿屈膝90°。骨盆主动后倾（收腹），身体直立向前移重心，感受后腿大腿根部前方（髂腰肌）深层拉伸。呼气时加深松解。',
+        tip: '骨盆后倾是关键——不做后倾则拉伸不到髂腰肌深层',
+        icon: 'spa', phase: 'release',
+      },
+      {
+        id: 'c19-m2', name: '单腿臀桥 · 臀大肌力量强化', duration: 40, sets: 4, reps: '10次/侧',
+        desc: '仰卧屈膝，一腿伸直或搭在对侧膝上，单腿支撑将骨盆顶起至肩-髋-膝一线，顶端停2秒，感受臀部深层充分收缩，缓慢落下。单腿臀桥比双腿版激活强度高约40%（Contreras, 2011）。',
+        tip: '骨盆保持水平，不要向悬空侧倾斜',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c19-m3', name: '侧卧蚌式 + 弹力带 · 臀中肌进阶', duration: 40, sets: 4, reps: '15次/侧',
+        desc: '在基础蚌式基础上，在双膝套弹力带增加阻力。侧卧屈膝，脚跟并拢，抵抗阻力缓慢打开上膝至最大幅度，停1秒后缓慢落回。臀中肌是骨盆侧向稳定的核心，激活不足导致膝内扣与骨盆侧倾。',
+        tip: '弹力带选择中等阻力；感受臀部外侧的燃烧感',
+        icon: 'fitness_center', phase: 'activate',
+      },
+      {
+        id: 'c19-m4', name: '哥本哈根平板 · 内收肌链激活', duration: 30, sets: 3, reps: '20秒/侧',
+        desc: '侧卧，上方脚放在椅子或台阶上，下方腿悬空，用内收肌将下方腿向上方腿靠拢并保持。是内收肌链（大腿内侧）最高效的等长强化方式，与臀中肌协同维持骨盆中立。',
+        tip: '初学者可先做辅助版（下方脚放地），感受大腿内侧发力',
+        icon: 'fitness_center', phase: 'strengthen',
+      },
+      {
+        id: 'c19-m5', name: '功能步态 · 骨盆控制整合', duration: 120, sets: 2, reps: '60秒',
+        desc: '缓慢单腿站立→跨步→收腿，全程保持骨盆水平，每一步在落地时有意识检查膝盖对准脚尖、骨盆不倾斜。将训练中的骨盆控制能力迁移到日常行走模式。',
+        tip: '速度越慢挑战越大；镜子前练习可以直接观察骨盆是否倾斜',
+        icon: 'accessibility_new', phase: 'integrate',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
   // 全身整合 — 居家
   // ─────────────────────────────────────────────────────────────────────────
 
@@ -777,10 +936,11 @@ const courses = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 const programs = [
+  // ─── P1：七日体验计划 ───────────────────────────────────────────────────────
   {
     id: 'p1',
     name: '七日 · 焕新',
-    desc: '每天15分钟，重建身体的秩序',
+    desc: '每天 15–20 分钟，用一周扫描全身六大问题区，感受体态改变的起点',
     duration: 7,
     sessionsPerWeek: 7,
     level: '初级',
@@ -790,25 +950,28 @@ const programs = [
     weeks: [
       {
         week: 1,
+        phase: '全身扫描体验',
+        phaseNote: '每天聚焦一个问题区，完整体验后再选择深度计划',
         days: [
-          { day: 1, label: '第一天', courseId: 'c1', focus: '颈线唤醒' },
-          { day: 2, label: '第二天', courseId: 'c4', focus: '肩背舒展' },
-          { day: 3, label: '第三天', courseId: 'c7', focus: '骨盆归位' },
-          { day: 4, label: '第四天', courseId: 'c10', focus: '腰背安放' },
-          { day: 5, label: '第五天', courseId: 'c11', focus: '膝稳养成' },
-          { day: 6, label: '第六天', courseId: 'c13', focus: '足弓生长' },
-          { day: 7, label: '第七天', courseId: 'c16', focus: '全身整合' },
+          { day: 1, label: '第一天', courseId: 'c1', focus: '颈线唤醒', note: '枕下松弛 + 深颈屈肌激活，感受颈部第一次真正延伸' },
+          { day: 2, label: '第二天', courseId: 'c4', focus: '肩背舒展', note: '胸肌松解 + 肩胛归位，含胸圆肩最直接的改变' },
+          { day: 3, label: '第三天', courseId: 'c7', focus: '骨盆归位', note: '髂腰肌松解 + 臀部唤醒，让腰椎回到它应在的位置' },
+          { day: 4, label: '第四天', courseId: 'c10', focus: '腰背安放', note: '多裂肌与竖脊肌激活，建立腰背深层的支撑力' },
+          { day: 5, label: '第五天', courseId: 'c11', focus: '膝稳养成', note: '臀中肌激活 + 股四头肌离心控制，保护膝关节' },
+          { day: 6, label: '第六天', courseId: 'c13', focus: '足弓生长', note: '短足训练 + 内在肌激活，从地面建立身体的根基' },
+          { day: 7, label: '第七天', courseId: 'c16', focus: '全身整合', note: '把六天训练的感知串联成完整的身体秩序' },
         ],
       },
     ],
   },
 
+  // ─── P2：八周系统计划 ─────────────────────────────────────────────────────
   {
     id: 'p2',
     name: '八周 · 立',
-    desc: '循序渐进，八周重建身体的立体秩序',
+    desc: '三阶段渐进：松解→激活→强化，每周 4 次，系统重建身体的立体秩序',
     duration: 56,
-    sessionsPerWeek: 3,
+    sessionsPerWeek: 4,
     level: '中级',
     icon: 'trending_up',
     color: '#7d9fc0',
@@ -816,153 +979,190 @@ const programs = [
     weeks: [
       {
         week: 1,
+        phase: '松解期',
+        phaseNote: '优先释放长期紧绷的肌肉，为后续激活清除阻力',
         days: [
-          { day: 1, label: '第一天', courseId: 'c1', focus: '颈线基础' },
-          { day: 3, label: '第三天', courseId: 'c4', focus: '肩背舒展' },
-          { day: 5, label: '第五天', courseId: 'c7', focus: '骨盆归位' },
+          { day: 1, label: '第一天', courseId: 'c1', focus: '颈线松解', note: '枕下减压 + 深颈屈肌入门激活' },
+          { day: 2, label: '第二天', courseId: 'c4', focus: '肩背松解', note: '胸肌 + 肩胛提肌系统松解，释放圆肩张力' },
+          { day: 4, label: '第四天', courseId: 'c7', focus: '骨盆松解', note: '髂腰肌与梨状肌松弛，建立骨盆中立感知' },
+          { day: 6, label: '第六天', courseId: 'c10', focus: '腰背松解', note: '腰方肌与胸腰筋膜减压，让腰背从慢性张力中释放' },
         ],
       },
       {
         week: 2,
+        phase: '松解期',
+        phaseNote: '继续深化松解，覆盖下肢链与足部',
         days: [
-          { day: 1, label: '第一天', courseId: 'c10', focus: '腰背安放' },
-          { day: 3, label: '第三天', courseId: 'c11', focus: '膝稳养成' },
-          { day: 5, label: '第五天', courseId: 'c13', focus: '足弓生长' },
+          { day: 1, label: '第一天', courseId: 'c11', focus: '膝稳基础', note: '臀中肌唤醒 + 股四头肌离心控制入门' },
+          { day: 2, label: '第二天', courseId: 'c13', focus: '足弓唤醒', note: '趾短屈肌与足内在肌激活，重建足弓支撑' },
+          { day: 4, label: '第四天', courseId: 'c1', focus: '颈线深化', note: '加强 CCF 激活精准度，感受深颈屈肌的独立发力' },
+          { day: 6, label: '第六天', courseId: 'c7', focus: '骨盆深化', note: '加入蚌式臀中肌训练，骨盆侧向稳定开始建立' },
         ],
       },
       {
         week: 3,
+        phase: '激活期',
+        phaseNote: '松解完成后正式进入激活阶段，唤醒长期沉睡的深层稳定肌群',
         days: [
-          { day: 1, label: '第一天', courseId: 'c3', focus: '颈背强化' },
-          { day: 3, label: '第三天', courseId: 'c6', focus: '肩背重塑' },
-          { day: 5, label: '第五天', courseId: 'c9', focus: '核心立' },
+          { day: 1, label: '第一天', courseId: 'c18', focus: '肩颈联合激活', note: 'YTW + 面拉 + 前锯肌激活，系统解决含胸圆肩' },
+          { day: 2, label: '第二天', courseId: 'c9', focus: '核心深层激活', note: '腹横肌 + 盆底肌协同激活，建立真正的核心稳定' },
+          { day: 4, label: '第四天', courseId: 'c19', focus: '骨盆核心激活', note: '单腿臀桥 + 蚌式进阶，臀部力量与骨盆控制联动' },
+          { day: 6, label: '第六天', courseId: 'c17', focus: '腰背深层激活', note: '死虫 + 鸟狗强化多裂肌与腹横肌的协同稳定' },
         ],
       },
       {
         week: 4,
+        phase: '激活期',
+        phaseNote: '强化激活，加入更多抗阻与功能性动作',
         days: [
-          { day: 1, label: '第一天', courseId: 'c12', focus: '膝稳进阶' },
-          { day: 3, label: '第三天', courseId: 'c3', focus: '颈背巩固' },
-          { day: 5, label: '第五天', courseId: 'c6', focus: '肩背巩固' },
+          { day: 1, label: '第一天', courseId: 'c3', focus: '颈背功能激活', note: '颈深屈肌进阶 + 肩胛稳定功能强化' },
+          { day: 2, label: '第二天', courseId: 'c12', focus: '膝稳进阶', note: '单腿功能训练 + 落地控制，提升膝关节动态稳定性' },
+          { day: 4, label: '第四天', courseId: 'c18', focus: '肩颈强化', note: '靠墙天使 + 弹力带面拉，上半身姿势控制提升' },
+          { day: 6, label: '第六天', courseId: 'c9', focus: '核心强化', note: '核心抗旋 + 脊柱抗伸训练，功能稳定性升级' },
         ],
       },
       {
         week: 5,
+        phase: '强化期',
+        phaseNote: '在稳定基础上加载力量，让身体秩序真正扎根',
         days: [
-          { day: 1, label: '第一天', courseId: 'c9', focus: '核心强化' },
-          { day: 3, label: '第三天', courseId: 'c12', focus: '膝稳强化' },
-          { day: 5, label: '第五天', courseId: 'c16', focus: '全身预整合' },
+          { day: 1, label: '第一天', courseId: 'c6', focus: '肩背重塑', note: '上半身推拉链整合，斜方肌下束主导训练' },
+          { day: 2, label: '第二天', courseId: 'c17', focus: '腰背强化', note: 'RDL + 鸟狗进阶，臀腿链与腰背深层联合强化' },
+          { day: 4, label: '第四天', courseId: 'c19', focus: '骨盆力量', note: '哥本哈根平板 + 单腿臀桥，骨盆稳定性达到新水平' },
+          { day: 6, label: '第六天', courseId: 'c16', focus: '全身预整合', note: '把前四周训练的各环节串联，感受整体秩序' },
         ],
       },
       {
         week: 6,
+        phase: '强化期',
+        phaseNote: '专项强化与全身协调并进',
         days: [
-          { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合一' },
-          { day: 3, label: '第三天', courseId: 'c6', focus: '肩背专项' },
-          { day: 5, label: '第五天', courseId: 'c16', focus: '全身整合二' },
+          { day: 1, label: '第一天', courseId: 'c3', focus: '颈背专项', note: '颈深屈肌最大激活 + 斜方肌强化超级组' },
+          { day: 2, label: '第二天', courseId: 'c16', focus: '全身整合', note: '动态全身热身 + 颈背核心超级组 + 地面整合' },
+          { day: 4, label: '第四天', courseId: 'c12', focus: '膝稳强化', note: '单腿控制 + 跳跃落地力学，膝关节动态保护' },
+          { day: 6, label: '第六天', courseId: 'c17', focus: '腰背功能', note: '脊柱抗旋 + 功能性腰背强化，日常动作保护' },
         ],
       },
       {
         week: 7,
+        phase: '整合期',
+        phaseNote: '从专项训练过渡到全身整合，建立真实场景的姿势控制',
         days: [
-          { day: 1, label: '第一天', courseId: 'c3', focus: '颈背专项' },
-          { day: 3, label: '第三天', courseId: 'c16', focus: '全身整合三' },
-          { day: 5, label: '第五天', courseId: 'c9', focus: '核心专项' },
+          { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合一', note: '全身动态热身 + 颈背核心联动 + 地面秩序整合' },
+          { day: 2, label: '第二天', courseId: 'c18', focus: '上半身整合', note: '肩胛稳定 + 颈背联动 + 靠墙天使全链路整合' },
+          { day: 4, label: '第四天', courseId: 'c19', focus: '下半身整合', note: '骨盆控制 + 功能步态 + 下肢链协同整合' },
+          { day: 6, label: '第六天', courseId: 'c16', focus: '全身整合二', note: '从足弓到头顶的完整秩序感，带入日常行走' },
         ],
       },
       {
         week: 8,
+        phase: '整合期',
+        phaseNote: '八周收尾：用最高质量的动作感知巩固所有训练成果',
         days: [
-          { day: 1, label: '第一天', courseId: 'c16', focus: '八周整合一' },
-          { day: 3, label: '第三天', courseId: 'c16', focus: '八周整合二' },
-          { day: 5, label: '第五天', courseId: 'c16', focus: '八周成果整合' },
+          { day: 1, label: '第一天', courseId: 'c16', focus: '八周整合一', note: '全身秩序感知 + 各问题区精华动作回顾' },
+          { day: 2, label: '第二天', courseId: 'c9', focus: '核心专项', note: '腹横肌与盆底协同巩固，核心稳定能力最终测试' },
+          { day: 4, label: '第四天', courseId: 'c17', focus: '腰背巩固', note: '死虫 + 鸟狗 + RDL 完整腰背保护链巩固' },
+          { day: 6, label: '第六天', courseId: 'c16', focus: '八周成果整合', note: '站在镜子前感受：八周前与现在，身体已然不同' },
         ],
       },
     ],
   },
 
+  // ─── P3：十二周深度重塑计划 ───────────────────────────────────────────────
   {
     id: 'p3',
     name: '十二周 · 归位',
-    desc: '十二周系统重塑，让身体回到它本该有的秩序',
+    desc: '四阶段系统工程：松解→激活→强化→整合，每周 5 次，让身体回到它本该有的秩序',
     duration: 84,
-    sessionsPerWeek: 4,
+    sessionsPerWeek: 5,
     level: '进阶',
     icon: 'workspace_premium',
     color: '#8d7dc0',
     scenes: ['home', 'gym'],
     weeks: [
-      { week: 1, phase: '基础期', days: [
-        { day: 1, label: '第一天', courseId: 'c1', focus: '颈线基础' },
-        { day: 2, label: '第二天', courseId: 'c4', focus: '肩背舒展' },
-        { day: 4, label: '第四天', courseId: 'c7', focus: '骨盆归位' },
-        { day: 6, label: '第六天', courseId: 'c10', focus: '腰背安放' },
+      { week: 1, phase: '松解期', phaseNote: '系统扫描全身筋膜张力，松解是一切改变的前提', days: [
+        { day: 1, label: '第一天', courseId: 'c1', focus: '颈线松解', note: '枕下减压 + CCF 入门，颈部第一次主动放松' },
+        { day: 2, label: '第二天', courseId: 'c4', focus: '肩背松解', note: '胸肌 + 肩胛提肌 + 菱形肌系统松解' },
+        { day: 3, label: '第三天', courseId: 'c7', focus: '骨盆松解', note: '髂腰肌与梨状肌松解，骨盆前倾第一步改善' },
+        { day: 5, label: '第五天', courseId: 'c10', focus: '腰背松解', note: '腰方肌 + 胸腰筋膜松解，腰背慢性张力释放' },
+        { day: 6, label: '第六天', courseId: 'c11', focus: '膝足松解', note: '大腿筋膜 + 足底筋膜松解，下肢链从末端开始放松' },
       ]},
-      { week: 2, phase: '基础期', days: [
-        { day: 1, label: '第一天', courseId: 'c11', focus: '膝稳基础' },
-        { day: 2, label: '第二天', courseId: 'c13', focus: '足弓生长' },
-        { day: 4, label: '第四天', courseId: 'c1', focus: '颈线巩固' },
-        { day: 6, label: '第六天', courseId: 'c7', focus: '骨盆巩固' },
+      { week: 2, phase: '松解期', phaseNote: '深化松解，重点处理颈背与下肢联动的筋膜张力', days: [
+        { day: 1, label: '第一天', courseId: 'c13', focus: '足弓松解唤醒', note: '足底筋膜松解 + 短足训练入门，地面根基建立' },
+        { day: 2, label: '第二天', courseId: 'c1', focus: '颈线深化松解', note: 'CCF 精准度提升 + 胸椎活动度改善' },
+        { day: 3, label: '第三天', courseId: 'c4', focus: '肩背深化松解', note: '胸椎旋转活动度训练 + 肩胛贴合改善' },
+        { day: 5, label: '第五天', courseId: 'c7', focus: '骨盆深化松解', note: '蚌式入门 + 骨盆中立感知精准建立' },
+        { day: 6, label: '第六天', courseId: 'c10', focus: '腰背深化松解', note: '猫牛 + 脊柱波浪，椎间隙减压与本体感觉唤醒' },
       ]},
-      { week: 3, phase: '基础期', days: [
-        { day: 1, label: '第一天', courseId: 'c4', focus: '肩背巩固' },
-        { day: 2, label: '第二天', courseId: 'c10', focus: '腰背巩固' },
-        { day: 4, label: '第四天', courseId: 'c11', focus: '膝稳巩固' },
-        { day: 6, label: '第六天', courseId: 'c13', focus: '足弓巩固' },
+      { week: 3, phase: '松解期', phaseNote: '松解期收尾：确认各肌群放松到位，准备进入激活阶段', days: [
+        { day: 1, label: '第一天', courseId: 'c2', focus: '颈线办公室版', note: '颌内收 + 靠墙校准，将颈线改善融入日常习惯' },
+        { day: 2, label: '第二天', courseId: 'c5', focus: '肩背办公室版', note: '坐姿肩胛后缩 + 拉伸，办公场景体态干预' },
+        { day: 3, label: '第三天', courseId: 'c11', focus: '膝稳松解基础', note: 'IT束与腘绳肌松解 + 臀中肌初步唤醒' },
+        { day: 5, label: '第五天', courseId: 'c13', focus: '足弓训练', note: '短足 + 趾屈训练，足内在肌激活稳定推进' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身扫描整合', note: '动态热身 + 全身各环节松解回顾，感受整体流动' },
       ]},
-      { week: 4, phase: '基础期', days: [
-        { day: 1, label: '第一天', courseId: 'c1', focus: '颈线深化' },
-        { day: 2, label: '第二天', courseId: 'c4', focus: '肩背深化' },
-        { day: 4, label: '第四天', courseId: 'c7', focus: '骨盆深化' },
-        { day: 6, label: '第六天', courseId: 'c10', focus: '腰背深化' },
+      { week: 4, phase: '激活期', phaseNote: '正式进入激活阶段：唤醒因长期代偿而沉睡的深层稳定肌群', days: [
+        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背激活', note: '深颈屈肌进阶激活 + 斜方肌下束开始强化' },
+        { day: 2, label: '第二天', courseId: 'c18', focus: '肩颈联合激活', note: 'YTW + 前锯肌 + 面拉，上半身三角稳定系统建立' },
+        { day: 3, label: '第三天', courseId: 'c9', focus: '核心深层激活', note: '腹横肌 360° 呼吸激活 + 盆底肌协同，深层核心正式启动' },
+        { day: 5, label: '第五天', courseId: 'c19', focus: '骨盆核心激活', note: '单腿臀桥 + 蚌式弹力带，骨盆侧向稳定系统激活' },
+        { day: 6, label: '第六天', courseId: 'c17', focus: '腰背深层激活', note: '死虫 + 鸟狗，多裂肌与腹横肌协同稳定系统建立' },
       ]},
-      { week: 5, phase: '强化期', days: [
-        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背强化' },
-        { day: 2, label: '第二天', courseId: 'c6', focus: '肩背重塑' },
-        { day: 4, label: '第四天', courseId: 'c9', focus: '核心立' },
-        { day: 6, label: '第六天', courseId: 'c12', focus: '膝稳进阶' },
+      { week: 5, phase: '激活期', phaseNote: '深化激活：提升精准度，加入功能性动作模式', days: [
+        { day: 1, label: '第一天', courseId: 'c18', focus: '肩颈激活进阶', note: '靠墙天使 + 弹力带面拉，激活质量全面提升' },
+        { day: 2, label: '第二天', courseId: 'c19', focus: '骨盆激活进阶', note: '哥本哈根平板入门 + 功能步态，骨盆控制迁移到动态' },
+        { day: 3, label: '第三天', courseId: 'c17', focus: '腰背激活进阶', note: '罗马尼亚硬拉 + 脊柱波浪，臀腿链激活与腰背减压联动' },
+        { day: 5, label: '第五天', courseId: 'c12', focus: '膝稳激活进阶', note: '单腿平衡 + 落地控制，膝关节动态稳定性建立' },
+        { day: 6, label: '第六天', courseId: 'c14', focus: '足弓激活进阶', note: '单腿短足 + 足跟提踵，从足部建立整体力线' },
       ]},
-      { week: 6, phase: '强化期', days: [
-        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背进阶' },
-        { day: 2, label: '第二天', courseId: 'c6', focus: '肩背进阶' },
-        { day: 4, label: '第四天', courseId: 'c9', focus: '核心进阶' },
-        { day: 6, label: '第六天', courseId: 'c12', focus: '膝稳强化' },
+      { week: 6, phase: '激活期', phaseNote: '激活期收尾：全身各肌群独立激活完成，准备进入力量强化', days: [
+        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背激活精化', note: 'CCF + YTW + 靠墙校准，颈背激活能力综合评估' },
+        { day: 2, label: '第二天', courseId: 'c9', focus: '核心激活精化', note: '死虫进阶 + 侧桥 + 腹横肌最大激活' },
+        { day: 3, label: '第三天', courseId: 'c19', focus: '骨盆激活精化', note: '单腿臀桥最大激活 + 功能步态高质量练习' },
+        { day: 5, label: '第五天', courseId: 'c17', focus: '腰背激活精化', note: '鸟狗最高质量版 + RDL 精准控制' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身激活整合', note: '各部位激活精华汇总，感受全身肌肉同时在线' },
       ]},
-      { week: 7, phase: '强化期', days: [
-        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背功能' },
-        { day: 2, label: '第二天', courseId: 'c6', focus: '肩背功能' },
-        { day: 4, label: '第四天', courseId: 'c9', focus: '核心功能' },
-        { day: 6, label: '第六天', courseId: 'c16', focus: '全身预整合' },
+      { week: 7, phase: '强化期', phaseNote: '在扎实的激活基础上加载力量，建立身体秩序的结构性支撑', days: [
+        { day: 1, label: '第一天', courseId: 'c6', focus: '肩背力量强化', note: '中下斜方肌最大力量训练 + 推拉链整合' },
+        { day: 2, label: '第二天', courseId: 'c17', focus: '腰背力量强化', note: 'RDL 加重 + 鸟狗进阶，腰背链最大力量建立' },
+        { day: 3, label: '第三天', courseId: 'c9', focus: '核心力量强化', note: '侧桥 + 前桥 + 抗旋转，全方向核心力量' },
+        { day: 5, label: '第五天', courseId: 'c12', focus: '膝稳力量强化', note: '单腿蹲进阶 + 跳跃落地控制，膝关节动态保护最强化' },
+        { day: 6, label: '第六天', courseId: 'c19', focus: '骨盆力量强化', note: '哥本哈根平板 + 单腿臀桥加重，骨盆最大稳定力' },
       ]},
-      { week: 8, phase: '强化期', days: [
-        { day: 1, label: '第一天', courseId: 'c9', focus: '核心综合' },
-        { day: 2, label: '第二天', courseId: 'c12', focus: '膝稳综合' },
-        { day: 4, label: '第四天', courseId: 'c6', focus: '肩背综合' },
-        { day: 6, label: '第六天', courseId: 'c16', focus: '全身整合' },
+      { week: 8, phase: '强化期', phaseNote: '力量强化推进：强度提升，各部位专项力量峰值', days: [
+        { day: 1, label: '第一天', courseId: 'c18', focus: '肩颈联合强化', note: '弹力带面拉最大阻力 + 靠墙天使 + 俯卧 YTW 进阶' },
+        { day: 2, label: '第二天', courseId: 'c17', focus: '腰背综合强化', note: '死虫 + 鸟狗 + RDL 全链路超级组' },
+        { day: 3, label: '第三天', courseId: 'c19', focus: '骨盆综合强化', note: '哥本哈根 + 臀桥 + 功能步态三连，骨盆稳定综合' },
+        { day: 5, label: '第五天', courseId: 'c9', focus: '核心综合强化', note: '腹横肌 + 多裂肌 + 抗旋 + 侧桥全套' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身强化整合', note: '颈背核心超级组 + 臀桥死虫联合 + 地面秩序整合' },
       ]},
-      { week: 9, phase: '整合期', days: [
-        { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合一' },
-        { day: 2, label: '第二天', courseId: 'c3', focus: '颈背专项' },
-        { day: 4, label: '第四天', courseId: 'c16', focus: '全身整合二' },
-        { day: 6, label: '第六天', courseId: 'c9', focus: '核心专项' },
+      { week: 9, phase: '强化期', phaseNote: '功能强化：力量迁移到动态动作，接近真实生活场景', days: [
+        { day: 1, label: '第一天', courseId: 'c3', focus: '颈背功能强化', note: '颈深屈肌最大激活 + 斜方肌强化 + 日常场景应用' },
+        { day: 2, label: '第二天', courseId: 'c6', focus: '肩背功能强化', note: '推拉链力量 + 动态肩胛稳定 + 功能性上肢训练' },
+        { day: 3, label: '第三天', courseId: 'c17', focus: '腰背功能强化', note: '脊柱抗旋 + 功能性弯腰起身 + 拾物动作力学' },
+        { day: 5, label: '第五天', courseId: 'c12', focus: '膝稳功能强化', note: '单腿蹲 + 跑跳落地 + 动态膝关节保护训练' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身功能强化', note: '短足 + 单腿平衡 + 地面整合，动态体态控制' },
       ]},
-      { week: 10, phase: '整合期', days: [
-        { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合三' },
-        { day: 2, label: '第二天', courseId: 'c6', focus: '肩背专项' },
-        { day: 4, label: '第四天', courseId: 'c16', focus: '全身整合四' },
-        { day: 6, label: '第六天', courseId: 'c12', focus: '膝稳专项' },
+      { week: 10, phase: '整合期', phaseNote: '开始整合：把各部位的训练成果连接为流畅的整体秩序', days: [
+        { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合一', note: '颈背 + 核心 + 地面三段整合，感受全身秩序链' },
+        { day: 2, label: '第二天', courseId: 'c18', focus: '上半身整合', note: '从颈到肩到背的完整力链整合，靠墙天使最终版' },
+        { day: 3, label: '第三天', courseId: 'c19', focus: '下半身整合', note: '骨盆 + 膝 + 足整体力线整合，功能步态高质量' },
+        { day: 5, label: '第五天', courseId: 'c9', focus: '核心整合', note: '核心稳定系统综合测试：抗旋 + 抗伸 + 抗侧弯全方向' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身整合二', note: '带着意识走入日常：整合训练中的每一个感知' },
       ]},
-      { week: 11, phase: '整合期', days: [
-        { day: 1, label: '第一天', courseId: 'c16', focus: '全身强化一' },
-        { day: 2, label: '第二天', courseId: 'c9', focus: '核心专项强化' },
-        { day: 4, label: '第四天', courseId: 'c16', focus: '全身强化二' },
-        { day: 6, label: '第六天', courseId: 'c13', focus: '足弓专项' },
+      { week: 11, phase: '整合期', phaseNote: '深化整合：在更接近生活的动作中巩固体态秩序', days: [
+        { day: 1, label: '第一天', courseId: 'c16', focus: '全身整合三', note: '动态热身 + 全链路激活 + 站立整合的高质量版本' },
+        { day: 2, label: '第二天', courseId: 'c17', focus: '腰背整合专项', note: 'RDL + 鸟狗 + 脊柱波浪，腰背保护链完整整合' },
+        { day: 3, label: '第三天', courseId: 'c6', focus: '肩背整合专项', note: '推拉链 + YTW + 面拉，上半身秩序最终确立' },
+        { day: 5, label: '第五天', courseId: 'c19', focus: '骨盆整合专项', note: '骨盆中立控制 + 功能步态 + 日常动作体态检查' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '全身整合四', note: '带着十一周的积累，从头到脚感受整体的轻盈秩序' },
       ]},
-      { week: 12, phase: '整合期', days: [
-        { day: 1, label: '第一天', courseId: 'c16', focus: '十二周收尾一' },
-        { day: 2, label: '第二天', courseId: 'c16', focus: '十二周收尾二' },
-        { day: 4, label: '第四天', courseId: 'c16', focus: '十二周收尾三' },
-        { day: 6, label: '第六天', courseId: 'c16', focus: '十二周成果整合' },
+      { week: 12, phase: '整合期', phaseNote: '十二周收尾：用最从容的状态完成整合，这不是终点，而是新习惯的起点', days: [
+        { day: 1, label: '第一天', courseId: 'c16', focus: '十二周收尾一', note: '全身动态热身 + 颈背核心 + 地面整合完整版' },
+        { day: 2, label: '第二天', courseId: 'c18', focus: '上半身收尾', note: '肩颈背联合整合，带着肌肉记忆走入未来' },
+        { day: 3, label: '第三天', courseId: 'c9', focus: '核心收尾', note: '核心稳定最终版：深层激活 + 功能控制 + 整合' },
+        { day: 5, label: '第五天', courseId: 'c17', focus: '腰背收尾', note: '腰背保护链最终整合，日常生活动作的安全感' },
+        { day: 6, label: '第六天', courseId: 'c16', focus: '十二周成果整合', note: '站在镜子前：十二周的身体与内心都已归位' },
       ]},
     ],
   },
