@@ -25,12 +25,12 @@
         <view class="xp-section">
           <view class="xp-labels">
             <text class="xp-current">{{currentXP}} XP</text>
-            <text class="xp-next">{{nextXP}} XP</text>
+            <text class="xp-next">{{nextXP === 9999 ? '∞' : nextXP + ' XP'}}</text>
           </view>
           <view class="xp-bar-bg">
-            <view class="xp-bar-fill" style="width: {{currentXP / nextXP * 100}}%;"></view>
+            <view class="xp-bar-fill" style="width: {{progressPct}}%;"></view>
           </view>
-          <text class="xp-hint">距下一级还需 {{nextXP - currentXP}} 经验</text>
+          <text class="xp-hint">{{xpToNext === 0 ? '已达最高等级' : '距下一级还需 ' + xpToNext + ' 经验'}}</text>
         </view>
       </view>
     </view>

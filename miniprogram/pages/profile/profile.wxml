@@ -20,6 +20,11 @@
         <text class="avatar-stat-value font-headline">{{checkInDays}}天</text>
         <text class="avatar-stat-label">打卡</text>
       </view>
+      <view class="avatar-stat-divider"></view>
+      <view class="avatar-stat">
+        <text class="avatar-stat-value font-headline">{{currentXP}}</text>
+        <text class="avatar-stat-label">经验值</text>
+      </view>
     </view>
   </view>
 

@@ -95,6 +95,6 @@ Page({
   },
 
   startTraining() {
-    wx.navigateTo({ url: '/pages/training/training' })
+    wx.switchTab({ url: '/pages/training/training' })
   },
 })
