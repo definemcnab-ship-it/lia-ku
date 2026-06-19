@@ -534,7 +534,9 @@ page { background: #f7f5f0; }
   justify-content: center; flex-shrink: 0;
 }
 .issue-info { flex: 1; }
-.issue-name { display: block; font-size: 28rpx; font-weight: 600; color: #2b2720; margin-bottom: 6rpx; }
+.issue-name-row { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8rpx; margin-bottom: 6rpx; }
+.issue-name { font-size: 28rpx; font-weight: 600; color: #2b2720; }
+.issue-measure-badge { font-size: 20rpx; color: #c08a7d; background: #f9ece8; border-radius: 8rpx; padding: 2rpx 10rpx; font-weight: 600; }
 .issue-detail { display: block; font-size: 24rpx; color: #8f8779; line-height: 1.6; }
 
 /* 建议人工复核（低置信，弱化呈现） */

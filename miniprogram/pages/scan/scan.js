@@ -60,9 +60,23 @@ const POSTURE_MAP = [
   },
   {
     key: 'shoulder',
-    issue: '双肩轻微含胸内扣',
+    issue: '双肩含胸内扣趋势',
     detail: '胸小肌紧张，中下斜方肌偏弱',
     courseId: 'c4', courseName: '肩背 · 舒展（居家）',
+    icon: 'accessibility_new',
+  },
+  {
+    key: 'shoulder',
+    issue: '双肩高低不对称',
+    detail: '肩带两侧肌力失衡，存在代偿性侧倾',
+    courseId: 'c18', courseName: '肩颈背联合强化',
+    icon: 'accessibility_new',
+  },
+  {
+    key: 'shoulder',
+    issue: '肩斜度偏大（溜肩趋势）',
+    detail: '斜方肌上束过度放松，肩带下沉',
+    courseId: 'c18', courseName: '肩颈背联合强化',
     icon: 'accessibility_new',
   },
   {
@@ -70,6 +84,13 @@ const POSTURE_MAP = [
     issue: '骨盆轻微前倾',
     detail: '髂腰肌缩短，臀大肌激活不足',
     courseId: 'c7', courseName: '骨盆 · 归位（居家）',
+    icon: 'fitness_center',
+  },
+  {
+    key: 'pelvis',
+    issue: '骨盆侧倾不对称',
+    detail: '腰方肌与臀中肌两侧力量失衡',
+    courseId: 'c19', courseName: '骨盆核心功能强化',
     icon: 'fitness_center',
   },
   {
@@ -83,6 +104,13 @@ const POSTURE_MAP = [
     key: 'knee',
     issue: '膝关节稳定性有提升空间',
     detail: 'VMO激活不足，臀中肌偏弱',
+    courseId: 'c11', courseName: '膝稳 · 养成（居家）',
+    icon: 'directions_walk',
+  },
+  {
+    key: 'knee',
+    issue: '膝关节外张趋势（O 型腿）',
+    detail: '髋外旋肌紧张，内收肌与VMO力量不足',
     courseId: 'c11', courseName: '膝稳 · 养成（居家）',
     icon: 'directions_walk',
   },
@@ -116,14 +144,16 @@ function simulate(prefs, lastScore) {
   return { score, issues }
 }
 
-// 后端返回的 issues 仅含 {key, issue, detail}，用 POSTURE_MAP 补全图标与课程
+// 后端返回的 issues 含 {key, issue, detail, measure?}，用 POSTURE_MAP 补全图标与课程
 function enrichIssues(rawIssues, prefs) {
   const scene = (prefs && prefs.scene && prefs.scene[0]) || 'home'
   return (rawIssues || []).map(raw => {
-    const base = POSTURE_MAP.find(p => p.key === raw.key) || {}
+    const base = POSTURE_MAP.find(p => p.key === raw.key && (!raw.issue || p.issue === raw.issue)) ||
+                 POSTURE_MAP.find(p => p.key === raw.key) || {}
     const merged = Object.assign({}, base, {
       issue: raw.issue || base.issue,
       detail: raw.detail || base.detail,
+      measure: raw.measure || '',
     })
     return adaptScene(merged, scene)
   })

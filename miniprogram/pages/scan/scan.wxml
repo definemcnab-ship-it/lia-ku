@@ -145,7 +145,7 @@
             <view class="explain-num">02</view>
             <view class="explain-info">
               <text class="explain-name">三视角综合分析</text>
-              <text class="explain-desc">正面检测高低肩与膝内扣，侧面检测头前引、圆肩、骨盆与膝超伸，背面作为正面补充</text>
+              <text class="explain-desc">正面检测高低肩、溜肩、X/O型腿、骨盆侧倾；侧面检测头前引（CVA）、圆肩、骨盆前倾、膝超伸；背面补充正面分析</text>
             </view>
           </view>
           <view class="explain-row">
@@ -296,7 +296,10 @@
               <mp-icon name="{{item.icon}}" size="22" color="#c08a7d" />
             </view>
             <view class="issue-info">
-              <text class="issue-name">{{item.issue}}</text>
+              <view class="issue-name-row">
+                <text class="issue-name">{{item.issue}}</text>
+                <text wx:if="{{item.measure}}" class="issue-measure-badge">{{item.measure}}</text>
+              </view>
               <text class="issue-detail">{{item.detail}}</text>
             </view>
           </view>

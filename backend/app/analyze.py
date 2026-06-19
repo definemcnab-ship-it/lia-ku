@@ -49,6 +49,18 @@ KNEE_HYPEREXT_SEVERE = 15.0
 KNEE_VALGUS = 7.0
 KNEE_VALGUS_SEVERE = 12.0
 
+# [近似] 膝内翻(O型腿)：膝间距 / 踝间距 >1.25 趋势，>1.45 明显
+KNEE_VARUS_RATIO = 1.25
+KNEE_VARUS_SEVERE = 1.45
+
+# [近似] 溜肩：耳→肩连线与水平线夹角 >55° 趋势（正常约 35–50°）
+SLOPE_SHOULDER_FLAG = 55.0
+SLOPE_SHOULDER_SEVERE = 65.0
+
+# [近似] 骨盆侧倾：髋高差 / 肩宽
+PELVIS_LATERAL_FLAG = 1.0 / 38.0
+PELVIS_LATERAL_SIGNIF = 2.0 / 38.0
+
 # [可测] 高低肩：>1cm 旗标，>2cm 显著。以双肩高差/肩宽近似（肩宽≈双肩峰距 ~38cm）
 SHOULDER_DIFF_FLAG = 1.0 / 38.0     # ≈0.026
 SHOULDER_DIFF_SIGNIF = 2.0 / 38.0   # ≈0.053
@@ -146,19 +158,23 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
     """基于 3D 矢状面几何量补充矢状面问题（仅填补 2D 未命中的 key）。"""
     penalty = 0
     if "neck" not in seen and m["cva"] < W_CVA_FHP:
+        cva = m["cva"]
         issues.append({
             "key": "neck",
             "issue": "颈线前移，头前引趋势",
-            "detail": "深颈屈肌激活不足，上斜方肌代偿过度",
+            "detail": f"CVA {cva:.0f}°（正常≥52°）；深颈屈肌激活不足，上斜方肌代偿过度",
+            "measure": f"CVA {cva:.0f}°",
         })
-        penalty += 12 if m["cva"] < W_CVA_SEVERE else 7
+        penalty += 12 if cva < W_CVA_SEVERE else 7
         seen.add("neck")
 
     if "shoulder" not in seen and m["sh_fwd"] > W_SH_FWD:
+        pct = round(m["sh_fwd"] * 100, 1)
         issues.append({
             "key": "shoulder",
             "issue": "双肩含胸内扣趋势",
-            "detail": "胸小肌紧张，中下斜方肌偏弱",
+            "detail": f"肩相对髋前移 {pct}%躯干高（参考值<11%）；胸小肌紧张，中下斜方肌偏弱",
+            "measure": f"前移 {pct}%",
         })
         penalty += 9 if m["sh_fwd"] > W_SH_FWD_SEVERE else 6
         seen.add("shoulder")
@@ -170,7 +186,8 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
         issues.append({
             "key": "pelvis",
             "issue": "骨盆轻微前倾",
-            "detail": "髂腰肌缩短，臀大肌激活不足",
+            "detail": f"躯干-大腿夹角 {tt:.0f}°（参考≥168°）；髂腰肌缩短，臀大肌激活不足",
+            "measure": f"躯干-腿 {tt:.0f}°",
         })
         penalty += 9 if tt < W_APT_ANT_SEVERE else 5
         seen.add("pelvis")
@@ -187,12 +204,14 @@ def _analyze_sagittal_3d(m: dict, issues: list, seen: set) -> int:
         seen.add("pelvis")
 
     if "knee" not in seen and m["knee_post"] and m["knee_hyperext"] > W_KNEE_HYPEREXT:
+        he = m["knee_hyperext"]
         issues.append({
             "key": "knee",
             "issue": "膝关节存在超伸趋势",
-            "detail": "VMO 与腘绳肌离心控制不足",
+            "detail": f"膝超伸约 {he:.0f}°（正常0–5°）；VMO 与腘绳肌离心控制不足",
+            "measure": f"超伸 {he:.0f}°",
         })
-        penalty += 8 if m["knee_hyperext"] > W_KNEE_HYPEREXT_SEVERE else 5
+        penalty += 8 if he > W_KNEE_HYPEREXT_SEVERE else 5
         seen.add("knee")
     return penalty
 
@@ -259,7 +278,8 @@ def _analyze_side(kp: Keypoints, issues: list):
             issues.append({
                 "key": "neck",
                 "issue": "颈线前移，头前引趋势",
-                "detail": "深颈屈肌激活不足，上斜方肌代偿过度",
+                "detail": f"CVA {cva:.0f}°（正常≥52°）；深颈屈肌激活不足，上斜方肌代偿过度",
+                "measure": f"CVA {cva:.0f}°",
             })
             penalty += 12 if cva < CVA_SEVERE else 7
 
@@ -267,10 +287,12 @@ def _analyze_side(kp: Keypoints, issues: list):
     if sh and hip:
         fwd = (sh.x - hip.x) * face / th
         if fwd > FSA_FWD_RATIO:
+            pct = round(fwd * 100, 1)
             issues.append({
                 "key": "shoulder",
                 "issue": "双肩含胸内扣趋势",
-                "detail": "胸小肌紧张，中下斜方肌偏弱",
+                "detail": f"肩相对髋前移 {pct}%躯干高（参考值<11%）；胸小肌紧张，中下斜方肌偏弱",
+                "measure": f"前移 {pct}%",
             })
             penalty += 9 if fwd > FSA_FWD_RATIO_SEVERE else 6
 
@@ -281,7 +303,8 @@ def _analyze_side(kp: Keypoints, issues: list):
             issues.append({
                 "key": "pelvis",
                 "issue": "骨盆轻微前倾",
-                "detail": "髂腰肌缩短，臀大肌激活不足",
+                "detail": f"躯干-大腿夹角 {trunk_thigh:.0f}°（参考≥168°）；髂腰肌缩短，臀大肌激活不足",
+                "measure": f"躯干-腿 {trunk_thigh:.0f}°",
             })
             penalty += 9 if trunk_thigh < APT_TRUNK_THIGH_SEVERE else 5
         elif trunk_thigh > APT_POSTERIOR:
@@ -308,17 +331,15 @@ def _analyze_side(kp: Keypoints, issues: list):
     # [可测] 膝超伸：髋-膝-踝夹角 >180° 即反弓，用膝点偏向「背侧」确认
     if hip and knee and ank:
         knee_ang = geo.angle(hip.x, hip.y, knee.x, knee.y, ank.x, ank.y)
-        # geo.angle 返回 0-180，超伸时膝点向身体背侧偏移，夹角接近 180 且膝「后凸」
-        # 用 signed_offset 判断膝是否在「髋-踝连线」背侧（超伸方向）
         off = geo.signed_offset(knee.x, knee.y, hip.x, hip.y, ank.x, ank.y)
-        # 人面朝 +x 时，背侧在 -x，膝后偏则 off 为正（叉积方向）
         knee_back = (off * face) > 0
-        overext_deg = knee_ang - 175.0   # >175° 开始计入（等效 >5° 超伸）
+        overext_deg = knee_ang - 175.0
         if knee_back and overext_deg > 0:
             issues.append({
                 "key": "knee",
                 "issue": "膝关节存在超伸趋势",
-                "detail": "VMO 与腘绳肌离心控制不足",
+                "detail": f"膝超伸约 {overext_deg:.0f}°（正常0–5°）；VMO 与腘绳肌离心控制不足",
+                "measure": f"超伸 {overext_deg:.0f}°",
             })
             penalty += 8 if overext_deg > KNEE_HYPEREXT_SEVERE else 5
     return penalty
@@ -330,6 +351,7 @@ def _analyze_front(kp: Keypoints, issues: list, seen: set):
     lk, rk = kp.lm(L_KNEE), kp.lm(R_KNEE)
     la, ra = kp.lm(L_ANKLE), kp.lm(R_ANKLE)
     lf, rf = kp.lm(L_FOOT), kp.lm(R_FOOT)
+    lear, rear = kp.lm(L_EAR), kp.lm(R_EAR)
     sw = geo.shoulder_width(kp) or 1.0
     penalty = 0
 
@@ -337,39 +359,82 @@ def _analyze_front(kp: Keypoints, issues: list, seen: set):
     if ls and rs and "shoulder" not in seen:
         diff = abs(ls.y - rs.y) / sw
         if diff > SHOULDER_DIFF_FLAG:
+            cm_approx = round(diff * 38, 1)
             issues.append({
                 "key": "shoulder",
                 "issue": "双肩高低不对称",
-                "detail": "肩带两侧肌力失衡，存在代偿性侧倾",
+                "detail": f"肩高差约 {cm_approx}cm（旗标>1cm，显著>2cm）；肩带两侧肌力失衡，存在代偿性侧倾",
+                "measure": f"高差 {cm_approx}cm",
             })
             penalty += 6 if diff > SHOULDER_DIFF_SIGNIF else 4
             seen.add("shoulder")
 
-    # [可测] 膝外翻(X 型)：额状面 髋-膝-踝 偏离，生理 5–7°，>7° 异常
+    # [近似] 溜肩：耳→肩连线与水平线夹角过大（肩斜度偏陡）
+    if ls and rs and lear and rear and "slope_shoulder" not in seen:
+        slope_l = geo.elevation_deg(lear.x, lear.y, ls.x, ls.y)
+        slope_r = geo.elevation_deg(rear.x, rear.y, rs.x, rs.y)
+        slope_avg = (slope_l + slope_r) / 2
+        if slope_avg > SLOPE_SHOULDER_FLAG:
+            issues.append({
+                "key": "shoulder",
+                "issue": "肩斜度偏大（溜肩趋势）",
+                "detail": f"耳→肩斜度 {slope_avg:.0f}°（参考值<55°）；斜方肌上束过度放松，肩带下沉",
+                "measure": f"斜度 {slope_avg:.0f}°",
+            })
+            penalty += 5 if slope_avg > SLOPE_SHOULDER_SEVERE else 3
+            seen.add("slope_shoulder")
+
+    # [可测] 膝外翻(X 型)与膝内翻(O 型)：额状面 髋-膝-踝
     if lh and rh and lk and rk and la and ra and "knee" not in seen:
         ang_l = 180.0 - geo.angle(lh.x, lh.y, lk.x, lk.y, la.x, la.y)
         ang_r = 180.0 - geo.angle(rh.x, rh.y, rk.x, rk.y, ra.x, ra.y)
         valgus = (ang_l + ang_r) / 2
-        # 膝间距明显小于踝间距 → 确认是内扣(X)而非外翻(O)
         knee_gap = abs(lk.x - rk.x)
-        ankle_gap = abs(la.x - ra.x)
-        x_shape = ankle_gap > 0 and knee_gap < ankle_gap
+        ankle_gap = abs(la.x - ra.x) or 0.001
+        x_shape = knee_gap < ankle_gap
+        o_shape = knee_gap > ankle_gap * KNEE_VARUS_RATIO
+
         if x_shape and valgus > KNEE_VALGUS:
             issues.append({
                 "key": "knee",
-                "issue": "膝关节内扣趋势",
-                "detail": "臀中肌无力，足踝稳定性不足",
+                "issue": "膝关节内扣趋势（X 型腿）",
+                "detail": f"膝外翻角 {valgus:.0f}°（正常5–7°）；臀中肌无力，足踝稳定性不足",
+                "measure": f"外翻 {valgus:.0f}°",
             })
             penalty += 7 if valgus > KNEE_VALGUS_SEVERE else 5
             seen.add("knee")
+        elif o_shape and "knee" not in seen:
+            ratio = round(knee_gap / ankle_gap, 2)
+            issues.append({
+                "key": "knee",
+                "issue": "膝关节外张趋势（O 型腿）",
+                "detail": f"膝/踝间距比 {ratio}（正常<1.25）；髋外旋肌紧张，内收肌与VMO力量不足",
+                "measure": f"膝/踝 {ratio}",
+            })
+            penalty += 6 if knee_gap > ankle_gap * KNEE_VARUS_SEVERE else 4
+            seen.add("knee")
 
-    # [筛查] 扁平足：2D 全身照不可诊断，仅在足明显外展/内偏时低置信度提示
+    # [近似] 骨盆侧倾：髋高差 / 肩宽
+    if lh and rh and "pelvis_lateral" not in seen:
+        hip_diff = abs(lh.y - rh.y) / sw
+        if hip_diff > PELVIS_LATERAL_FLAG:
+            cm_approx = round(hip_diff * 38, 1)
+            issues.append({
+                "key": "pelvis",
+                "issue": "骨盆侧倾不对称",
+                "detail": f"髋高差约 {cm_approx}cm（旗标>1cm）；腰方肌与臀中肌两侧力量失衡",
+                "measure": f"髋高差 {cm_approx}cm",
+            })
+            penalty += 5 if hip_diff > PELVIS_LATERAL_SIGNIF else 3
+            seen.add("pelvis_lateral")
+
+    # [筛查] 扁平足：2D 全身照不可诊断，仅在足明显外展时低置信度提示
     if la and ra and lf and rf and "foot" not in seen:
-        # 足尖外展量：踝→足尖向外水平分量 / 踝间距，作为旋前粗略征象
         ankle_gap = abs(la.x - ra.x) or 1.0
-        splay_l = (la.x - lf.x) / ankle_gap   # 左足尖偏外为正
+        splay_l = (la.x - lf.x) / ankle_gap
         splay_r = (rf.x - ra.x) / ankle_gap
-        if (splay_l + splay_r) / 2 > FOOT_PRONATION_RATIO:
+        splay_avg = (splay_l + splay_r) / 2
+        if splay_avg > FOOT_PRONATION_RATIO:
             issues.append({
                 "key": "foot",
                 "issue": "疑似足弓塌陷（仅初筛）",
