@@ -538,6 +538,13 @@ def is_trial_course(course_name, card_name=None, has_trial_card=False, remark=No
     return False
 
 
+def _clean(v):
+    """把 None 或字符串 'None' 都转成空字符串"""
+    if v is None or str(v) == "None":
+        return ""
+    return str(v)
+
+
 def build_member_lookup(members):
     """构建会员名→聚合数据的查找表（同一会员多张卡累加签到次数）"""
     lookup = {}
@@ -553,8 +560,8 @@ def build_member_lookup(members):
         if name not in lookup:
             lookup[name] = {
                 "checkInUsedCount": 0,
-                "memberPhone": m.get("memberPhone", ""),
-                "sellerName": m.get("sellerName", ""),
+                "memberPhone": _clean(m.get("memberPhone")),
+                "sellerName": _clean(m.get("sellerName")),
                 "cardName": m.get("cardName", ""),
                 "cardTypeName": m.get("cardTypeName", ""),
                 "lastCheckInTime": m.get("lastCheckInTime", 0) or 0,
@@ -571,11 +578,11 @@ def build_member_lookup(members):
         card_type = m.get("cardTypeName", "") or ""
         if "体验" in card_name or "体验" in card_type:
             lookup[name]["has_trial_card"] = True
-        # 保留有值的手机号和会籍顾问
-        if m.get("memberPhone") and not lookup[name]["memberPhone"]:
-            lookup[name]["memberPhone"] = m.get("memberPhone")
-        if m.get("sellerName") and not lookup[name]["sellerName"]:
-            lookup[name]["sellerName"] = m.get("sellerName")
+        # 保留有值的手机号和会籍顾问（过滤 None）
+        if _clean(m.get("memberPhone")) and not lookup[name]["memberPhone"]:
+            lookup[name]["memberPhone"] = _clean(m.get("memberPhone"))
+        if _clean(m.get("sellerName")) and not lookup[name]["sellerName"]:
+            lookup[name]["sellerName"] = _clean(m.get("sellerName"))
         if card_name and not lookup[name]["cardName"]:
             lookup[name]["cardName"] = card_name
         if card_type and not lookup[name]["cardTypeName"]:
