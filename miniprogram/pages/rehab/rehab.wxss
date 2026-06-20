@@ -185,6 +185,45 @@
 .phase-tab-active .phase-tab-name { color: #c08a7d; font-weight: 600; }
 .phase-tab-active .phase-tab-weeks { color: #c08a7d; }
 
+/* ── 周次切换 ── */
+.week-chips {
+  display: flex;
+  gap: 12rpx;
+}
+
+.week-chip {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: #8f8779;
+  background: #ffffff;
+  padding: 16rpx 0;
+  border-radius: 18rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.week-chip-active {
+  background: #c08a7d;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ── 当周主题 ── */
+.week-theme {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 22rpx;
+  padding-top: 20rpx;
+  border-top: 2rpx solid #f0ece4;
+}
+
+.week-theme-text {
+  font-size: 24rpx;
+  color: #c08a7d;
+  font-weight: 500;
+}
+
 /* ── 阶段信息卡 ── */
 .phase-card {
   background: #ffffff;
@@ -414,6 +453,69 @@
   margin-top: 16rpx;
   padding-top: 16rpx;
   border-top: 2rpx solid #f0ece4;
+}
+
+/* ── 协同改善（当周分块卡）── */
+.supp-block-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 20rpx;
+}
+
+.supp-block-head {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 2rpx solid #f0ece4;
+}
+
+.supp-session {
+  padding: 18rpx 0 4rpx;
+}
+
+.supp-session-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.supp-session-title {
+  font-size: 25rpx;
+  color: #2b2720;
+  font-weight: 500;
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.supp-session-mins {
+  font-size: 21rpx;
+  color: #8f8779;
+  flex-shrink: 0;
+}
+
+.supp-block-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14rpx;
+  padding: 8rpx 0 8rpx 8rpx;
+}
+
+.supp-block-cat {
+  font-size: 22rpx;
+  color: #c08a7d;
+  flex-shrink: 0;
+  min-width: 120rpx;
+}
+
+.supp-block-moves {
+  flex: 1;
+  font-size: 23rpx;
+  color: #5a5349;
+  line-height: 1.5;
 }
 
 /* ── 理论基础 ── */

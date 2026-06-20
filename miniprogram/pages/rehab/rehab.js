@@ -5,79 +5,96 @@ const SCENE_ICONS = { home: 'home', office: 'business_center', gym: 'fitness_cen
 const ISSUE_LABELS = {
   neck: '头颈', shoulder: '肩部', pelvis: '骨盆', back: '腰背', knee: '膝关节', foot: '足弓',
 }
-
-function buildCombinedSessions(issueKeys, scene, phaseIdx, weekIdx) {
-  const primary = REHAB_PLANS[issueKeys[0]]
-  if (!primary) return { baseSessions: [], supplementBlocks: [] }
-  const phase = primary.phases[phaseIdx]
-  const sceneData = phase && phase.scenes && phase.scenes[scene]
-  const weekPlan = sceneData && sceneData.weekPlans && sceneData.weekPlans[weekIdx]
-  const baseSessions = (weekPlan && weekPlan.sessions) || []
-
-  const supplementBlocks = []
-  for (let i = 1; i < issueKeys.length; i++) {
-    const plan = REHAB_PLANS[issueKeys[i]]
-    if (!plan) continue
-    const suppPhase = plan.phases[phaseIdx]
-    const suppScene = suppPhase && suppPhase.scenes && suppPhase.scenes[scene]
-    const suppWeek = suppScene && suppScene.weekPlans && suppScene.weekPlans[weekIdx]
-    const suppSession = suppWeek && suppWeek.sessions && suppWeek.sessions[0]
-    if (!suppSession) continue
-    const firstBlock = suppSession.blocks && suppSession.blocks[0]
-    if (firstBlock) {
-      supplementBlocks.push({
-        issueLabel: ISSUE_LABELS[issueKeys[i]] || issueKeys[i],
-        issueName: plan.name,
-        block: firstBlock,
-      })
-    }
-  }
-  return { baseSessions, supplementBlocks }
-}
+const WEEK_LABELS = ['第1周', '第2周', '第3周', '第4周']
 
 Page({
   data: {
-    issues: [],
-    issueLabels: [],
+    issues: [],            // parsed issue keys from URL
+    issueLabels: [],       // human readable labels for tags
     scene: 'home',
     activePhaseIdx: 0,
-    activeWeekIdx: 0,
-    plans: [],
-    primaryPlan: null,
-    supplementPlans: [],
+    activeWeekIdx: 0,      // 0..3 → W1..W4 within active phase
+    plans: [],             // REHAB_PLANS entries for detected issues
+    primaryPlan: null,     // the first/main plan to show
+    supplementPlans: [],   // additional plans (issues[1..])
     showScience: false,
     scenes: ['home', 'office', 'gym'],
     sceneLabels: SCENE_LABELS,
     sceneIcons: SCENE_ICONS,
+    weekLabels: WEEK_LABELS,
     currentPhase: null,
-    currentWeekPlan: null,
-    combinedSessions: [],
-    supplementBlocks: [],
+    currentSceneData: null,
+    currentWeekPlan: null,        // active weekPlan of primary plan
+    combinedSessions: [],         // primary plan sessions for current week
+    supplementBlocks: [],         // [{ name, icon, weekTheme, sessions }] from other issues
   },
 
   onLoad(options) {
     const issueKeys = (options.issues || 'neck').split(',').filter(Boolean)
     const scene = options.scene || 'home'
+
     const plans = issueKeys.map(key => REHAB_PLANS[key]).filter(Boolean)
     const primary = plans[0] || null
     const issueLabels = issueKeys.map(k => ISSUE_LABELS[k] || k)
-    this.setData({ issues: issueKeys, issueLabels, scene, plans, primaryPlan: primary, supplementPlans: plans.slice(1) })
-    if (primary) wx.setNavigationBarTitle({ title: primary.name })
+
+    this.setData({
+      issues: issueKeys,
+      issueLabels,
+      scene,
+      plans,
+      primaryPlan: primary,
+      supplementPlans: plans.slice(1),
+    })
+    if (primary) {
+      wx.setNavigationBarTitle({ title: primary.name })
+    }
     this._buildView()
   },
 
+  // pull a weekPlan out of a plan for given phase/scene/week index
+  _getWeekPlan(plan, phaseIdx, scene, weekIdx) {
+    if (!plan || !plan.phases) return null
+    const phase = plan.phases[phaseIdx]
+    const sceneData = phase && phase.scenes && phase.scenes[scene]
+    if (!sceneData || !sceneData.weekPlans) return null
+    return sceneData.weekPlans[weekIdx] || sceneData.weekPlans[0] || null
+  },
+
+  buildCombinedSessions() {
+    const { plans, activePhaseIdx, scene, activeWeekIdx } = this.data
+    const primary = plans[0]
+
+    const primaryWeek = this._getWeekPlan(primary, activePhaseIdx, scene, activeWeekIdx)
+    const combinedSessions = (primaryWeek && primaryWeek.sessions) || []
+
+    // supplement blocks: one card per additional issue, showing that issue's
+    // sessions for the same phase / scene / week
+    const supplementBlocks = plans.slice(1).map(plan => {
+      const wk = this._getWeekPlan(plan, activePhaseIdx, scene, activeWeekIdx)
+      return {
+        name: plan.name,
+        icon: plan.icon,
+        weekTheme: wk ? wk.theme : '',
+        sessions: (wk && wk.sessions) || [],
+      }
+    }).filter(b => b.sessions.length > 0)
+
+    return { primaryWeek, combinedSessions, supplementBlocks }
+  },
+
   _buildView() {
-    const { issues, scene, activePhaseIdx, activeWeekIdx, primaryPlan } = this.data
+    const { primaryPlan, scene, activePhaseIdx } = this.data
     if (!primaryPlan) return
     const phase = primaryPlan.phases[activePhaseIdx]
     const sceneData = phase && phase.scenes && phase.scenes[scene]
-    const weekPlan = sceneData && sceneData.weekPlans && sceneData.weekPlans[activeWeekIdx]
-    const combined = buildCombinedSessions(issues, scene, activePhaseIdx, activeWeekIdx)
+    const { primaryWeek, combinedSessions, supplementBlocks } = this.buildCombinedSessions()
+
     this.setData({
       currentPhase: phase,
-      currentWeekPlan: weekPlan,
-      combinedSessions: combined.baseSessions || [],
-      supplementBlocks: combined.supplementBlocks || [],
+      currentSceneData: sceneData,
+      currentWeekPlan: primaryWeek,
+      combinedSessions,
+      supplementBlocks,
     })
   },
 
@@ -86,14 +103,14 @@ Page({
     this.setData({ activePhaseIdx: idx, activeWeekIdx: 0 }, () => this._buildView())
   },
 
-  switchWeek(e) {
-    const idx = +e.currentTarget.dataset.idx
-    this.setData({ activeWeekIdx: idx }, () => this._buildView())
-  },
-
   switchScene(e) {
     const scene = e.currentTarget.dataset.scene
     this.setData({ scene }, () => this._buildView())
+  },
+
+  switchWeek(e) {
+    const idx = +e.currentTarget.dataset.idx
+    this.setData({ activeWeekIdx: idx }, () => this._buildView())
   },
 
   toggleScience() {
@@ -103,10 +120,13 @@ Page({
   startToday() {
     const issueCoursemap = { neck: 'c1', shoulder: 'c4', pelvis: 'c7', back: 'c10', knee: 'c11', foot: 'c13' }
     const key = this.data.issues[0]
-    wx.navigateTo({ url: `/pages/player/player?courseId=${issueCoursemap[key] || 'c16'}` })
+    const courseId = issueCoursemap[key] || 'c16'
+    wx.navigateTo({ url: `/pages/player/player?courseId=${courseId}` })
   },
 
   navBack() {
-    wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/scan/scan' }) })
+    wx.navigateBack({
+      fail: () => wx.switchTab({ url: '/pages/scan/scan' }),
+    })
   },
 })

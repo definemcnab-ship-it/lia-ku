@@ -1,5 +1,7 @@
 <view class="page">
+
   <scroll-view class="scroll-area" scroll-y>
+
     <block wx:if="{{primaryPlan}}">
 
       <!-- ── 顶部计划头 ── -->
@@ -9,9 +11,13 @@
         </view>
         <text class="hero-name font-headline">{{primaryPlan.name}}</text>
         <text class="hero-tagline">{{primaryPlan.tagline}}</text>
+
+        <!-- 体态标签 -->
         <view class="tag-row">
           <view wx:for="{{issueLabels}}" wx:key="*this" class="issue-tag">{{item}}</view>
         </view>
+
+        <!-- 12周三阶段进度弧 -->
         <view class="arc-row">
           <view wx:for="{{primaryPlan.phases}}" wx:key="id" class="arc-seg {{index === activePhaseIdx ? 'arc-active' : index < activePhaseIdx ? 'arc-done' : ''}}">
             <view class="arc-bar"></view>
@@ -24,7 +30,13 @@
       <!-- ── 场景切换 ── -->
       <view class="section">
         <view class="scene-chips">
-          <view wx:for="{{scenes}}" wx:key="*this" class="scene-chip {{scene === item ? 'scene-chip-active' : ''}}" bindtap="switchScene" data-scene="{{item}}">
+          <view
+            wx:for="{{scenes}}"
+            wx:key="*this"
+            class="scene-chip {{scene === item ? 'scene-chip-active' : ''}}"
+            bindtap="switchScene"
+            data-scene="{{item}}"
+          >
             <mp-icon name="{{sceneIcons[item]}}" size="18" color="{{scene === item ? '#ffffff' : '#8f8779'}}" />
             <text class="scene-chip-text">{{sceneLabels[item]}}</text>
           </view>
@@ -34,10 +46,29 @@
       <!-- ── 阶段标签页 ── -->
       <view class="section">
         <view class="phase-tabs">
-          <view wx:for="{{primaryPlan.phases}}" wx:key="id" class="phase-tab {{index === activePhaseIdx ? 'phase-tab-active' : ''}}" bindtap="switchPhase" data-idx="{{index}}">
+          <view
+            wx:for="{{primaryPlan.phases}}"
+            wx:key="id"
+            class="phase-tab {{index === activePhaseIdx ? 'phase-tab-active' : ''}}"
+            bindtap="switchPhase"
+            data-idx="{{index}}"
+          >
             <text class="phase-tab-name">{{item.name}}</text>
             <text class="phase-tab-weeks">{{item.weeks}}</text>
           </view>
+        </view>
+      </view>
+
+      <!-- ── 周次切换 ── -->
+      <view class="section">
+        <view class="week-chips">
+          <view
+            wx:for="{{weekLabels}}"
+            wx:key="*this"
+            class="week-chip {{index === activeWeekIdx ? 'week-chip-active' : ''}}"
+            bindtap="switchWeek"
+            data-idx="{{index}}"
+          >{{item}}</view>
         </view>
       </view>
 
@@ -46,25 +77,25 @@
         <view class="phase-card">
           <view class="phase-card-head">
             <text class="phase-card-title font-headline">{{currentPhase.name}} · 目标</text>
+            <view class="phase-freq" wx:if="{{currentSceneData}}">
+              <mp-icon name="schedule" size="14" color="#c08a7d" />
+              <text class="phase-freq-text">{{currentSceneData.frequency}}</text>
+            </view>
           </view>
           <text class="phase-goal">{{currentPhase.goal}}</text>
           <view class="keyword-row">
             <view wx:for="{{currentPhase.keyWords}}" wx:key="*this" class="keyword-pill">{{item}}</view>
+            <view class="keyword-pill keyword-days" wx:if="{{currentSceneData}}">每周{{currentSceneData.daysPerWeek}}天</view>
+          </view>
+          <!-- 当周主题 -->
+          <view class="week-theme" wx:if="{{currentWeekPlan}}">
+            <mp-icon name="flag" size="14" color="#c08a7d" />
+            <text class="week-theme-text">{{weekLabels[activeWeekIdx]}} · {{currentWeekPlan.theme}}</text>
           </view>
         </view>
       </view>
 
-      <!-- ── 周选择器 ── -->
-      <view class="section" wx:if="{{currentPhase}}">
-        <view class="week-chips">
-          <view wx:for="{{[0,1,2,3]}}" wx:key="*this" class="week-chip {{activeWeekIdx === item ? 'week-chip-active' : ''}}" bindtap="switchWeek" data-idx="{{item}}">
-            <text>第{{item+1}}周</text>
-          </view>
-        </view>
-        <text wx:if="{{currentWeekPlan}}" class="week-theme">· {{currentWeekPlan.theme}} ·</text>
-      </view>
-
-      <!-- ── 训练课表 ── -->
+      <!-- ── 训练课表（当周）── -->
       <view class="section" wx:if="{{combinedSessions.length > 0}}">
         <view class="scene-head">
           <mp-icon name="{{sceneIcons[scene]}}" size="18" color="#c08a7d" />
@@ -79,6 +110,7 @@
               <text class="session-mins-text">{{session.totalMins}}min</text>
             </view>
           </view>
+
           <view wx:for="{{session.blocks}}" wx:key="category" wx:for-item="block" class="block">
             <view class="block-head">
               <view class="block-dot"></view>
@@ -94,29 +126,35 @@
             </view>
           </view>
         </view>
+      </view>
 
-        <!-- ── 协同补充训练 ── -->
-        <block wx:if="{{supplementBlocks.length > 0}}">
-          <view class="supp-section-head">
-            <mp-icon name="add_circle" size="16" color="#8f8779" />
-            <text class="supp-section-label">协同补充训练</text>
-          </view>
-          <view wx:for="{{supplementBlocks}}" wx:key="issueName" class="supp-block-card">
-            <view class="supp-block-tag">{{item.issueLabel}} · {{item.issueName}}</view>
-            <view class="block-head">
-              <view class="block-dot block-dot-supp"></view>
-              <text class="block-category">{{item.block.category}}</text>
-              <text class="block-note">{{item.block.note}}</text>
+      <!-- ── 协同改善（多问题时，当周）── -->
+      <view class="section" wx:if="{{supplementBlocks.length > 0}}">
+        <text class="section-title font-headline">协同改善 · 本周穿插</text>
+
+        <view wx:for="{{supplementBlocks}}" wx:key="name" wx:for-item="supp" class="supp-block-card">
+          <view class="supp-block-head">
+            <view class="supp-icon">
+              <mp-icon name="{{supp.icon}}" size="20" color="#8f8779" />
             </view>
-            <view wx:for="{{item.block.moves}}" wx:key="name" wx:for-item="move" class="move-row">
-              <view class="move-main">
-                <text class="move-name">{{move.name}}</text>
-                <text class="move-detail">{{move.detail}}</text>
-              </view>
-              <view class="move-equip" wx:if="{{move.equipment && move.equipment !== '无'}}">{{move.equipment}}</view>
+            <view class="supp-info">
+              <text class="supp-name">{{supp.name}}</text>
+              <text class="supp-tag" wx:if="{{supp.weekTheme}}">{{weekLabels[activeWeekIdx]}} · {{supp.weekTheme}}</text>
             </view>
           </view>
-        </block>
+
+          <view wx:for="{{supp.sessions}}" wx:key="title" wx:for-item="session" class="supp-session">
+            <view class="supp-session-head">
+              <text class="supp-session-title">{{session.title}}</text>
+              <text class="supp-session-mins">{{session.totalMins}}min</text>
+            </view>
+            <view wx:for="{{session.blocks}}" wx:key="category" wx:for-item="block" class="supp-block-line">
+              <text class="supp-block-cat">{{block.category}}</text>
+              <text class="supp-block-moves">{{block.moves[0].name}}{{block.moves[1] ? ' / ' + block.moves[1].name : ''}}</text>
+            </view>
+          </view>
+        </view>
+        <text class="supp-foot">检测到多项体态特征，主计划以首要问题为核心，以上方向建议本周穿插进行</text>
       </view>
 
       <!-- ── 理论基础（可折叠）── -->
@@ -129,6 +167,7 @@
             </view>
             <text class="science-toggle">{{showScience ? '收起' : '展开'}}</text>
           </view>
+
           <block wx:if="{{showScience}}">
             <view class="science-item">
               <text class="science-dim">解剖学</text>
@@ -158,9 +197,11 @@
       <view style="height: 160rpx"></view>
     </block>
 
+    <!-- 无数据兜底 -->
     <view wx:else class="empty">
       <text class="empty-text">暂无匹配的康复计划</text>
     </view>
+
   </scroll-view>
 
   <!-- ── 底部 CTA ── -->
@@ -170,4 +211,5 @@
       <text class="cta-text">开始今日训练</text>
     </view>
   </view>
+
 </view>
