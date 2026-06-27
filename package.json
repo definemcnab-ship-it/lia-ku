@@ -1,0 +1,14 @@
+{
+  "name": "feishu-daily-schedule-push",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "从飞书多维表格读取每日班表并推送到飞书群机器人",
+  "scripts": {
+    "push": "node scripts/push-schedule.js",
+    "dry-run": "node scripts/push-schedule.js --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,38 @@
+name: 每日班表推送
+
+on:
+  schedule:
+    # GitHub Actions 使用 UTC 时间。下面是每天 08:00（北京时间 UTC+8）触发。
+    # 如需改时间，把分钟/小时换算成 UTC：北京时间 08:00 = UTC 00:00。
+    - cron: '0 0 * * *'
+  # 允许在 Actions 页面手动触发，方便测试
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Push daily schedule
+        run: node scripts/push-schedule.js
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
+          # 以下为可选覆盖项，一般用默认值即可；如需修改可在仓库 Variables 里配置
+          FEISHU_APP_TOKEN: ${{ vars.FEISHU_APP_TOKEN }}
+          FEISHU_TABLE_ID: ${{ vars.FEISHU_TABLE_ID }}
+          FEISHU_VIEW_ID: ${{ vars.FEISHU_VIEW_ID }}
+          FEISHU_DATE_FIELD: ${{ vars.FEISHU_DATE_FIELD }}
+          FEISHU_WEEKDAY_FIELD: ${{ vars.FEISHU_WEEKDAY_FIELD }}
+          FEISHU_ROLE_FIELDS: ${{ vars.FEISHU_ROLE_FIELDS }}
+          FEISHU_TIMEZONE: ${{ vars.FEISHU_TIMEZONE }}
+          FEISHU_PUSH_WHEN_EMPTY: ${{ vars.FEISHU_PUSH_WHEN_EMPTY }}
