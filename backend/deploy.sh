@@ -6,9 +6,19 @@
 
 set -euo pipefail
 
-# ── 配置（已与小程序 config.js 对齐，无需修改）──
+# ── 配置 ──
 DOMAIN="api.slique.cn"
-API_KEY="c1d5bcaabe4f6c3238be522803ff4388"
+# 密钥不写在脚本里（本仓库公开，写死等于泄露）。优先取环境变量
+# POSTURE_API_KEY；未提供则复用服务器上次生成的密钥；都没有则自动生成。
+KEY_FILE="/etc/slique/api_key"
+if [ -n "${POSTURE_API_KEY:-}" ]; then
+  API_KEY="$POSTURE_API_KEY"
+elif [ -s "$KEY_FILE" ]; then
+  API_KEY="$(cat "$KEY_FILE")"
+else
+  API_KEY="$(head -c16 /dev/urandom | od -An -tx1 | tr -d ' \n')"
+fi
+mkdir -p /etc/slique && printf '%s' "$API_KEY" > "$KEY_FILE" && chmod 600 "$KEY_FILE"
 REPO="https://github.com/definemcnab-ship-it/lia-ku.git"
 BRANCH="claude/optimistic-maxwell-mArMz"
 # 国内 pip / docker 镜像
@@ -58,8 +68,13 @@ if ! command -v caddy >/dev/null 2>&1; then
   apt-get install -y -qq caddy >/dev/null
 fi
 
+# 同时监听 443（标准）与 8443（小程序 config.js 使用的端口），
+# 两个端口都反代到后端，避免端口不一致导致小程序连不上。
 cat > /etc/caddy/Caddyfile <<CADDY
 $DOMAIN {
+    reverse_proxy localhost:8000
+}
+$DOMAIN:8443 {
     reverse_proxy localhost:8000
 }
 CADDY
@@ -76,4 +91,10 @@ echo ""
 echo "==================================================="
 echo "部署完成。访问 https://$DOMAIN/health 应返回 {\"ok\":true}"
 echo "查看日志： docker logs -f slique"
+echo ""
+echo "★ 本次生效的 API 密钥（请填入小程序 miniprogram/config.secret.js）："
+echo ""
+echo "    module.exports = { apiKey: '$API_KEY' }"
+echo ""
+echo "  密钥已保存在 $KEY_FILE，重复部署会自动复用。"
 echo "==================================================="
