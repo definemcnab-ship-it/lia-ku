@@ -14,14 +14,9 @@ App({
       // 记录需要跳转，home/onShow 里处理（onLaunch 时页面还未挂载，无法直接跳）
       this.globalData.needOnboarding = true
     }
-    // 加载思源宋体，用于 font-headline（与网页版一致）
-    wx.loadFontFace({
-      family: 'NotoSerifSC',
-      source: 'url("https://fonts.gstatic.com/s/notoserifsc/v22/H4c8BXePl9DZ0Xe7gG9cyOj7mpm6.woff2")',
-      global: true,
-      success: () => {},
-      fail: () => {},
-    })
+    // 标题字体直接用系统衬线回退（app.wxss 已配置）。
+    // 不再从 fonts.gstatic.com 远程加载思源宋体：谷歌域名国内不可达，
+    // 每次启动都白白报错，真机用户从来加载不到。
 
     const score = wx.getStorageSync('postureScore')
     const lastScore = wx.getStorageSync('lastScore')
