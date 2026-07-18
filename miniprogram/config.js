@@ -25,7 +25,9 @@ try {
 
 const POSTURE_API = {
   enabled: true,
-  baseUrl: 'https://api.slique.cn:8443',
+  // 注意：微信小程序合法域名不允许带端口号（只认 443），
+  // 服务器端 Caddy 已同时监听 443 与 8443，这里必须用无端口地址。
+  baseUrl: 'https://api.slique.cn',
   apiKey: (secret && secret.apiKey) || '',
   timeout: 40000,
 }
