@@ -25,9 +25,15 @@ try {
 
 const POSTURE_API = {
   enabled: true,
-  // 注意：微信小程序合法域名不允许带端口号（只认 443），
-  // 服务器端 Caddy 已同时监听 443 与 8443，这里必须用无端口地址。
-  baseUrl: 'https://api.slique.cn',
+  // ⚠️ 端口说明（重要）：
+  //   域名 slique.cn 尚未 ICP 备案，国内云厂商会拦截未备案域名的
+  //   443/80 外部访问，故开发阶段暂走 8443 绕行（需开发者工具勾选
+  //   「不校验合法域名」）。
+  //   微信正式发布强制要求：域名已备案 + 标准 443（不允许带端口）。
+  //   ICP 备案通过后：把下面地址改为 'https://api.slique.cn'，并在
+  //   微信公众平台「开发设置-服务器域名」配置 request 与 uploadFile
+  //   合法域名。服务器端 Caddy 已同时监听 443 与 8443，无需改动。
+  baseUrl: 'https://api.slique.cn:8443',
   apiKey: (secret && secret.apiKey) || '',
   timeout: 40000,
 }
