@@ -39,16 +39,18 @@ def health():
 
 
 @app.post("/posture/validate")
-async def posture_validate(
+def posture_validate(
     file: UploadFile = File(...),
     angle: str = Form(...),
     authorization: str = Header(default=""),
 ):
+    # 同步端点：FastAPI 会放到线程池执行。MediaPipe 推理耗时 1-2 秒，
+    # 若写成 async 会阻塞事件循环，期间 /health 等所有请求都无响应。
     _check_auth(authorization)
     if angle not in ("front", "side", "back"):
         raise HTTPException(status_code=400, detail="angle must be front/side/back")
 
-    data = await file.read()
+    data = file.file.read()
     if not data:
         raise HTTPException(status_code=400, detail="empty file")
     if len(data) > MAX_BYTES:

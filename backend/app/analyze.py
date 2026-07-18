@@ -392,7 +392,11 @@ def _analyze_front(kp: Keypoints, issues: list, seen: set):
         knee_gap = abs(lk.x - rk.x)
         ankle_gap = abs(la.x - ra.x) or 0.001
         x_shape = knee_gap < ankle_gap
-        o_shape = knee_gap > ankle_gap * KNEE_VARUS_RATIO
+        # O 型腿依赖「膝/踝间距比」，双脚并拢时分母趋近 0、比值爆炸会必然
+        # 误报。拍摄要求是双脚与肩同宽；踝距不足肩宽 40% 视为站姿不达标，
+        # 跳过该项判定（宁可漏报不可误报）。
+        feet_apart = ankle_gap >= sw * 0.4
+        o_shape = feet_apart and knee_gap > ankle_gap * KNEE_VARUS_RATIO
 
         if x_shape and valgus > KNEE_VALGUS:
             issues.append({
@@ -431,8 +435,12 @@ def _analyze_front(kp: Keypoints, issues: list, seen: set):
     # [筛查] 扁平足：2D 全身照不可诊断，仅在足明显外展时低置信度提示
     if la and ra and lf and rf and "foot" not in seen:
         ankle_gap = abs(la.x - ra.x) or 1.0
-        splay_l = (la.x - lf.x) / ankle_gap
-        splay_r = (rf.x - ra.x) / ankle_gap
+        # 朝向修正：正面照本人左踝在画面右侧(x 更大)，背面照相反。
+        # 「外展」= 脚尖偏离身体中线，需按朝向翻转符号，否则正面照会把
+        # 内八误判成外展。
+        orient = 1.0 if la.x < ra.x else -1.0   # +1 背面 / -1 正面
+        splay_l = orient * (la.x - lf.x) / ankle_gap
+        splay_r = orient * (rf.x - ra.x) / ankle_gap
         splay_avg = (splay_l + splay_r) / 2
         if splay_avg > FOOT_PRONATION_RATIO:
             issues.append({

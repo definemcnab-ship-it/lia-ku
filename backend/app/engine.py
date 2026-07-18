@@ -4,6 +4,7 @@
 只需保持 detect() 返回相同的 Keypoints 结构，其余业务代码无需改动。
 """
 
+import threading
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -68,18 +69,21 @@ def _decode(image_bytes: bytes) -> Optional[np.ndarray]:
 
 # ── 模型单例 ──
 # MediaPipe 模型加载较慢；每次请求都重建会导致严重超时。
-# 这里在进程内只加载一次并复用（FastAPI 同步端点串行执行，单例线程安全）。
+# 这里在进程内只加载一次并复用。注意：MediaPipe 图实例**不是线程安全**的，
+# FastAPI 同步端点在线程池并发执行，必须用锁串行化推理。
 # model_complexity=1 在精度与速度间平衡，2 核机器上单图推理 ~1-2s。
 _pose = mp_pose.Pose(static_image_mode=True, model_complexity=1,
                      min_detection_confidence=0.5)
 _face = mp_face.FaceDetection(model_selection=1, min_detection_confidence=0.6)
+_infer_lock = threading.Lock()
 
 
 def warmup():
     """启动时预热：用一张空白图跑一次推理，触发模型加载。"""
     blank = np.zeros((256, 256, 3), dtype=np.uint8)
-    _pose.process(blank)
-    _face.process(blank)
+    with _infer_lock:
+        _pose.process(blank)
+        _face.process(blank)
 
 
 _MAX_SIDE = 1024  # 推理前将长边缩放到此尺寸，手机大图提速数倍且不损精度
@@ -104,9 +108,12 @@ def detect(image_bytes: bytes) -> Keypoints:
     blur = float(cv2.Laplacian(gray, cv2.CV_64F).var())
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    # 人脸数量（用于判断多人 / 正背面）
+    # 人脸数量（用于判断多人 / 正背面）+ 人体关键点。
+    # MediaPipe 图实例非线程安全，推理段加锁串行化。
+    with _infer_lock:
+        fres = _face.process(rgb)
+        pres = _pose.process(rgb)
     face_count = 0
-    fres = _face.process(rgb)
     if fres.detections:
         face_count = len(fres.detections)
 
@@ -114,7 +121,6 @@ def detect(image_bytes: bytes) -> Keypoints:
     landmarks = []
     world = []
     has_pose = False
-    pres = _pose.process(rgb)
     if pres.pose_landmarks:
         has_pose = True
         for p in pres.pose_landmarks.landmark:
