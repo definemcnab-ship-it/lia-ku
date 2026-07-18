@@ -308,7 +308,7 @@ Page({
 
   _finishAnalysis(result) {
     app.saveScore(result.score)
-    const today = new Date().toISOString().slice(0, 10)
+    const today = app.todayStr()   // 本地时区，与打卡/日历口径一致
     const history = (wx.getStorageSync('scanHistory') || [])
     history.push({ date: today, score: result.score, issueCount: result.issues.length })
     wx.setStorageSync('scanHistory', history)

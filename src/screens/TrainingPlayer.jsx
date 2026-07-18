@@ -54,11 +54,13 @@ const EXERCISES = [
 // 阶段：prepare → exercise → rest → (next or complete)
 const PHASES = { PREPARE: 'prepare', EXERCISE: 'exercise', REST: 'rest', COMPLETE: 'complete' }
 
-function useCountdown(target, running, onDone) {
+// resetKey：每进入一个新的"动作/组"都必须变化——否则同一动作第二次
+// 组间休息时 target 值没变，秒数停留在上次的 0，休息会被瞬间跳过。
+function useCountdown(target, running, onDone, resetKey) {
   const [sec, setSec] = useState(target)
   const ref = useRef(null)
 
-  useEffect(() => { setSec(target) }, [target])
+  useEffect(() => { setSec(target) }, [target, resetKey])
 
   useEffect(() => {
     if (!running) { clearInterval(ref.current); return }
@@ -98,6 +100,11 @@ export default function TrainingPlayer() {
       return
     }
     if (phase === PHASES.EXERCISE) {
+      // 全部动作的最后一组：无需休息，直接完成
+      if (isLast) {
+        setPhase(PHASES.COMPLETE)
+        return
+      }
       if (isHold || ex.reps) {
         // 进入组间休息
         setPhase(PHASES.REST)
@@ -118,11 +125,11 @@ export default function TrainingPlayer() {
         setPhase(PHASES.COMPLETE)
       }
     }
-  }, [phase, isHold, ex.reps, setNum, totalSets, exIdx])
+  }, [phase, isHold, isLast, ex.reps, setNum, totalSets, exIdx])
 
-  const prepSec = useCountdown(3, phase === PHASES.PREPARE && !paused, advancePhase)
-  const holdSec = useCountdown(ex.holdSec || 0, phase === PHASES.EXERCISE && isHold && !paused, advancePhase)
-  const restSec = useCountdown(ex.restSec, phase === PHASES.REST && !paused, advancePhase)
+  const prepSec = useCountdown(3, phase === PHASES.PREPARE && !paused, advancePhase, exIdx)
+  const holdSec = useCountdown(ex.holdSec || 0, phase === PHASES.EXERCISE && isHold && !paused, advancePhase, `${exIdx}-${setNum}`)
+  const restSec = useCountdown(ex.restSec, phase === PHASES.REST && !paused, advancePhase, `${exIdx}-${setNum}`)
 
   const doneRep = () => {
     if (isHold) return

@@ -121,7 +121,8 @@ Page({
     const issueCoursemap = { neck: 'c1', shoulder: 'c4', pelvis: 'c7', back: 'c10', knee: 'c11', foot: 'c13' }
     const key = this.data.issues[0]
     const courseId = issueCoursemap[key] || 'c16'
-    wx.navigateTo({ url: `/pages/player/player?courseId=${courseId}` })
+    // 带上当前选中的场景，让播放器做居家/办公室/健身房动作适配
+    wx.navigateTo({ url: `/pages/player/player?courseId=${courseId}&scene=${this.data.scene}` })
   },
 
   navBack() {

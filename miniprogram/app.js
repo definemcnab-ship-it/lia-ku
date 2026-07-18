@@ -62,6 +62,9 @@ App({
   },
 
   todayStr() {
-    return new Date().toISOString().slice(0, 10)
+    // 本地时区日期（不能用 toISOString——那是 UTC，北京时间早上 8 点前会记成昨天）
+    const d = new Date()
+    const p = n => (n < 10 ? '0' + n : '' + n)
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate())
   },
 })
