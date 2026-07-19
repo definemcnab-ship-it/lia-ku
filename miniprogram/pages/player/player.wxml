@@ -119,6 +119,25 @@
       </view>
       <text class="done-title">训练完成！</text>
       <text class="done-sub">今日打卡成功 · 共 {{totalMinutes}} 分钟</text>
+      <text class="done-week" wx:if="{{weekCount > 0}}">本周第 {{weekCount}} 次训练</text>
+
+      <!-- 新解锁成就 -->
+      <view class="badge-pop" wx:if="{{newBadges.length}}">
+        <text class="badge-pop-title">解锁新成就</text>
+        <view class="badge-chip" wx:for="{{newBadges}}" wx:key="id">
+          <view class="badge-chip-icon">
+            <mp-icon name="{{item.icon}}" size="22" color="#c08a7d" />
+          </view>
+          <view class="badge-chip-info">
+            <text class="badge-name">{{item.name}}</text>
+            <text class="badge-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 够得着的下一步 -->
+      <text class="badge-next" wx:if="{{nextBadgeHint}}">{{nextBadgeHint}}</text>
+
       <view class="done-actions">
         <view class="done-btn done-btn-outline" bindtap="goTraining">
           <text>返回训练</text>

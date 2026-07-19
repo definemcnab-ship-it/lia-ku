@@ -2,6 +2,7 @@ const app = getApp()
 const { courses } = require('../training/trainingData')
 const { poseSrc, poseMode } = require('./poses')
 const { sceneAdapt, sceneLabel } = require('./sceneAdapt')
+const achievements = require('../../utils/achievements')
 
 // 组间休息时长（秒）
 const REST_SECS = 30
@@ -23,6 +24,10 @@ Page({
     // 总进度
     totalMinutes: 0,
     elapsedSeconds: 0,
+    // 完成页正反馈
+    weekCount: 0,        // 本周第 N 次训练
+    newBadges: [],       // 本次新解锁成就
+    nextBadgeHint: '',   // 够得着的下一步
   },
 
   _timer: null,
@@ -119,7 +124,6 @@ Page({
   // 跳到指定动作索引
   _goNextMove(next) {
     if (next >= this.data.moves.length) {
-      this.setData({ done: true, playing: false })
       app.addCheckIn(app.todayStr())
       const c = this._course
       if (c) {
@@ -130,6 +134,15 @@ Page({
           scene: this._scene || '',
         })
       }
+      // 打卡入账后再算成就与本周次数，保证"本次"计入
+      const stats = achievements.buildStats(app.globalData, wx.getStorageSync('scanHistory') || [])
+      this.setData({
+        done: true,
+        playing: false,
+        weekCount: achievements.weekSessionCount(app.globalData.sessions || []),
+        newBadges: achievements.checkNewlyEarned(stats),
+        nextBadgeHint: achievements.nextHint(stats),
+      })
       return
     }
     const move = this.data.moves[next]

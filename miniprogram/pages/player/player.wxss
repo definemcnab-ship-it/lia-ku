@@ -412,3 +412,66 @@
   width: 100%;
   height: 100%;
 }
+
+/* ── 完成页正反馈（成就弹出 + 下一步提示）── */
+.done-week {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #9e9688;
+  text-align: center;
+}
+.badge-pop {
+  margin-top: 28rpx;
+  padding: 24rpx;
+  background: #f7f5f0;
+  border: 1rpx solid #e0dbd2;
+  border-radius: 20rpx;
+}
+.badge-pop-title {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #c08a7d;
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+.badge-chip {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 12rpx 0;
+}
+.badge-chip-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #fcfaf5;
+  border: 1rpx solid #e0dbd2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.badge-chip-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.badge-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4a443b;
+}
+.badge-desc {
+  font-size: 22rpx;
+  color: #9e9688;
+  margin-top: 4rpx;
+}
+.badge-next {
+  display: block;
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #8f8779;
+  text-align: center;
+}
