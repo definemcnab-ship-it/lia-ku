@@ -475,3 +475,29 @@
   color: #8f8779;
   text-align: center;
 }
+
+/* ── 目标肌群标注 ── */
+.muscle-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  padding: 0 40rpx;
+  margin-top: 12rpx;
+}
+.muscle-phase {
+  font-size: 20rpx;
+  color: #fcfaf5;
+  background: #8f8779;
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+  letter-spacing: 2rpx;
+}
+.muscle-chip {
+  font-size: 20rpx;
+  color: #6e675b;
+  background: #ece8e0;
+  border: 1rpx solid #e0dbd2;
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+}

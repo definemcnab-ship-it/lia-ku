@@ -8,6 +8,20 @@ const notify = require('../../utils/notify')
 // 组间休息时长（秒）
 const REST_SECS = 30
 
+// 动作阶段 → 中文标签 + 该阶段对应的目标肌群类别
+const PHASE_LABELS = {
+  release: '松解', stretch: '拉伸',
+  activate: '激活', strengthen: '强化',
+  integrate: '整合',
+}
+// 松解/拉伸类动作的目标是"放松"的肌群，激活/强化类是"唤醒"的肌群
+function musclesForPhase(tm, phase) {
+  if (!tm) return []
+  if (phase === 'release' || phase === 'stretch') return tm.release || []
+  if (phase === 'activate' || phase === 'strengthen') return tm.activate || []
+  return (tm.activate || []).slice(0, 3)   // integrate：显示主要激活肌群
+}
+
 Page({
   data: {
     courseN: '',
@@ -45,6 +59,8 @@ Page({
     const moves = adapted.map(m => Object.assign({}, m, {
       pose: poseSrc(m),
       poseMode: poseMode(m),
+      phaseLabel: PHASE_LABELS[m.phase] || '',
+      muscles: musclesForPhase(course.targetMuscles, m.phase),
     }))
     this._course = course
     this._scene = scene

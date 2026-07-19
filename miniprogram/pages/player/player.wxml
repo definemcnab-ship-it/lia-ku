@@ -76,6 +76,12 @@
     </view>
   </view>
 
+  <!-- 目标肌群 -->
+  <view class="muscle-row" wx:if="{{moves[currentIdx].muscles.length}}">
+    <text class="muscle-phase">{{moves[currentIdx].phaseLabel}}</text>
+    <text class="muscle-chip" wx:for="{{moves[currentIdx].muscles}}" wx:key="*this">{{item}}</text>
+  </view>
+
   <!-- Move description -->
   <text wx:if="{{moves[currentIdx]}}" class="move-desc">{{moves[currentIdx].desc}}</text>
 
