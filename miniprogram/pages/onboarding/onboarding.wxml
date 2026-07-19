@@ -19,8 +19,8 @@
         <mp-icon name="self_improvement" size="72" color="#8f8779" />
       </view>
       <text class="slide-tag">专业体态养成</text>
-      <text class="slide-title">松而不塌</text>
-      <text class="slide-body">专注女性六大体态问题，结合运动医学与神经肌肉控制，真正从根源改善。</text>
+      <text class="slide-title">工位不该决定你的形状</text>
+      <text class="slide-body">乌龟颈、含胸圆肩、假胯宽——都是椅子一天天刻上去的。结合运动医学与神经肌肉控制，一天 10 分钟，把它们一天天刻回来。</text>
       <view class="feature-list">
         <view class="feature-row">
           <mp-icon name="check_circle" size="20" color="#c08a7d" />

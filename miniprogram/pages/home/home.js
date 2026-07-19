@@ -10,9 +10,9 @@ Page({
     trainedToday: false,
     bannerIdx: 0,
     banners: [
-      { id: 'a1', label: '新功能', title: '斯俪等级体系上线', sub: '累计打卡 · 月相成长 · 专属奖品', to: '/pages/levels/levels', cta: '立即查看', icon: 'emoji_events', iconColor: '#8f8779' },
-      { id: 'a2', label: '限时活动', title: '七日 · 焕新', sub: '连续打卡7天解锁「晨星」等级', to: '/pages/training/training', cta: '开始焕新', icon: 'fitness_center', iconColor: '#5a7a5a' },
-      { id: 'a3', label: '饮食日历', title: '记录三餐，吃出好体态', sub: '点击查看本月饮食打卡日历', to: '/pages/diet/diet', cta: '查看日历', icon: 'calendar_month', iconColor: '#8f7a55' },
+      { id: 'a1', label: 'AI 检测', title: '乌龟颈，还是天鹅颈？', sub: '一张照片，30 秒看清颈肩的真相', to: '/pages/scan/scan', cta: '立即检测', icon: 'camera', iconColor: '#8f8779' },
+      { id: 'a2', label: '七日焕新', title: '把伏案 8 小时，练回来', sub: '每天 10 分钟 · 连续 7 天解锁「晨星」', to: '/pages/training/training', cta: '开始焕新', icon: 'fitness_center', iconColor: '#5a7a5a' },
+      { id: 'a3', label: '饮食日历', title: '肩颈的僵硬，一半在餐盘里', sub: '记录三餐，吃出轻盈体态', to: '/pages/diet/diet', cta: '查看日历', icon: 'calendar_month', iconColor: '#8f7a55' },
     ],
     shortcuts: [
       { to: '/pages/scan/scan',         icon: 'camera',         label: '体态档案' },
@@ -22,9 +22,9 @@ Page({
       { to: '/pages/levels/levels',     icon: 'emoji_events',    label: '等级' },
     ],
     stories: [
-      { id: 's1', icon: 'self_improvement', title: '八周 · 立', sub: '肩背重新舒展', tag: '真实蜕变' },
-      { id: 's2', icon: 'accessibility_new', title: '归位，腰线回来了', sub: '身体的秩序', tag: '体态故事' },
-      { id: 's3', icon: 'star', title: '颈线，向上生长', sub: '轻盈 · 清透', tag: '30天打卡' },
+      { id: 's1', icon: 'self_improvement', title: '八周，甩掉"乌龟壳"', sub: '肩背重新舒展', tag: '真实蜕变' },
+      { id: 's2', icon: 'accessibility_new', title: '假胯宽消了，腰线回来了', sub: '原来不是胖，是骨盆歪', tag: '体态故事' },
+      { id: 's3', icon: 'star', title: '合照里，不再是缩着的那个', sub: '颈线向上生长', tag: '30天打卡' },
       { id: 's4', icon: 'favorite', title: '长回自己', sub: '产后 · 焕新养成', tag: '妈妈蜕变' },
     ],
     categories: [
