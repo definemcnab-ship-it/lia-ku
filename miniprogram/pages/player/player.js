@@ -3,6 +3,7 @@ const { courses } = require('../training/trainingData')
 const { poseSrc, poseMode } = require('./poses')
 const { sceneAdapt, sceneLabel } = require('./sceneAdapt')
 const achievements = require('../../utils/achievements')
+const notify = require('../../utils/notify')
 
 // 组间休息时长（秒）
 const REST_SECS = 30
@@ -143,6 +144,8 @@ Page({
         newBadges: achievements.checkNewlyEarned(stats),
         nextBadgeHint: achievements.nextHint(stats),
       })
+      // 训练完成的高光时刻请求订阅授权（模板未配置时自动跳过）
+      notify.askSubscribe()
       return
     }
     const move = this.data.moves[next]
