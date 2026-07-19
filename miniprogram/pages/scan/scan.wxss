@@ -612,3 +612,66 @@ page { background: #f7f5f0; }
 .rehab-plan-info { flex: 1; }
 .rehab-plan-title { display: block; font-size: 30rpx; color: #2b2720; }
 .rehab-plan-sub { display: block; font-size: 22rpx; color: #a8866f; margin-top: 6rpx; }
+
+/* ── 与上次对比卡 ── */
+.compare-card {
+  padding: 28rpx;
+}
+.compare-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #e0dbd2;
+  margin-bottom: 8rpx;
+}
+.compare-prev-date {
+  font-size: 24rpx;
+  color: #9e9688;
+}
+.compare-score {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #6e675b;
+}
+.compare-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 18rpx 0;
+}
+.compare-row + .compare-row {
+  border-top: 1rpx solid #f0ede7;
+}
+.compare-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cdot-good { background: #5a7a5a; }
+.cdot-warn { background: #a85c47; }
+.cdot-new  { background: #c0a870; }
+.compare-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+.compare-label {
+  font-size: 26rpx;
+  color: #4a443b;
+}
+.compare-change {
+  font-size: 24rpx;
+}
+.compare-up   { color: #5a7a5a; }
+.compare-down { color: #a85c47; }
+.compare-empty {
+  display: block;
+  padding: 20rpx 0 8rpx;
+  font-size: 24rpx;
+  color: #9e9688;
+  text-align: center;
+}

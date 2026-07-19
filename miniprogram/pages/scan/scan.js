@@ -1,5 +1,6 @@
 const app = getApp()
 const postureApi = require('../../utils/postureApi')
+const { buildCompare } = require('../../utils/scanCompare')
 
 const ANGLES = [
   {
@@ -179,6 +180,7 @@ Page({
     failReason: '',
     analyzing: false,
     result: null,
+    compare: null,   // 与上次检测的对比（首扫为 null）
     history: [],
     prefs: null,
   },
@@ -310,9 +312,18 @@ Page({
     app.saveScore(result.score)
     const today = app.todayStr()   // 本地时区，与打卡/日历口径一致
     const history = (wx.getStorageSync('scanHistory') || [])
-    history.push({ date: today, score: result.score, issueCount: result.issues.length })
+    // 与上一次记录逐项对比（入库前取 prev，保证比的是"上次"）
+    const prev = history.length ? history[history.length - 1] : null
+    const compare = buildCompare(prev, result)
+    // 历史记录保存 issues 明细，供下次复测对比
+    history.push({
+      date: today,
+      score: result.score,
+      issueCount: result.issues.length,
+      issues: result.issues.map(i => ({ key: i.key, issue: i.issue, measure: i.measure || '' })),
+    })
     wx.setStorageSync('scanHistory', history)
-    this.setData({ step: 'result', result, history })
+    this.setData({ step: 'result', result, history, compare })
   },
 
   goToCourse(e) {
@@ -329,6 +340,6 @@ Page({
 
   resetAll() {
     this._fileIds = { front: '', side: '', back: '' }
-    this.setData({ step: 'guide', angleIdx: 0, passed: [false, false, false], result: null })
+    this.setData({ step: 'guide', angleIdx: 0, passed: [false, false, false], result: null, compare: null })
   },
 })
