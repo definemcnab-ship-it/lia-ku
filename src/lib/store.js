@@ -75,19 +75,14 @@ export function todayStr(d = new Date()) {
 
 // —— 领域动作 ——
 
-// 记录今天完成训练（同日去重）
-// 每完成一个新训练日，体态分小幅提升（封顶 98），lastScore 记录提升前的分值用于对比。
+// 记录今天完成训练（同日去重）。
+// 体态分只由真实扫描复测产生——训练打卡不加分，否则用户会察觉
+// 分数是"哄人的"，摧毁对检测的信任；打卡的奖励走连续天数与勋章。
 export function recordTrainingDone() {
   const t = todayStr()
   setState(s => {
     if (s.checkIns.includes(t)) return {}
-    const gain = s.postureScore < 90 ? 2 : s.postureScore < 96 ? 1 : 0
-    const nextScore = Math.min(98, s.postureScore + gain)
-    return {
-      checkIns: [...s.checkIns, t],
-      lastScore: s.postureScore,
-      postureScore: nextScore,
-    }
+    return { checkIns: [...s.checkIns, t] }
   })
 }
 
