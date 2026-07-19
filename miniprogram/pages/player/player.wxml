@@ -76,6 +76,9 @@
     </view>
   </view>
 
+  <!-- 评估素材署名（GymVisual 条款要求；正式素材接入后随开关消失） -->
+  <text class="asset-credit" wx:if="{{moves[currentIdx].demo}}">示范动图 © GymVisual · 评估用</text>
+
   <!-- 目标肌群 -->
   <view class="muscle-row" wx:if="{{moves[currentIdx].muscles.length}}">
     <text class="muscle-phase">{{moves[currentIdx].phaseLabel}}</text>

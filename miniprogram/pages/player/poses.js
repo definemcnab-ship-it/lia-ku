@@ -143,6 +143,39 @@ function poseKey(move) {
   return 'chin_tuck'
 }
 
+// ══════════════════════════════════════════════════════════════
+// ⚠️ 评估模式（EVAL ONLY，发布红线）
+// 以下演示动图为 GymVisual 版权素材，热链自其书面许可托管的公开仓库
+// （hasaneyldrm/exercises-dataset），仅供内部评估动图演示的产品效果，
+// 未获得自有商用授权。
+// 【上线体验版/正式版前必须二选一】：
+//   1) 在 gymvisual.com 购买正式授权，替换为已购素材；
+//   2) 换成即梦 AI 自制动图 / 真人拍摄素材。
+// 然后把 DEMO_GYMVISUAL 改为 false。带着此开关为 true 的状态发布
+// 即构成侵权，切勿上线。
+// ══════════════════════════════════════════════════════════════
+// 评估动图放在本地 images/poses/demo/ 目录（该目录已被 .gitignore
+// 忽略，永远不会提交进仓库，也不会随代码分发——仅存在于本机）。
+const DEMO_GYMVISUAL = true
+const DEMO_BASE = '/images/poses/demo/'
+const DEMO_GIFS = {
+  chin_tuck: 'chin_tuck.gif',       // side push neck stretch（近似）
+  neck_side: 'neck_side.gif',       // neck side stretch
+  supine_rest: 'supine_rest.gif',   // pelvic tilt
+  doorway: 'doorway.gif',           // dynamic chest stretch
+  band_pull: 'band_pull.gif',       // band standing rear delt row（近似面拉）
+  side_lying: 'side_lying.gif',     // side hip abduction（近似蚌式）
+  bridge: 'bridge.gif',             // low glute bridge on floor
+  dead_bug: 'dead_bug.gif',         // dead bug
+  quadruped: 'quadruped.gif',       // kneeling lat stretch（近似）
+  plank: 'plank.gif',               // front plank with twist
+  squat: 'squat.gif',               // curtsey squat（近似）
+  lunge: 'lunge.gif',               // forward lunge
+  foot: 'foot.gif',                 // band single leg calf raise
+  foam_roll: 'foam_roll.gif',       // roller back stretch
+  // 无合适匹配，保留线条图：prone_ytw / wall_angel / bird_dog / balance
+}
+
 // 真实插图：放进 /images/poses/<姿势名>.png 即自动替换对应线条图
 // 例如 images/poses/bridge.png 生效后，所有臀桥类动作自动使用该图
 // 也可填远程 URL：IMG.bridge = 'https://...'
@@ -169,6 +202,7 @@ const IMG = {
 
 function poseSrc(move) {
   const key = poseKey(move)
+  if (DEMO_GYMVISUAL && DEMO_GIFS[key]) return DEMO_BASE + DEMO_GIFS[key]
   if (IMG[key]) return IMG[key]
   const inner = POSES[key]
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140">${inner}</svg>`
@@ -177,7 +211,14 @@ function poseSrc(move) {
 
 // 真实图片是照片/插画，铺满卡片比居中悬浮更好看
 function poseMode(move) {
-  return IMG[poseKey(move)] ? 'cover' : 'fit'
+  const key = poseKey(move)
+  if (DEMO_GYMVISUAL && DEMO_GIFS[key]) return 'fit'   // 演示动图为方图，居中完整展示
+  return IMG[key] ? 'cover' : 'fit'
 }
 
-module.exports = { poseSrc, poseMode }
+// 当前动作是否在用评估素材（用于界面署名标注）
+function isDemoAsset(move) {
+  return !!(DEMO_GYMVISUAL && DEMO_GIFS[poseKey(move)])
+}
+
+module.exports = { poseSrc, poseMode, isDemoAsset }

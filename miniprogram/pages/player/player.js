@@ -1,6 +1,6 @@
 const app = getApp()
 const { courses } = require('../training/trainingData')
-const { poseSrc, poseMode } = require('./poses')
+const { poseSrc, poseMode, isDemoAsset } = require('./poses')
 const { sceneAdapt, sceneLabel } = require('./sceneAdapt')
 const achievements = require('../../utils/achievements')
 const notify = require('../../utils/notify')
@@ -59,6 +59,7 @@ Page({
     const moves = adapted.map(m => Object.assign({}, m, {
       pose: poseSrc(m),
       poseMode: poseMode(m),
+      demo: isDemoAsset(m),   // 评估素材需显示 © 署名
       phaseLabel: PHASE_LABELS[m.phase] || '',
       muscles: musclesForPhase(course.targetMuscles, m.phase),
     }))

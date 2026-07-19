@@ -7,3 +7,6 @@ dist
 
 # 本地密钥（永不入库）
 miniprogram/config.secret.js
+
+# 评估用演示动图（GymVisual 版权，仅限本机评估，禁止提交与发布）
+miniprogram/images/poses/demo/
