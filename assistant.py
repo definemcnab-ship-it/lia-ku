@@ -23,6 +23,9 @@ DATA_DIR = Path(__file__).parent / "data"
 AUTH_FILE = DATA_DIR / "auth.json"
 REPORT_DIR = DATA_DIR / "reports"
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
+FOLLOWUPS_FILE = DATA_DIR / "followups.json"
+SERVER_PORT = 18765
+SERVER_SCRIPT = DATA_DIR / "_server.py"
 
 MILESTONES = {
     1:  "课后回访", 5:  "体测", 10: "第一轮案例",
@@ -59,8 +62,7 @@ def ensure_login(page):
         try:
             page.wait_for_url("**/home/manage/**", timeout=300000)
         except PwTimeout:
-            print("登录超时")
-            sys.exit(1)
+            raise RuntimeError("登录超时：登录状态可能已过期，请手动运行 assistant.py 重新登录")
         page.wait_for_timeout(5000)
 
     if "login" in page.url.lower():
@@ -68,8 +70,7 @@ def ensure_login(page):
         try:
             page.wait_for_url("**/home/manage/**", timeout=300000)
         except PwTimeout:
-            print("登录超时")
-            sys.exit(1)
+            raise RuntimeError("登录超时：登录状态可能已过期，请手动运行 assistant.py 重新登录")
         page.wait_for_timeout(5000)
 
     page.context.storage_state(path=str(AUTH_FILE))
@@ -433,6 +434,63 @@ def fetch_upcoming_courses(page, weeks=2):
     return {"group": all_group, "private": all_private}
 
 
+def get_tomorrow_trials(upcoming_courses, member_lookup, pt_used=None):
+    """从未来课程中提取明天的体验课新会员列表，逻辑与今日新会员一致：
+    小班：体验课 + (签到=0 或 备注含"二次体验")
+    私教：体验课 + (私教节数≤1 或 备注含"二次体验")
+    """
+    from datetime import date as _d, timedelta
+    tomorrow = (_d.today() + timedelta(days=1)).isoformat()
+    pt_used = pt_used or {}
+    seen = set()
+
+    trials = []
+    for key, type_label in [("group", "小班"), ("private", "私教")]:
+        for c in upcoming_courses.get(key, []):
+            if c.get("date") != tomorrow:
+                continue
+            if c.get("status") == -1:  # 已取消的课程跳过
+                continue
+            course_name = c.get("courseName", "")
+            trainer = c.get("trainerName", "")
+            start_time = c.get("startTime", "")
+            end_time = c.get("endTime", "")
+            time_slot = f"{start_time}-{end_time}"
+            trainee_names = parse_trainee_names(c.get("traineeNames", ""))
+            course_remark = _get_remark(c)
+
+            for tname in trainee_names:
+                if not tname or tname in seen:
+                    continue
+                member = member_lookup.get(tname, {})
+                total_checkins = member.get("checkInUsedCount", 0) or 0
+                card_name = member.get("cardName", "")
+                has_trial = member.get("has_trial_card", False)
+                is_second = "二次体验" in course_remark
+
+                # 判断是否体验课：课程名含"体验"或小班卡名含"体验"（首次）或备注含"二次体验"
+                is_trial = ("体验" in course_name) or ("二次体验" in course_remark)
+                if key == "group" and ("体验" in card_name) and total_checkins <= 0:
+                    is_trial = True
+                if not is_trial:
+                    continue
+
+                seen.add(tname)
+                trials.append({
+                    "name": tname,
+                    "type": type_label,
+                    "course": course_name,
+                    "time": time_slot,
+                    "trainer": trainer,
+                    "consultant": member.get("sellerName", ""),
+                    "remark": course_remark,
+                })
+
+    # 按时间排序
+    trials.sort(key=lambda x: x.get("time", ""))
+    return trials
+
+
 def build_next_booking_lookup(upcoming_courses):
     """构建 会员名 -> 下一节已约未上课程 (date, time, courseName, trainer, 类型) 的查找表。
     取日期>=今天中最早的一节。"""
@@ -441,6 +499,8 @@ def build_next_booking_lookup(upcoming_courses):
     bookings = {}  # name -> list of (date, startTime, courseName, trainer, type)
     for key, type_label in [("group", "小班"), ("private", "私教")]:
         for c in upcoming_courses.get(key, []):
+            if c.get("status") == -1:  # 已取消的课程跳过
+                continue
             cdate = c.get("date", "")
             if not cdate or cdate < today_iso:
                 continue
@@ -475,6 +535,7 @@ class DailyReport:
     second_class: list = field(default_factory=list)
     low_sessions: list = field(default_factory=list)
     low_group_points: list = field(default_factory=list)
+    low_group_expiry: list = field(default_factory=list)  # 小班权益点卡有效期不足15天
     milestones: list = field(default_factory=list)
     coaches: dict = field(default_factory=dict)
     monthly_new_members: list = field(default_factory=list)
@@ -489,6 +550,7 @@ class DailyReport:
             "new_personal": len(self.new_personal),
             "second_class": len(self.second_class),
             "low_sessions": len(self.low_sessions),
+            "low_group_expiry": len(self.low_group_expiry),
             "milestones": len(self.milestones),
             "coaches": len(all_trainers),
             "monthly_new": len(self.monthly_new_members),
@@ -543,6 +605,37 @@ def _clean(v):
     if v is None or str(v) == "None":
         return ""
     return str(v)
+
+
+def _ts_to_date(raw):
+    """把 API 返回的到期时间安全转成 date。
+    支持毫秒/秒时间戳（int/float/数字字符串）和 'YYYY-MM-DD' 字符串；
+    无法解析或无到期时间时返回 None。"""
+    if raw is None:
+        return None
+    if isinstance(raw, str):
+        s = raw.strip()
+        if not s:
+            return None
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", s)
+        if m:
+            try:
+                return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            except ValueError:
+                return None
+        try:
+            raw = float(s)
+        except ValueError:
+            return None
+    if not isinstance(raw, (int, float)) or raw <= 0:
+        return None
+    # 毫秒时间戳转秒
+    if raw > 100000000000:
+        raw = raw / 1000
+    try:
+        return datetime.fromtimestamp(raw).date()
+    except (ValueError, OSError, OverflowError):
+        return None
 
 
 def build_member_lookup(members):
@@ -606,16 +699,10 @@ def _is_card_valid(member_card):
     if card_status in ("已过期", "作废", "已停用", "已退卡", "冻结"):
         return False
 
-    # endDate: 0 表示无过期时间（永久有效）
-    if end_date == 0:
-        return True
-
-    # endDate 可能是毫秒时间戳
-    if isinstance(end_date, (int, float)) and end_date > 1000000000:
-        from datetime import date as _dt_date
-        end_dt = _dt_date.fromtimestamp(end_date / 1000)
-        if end_dt < _dt_date.today():
-            return False
+    # endDate: 0/空 表示无过期时间（永久有效）；无法解析时也视为有效
+    end_dt = _ts_to_date(end_date)
+    if end_dt is not None and end_dt < date.today():
+        return False
 
     return True
 
@@ -663,9 +750,28 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     if not_in_members:
         print(f"  ⚠️ 未在会员库中找到: {not_in_members}")
 
-    # 收集今日所有课程及其学员
+    # 收集今日所有课程及其学员（排除已取消的课程）
+    def _is_course_cancelled(course):
+        """判断课程是否已取消（status=-1 表示已取消）"""
+        return course.get("status") == -1
+
     all_today_group = [c for c in courses["group"] if c.get("date") == today]
     all_today_private = [c for c in courses["private"] if c.get("date") == today]
+
+    # 过滤已取消
+    all_today_group = [c for c in all_today_group if not _is_course_cancelled(c)]
+    all_today_private = [c for c in all_today_private if not _is_course_cancelled(c)]
+
+    # 诊断：检查课程数据中的取消相关字段
+    _cancelled_found = False
+    for c in courses["group"] + courses["private"]:
+        for f in ("status", "courseStatus", "state", "reserveStatus", "isCancel", "cancelled"):
+            val = c.get(f)
+            if val is not None and val != "" and val != 0 and val is not False:
+                if not _cancelled_found:
+                    print(f"\n  [诊断] 课程状态字段样例:")
+                    _cancelled_found = True
+                print(f"    {c.get('courseName','')[:15]} {c.get('date','')} {f}={val}")
 
     # 构建教练→今日课程映射
     coach_courses = {}
@@ -674,6 +780,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     # 新会员定义：用体验课首次约课（total_checkins=0），或备注注明"二次体验"
     print("\n  [诊断] 新会员判断（首次约课/二次体验）:")
     seen_new = set()  # 去重：一个会员只算一次新会员
+    seen_second = set()  # 去重：一个会员只算一次第2节课
 
     # 1a: 小班课新会员
     for course in all_today_group:
@@ -699,10 +806,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             has_trial = member.get("has_trial_card", False)
             in_lookup = tname in member_lookup
 
-            # 小班新会员：体验课 + (首次=签到0 或 备注含"二次体验")
-            is_trial = is_trial_course(course_name, card_name, has_trial, remark=course_remark)
+            # 小班新会员：课程名含"体验"或卡名含"体验"（首次）或备注含"二次体验"
+            is_trial = ("体验" in course_name) or ("二次体验" in course_remark)
+            is_first_trial = ("体验" in card_name) and total_checkins <= 0
+            is_trial = is_trial or is_first_trial
             is_second = "二次体验" in course_remark
-            is_new_member = (total_checkins <= 0) or is_second
 
             # 完整诊断
             status = []
@@ -715,7 +823,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             if tname in seen_new:
                 status.append("已在seen_new(已作为其他类型新会员)")
 
-            if is_new_member and is_trial and tname not in seen_new:
+            if is_trial and tname not in seen_new:
                 status.insert(0, "✅ 新会员")
                 seen_new.add(tname)
                 report.new_small_group.append({
@@ -725,20 +833,17 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                     "consultant": consultant,
                     "remark": course_remark,
                 })
-            elif not is_new_member and is_trial:
-                status.insert(0, "⏭ 非首次(签到>0且无二次体验备注)")
-            elif is_new_member and not is_trial:
+            elif not is_trial:
                 status.insert(0, "⏭ 非体验课")
-            elif total_checkins == 1:
-                status.insert(0, "📌 第2节")
-                if member.get("has_valid_card") and tname not in seen_new:
+                # 第2节课检测（非体验课且签到=1）
+                if total_checkins == 1 and member.get("has_valid_card") and tname not in seen_second:
+                    seen_second.add(tname)
                     report.second_class.append({
                         "name": tname, "phone": phone,
                         "course": course_name, "time": time_slot,
                         "coach": trainer, "consultant": consultant,
                     })
-            else:
-                status.insert(0, "⏭ 跳过")
+                    status[0] = "📌 第2节"
             print(f"    {status[0]} {tname} {'|'.join(status[1:])}")
 
     # 1b: 私教课新会员
@@ -763,13 +868,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             phone = member.get("memberPhone", "")
             consultant = member.get("sellerName", "")
 
-            # 私教新会员：体验课 + (首次上私教 pt_sessions<=1 或 备注含"二次体验")
-            # 用私教节数而非总签到数，避免遗漏已有小班记录但首次上私教体验的会员
+            # 私教新会员：课程名含"体验"或备注含"二次体验"即纳入
             is_second = "二次体验" in course_remark
-            is_new = (pt_sessions <= 1) or is_second
-            is_trial = is_trial_course(course_name, remark=course_remark)
+            is_trial = ("体验" in course_name) or is_second
             remark_hint = f" 备注={course_remark[:20]}" if course_remark else ""
-            if is_new and is_trial and tname not in seen_new:
+            if is_trial and tname not in seen_new:
                 seen_new.add(tname)
                 report.new_personal.append({
                     "name": tname, "phone": phone,
@@ -777,14 +880,40 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                     "coach": trainer, "consultant": consultant,
                     "remark": course_remark,
                 })
-                print(f"    ✅ [新会员-私教] {tname} 总签到={total_checkins} 二次体验={is_second}{remark_hint}")
-            elif is_new and not is_trial:
+                print(f"    ✅ [新会员-私教] {tname} 课程={course_name}{remark_hint}")
+            elif not is_trial:
                 print(f"    ⏭  [非体验课-私教] {tname} 课程={course_name}{remark_hint}")
-            elif not is_new:
-                print(f"    ⏭  [非首次-私教] {tname} 总签到={total_checkins} 私教节数={pt_sessions}{remark_hint}")
 
-    # ---- 规则3: 私教课时不足（低于5节）----
+    # ---- 规则3: 私教课时不足（剩余2-4节，且未购买新课包）----
     # 同一学员可能有多个课包，按学员聚合剩余课时后再判断，避免重复提醒
+
+    # 检测已续课学员：有 ≥2 个不同的正式课包名称（排除体验课/赠课）→ 已购买新产品
+    def _is_formal_course(cn):
+        """正式课包：非体验、非赠课"""
+        return cn and "体验" not in cn and "赠课" not in cn
+
+    trainee_packages = {}  # name -> set of formal courseName
+    for t in trainees:
+        tname = t.get("traineeName", "")
+        if not tname:
+            continue
+        cn = t.get("courseName", "") or ""
+        if _is_formal_course(cn):
+            if tname not in trainee_packages:
+                trainee_packages[tname] = set()
+            trainee_packages[tname].add(cn)
+
+    renewed_trainees = set()
+    # 注意：循环变量不能叫 courses，否则会覆盖函数参数，导致规则5数据源出错
+    for tname, pkg_names in trainee_packages.items():
+        if len(pkg_names) >= 2:
+            renewed_trainees.add(tname)
+
+    if renewed_trainees:
+        print(f"\n  [已续课] 以下学员有多个正式课包，已续课，不做课时不足提醒:")
+        for n in sorted(renewed_trainees):
+            print(f"    {n}: {', '.join(trainee_packages[n])}")
+
     low_sessions_agg = {}  # name -> 剩余总节数
     low_sessions_detail = {}  # name -> 课程/教练信息
     for t in trainees:
@@ -799,7 +928,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             low_sessions_detail[tname] = t
 
     for tname, total_remain in low_sessions_agg.items():
-        if 1 < total_remain < 5:
+        if 1 < total_remain < 5:  # 剩余 2-4 节
+            # 已续课（购买了新产品）的学员不推送课时不足
+            if tname in renewed_trainees:
+                print(f"  [课时不足-跳过] {tname} 已续课（剩余{total_remain}节），跳过提醒")
+                continue
             member = member_lookup.get(tname, {})
             if member.get("has_valid_card"):
                 t = low_sessions_detail[tname]
@@ -814,20 +947,52 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                     "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
                 })
 
-    # ---- 规则3b: 小班课权益点不足（剩余 ≤ 6 元）----
+    # ---- 规则3b: 小班课权益点不足（剩余2-5元，且未购买新权益点卡）----
     # 权益点卡 unit=="元"，remain 即剩余元数；仅统计有效卡
+    # 只筛选 2025艾莉卡 / 2025艾莉卡max / 2025艾莉卡plus 三种权益点卡
+
+    # 先检测已购买新权益点卡的会员：有 ≥2 个不同的权益点卡名（排除体验/赠送包）
+    member_cards = {}  # name -> set of cardName
     for m in members:
         if (m.get("unit") or "") != "元":
             continue
         if not _is_card_valid(m):
             continue
-        # 排除权益点赠送包（赠送包/赠送包2等）
+        cn = m.get("cardName", "") or ""
+        if not cn or "赠送包" in cn or "体验" in cn:
+            continue
+        gname = m.get("displayName", "")
+        if not gname:
+            continue
+        if gname not in member_cards:
+            member_cards[gname] = set()
+        member_cards[gname].add(cn)
+
+    renewed_members = set()
+    for gname, cards in member_cards.items():
+        if len(cards) >= 2:
+            renewed_members.add(gname)
+
+    if renewed_members:
+        print(f"\n  [小班已续卡] 以下会员有多张正式权益点卡，不做权益点不足提醒:")
+        for n in sorted(renewed_members):
+            print(f"    {n}: {', '.join(member_cards[n])}")
+
+    for m in members:
+        if (m.get("unit") or "") != "元":
+            continue
+        if not _is_card_valid(m):
+            continue
         card_nm = m.get("cardName", "") or ""
-        if "赠送包" in card_nm:
+        if "赠送包" in card_nm or "体验" in card_nm:
             continue
         remain = m.get("remain", 0) or 0
-        if 0 < remain <= 6:
+        if 1 < remain <= 5:  # 剩余 2-5 元
             gname = m.get("displayName", "")
+            # 已购买新权益点卡的会员不推送
+            if gname in renewed_members:
+                print(f"  [权益点不足-跳过] {gname} 有多张权益点卡（剩余{remain}元），跳过提醒")
+                continue
             nb = next_booking.get(gname, {})
             report.low_group_points.append({
                 "name": gname,
@@ -837,11 +1002,79 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                 "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
                 "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
             })
-    print(f"\n  [小班权益点不足] 剩余≤6元: {len(report.low_group_points)} 人")
+    print(f"\n  [小班权益点不足] 剩余2-5元: {len(report.low_group_points)} 人")
 
     # 按下次约课时间从近到远排序（无约课的排最后）
     report.low_sessions.sort(key=lambda x: x.get("next_booking") or "9999")
     report.low_group_points.sort(key=lambda x: x.get("next_booking") or "9999")
+
+    # ---- 规则3c: 艾莉卡/可可/艾萌 权益点卡有效期不足15天 ----
+    # 独立新规则，不影响规则3b
+    # 如果会员已有同系列卡剩余 > 15 天（已续课），则剔除
+
+    # 小班卡种（推送范围）
+    SMALL_GROUP_CARDS = [
+        "2025艾莉卡plus", "2025艾莉卡max", "2025艾莉卡",
+        "艾莉尊享无限卡",
+    ]
+    # 全部卡种（用于检测已续课，包含私教卡）
+    ALL_CARD_TYPES = SMALL_GROUP_CARDS + [
+        "2025可可卡pro", "2025可可卡max", "2025可可卡",
+        "2025艾萌卡pro", "2025艾萌卡max", "2025艾萌卡",
+    ]
+
+    def _match_any(cn, types):
+        for t in types:
+            if t in cn:
+                return True
+        return False
+
+    # 第一遍：检测已续课会员（所有卡种中任意卡剩余 > 15 天）
+    renewed_ailika = set()
+    for m in members:
+        if not _is_card_valid(m):
+            continue
+        cn = m.get("cardName", "") or ""
+        if not _match_any(cn, ALL_CARD_TYPES):
+            continue
+        expiry_date = _ts_to_date(m.get("expireDate")) or _ts_to_date(m.get("endDate"))
+        if expiry_date is None:
+            continue
+        days_left = (expiry_date - date.today()).days
+        if days_left > 15:
+            renewed_ailika.add(m.get("displayName", ""))
+
+    if renewed_ailika:
+        print(f"\n  [艾莉卡已续课] {len(renewed_ailika)} 人已续课（含私教），不做过期提醒")
+
+    # 第二遍：只筛选小班卡中有效期不足15天的
+    for m in members:
+        if not _is_card_valid(m):
+            continue
+        cn = m.get("cardName", "") or ""
+        if not _match_any(cn, SMALL_GROUP_CARDS):
+            continue
+        gname = m.get("displayName", "")
+        if gname in renewed_ailika:
+            continue
+        expiry_date = _ts_to_date(m.get("expireDate")) or _ts_to_date(m.get("endDate"))
+        if expiry_date is None:
+            continue
+        days_left = (expiry_date - date.today()).days
+        if 0 < days_left <= 15:
+            nb = next_booking.get(gname, {})
+            report.low_group_expiry.append({
+                "name": gname,
+                "phone": m.get("memberPhone", ""),
+                "card": m.get("cardName", ""),
+                "days_left": days_left,
+                "end_date": expiry_date.isoformat(),
+                "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
+                "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
+            })
+    print(f"  [艾莉卡过期] 有效期≤15天: {len(report.low_group_expiry)} 人")
+    # 按剩余天数从少到多排序
+    report.low_group_expiry.sort(key=lambda x: x.get("days_left", 999))
 
     # ---- 规则4: 会员里程碑（仅私教课会员）----
     # 收集今日私教学员名
@@ -849,6 +1082,26 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     for c in all_today_private:
         for n in parse_trainee_names(c.get("traineeNames", "")):
             today_pt_trainees.add(n)
+
+    # 构建 学员→教练 查找表（多教练时取上课次数最多的）
+    from collections import Counter as _Counter
+    trainee_coach_count = {}  # name -> Counter of coach appearances
+    for t in trainees:
+        tn = t.get("traineeName", "")
+        if not tn:
+            continue
+        coaches = (t.get("courseTrainers", "") or "").split("/")
+        used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
+        if tn not in trainee_coach_count:
+            trainee_coach_count[tn] = _Counter()
+        for c in coaches:
+            c = c.strip()
+            if c:
+                trainee_coach_count[tn][c] += used
+    trainee_coach = {}
+    for tn, counter in trainee_coach_count.items():
+        if counter:
+            trainee_coach[tn] = counter.most_common(1)[0][0]
 
     # 仅使用有私教记录的会员，用私教节数判断里程碑
     for name, pt_sessions in pt_used.items():
@@ -859,8 +1112,13 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             continue
         phone = member.get("memberPhone", "")
         consultant = member.get("sellerName", "")
+        if consultant == "肖湘蓉":
+            consultant = "林潇"
+        coach = trainee_coach.get(name, "")
 
         for ms, action in MILESTONES.items():
+            if ms == 1:
+                continue  # 第1节课后回访不需要提醒
             if pt_sessions == ms:
                 # 精确命中里程碑
                 if not any(x["name"] == name and x["milestone"] == ms
@@ -870,6 +1128,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                         "sessions": pt_sessions,
                         "milestone": ms, "action": action,
                         "consultant": consultant,
+                        "coach": coach,
                     })
                 break
             # 即将到达里程碑（1-2节内）：仅提醒今日有私教课的学员
@@ -881,6 +1140,7 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                         "sessions": pt_sessions,
                         "milestone": ms, "action": action,
                         "consultant": consultant,
+                        "coach": coach,
                     })
                 break  # 只提醒最近的里程碑
 
@@ -894,7 +1154,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
 
     # 使用 courses（页面初始加载拦截的完整周数据，最可靠）
     # week_courses 的逐天API调用可能因API无视日期参数而返回错误数据
-    source_courses = courses
+    if not isinstance(courses, dict):
+        print(f"  ⚠️ [BUG] courses 类型异常: {type(courses).__name__}，回退到 week_courses")
+        source_courses = week_courses if isinstance(week_courses, dict) else {"group": [], "private": []}
+    else:
+        source_courses = courses
 
     # 诊断：对比 courses 和 week_courses 的差异
     src_dates = set()
@@ -1145,14 +1409,15 @@ def _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_
 # ============================================================
 #  飞书推送
 # ============================================================
-def send_feishu(report):
-    """向所有配置的飞书 webhook 推送今日新会员 + 昨日体验课 + 课时不足摘要"""
+def send_feishu(report, tomorrow_trials=None):
+    """向所有配置的飞书 webhook 推送今日新会员 + 昨日体验课 + 明日体验课 + 课时不足摘要"""
     if not FEISHU_WEBHOOKS:
         return
 
     from datetime import date as _d, timedelta
     today = report.date
     yesterday = (_d.today() - timedelta(days=1)).isoformat()
+    tomorrow = (_d.today() + timedelta(days=1)).isoformat()
 
     # ── 今日新会员 ──
     new_lines = []
@@ -1187,13 +1452,23 @@ def send_feishu(report):
             f"教练:{m.get('trainer','')}  会籍:{m.get('consultant','')}{nb_str}"
         )
 
-    # ── 小班课权益点不足（剩余≤6元）──
+    # ── 小班课权益点不足（剩余2-5元）──
     group_lines = []
     for m in report.low_group_points:
         nb = m.get("next_booking", "")
         nb_str = f"  下次约课:{nb}" if nb else "  下次约课:无"
         group_lines.append(
             f"  {m['name']}  剩余{m['remaining']}元  {m.get('card','')}  "
+            f"会籍:{m.get('consultant','')}{nb_str}"
+        )
+
+    # ── 小班权益点卡有效期不足15天 ──
+    expiry_lines = []
+    for m in report.low_group_expiry:
+        nb = m.get("next_booking", "")
+        nb_str = f"  下次约课:{nb}" if nb else "  下次约课:无"
+        expiry_lines.append(
+            f"  {m['name']}  剩余{m.get('days_left',0)}天到期  {m.get('card','')}  "
             f"会籍:{m.get('consultant','')}{nb_str}"
         )
 
@@ -1211,6 +1486,22 @@ def send_feishu(report):
     else:
         parts.append(f"\n📋 昨日体验课：0人")
 
+    # ── 明日体验课（隔天推送）──
+    tomorrow_lines = []
+    if tomorrow_trials:
+        for m in tomorrow_trials:
+            tomorrow_lines.append(
+                f"  【{m.get('type','')}】{m['name']}  {m.get('course','')}  "
+                f"{m.get('time','')}  教练:{m.get('trainer','')}  "
+                f"会籍:{m.get('consultant','')}"
+            )
+
+    if tomorrow_lines:
+        parts.append(f"\n📅 明日体验课（{len(tomorrow_lines)}人）")
+        parts.extend(tomorrow_lines)
+    else:
+        parts.append(f"\n📅 明日体验课：0人")
+
     if low_lines:
         parts.append(f"\n⚠️ 私教课时不足（{len(low_lines)}人）")
         parts.extend(low_lines)
@@ -1219,13 +1510,19 @@ def send_feishu(report):
         parts.append(f"\n⚠️ 小班课权益点不足（{len(group_lines)}人）")
         parts.extend(group_lines)
 
-    text = "\n".join(parts)
-    payload = json.dumps({
+    if expiry_lines:
+        parts.append(f"\n⏰ 小班权益点卡即将过期（{len(expiry_lines)}人）")
+        parts.extend(expiry_lines)
+
+    _feishu_send_text("\n".join(parts))
+
+
+def _feishu_send_text(text):
+    """向所有配置的飞书 webhook 发送一条纯文本消息"""
+    payload_str = json.dumps({
         "msg_type": "text",
         "content": {"text": text}
-    }, ensure_ascii=False).encode("utf-8")
-
-    payload_str = payload.decode("utf-8")
+    }, ensure_ascii=False)
     for url in FEISHU_WEBHOOKS:
         try:
             result = subprocess.run(
@@ -1359,8 +1656,27 @@ def generate_html(report):
             "course": m.get("card", ""),
         })
 
+    # 小班权益点卡有效期不足并入"课时不足"区
+    for m in report.low_group_expiry:
+        info = f'小班权益点 {m.get("card","")}  {m.get("days_left",0)}天后到期'
+        if m.get("consultant"):
+            info += f' 会籍:{m["consultant"]}'
+        info += f' | 下次约课:{m.get("next_booking") or "无"}'
+        sections_data["low_sessions"].append({
+            "id": f"lx_{m['name']}",
+            "name": m["name"],
+            "phone": m.get("phone", ""),
+            "info": info,
+            "label": f'{m.get("days_left",0)}天到期',
+            "coach": "",
+            "consultant": m.get("consultant", ""),
+            "course": m.get("card", ""),
+        })
+
     for m in report.milestones:
         info = f'第{m["sessions"]}节→第{m["milestone"]}节 ({m["action"]})'
+        if m.get("coach"):
+            info += f' 教练:{m["coach"]}'
         if m.get("consultant"):
             info += f' 会籍:{m["consultant"]}'
         sections_data["milestones"].append({
@@ -1369,7 +1685,7 @@ def generate_html(report):
             "phone": m.get("phone", ""),
             "info": info,
             "label": m["action"],
-            "coach": "",
+            "coach": m.get("coach", ""),
             "consultant": m.get("consultant", ""),
             "course": m["action"],
         })
@@ -1445,6 +1761,16 @@ def generate_html(report):
         </div>"""
 
     sections_json = json.dumps(sections_data, ensure_ascii=False)
+
+    # 从磁盘加载跟进记录（解决 file:// 协议下 localStorage 不可靠的问题）
+    embedded_followups = {}
+    if FOLLOWUPS_FILE.exists():
+        try:
+            all_followups = json.loads(FOLLOWUPS_FILE.read_text(encoding="utf-8"))
+            embedded_followups = all_followups.get(report_date, {})
+        except Exception:
+            pass
+    embedded_followups_json = json.dumps(embedded_followups, ensure_ascii=False)
 
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -1550,10 +1876,12 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
     </select>
   </div>
   <div class="export-area">
+    <button onclick="saveFollowupsToDisk()" title="下载跟进记录到本地磁盘，下次打开自动恢复" style="background:#f59e0b;color:#000">💾 保存跟进到磁盘</button>
     <button onclick="exportCSV()" title="导出CSV文件">导出 CSV</button>
     <button onclick="exportMonthlyNewCSV()" title="单独导出本月新会员" style="background:#10b981">导出本月新会员</button>
     <button class="sec-btn" onclick="exportJSON()" title="导出含跟进记录">导出 JSON</button>
-    <span style="font-size:10px;color:#777;display:block;text-align:center;margin-top:6px">跟进自动保存</span>
+    <span id="disk_save_hint" style="font-size:10px;color:#10b981;display:block;text-align:center;margin-top:6px"></span>
+    <span style="font-size:10px;color:#777;display:block;text-align:center">跟进自动保存 · 亦可手动下载备份</span>
   </div>
 </div>
 <div class="main">
@@ -1636,6 +1964,7 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
 const DATA = {sections_json};
 const REPORT_DATE = '{report_date}';
 const STORAGE_KEY = 'assistant_followup_' + REPORT_DATE;
+const EMBEDDED_FOLLOWUPS = {embedded_followups_json};
 const AVAILABLE_DATES = {available_dates_json};
 
 // 初始化日期选择器
@@ -1659,12 +1988,60 @@ function navToDate(d) {{
 // 加载已保存的跟进记录
 function loadFollowups() {{
   try {{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{{}}');
+    const fromLS = localStorage.getItem(STORAGE_KEY);
+    if (fromLS) return JSON.parse(fromLS);
+    // localStorage 为空时回退到磁盘嵌入数据（解决 file:// 协议下 localStorage 不可靠的问题）
+    if (Object.keys(EMBEDDED_FOLLOWUPS).length > 0) return JSON.parse(JSON.stringify(EMBEDDED_FOLLOWUPS));
+    return {{}};
   }} catch(e) {{ return {{}}; }}
 }}
 
+const SERVER_URL = 'http://127.0.0.1:{SERVER_PORT}';
+
 function saveFollowups(data) {{
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // 自动同步到磁盘（通过本地 HTTP 服务器）
+  autoSaveToDisk();
+}}
+
+// 自动保存跟进记录到磁盘
+let _autoSaveTimer = null;
+function autoSaveToDisk() {{
+  if (_autoSaveTimer) clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(function() {{
+    const merged = loadFollowups();
+    // 合并嵌入式数据
+    const all = JSON.parse(JSON.stringify(EMBEDDED_FOLLOWUPS));
+    Object.keys(merged).forEach(function(k) {{ all[k] = merged[k]; }});
+    fetch(SERVER_URL + '/save_followups', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify(all)
+    }}).then(function(r) {{ return r.json(); }})
+      .then(function(resp) {{
+        if (resp && resp.ok) {{
+          const hint = document.getElementById('disk_save_hint');
+          if (hint) {{ hint.textContent = '✅ 已自动保存到磁盘'; hint.style.color = '#10b981';
+            setTimeout(function() {{ hint.textContent = ''; }}, 2000); }}
+        }}
+      }})
+      .catch(function() {{}}); // 服务器不可用时静默失败
+  }}, 800); // 800ms 防抖
+}}
+
+// 手动保存跟进记录到磁盘（下载文件作为 fallback）
+function saveFollowupsToDisk() {{
+  const current = loadFollowups();
+  const merged = JSON.parse(JSON.stringify(EMBEDDED_FOLLOWUPS));
+  Object.keys(current).forEach(function(k) {{ merged[k] = current[k]; }});
+  const blob = new Blob([JSON.stringify(merged, null, 2)], {{type:'application/json'}});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'followups.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('已下载 followups.json！\\n请将文件保存到 data/followups.json，下次打开页面即可恢复跟进记录。');
 }}
 
 // 构建行HTML
@@ -1880,6 +2257,61 @@ renderAll();
 </body></html>"""
 
 
+def _ensure_server_script():
+    """写入微型 HTTP 服务器脚本，用于本地 serve 报告和保存跟进记录"""
+    SERVER_SCRIPT.write_text('''#!/usr/bin/env python3
+"""微型 HTTP 服务器 - serve 报告 + 自动保存跟进记录到磁盘"""
+import http.server, json, os, sys
+from pathlib import Path
+
+PORT = 18765
+PROJECT_DIR = Path(__file__).parent.parent
+DATA_DIR = PROJECT_DIR / "data"
+REPORT_DIR = DATA_DIR / "reports"
+FOLLOWUPS_FILE = DATA_DIR / "followups.json"
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(PROJECT_DIR), **kwargs)
+
+    def do_POST(self):
+        if self.path == "/save_followups":
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                data = json.loads(self.rfile.read(length))
+                FOLLOWUPS_FILE.parent.mkdir(parents=True, exist_ok=True)
+                FOLLOWUPS_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"ok": True}).encode())
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({"ok": False, "error": str(e)}).encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+if __name__ == "__main__":
+    httpd = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
+    print(f"Assistant server ready: http://127.0.0.1:{PORT}")
+    sys.stdout.flush()
+    httpd.serve_forever()
+''', encoding="utf-8")
+
+
+def _server_ready():
+    """检查本地 HTTP 服务器是否在运行"""
+    import urllib.request
+    try:
+        req = urllib.request.Request(f"http://127.0.0.1:{SERVER_PORT}/")
+        urllib.request.urlopen(req, timeout=2)
+        return True
+    except Exception:
+        return False
+
+
 def save_and_open(report):
     html = generate_html(report)
     fp = REPORT_DIR / f"每日提醒_{report.date}.html"
@@ -1895,6 +2327,7 @@ def save_and_open(report):
         "second_class": report.second_class,
         "low_sessions": report.low_sessions,
         "low_group_points": report.low_group_points,
+        "low_group_expiry": report.low_group_expiry,
         "milestones": report.milestones,
         "coaches": {k: {"weekday": v["weekday"], "trainers": v["trainers"]}
                     for k, v in report.coaches.items()},
@@ -1902,7 +2335,16 @@ def save_and_open(report):
     }, ensure_ascii=False, indent=2), encoding="utf-8")
 
     import webbrowser
-    webbrowser.open(f"file://{fp}")
+    from urllib.parse import quote
+    # 优先通过本地 HTTP 服务器打开（支持自动保存跟进记录到磁盘）
+    if _server_ready():
+        rel = str(fp.relative_to(DATA_DIR.parent))
+        # URL 编码中文路径，避免浏览器编码不一致导致 404
+        rel_encoded = quote(rel, safe='/')
+        url = f"http://127.0.0.1:{SERVER_PORT}/{rel_encoded}"
+        webbrowser.open(url)
+    else:
+        webbrowser.open(f"file://{fp}")
     return fp
 
 
@@ -1997,7 +2439,21 @@ def run(show_browser=True, push_feishu=False):
             # 6. 飞书推送（仅定时任务模式）
             if push_feishu and FEISHU_WEBHOOKS:
                 print("\n[推送] 发送飞书通知...")
-                send_feishu(report)
+                # 提取明日体验课用于隔天推送（逻辑与今日新会员一致）
+                member_lookup_fs = build_member_lookup(members)
+                # 构建私教已用节数，用于判断私教新会员
+                pt_used_fs = {}
+                for t in trainees:
+                    tn = t.get("traineeName", "")
+                    if not tn:
+                        continue
+                    buy = t.get("buyCount", 0) or 0
+                    remain = t.get("remainCount", 0) or 0
+                    used = max(0, buy - remain)
+                    pt_used_fs[tn] = pt_used_fs.get(tn, 0) + used
+                tomorrow_trials = get_tomorrow_trials(upcoming_courses, member_lookup_fs, pt_used_fs)
+                print(f"  明日体验课: {len(tomorrow_trials)} 人")
+                send_feishu(report, tomorrow_trials=tomorrow_trials)
 
             s = report.summary()
             print("\n" + "=" * 50)
@@ -2009,6 +2465,7 @@ def run(show_browser=True, push_feishu=False):
             print(f"  四、里程碑节点: {s['milestones']}人")
             print(f"  五、教练空闲时间: {s['coaches']}位")
             print(f"  六、本月新会员: {s['monthly_new']}人")
+            print(f"  七、权益点卡即将过期(≤15天): {s['low_group_expiry']}人")
             print(f"\n报告已保存: {filepath}")
 
             return report
@@ -2017,6 +2474,16 @@ def run(show_browser=True, push_feishu=False):
             print(f"\n出错: {e}")
             import traceback
             traceback.print_exc()
+            # 定时任务模式下推送错误到飞书，避免"推送悄悄失败"没人知道
+            if push_feishu and FEISHU_WEBHOOKS:
+                try:
+                    _feishu_send_text(
+                        f"❌ {today_str()} 每日提醒生成失败\n"
+                        f"错误: {e}\n"
+                        f"请查看 data/cron.log 或手动运行 assistant.py 排查"
+                    )
+                except Exception:
+                    pass
         finally:
             browser.close()
 
