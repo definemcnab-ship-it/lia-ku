@@ -939,11 +939,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
                 nb = next_booking.get(tname, {})
                 report.low_sessions.append({
                     "name": tname,
-                    "phone": t.get("phone", ""),
+                    "phone": _clean(t.get("phone")),
                     "remaining": total_remain,
                     "course": t.get("courseName", ""),
                     "trainer": t.get("courseTrainers", ""),
-                    "consultant": member.get("sellerName", ""),
+                    "consultant": _clean(member.get("sellerName")),
                     "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
                 })
 
@@ -996,10 +996,10 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             nb = next_booking.get(gname, {})
             report.low_group_points.append({
                 "name": gname,
-                "phone": m.get("memberPhone", ""),
+                "phone": _clean(m.get("memberPhone")),
                 "remaining": remain,
                 "card": m.get("cardName", ""),
-                "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
+                "consultant": _clean(m.get("sellerNames")) or _clean(m.get("sellerName")),
                 "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
             })
     print(f"\n  [小班权益点不足] 剩余2-5元: {len(report.low_group_points)} 人")
@@ -1065,11 +1065,11 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             nb = next_booking.get(gname, {})
             report.low_group_expiry.append({
                 "name": gname,
-                "phone": m.get("memberPhone", ""),
+                "phone": _clean(m.get("memberPhone")),
                 "card": m.get("cardName", ""),
                 "days_left": days_left,
                 "end_date": expiry_date.isoformat(),
-                "consultant": m.get("sellerNames", "") or m.get("sellerName", ""),
+                "consultant": _clean(m.get("sellerNames")) or _clean(m.get("sellerName")),
                 "next_booking": f"{nb.get('date','')} {nb.get('time','')}".strip() if nb else "",
             })
     print(f"  [艾莉卡过期] 有效期≤15天: {len(report.low_group_expiry)} 人")
