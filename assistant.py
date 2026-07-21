@@ -729,7 +729,8 @@ def _collect_today_courses(sources, key, today):
                 by_id[cid] = dict(c)
                 order.append(cid)
             else:
-                # 同一节课，合并学员名（并集），保留首个来源的其他字段
+                # 同一节课，合并学员名（并集）。取消状态以首个来源（页面实时快照）为准，
+                # 不因其他来源的过期数据误判为取消，避免漏掉正常课的学员
                 existing = by_id[cid]
                 names = set(parse_trainee_names(existing.get("traineeNames", ""))) | \
                         set(parse_trainee_names(c.get("traineeNames", "")))
