@@ -707,8 +707,38 @@ def _is_card_valid(member_card):
     return True
 
 
+def _collect_today_courses(sources, key, today):
+    """把多个来源里"今天"的课程合并去重，并合并同一节课在不同来源里的学员名。
+
+    抓取"今日课程"依赖页面默认周视图的一次拦截，若某节课是刚约上的
+    （如刚在13点约课后马上跑推送），这一次拦截可能没覆盖到。因此把
+    fetch_week/month/upcoming 等独立按日期重新拉取的来源里"今天"的课
+    也并进来，取学员名的并集，最大限度避免漏掉新约的学员。
+    """
+    by_id = {}
+    order = []
+    for src in sources:
+        if not isinstance(src, dict):
+            continue
+        for c in src.get(key, []):
+            if c.get("date") != today:
+                continue
+            cid = (c.get("date"), c.get("startTime"), c.get("endTime"),
+                   c.get("trainerName"), c.get("courseName"))
+            if cid not in by_id:
+                by_id[cid] = dict(c)
+                order.append(cid)
+            else:
+                # 同一节课，合并学员名（并集），保留首个来源的其他字段
+                existing = by_id[cid]
+                names = set(parse_trainee_names(existing.get("traineeNames", ""))) | \
+                        set(parse_trainee_names(c.get("traineeNames", "")))
+                existing["traineeNames"] = "、".join(names)
+    return [by_id[cid] for cid in order]
+
+
 def apply_rules(courses, members, trainees, week_courses=None, month_courses=None,
-                next_booking=None):
+                next_booking=None, upcoming_courses=None):
     """应用5大提醒规则。week_courses用于整周教练空闲，month_courses用于月度新会员"""
     report = DailyReport(date=today_str())
     today = today_str()
@@ -734,13 +764,22 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             pt_used[name] = 0
         pt_used[name] += used
 
+    # 合并所有来源里"今天"的课程（拦截的周视图 + 按日期重新拉取的周/月/未来），
+    # 避免刚约上的课因单次拦截未覆盖而漏掉学员
+    _today_sources = [courses, week_courses, month_courses, upcoming_courses]
+    merged_today_group = _collect_today_courses(_today_sources, "group", today)
+    merged_today_private = _collect_today_courses(_today_sources, "private", today)
+    _base_group = len([c for c in courses.get("group", []) if c.get("date") == today])
+    _base_private = len([c for c in courses.get("private", []) if c.get("date") == today])
+    print(f"\n  [诊断] 今日课程合并: 团体 {_base_group}→{len(merged_today_group)} 节, "
+          f"私教 {_base_private}→{len(merged_today_private)} 节（多来源合并后）")
+
     # 诊断：检查课程学员名匹配情况
     print("\n  [诊断] 名字匹配检查:")
     today_all_trainees = set()
-    for c in courses["group"] + courses["private"]:
-        if c.get("date") == today:
-            for n in parse_trainee_names(c.get("traineeNames", "")):
-                today_all_trainees.add(n)
+    for c in merged_today_group + merged_today_private:
+        for n in parse_trainee_names(c.get("traineeNames", "")):
+            today_all_trainees.add(n)
     in_members = sum(1 for n in today_all_trainees if n in member_lookup)
     in_pt = sum(1 for n in today_all_trainees if n in pt_used)
     print(f"  今日上课学员共 {len(today_all_trainees)} 人")
@@ -755,12 +794,9 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
         """判断课程是否已取消（status=-1 表示已取消）"""
         return course.get("status") == -1
 
-    all_today_group = [c for c in courses["group"] if c.get("date") == today]
-    all_today_private = [c for c in courses["private"] if c.get("date") == today]
-
     # 过滤已取消
-    all_today_group = [c for c in all_today_group if not _is_course_cancelled(c)]
-    all_today_private = [c for c in all_today_private if not _is_course_cancelled(c)]
+    all_today_group = [c for c in merged_today_group if not _is_course_cancelled(c)]
+    all_today_private = [c for c in merged_today_private if not _is_course_cancelled(c)]
 
     # 诊断：检查课程数据中的取消相关字段
     _cancelled_found = False
@@ -807,8 +843,10 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
             in_lookup = tname in member_lookup
 
             # 小班新会员：课程名含"体验"或卡名含"体验"（首次）或备注含"二次体验"
+            # 注意：小班体验课的课程名往往不含"体验"（如"核心床L1"），只能靠体验卡识别。
+            # 签到门槛放宽到 <=1，避免"当天已签到导致签到数变1"的首次体验会员被漏掉。
             is_trial = ("体验" in course_name) or ("二次体验" in course_remark)
-            is_first_trial = ("体验" in card_name) and total_checkins <= 0
+            is_first_trial = ("体验" in card_name) and total_checkins <= 1
             is_trial = is_trial or is_first_trial
             is_second = "二次体验" in course_remark
 
@@ -2430,7 +2468,7 @@ def run(show_browser=True, push_feishu=False):
             # 4. 应用规则（传入整周课程、整月课程、下次约课）
             print("[4/5] 应用提醒规则...")
             report = apply_rules(courses, members, trainees, week_courses, month_courses,
-                                 next_booking=next_booking)
+                                 next_booking=next_booking, upcoming_courses=upcoming_courses)
 
             # 5. 生成报告
             print("[5/5] 生成报告...")
