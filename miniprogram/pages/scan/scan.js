@@ -322,8 +322,10 @@ Page({
       issueCount: result.issues.length,
       issues: result.issues.map(i => ({ key: i.key, issue: i.issue, measure: i.measure || '' })),
     })
-    wx.setStorageSync('scanHistory', history)
-    this.setData({ step: 'result', result, history, compare })
+    // 只保留最近 60 次检测记录，避免存储无限膨胀
+    const trimmed = history.length > 60 ? history.slice(-60) : history
+    wx.setStorageSync('scanHistory', trimmed)
+    this.setData({ step: 'result', result, history: trimmed, compare })
   },
 
   goToCourse(e) {

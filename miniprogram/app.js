@@ -53,6 +53,10 @@ App({
   addSession(session) {
     const rec = Object.assign({ date: this.todayStr() }, session)
     this.globalData.sessions.push(rec)
+    // 只保留最近 500 条，避免长期使用后本地存储无限膨胀
+    if (this.globalData.sessions.length > 500) {
+      this.globalData.sessions = this.globalData.sessions.slice(-500)
+    }
     wx.setStorageSync('sessions', this.globalData.sessions)
   },
 

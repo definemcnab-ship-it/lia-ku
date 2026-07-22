@@ -214,8 +214,4 @@ Page({
   navBack() {
     wx.navigateBack()
   },
-
-  get pct() {
-    return Math.min(100, Math.round(this.data.todayCalories / this.data.targetCalories * 100))
-  },
 })

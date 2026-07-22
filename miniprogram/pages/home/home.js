@@ -38,8 +38,9 @@ Page({
   },
 
   onLoad() {
-    const sysInfo = wx.getSystemInfoSync()
-    this.setData({ statusBarHeight: sysInfo.statusBarHeight })
+    // getSystemInfoSync 已废弃，改用 getWindowInfo（仅取状态栏高度）
+    const info = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync())
+    this.setData({ statusBarHeight: info.statusBarHeight })
   },
 
   onShow() {
