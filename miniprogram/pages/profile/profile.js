@@ -1,22 +1,4 @@
-const LEVEL_TABLE = [
-  { name: '晨芽', minXP: 0 },
-  { name: '晨星', minXP: 100 },
-  { name: '银羽', minXP: 500 },
-  { name: '金鹤', minXP: 1200 },
-  { name: '斯俪女神', minXP: 2500 },
-]
-
-function computeXP(checkIns, sessions, scanHistory) {
-  return (checkIns.length * 1) + (sessions.length * 5) + ((scanHistory || []).length * 10)
-}
-
-function levelFromXP(xp) {
-  let cur = LEVEL_TABLE[0]
-  for (const lv of LEVEL_TABLE) {
-    if (xp >= lv.minXP) cur = lv
-  }
-  return cur.name
-}
+const { computeXP, levelName } = require('../../utils/levelSystem')
 
 Page({
   data: {
@@ -48,7 +30,7 @@ Page({
       postureScore: a.globalData.postureScore,
       checkInDays: checkIns.length,
       currentXP: xp,
-      level: levelFromXP(xp),
+      level: levelName(xp),
     })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 4 })
