@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { useStore, recordTrainingDone, todayStr } from '../lib/store.js'
+import { useStore, recordTrainingDone, todayStr, badgeWall } from '../lib/store.js'
 import { SLIQUE_LEVELS, computeLevel } from '../lib/content.js'
 
 // 我的 → 斯俪分阶梯等级：累计打卡解锁等级与专属权益。
@@ -11,6 +11,8 @@ export default function Levels() {
   const total = checkIns.length
   const { index, current, next, progress, remain } = computeLevel(total)
   const checkedToday = checkIns.includes(todayStr())
+  const badges = badgeWall()
+  const earnedCount = badges.filter(b => b.earned).length
 
   // 升级庆祝：打卡后等级 index 提升时弹出
   const prevIndex = useRef(index)
@@ -63,6 +65,29 @@ export default function Levels() {
             <Icon name={checkedToday ? 'check_circle' : 'add'} size={18} className={checkedToday ? 'text-on-surface-variant/60' : 'text-white'} />
             {checkedToday ? '今日已打卡' : '立即打卡 +1 天'}
           </button>
+        </section>
+
+        {/* 成就徽章墙 */}
+        <section className="space-y-stack-md">
+          <div className="flex items-center justify-between">
+            <h2 className="font-headline text-[18px] text-ink font-light">成就徽章</h2>
+            <span className="font-label text-[13px] text-on-surface-variant">{earnedCount} / {badges.length}</span>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {badges.map(b => (
+              <div key={b.id}
+                title={b.desc}
+                className={`rounded-lg p-2.5 flex flex-col items-center text-center bg-surface-container-lowest shadow-soft transition ${b.earned ? '' : 'opacity-50'}`}>
+                <div className={`w-11 h-11 rounded-full flex items-center justify-center text-[22px] mb-1 ${b.earned ? 'bg-primary-fixed' : 'bg-surface-container'}`}>
+                  {b.earned ? b.icon : '🔒'}
+                </div>
+                <span className="font-label text-[11px] text-on-surface leading-tight">{b.name}</span>
+                <span className="font-label text-[9px] text-outline mt-0.5 leading-tight">
+                  {b.earned ? '已解锁' : (b.progress || '未解锁')}
+                </span>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* 等级阶梯 */}

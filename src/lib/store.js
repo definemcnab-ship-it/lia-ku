@@ -107,6 +107,41 @@ export function countThisMonth(checkIns) {
   return checkIns.filter(c => c.startsWith(prefix)).length
 }
 
+// —— 成就系统（与小程序 utils/achievements.js 对齐）——
+// 奖励曲线：前 3 天密集正反馈，之后间距递增形成挑战。
+const BADGES = [
+  { id: 'first_train', name: '第一步',   icon: '🌱', streakNeed: 0,  desc: '完成首次训练，最难的一步已迈出', test: s => s.sessions >= 1 },
+  { id: 'comeback',    name: '回来了',   icon: '💗', streakNeed: 2,  desc: '连续 2 天训练，习惯开始生根', test: s => s.streak >= 2 },
+  { id: 'habit3',      name: '三日成势', icon: '🌿', streakNeed: 3,  desc: '连续 3 天，身体已经开始期待', test: s => s.streak >= 3 },
+  { id: 'streak5',     name: '五日连胜', icon: '🔥', streakNeed: 5,  desc: '连续 5 天，多数人止步于此，你没有', test: s => s.streak >= 5 },
+  { id: 'week7',       name: '整周达成', icon: '🏆', streakNeed: 7,  desc: '完整一周，肩颈已在悄悄回位', test: s => s.streak >= 7 },
+  { id: 'fort14',      name: '双周坚持', icon: '🧘', streakNeed: 14, desc: '14 天，镜子里的变化藏不住了', test: s => s.streak >= 14 },
+  { id: 'form21',      name: '习惯成形', icon: '📈', streakNeed: 21, desc: '21 天，训练已长成你的一部分', test: s => s.streak >= 21 },
+  { id: 'renew28',     name: '28天焕新', icon: '✨', streakNeed: 28, desc: '一个完整周期，去复测看看数据', test: s => s.streak >= 28 },
+  { id: 'scan1',       name: '直面真相', icon: '📷', streakNeed: 0,  desc: '完成首次 AI 体态检测', test: s => s.scans >= 1 },
+  { id: 'vol10',       name: '十次沉淀', icon: '💪', streakNeed: 0,  desc: '累计完成 10 次训练', test: s => s.sessions >= 10 },
+  { id: 'vol30',       name: '三十而立', icon: '👑', streakNeed: 0,  desc: '累计完成 30 次训练，体态由你定义', test: s => s.sessions >= 30 },
+]
+
+// 返回成就墙数据：每枚徽章的解锁状态与"还差 N 天"进度
+export function badgeWall() {
+  const s = getState()
+  const stats = {
+    streak: computeStreak(s.checkIns),
+    sessions: s.checkIns.length,   // 网页原型：一次打卡=一次训练
+    scans: (s.photos || []).length,
+  }
+  return BADGES.map(b => {
+    const earned = b.test(stats)
+    let progress = ''
+    if (!earned && b.streakNeed > 0) {
+      const gap = b.streakNeed - stats.streak
+      if (gap > 0) progress = `还差 ${gap} 天`
+    }
+    return { ...b, earned, progress }
+  })
+}
+
 // 切换某条动态的点赞状态（持久化）
 export function toggleCommunityLike(id) {
   setState(s => {
