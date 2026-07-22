@@ -19,6 +19,16 @@ Page({
     ],
   },
 
+  onShareAppMessage() {
+    const lv = this.data.currentLevel || ''
+    return { title: lv ? `我在斯俪升到「${lv}」啦，来一起养成好体态` : '斯俪 · 体态养成，打卡升级', path: '/pages/home/home' }
+  },
+
+  onShareTimeline() {
+    const lv = this.data.currentLevel || ''
+    return { title: lv ? `斯俪体态等级「${lv}」` : '斯俪 · 体态养成' }
+  },
+
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 })

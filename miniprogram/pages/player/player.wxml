@@ -147,6 +147,11 @@
       <!-- 够得着的下一步 -->
       <text class="badge-next" wx:if="{{nextBadgeHint}}">{{nextBadgeHint}}</text>
 
+      <button class="done-share-btn" open-type="share">
+        <mp-icon name="share" size="18" color="#8f8779" />
+        <text class="done-share-text">分享今日成果</text>
+      </button>
+
       <view class="done-actions">
         <view class="done-btn done-btn-outline" bindtap="goTraining">
           <text>返回训练</text>

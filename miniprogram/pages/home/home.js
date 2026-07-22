@@ -43,6 +43,14 @@ Page({
     this.setData({ statusBarHeight: info.statusBarHeight })
   },
 
+  onShareAppMessage() {
+    return { title: '斯俪 · 科学改善体态，一张照片测出你的挺拔度', path: '/pages/home/home' }
+  },
+
+  onShareTimeline() {
+    return { title: '斯俪 · 科学改善体态' }
+  },
+
   onShow() {
     const app = getApp()
     // 首次启动引导问卷

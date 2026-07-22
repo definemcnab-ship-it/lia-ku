@@ -51,6 +51,14 @@ Page({
 
   onUnload() { clearInterval(this._timer) },
 
+  onShareAppMessage() {
+    const c = this._course
+    return {
+      title: c ? `我刚练完「${c.name}」，一起改善体态吧` : '斯俪 · 体态矫正训练',
+      path: '/pages/home/home',
+    }
+  },
+
   onLoad(options) {
     const courseId = options.courseId || 'c1'
     const scene = options.scene || ''

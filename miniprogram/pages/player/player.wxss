@@ -510,3 +510,23 @@
   color: #b8b0a4;
   margin-top: 6rpx;
 }
+
+/* 完成页分享按钮 */
+.done-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  width: 100%;
+  margin-top: 24rpx;
+  background: #f4f1ec;
+  border: 1rpx solid #e0dbd2;
+  border-radius: 999rpx;
+  padding: 20rpx 0;
+  line-height: 1;
+}
+.done-share-btn::after { border: none; }
+.done-share-text {
+  font-size: 26rpx;
+  color: #6e675b;
+}

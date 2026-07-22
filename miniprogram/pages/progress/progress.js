@@ -138,6 +138,17 @@ Page({
     hasData: false,
   },
 
+  onShareAppMessage() {
+    const days = this.data.checkInDays || 0
+    const title = days > 0 ? `我在斯俪已坚持体态训练 ${days} 天，一起变挺拔` : '斯俪 · 科学改善体态，看得见的进步'
+    return { title, path: '/pages/home/home' }
+  },
+
+  onShareTimeline() {
+    const days = this.data.checkInDays || 0
+    return { title: days > 0 ? `坚持体态训练 ${days} 天打卡中 · 斯俪` : '斯俪 · 科学改善体态' }
+  },
+
   onShow() {
     const a = getApp()
     const checkIns = a.globalData.checkIns || []

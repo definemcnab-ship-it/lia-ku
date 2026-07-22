@@ -187,6 +187,17 @@ Page({
 
   _fileIds: { front: '', side: '', back: '' }, // 后端模式下各角度文件标识
 
+  onShareAppMessage() {
+    const r = this.data.result
+    const title = r ? `我的体态挺拔度 ${r.score} 分，你敢测测吗？` : '斯俪 AI 体态检测 · 一张照片看清体态问题'
+    return { title, path: '/pages/scan/scan' }
+  },
+
+  onShareTimeline() {
+    const r = this.data.result
+    return { title: r ? `体态挺拔度 ${r.score} 分 · 斯俪 AI 检测` : '斯俪 AI 体态检测' }
+  },
+
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 })
