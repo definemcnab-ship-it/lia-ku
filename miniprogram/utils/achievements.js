@@ -85,4 +85,18 @@ function nextHint(stats) {
 function allBadges() { return BADGES }
 function earnedIds() { return wx.getStorageSync(STORE_KEY) || [] }
 
-module.exports = { buildStats, checkNewlyEarned, nextHint, weekSessionCount, allBadges, earnedIds }
+// 成就墙展示用：返回每枚徽章的解锁状态（纯展示，无副作用）。
+// earned 以实时 stats 判定，未解锁的连续类徽章附「还差 N 天」进度。
+function badgeList(stats) {
+  return BADGES.map(b => {
+    const earned = b.test(stats)
+    let progress = ''
+    if (!earned && b.streakNeed > 0) {
+      const gap = b.streakNeed - stats.streak
+      if (gap > 0) progress = '还差 ' + gap + ' 天'
+    }
+    return { id: b.id, name: b.name, icon: b.icon, desc: b.desc, earned, progress }
+  })
+}
+
+module.exports = { buildStats, checkNewlyEarned, nextHint, weekSessionCount, allBadges, earnedIds, badgeList }

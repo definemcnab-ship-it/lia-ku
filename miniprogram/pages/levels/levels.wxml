@@ -35,6 +35,23 @@
       </view>
     </view>
 
+    <!-- 成就墙 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">成就徽章</text>
+        <text class="badge-count">{{earnedCount}} / {{badgeTotal}}</text>
+      </view>
+      <view class="card badge-wall">
+        <view class="badge-cell {{item.earned ? '' : 'badge-locked'}}" wx:for="{{badges}}" wx:key="id">
+          <view class="badge-medal {{item.earned ? 'badge-medal-on' : ''}}">
+            <mp-icon name="{{item.earned ? item.icon : 'lock'}}" size="30" color="{{item.earned ? '#c08a7d' : '#bbb4ac'}}" />
+          </view>
+          <text class="badge-cell-name">{{item.name}}</text>
+          <text class="badge-cell-sub">{{item.earned ? '已解锁' : (item.progress || '未解锁')}}</text>
+        </view>
+      </view>
+    </view>
+
     <!-- Level roadmap -->
     <view class="section">
       <view class="section-header">

@@ -1,3 +1,5 @@
+const achievements = require('../../utils/achievements')
+
 // XP 计算：打卡1天=1XP，完成训练=5XP，体态扫描=10XP
 function computeXP(checkIns, sessions, scanHistory) {
   const xp = (checkIns.length * 1) + (sessions.length * 5) + (scanHistory.length * 10)
@@ -47,6 +49,11 @@ Page({
     const sessions = a.globalData.sessions || []
     const scanHistory = wx.getStorageSync('scanHistory') || []
 
+    // 成就墙
+    const stats = achievements.buildStats(a.globalData, scanHistory)
+    const badges = achievements.badgeList(stats)
+    const earnedCount = badges.filter(b => b.earned).length
+
     const xp = computeXP(checkIns, sessions, scanHistory)
     const lv = computeLevel(xp)
     const inLvXP = xp - lv.minXP
@@ -77,6 +84,9 @@ Page({
       totalSessions: sessions.length,
       levels,
       rewards,
+      badges,
+      earnedCount,
+      badgeTotal: badges.length,
     })
   },
 
