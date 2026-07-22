@@ -1,0 +1,14 @@
+<view class="page" wx:if="{{doc}}">
+  <view class="head">
+    <text class="title">{{doc.title}}</text>
+    <text class="updated" wx:if="{{doc.updated}}">更新日期：{{doc.updated}}</text>
+    <text class="intro">{{doc.intro}}</text>
+  </view>
+  <view class="section" wx:for="{{doc.sections}}" wx:key="h" wx:for-item="sec">
+    <text class="sec-h">{{sec.h}}</text>
+    <text class="sec-p" wx:for="{{sec.p}}" wx:key="*this" wx:for-item="para">{{para}}</text>
+  </view>
+  <view class="foot">
+    <text class="foot-text">继续使用即表示您已阅读并同意本文件。</text>
+  </view>
+</view>

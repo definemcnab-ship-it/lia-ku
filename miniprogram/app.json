@@ -12,7 +12,8 @@
     "pages/rehab/rehab",
     "pages/diet/diet",
     "pages/levels/levels",
-    "pages/community/community"
+    "pages/community/community",
+    "pages/legal/legal"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -31,6 +31,7 @@ Page({
       { label: '等级与奖励', icon: 'emoji_events' },
       { label: '饮食日历', icon: 'calendar_month' },
       { label: '斯俪圈子', icon: 'chat_bubble' },
+      { label: '隐私与条款', icon: 'shield' },
     ],
   },
 
@@ -55,6 +56,9 @@ Page({
   },
 
   navMenu(e) {
+    const index = e.currentTarget.dataset.index
+    // 最后一项「隐私与条款」：弹出四份合规文档供选择
+    if (index === 5) return this.openLegal()
     const routes = [
       '/pages/training/training',
       '/pages/progress/progress',
@@ -62,11 +66,22 @@ Page({
       '/pages/diet/diet',
       '/pages/community/community',
     ]
-    const url = routes[e.currentTarget.dataset.index]
+    const url = routes[index]
     if (!url) return
     const tabPages = ['/pages/home/home', '/pages/training/training', '/pages/scan/scan', '/pages/community/community', '/pages/profile/profile']
     if (tabPages.includes(url)) wx.switchTab({ url })
     else wx.navigateTo({ url })
+  },
+
+  openLegal() {
+    const items = ['健康与免责声明', '隐私政策', '用户服务协议', '数据采集与使用授权']
+    const keys = ['health', 'privacy', 'user', 'data']
+    wx.showActionSheet({
+      itemList: items,
+      success: (r) => {
+        if (r.tapIndex >= 0) wx.navigateTo({ url: '/pages/legal/legal?doc=' + keys[r.tapIndex] })
+      },
+    })
   },
 
   logout() {

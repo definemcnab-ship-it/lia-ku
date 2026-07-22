@@ -1,0 +1,10 @@
+.page { min-height: 100vh; background: #f7f5f0; padding: 32rpx 40rpx 80rpx; box-sizing: border-box; }
+.head { padding-bottom: 28rpx; border-bottom: 1rpx solid #e0dbd2; margin-bottom: 28rpx; }
+.title { display: block; font-size: 40rpx; font-weight: 600; color: #4a443b; }
+.updated { display: block; font-size: 22rpx; color: #9e9688; margin-top: 12rpx; }
+.intro { display: block; font-size: 26rpx; color: #6e675b; line-height: 1.7; margin-top: 20rpx; }
+.section { margin-bottom: 32rpx; }
+.sec-h { display: block; font-size: 28rpx; font-weight: 600; color: #4a443b; margin-bottom: 14rpx; }
+.sec-p { display: block; font-size: 26rpx; color: #6e675b; line-height: 1.8; margin-bottom: 12rpx; }
+.foot { margin-top: 20rpx; padding-top: 24rpx; border-top: 1rpx solid #e0dbd2; }
+.foot-text { font-size: 24rpx; color: #9e9688; text-align: center; display: block; }
