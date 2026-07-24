@@ -81,6 +81,33 @@ def ensure_login(page):
 # ============================================================
 #  数据获取（通过API拦截 + fetch调用）
 # ============================================================
+def _safe_goto(page, url, wait_until="domcontentloaded", timeout=60000,
+               retries=2, settle=3000):
+    """带重试的页面导航：偶发网络超时（如定时任务触发时Mac刚唤醒、网络还没就绪）
+    不应让整次运行失败。超时后自动多试几次，仍失败才抛出。"""
+    last_err = None
+    for attempt in range(retries + 1):
+        try:
+            page.goto(url, wait_until=wait_until, timeout=timeout)
+            return True
+        except Exception as e:
+            last_err = e
+            print(f"  ⚠️ 页面加载超时/失败（第{attempt + 1}/{retries + 1}次）: {str(e)[:80]}")
+            if attempt < retries:
+                page.wait_for_timeout(settle * (attempt + 1))  # 递增等待后重试
+    raise last_err
+
+
+def _safe_reload(page, wait_until="networkidle", timeout=60000):
+    """容错的页面刷新：刷新失败不致命（首次导航可能已拦截到数据），仅告警。"""
+    try:
+        page.reload(wait_until=wait_until, timeout=timeout)
+        return True
+    except Exception as e:
+        print(f"  ⚠️ 页面刷新失败（忽略，继续用已获取数据）: {str(e)[:80]}")
+        return False
+
+
 def api_post(page, path, body="{}"):
     """通过page.evaluate发POST请求"""
     result = page.evaluate(f"""
@@ -179,12 +206,12 @@ def fetch_courses(page):
 
     import time as _time
     _ts = int(_time.time())
-    # 带时间戳的URL避免浏览器缓存
-    page.goto(f"{BASE_URL}/home/manage/course/reservations?_t={_ts}",
-              wait_until="domcontentloaded", timeout=60000)
+    # 带时间戳的URL避免浏览器缓存（带重试，缓解偶发网络超时）
+    _safe_goto(page, f"{BASE_URL}/home/manage/course/reservations?_t={_ts}",
+               wait_until="domcontentloaded", timeout=60000)
     page.wait_for_timeout(2000)
-    # 二次reload确保AngularJS获取最新API数据
-    page.reload(wait_until="networkidle")
+    # 二次reload确保AngularJS获取最新API数据（刷新失败不致命）
+    _safe_reload(page, wait_until="networkidle")
     page.wait_for_timeout(6000)
 
     if "login" in page.url.lower():
