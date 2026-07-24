@@ -136,12 +136,20 @@ def fetch_all_members(page):
             data = api_post(page, path)
             d = data.get("data", {})
             if total is None:
-                total = d.get("totalCount", 0)
-            members = d.get("data", [])
+                total = d.get("totalCount", 0) or 0
+            members = d.get("data", []) or []
             all_members.extend(members)
-            if len(all_members) >= total:
-                break
+            # 停止条件（任一满足即停，防止 totalCount 偏大时无限翻页卡死）：
+            if not members:
+                break                              # 本页无数据，没有下一页了
+            if total and len(all_members) >= total:
+                break                              # 已取满声明的总数
+            if len(members) < page_size:
+                break                              # 本页不满一页，是最后一页
             page_num += 1
+            if page_num > 1000:                    # 硬上限，绝不无限循环
+                print("  ⚠️ 会员分页超过安全上限(1000页)，停止翻页")
+                break
         except Exception as e:
             print(f"  获取会员数据出错 (page {page_num}): {e}")
             break
@@ -224,98 +232,63 @@ def fetch_courses(page):
     return courses_data, api_urls
 
 
-def fetch_week_courses(page, api_urls):
-    """获取本周一到周日的全部课程"""
-    import re
+def fetch_week_courses(page, api_urls=None):
+    """获取本周一到周日的全部课程。
+
+    改用与 fetch_month_courses 相同的可靠方式：导航页面到本周日期范围并拦截
+    接口响应（AngularJS 会据页面参数发起正确的接口请求）。旧方式靠改写接口
+    URL 里的日期参数，但本站接口 URL 不含日期参数，一直替换失败、白跑刷屏。
+    api_urls 参数保留仅为兼容旧调用，不再使用。
+    """
     import time as _time
     from datetime import date as dt_date, timedelta
-    _ts = int(_time.time())
 
     today = dt_date.today()
     monday = today - timedelta(days=today.weekday())
-    week_dates = [(monday + timedelta(days=i)).isoformat() for i in range(7)]
+    sunday = monday + timedelta(days=6)
+    ws, we = monday.isoformat(), sunday.isoformat()
+    _ts = int(_time.time())
 
-    all_group = []
-    all_private = []
+    week_data = {"group": [], "private": []}
 
-    print(f"  [调试] 团体课API: {api_urls.get('group', 'N/A')}")
-    print(f"  [调试] 私教课API: {api_urls.get('private', 'N/A')}")
-
-    for day_date in week_dates:
-        print(f"  获取 {day_date} 课程...")
-
-        for key in ["group", "private"]:
-            base_url = api_urls.get(key)
-            if not base_url:
-                continue
-
-            # 尝试多种日期参数模式
-            new_url = base_url
-            # 模式1: startDate=YYYY-MM-DD&endDate=YYYY-MM-DD (周视图)
-            new_url = re.sub(r'startDate=\d{4}-\d{2}-\d{2}', f'startDate={day_date}', new_url)
-            new_url = re.sub(r'endDate=\d{4}-\d{2}-\d{2}', f'endDate={day_date}', new_url)
-            # 模式2: date=YYYY-MM-DD
-            if new_url == base_url:
-                new_url = re.sub(r'date=\d{4}-\d{2}-\d{2}', f'date={day_date}', base_url)
-
-            if new_url == base_url:
-                print(f"    ⚠️ 未能替换日期参数，跳过 {key}")
-                continue
-
+    def on_response(response):
+        url = response.url
+        if "reserved_instances" in url:
             try:
-                result = page.evaluate(f"""
-                    async () => {{
-                        const r = await fetch('{new_url}&_t={_ts}', {{
-                            method: 'GET',
-                            headers: {{'Accept': 'application/json', 'Cache-Control': 'no-cache', 'Pragma': 'no-cache'}}
-                        }});
-                        const data = await r.json();
-                        return data;
-                    }}
-                """)
-                data = result.get("data", []) if isinstance(result, dict) else []
-                if key == "group":
-                    all_group.extend(data)
-                else:
-                    all_private.extend(data)
-            except Exception as e:
-                print(f"    {key} API调用失败: {e}")
+                data = response.json()
+                if "isWebPage=true" in url:
+                    week_data["group"] = data.get("data", [])
+                elif "isTraining" not in url and "isWebPage" not in url:
+                    week_data["private"] = data.get("data", [])
+            except Exception:
+                pass
 
-    # 诊断：每天获取了多少课程
-    day_stats = {}
-    for c in all_group + all_private:
-        d = c.get("date", "")
-        day_stats[d] = day_stats.get(d, 0) + 1
-    for d in week_dates:
-        cnt = day_stats.get(d, 0)
-        if cnt > 0:
-            print(f"    {d}: {cnt} 节")
-    missing = [d for d in week_dates if d not in day_stats]
-    if missing:
-        print(f"  ⚠️ 以下日期无API数据: {missing}")
-
-    # 如果API方式获取失败，回退到仅用今日数据（已通过拦截获取）
-    if not all_group and not all_private:
-        print("  ⚠️ 本周API调用未获取到数据，回退到仅今日数据")
+    page.on("response", on_response)
+    try:
+        page_url = (f"{BASE_URL}/home/manage/course/reservations"
+                    f"?startDate={ws}&endDate={we}&_t={_ts}")
+        _safe_goto(page, page_url, wait_until="domcontentloaded", timeout=60000)
+        page.wait_for_timeout(1500)
+        _safe_reload(page, wait_until="networkidle")
+        page.wait_for_timeout(4000)
+    except Exception as e:
+        print(f"  ⚠️ 整周课程获取失败: {str(e)[:80]}")
+    finally:
+        page.remove_listener("response", on_response)
 
     # 去重
-    seen_group = set()
-    unique_group = []
-    for c in all_group:
-        key = f"{c.get('date')}_{c.get('startTime')}_{c.get('trainerName')}_{c.get('courseName')}"
-        if key not in seen_group:
-            seen_group.add(key)
-            unique_group.append(c)
+    def _dedup(lst):
+        seen, out = set(), []
+        for c in lst:
+            k = f"{c.get('date')}_{c.get('startTime')}_{c.get('trainerName')}_{c.get('courseName')}"
+            if k not in seen:
+                seen.add(k)
+                out.append(c)
+        return out
 
-    seen_private = set()
-    unique_private = []
-    for c in all_private:
-        key = f"{c.get('date')}_{c.get('startTime')}_{c.get('trainerName')}_{c.get('courseName')}"
-        if key not in seen_private:
-            seen_private.add(key)
-            unique_private.append(c)
-
-    print(f"  本周总计: {len(unique_group)} 节团体课, {len(unique_private)} 节私教课")
+    unique_group = _dedup(week_data["group"])
+    unique_private = _dedup(week_data["private"])
+    print(f"  本周总计: {len(unique_group)} 节团体课, {len(unique_private)} 节私教课 ({ws}~{we})")
     return {"group": unique_group, "private": unique_private}
 
 
