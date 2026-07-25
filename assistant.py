@@ -46,12 +46,31 @@ FEISHU_WEBHOOKS = [
 # ============================================================
 #  登录处理
 # ============================================================
+def _wait_for_network(page, url, max_attempts=6, per_timeout=30000, gap=10000):
+    """等待网络就绪再开跑。
+
+    定时任务在 Mac 刚唤醒时触发，此时 WiFi 常还没连稳，若直接抓数据会拿到
+    残缺结果（部分接口失败、推送不全）。这里反复尝试打开页面，直到成功或
+    次数用尽，给网络最多约 (max_attempts × (per_timeout+gap)) 的恢复时间。
+    """
+    for attempt in range(max_attempts):
+        try:
+            page.goto(url, wait_until="networkidle", timeout=per_timeout)
+            if attempt > 0:
+                print(f"  ✅ 网络已就绪（第{attempt + 1}次尝试成功）")
+            return True
+        except Exception as e:
+            print(f"  ⏳ 等待网络就绪（第{attempt + 1}/{max_attempts}次）: {str(e)[:60]}")
+            if attempt < max_attempts - 1:
+                page.wait_for_timeout(gap)
+    print("  ⚠️ 网络多次未就绪，仍尝试继续（结果可能不完整）")
+    return False
+
+
 def ensure_login(page):
     url = f"{BASE_URL}/home/manage/course/reservations"
-    try:
-        page.goto(url, wait_until="networkidle", timeout=60000)
-    except Exception:
-        pass
+    # 先等网络真正连通，避免刚唤醒时半连接状态下抓到残缺数据
+    _wait_for_network(page, url)
     page.wait_for_timeout(5000)
 
     if "login" in page.url.lower():
@@ -338,9 +357,9 @@ def fetch_month_courses(page):
 
         try:
             page_url = f"{BASE_URL}/home/manage/course/reservations?startDate={ws}&endDate={we}&_t={_ts}"
-            page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
+            _safe_goto(page, page_url, wait_until="domcontentloaded", timeout=60000)
             page.wait_for_timeout(1500)
-            page.reload(wait_until="networkidle")
+            _safe_reload(page, wait_until="networkidle")
             page.wait_for_timeout(4000)
 
             if "login" in page.url.lower():
@@ -416,9 +435,9 @@ def fetch_upcoming_courses(page, weeks=2):
         page.on("response", on_response)
         try:
             page_url = f"{BASE_URL}/home/manage/course/reservations?startDate={ws}&endDate={we}&_t={_ts}"
-            page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
+            _safe_goto(page, page_url, wait_until="domcontentloaded", timeout=60000)
             page.wait_for_timeout(1500)
-            page.reload(wait_until="networkidle")
+            _safe_reload(page, wait_until="networkidle")
             page.wait_for_timeout(4000)
             if "login" in page.url.lower():
                 page.remove_listener("response", on_response)
