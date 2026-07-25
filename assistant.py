@@ -766,14 +766,26 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup, memb
 
     today_iso = date.today().isoformat()
 
-    # 按手机号索引会员卡，取会籍顾问——避免同名会员的会籍互相串
+    # 会员卡索引：按手机号取会籍顾问；按 traineeId 反查手机号（课包若带 traineeId
+    # 就能精确对到人）；并统计每个姓名到底对应几个人（几个不同手机号）
     consultant_by_phone = {}
+    phone_by_trainee_id = {}
+    card_phones_by_name = {}      # 姓名 -> {手机号}
+    card_sellers_by_name = {}     # 姓名 -> {会籍顾问}
     for m in (members or []):
         ph = _clean(m.get("memberPhone"))
-        if not ph:
-            continue
-        if not consultant_by_phone.get(ph):
-            consultant_by_phone[ph] = _clean(m.get("sellerName"))
+        nm = m.get("displayName", "") or ""
+        seller = _clean(m.get("sellerName"))
+        if ph:
+            if not consultant_by_phone.get(ph):
+                consultant_by_phone[ph] = seller
+            tid = m.get("traineeId")
+            if tid and tid not in phone_by_trainee_id:
+                phone_by_trainee_id[tid] = ph
+            if nm:
+                card_phones_by_name.setdefault(nm, set()).add(ph)
+        if nm and seller:
+            card_sellers_by_name.setdefault(nm, set()).add(seller)
 
     # 1) 最近上课教练：遍历带日期的私教课，取每个会员"最近一节已上过的非体验课"。
     #    过去/今天的课与未来的约课分开记，优先用已上过的，未来约课只作次选。
@@ -810,8 +822,10 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup, memb
         cn = t.get("courseName", "") or ""
         if "体验" in cn:           # 跳过体验课包
             continue
+        # 手机号优先取课包自带的；没有则用 traineeId 去会员卡里精确反查
         phone = (_clean(t.get("phone")) or _clean(t.get("memberPhone"))
-                 or _clean(t.get("traineePhone")))
+                 or _clean(t.get("traineePhone"))
+                 or _clean(phone_by_trainee_id.get(t.get("traineeId"))))
         ent = agg.setdefault((name, phone), {"remain": 0, "single": Counter()})
         ent["remain"] += (t.get("remainCount", 0) or 0)
         used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
@@ -834,7 +848,9 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup, memb
         # 剔除剩余 0 节的会员（课已上完，不算教练当前在带的会员）
         if ent["remain"] <= 0:
             continue
-        dup_count = len(phones_by_name.get(name, ()))
+        # 同名人数以会员卡为准（课包可能没带手机号，光看课包会漏判同名）
+        dup_count = max(len(phones_by_name.get(name, ())),
+                        len(card_phones_by_name.get(name, ())))
         coach, last_date = None, ""
         # 同名不同人时，课程记录（只有姓名）无法确定是谁上的课，跳过这步
         if dup_count <= 1:
@@ -848,12 +864,27 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup, memb
         if coach is None:
             coach = UNASSIGNED_COACH_LABEL
         m = member_lookup.get(name, {})
-        # 同名时不能用按姓名合并的 member_lookup（会串号），优先用课包里的手机号
-        consultant = (consultant_by_phone.get(phone) or
-                      ("" if dup_count > 1 else m.get("sellerName", "")))
+        # 手机号：确定的优先；不确定且同名多人时留空，绝不显示别人的号
+        card_phones = card_phones_by_name.get(name, set())
+        if phone:
+            show_phone = phone
+        elif len(card_phones) == 1:
+            show_phone = next(iter(card_phones))
+        else:
+            show_phone = ""
+        # 会籍：能按手机号确定就用；否则同名各卡的会籍一致时才敢用，不一致留空
+        sellers = card_sellers_by_name.get(name, set())
+        if show_phone and consultant_by_phone.get(show_phone):
+            consultant = consultant_by_phone[show_phone]
+        elif len(sellers) == 1:
+            consultant = next(iter(sellers))
+        elif dup_count <= 1:
+            consultant = _clean(m.get("sellerName"))
+        else:
+            consultant = ""
         coach_members.setdefault(coach, []).append({
             "name": name,
-            "phone": phone or ("" if dup_count > 1 else m.get("memberPhone", "")),
+            "phone": show_phone,
             "consultant": consultant,
             "remaining": ent["remain"],
             "last_class": last_date,
