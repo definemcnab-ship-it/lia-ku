@@ -663,7 +663,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
 
     归属规则：优先按"最近约课的教练"——取该会员最新一节【非体验】私教课的教练；
     若近期（已抓取的课程范围内）没有约课记录，退回按签课记录里"上课最多"的教练。
-    只纳入有【正式（非体验）私教课包】的会员。
+    只纳入有【正式（非体验）私教课包】且【剩余节数 > 0】的会员。
     """
     from collections import Counter
 
@@ -709,6 +709,9 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
     # 3) 归集：教练 -> 会员
     coach_members = {}
     for name in real_members:
+        # 剔除剩余 0 节的会员（课已上完，不算教练当前在带的会员）
+        if remain_total.get(name, 0) <= 0:
+            continue
         if name in latest:
             coach = latest[name][2]
         elif fallback.get(name):
