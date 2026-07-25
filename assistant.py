@@ -558,6 +558,7 @@ class DailyReport:
     milestones: list = field(default_factory=list)
     coaches: dict = field(default_factory=dict)
     monthly_new_members: list = field(default_factory=list)
+    coach_members: dict = field(default_factory=dict)  # 教练 -> 其名下私教会员列表
 
     def summary(self):
         # 统计所有日期中出现的唯一教练数
@@ -655,6 +656,76 @@ def _ts_to_date(raw):
         return datetime.fromtimestamp(raw).date()
     except (ValueError, OSError, OverflowError):
         return None
+
+
+def build_coach_member_list(trainees, private_dated_courses, member_lookup):
+    """按教练归集私教会员列表（不含纯体验会员）。
+
+    归属规则：优先按"最近约课的教练"——取该会员最新一节【非体验】私教课的教练；
+    若近期（已抓取的课程范围内）没有约课记录，退回按签课记录里"上课最多"的教练。
+    只纳入有【正式（非体验）私教课包】的会员。
+    """
+    from collections import Counter
+
+    # 1) 最近约课教练：遍历带日期的私教课，取每个会员"最新一节非体验课"的教练
+    latest = {}  # name -> (date, startTime, coach)
+    for c in private_dated_courses:
+        if c.get("status") == -1:  # 已取消跳过
+            continue
+        cn = c.get("courseName", "") or ""
+        if "体验" in cn:           # 不含体验课
+            continue
+        coach = (c.get("trainerName", "") or "").strip()
+        if not coach:
+            continue
+        d = c.get("date", "") or ""
+        st = c.get("startTime", "") or ""
+        for name in parse_trainee_names(c.get("traineeNames", "")):
+            if not name:
+                continue
+            cur = latest.get(name)
+            if cur is None or (d, st) > (cur[0], cur[1]):
+                latest[name] = (d, st, coach)
+
+    # 2) 真实私教会员集合 + 剩余节数 + 备用"上课最多"教练（排除纯体验课包）
+    real_members = set()
+    remain_total = {}   # name -> 剩余总节数
+    fallback = {}       # name -> Counter(coach -> 已上节数)
+    for t in trainees:
+        name = t.get("traineeName", "")
+        if not name:
+            continue
+        cn = t.get("courseName", "") or ""
+        if "体验" in cn:           # 跳过体验课包
+            continue
+        real_members.add(name)
+        remain_total[name] = remain_total.get(name, 0) + (t.get("remainCount", 0) or 0)
+        used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
+        for coach in (t.get("courseTrainers", "") or "").split("/"):
+            coach = coach.strip()
+            if coach:
+                fallback.setdefault(name, Counter())[coach] += used
+
+    # 3) 归集：教练 -> 会员
+    coach_members = {}
+    for name in real_members:
+        if name in latest:
+            coach = latest[name][2]
+        elif fallback.get(name):
+            coach = fallback[name].most_common(1)[0][0]
+        else:
+            continue  # 没有任何教练线索，跳过
+        m = member_lookup.get(name, {})
+        coach_members.setdefault(coach, []).append({
+            "name": name,
+            "phone": m.get("memberPhone", ""),
+            "consultant": m.get("sellerName", ""),
+            "remaining": remain_total.get(name, 0),
+        })
+    # 每位教练内部按剩余节数从少到多排（快用完的排前面，方便盯续课）
+    for coach in coach_members:
+        coach_members[coach].sort(key=lambda x: (x.get("remaining", 0), x.get("name", "")))
+    return coach_members
 
 
 def build_member_lookup(members):
@@ -1294,6 +1365,15 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     # ---- 规则6: 本月新会员汇总（含转化信息）----
     _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_courses)
 
+    # ---- 规则7: 教练的会员列表（私教，不含体验，按最近约课教练归属）----
+    _priv_dated = []
+    for src in (courses, week_courses, month_courses, upcoming_courses):
+        if isinstance(src, dict):
+            _priv_dated.extend(src.get("private", []))
+    report.coach_members = build_coach_member_list(trainees, _priv_dated, member_lookup)
+    _cm_total = sum(len(v) for v in report.coach_members.values())
+    print(f"\n  [教练会员列表] {len(report.coach_members)} 位教练，共 {_cm_total} 名私教会员")
+
     return report
 
 
@@ -1818,6 +1898,43 @@ def generate_html(report):
         <div class="rows" id="rows_co_{day_str}">{trainer_rows}</div>
         </div>"""
 
+    # 教练的会员列表：按教练分组，预渲染为可折叠区块（供 CSV 导出也放入 sections_data）
+    sections_data["coach_members"] = []
+    coach_members_html = ""
+    _cm_total = sum(len(v) for v in report.coach_members.values())
+    for _idx, coach in enumerate(sorted(report.coach_members.keys())):
+        members = report.coach_members[coach]
+        member_rows = ""
+        for m in members:
+            phone = f"  {m['phone']}" if m.get("phone") else ""
+            consultant = f"  会籍:{m['consultant']}" if m.get("consultant") else ""
+            member_rows += (
+                f'<div class="r"><div class="top">'
+                f'<span class="n">{m["name"]}</span>'
+                f'<span class="i">剩余{m.get("remaining",0)}节{phone}{consultant}</span>'
+                f'</div></div>'
+            )
+            sections_data["coach_members"].append({
+                "id": f"cm_{coach}_{m['name']}",
+                "name": m["name"],
+                "phone": m.get("phone", ""),
+                "info": f'教练:{coach} 剩余{m.get("remaining",0)}节',
+                "label": f'剩{m.get("remaining",0)}节',
+                "coach": coach,
+                "consultant": m.get("consultant", ""),
+                "course": "",
+                "time": "",
+            })
+        if not member_rows:
+            member_rows = '<div style="padding:10px;color:#999;text-align:center">暂无会员</div>'
+        _sec_id = f"cm_{_idx}"
+        coach_members_html += f"""<div class="sec" id="{_sec_id}" style="margin-bottom:4px">
+        <div class="sh" onclick="toggleSec('{_sec_id}')" style="font-size:13px"><span>{coach}（{len(members)}人）</span><span style="display:flex;gap:8px;align-items:center"><span class="arrow">&#9660;</span></span></div>
+        <div class="rows" id="rows_{_sec_id}">{member_rows}</div>
+        </div>"""
+    if not coach_members_html:
+        coach_members_html = '<div style="padding:20px;color:#999;text-align:center">暂无数据</div>'
+
     sections_json = json.dumps(sections_data, ensure_ascii=False)
 
     # 从磁盘加载跟进记录（解决 file:// 协议下 localStorage 不可靠的问题）
@@ -1927,6 +2044,7 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
     <a href="#sec4"><span class="dot d4"></span><span>里程碑</span></a>
     <a href="#sec5"><span class="dot d5"></span><span>教练空闲</span></a>
     <a href="#sec6"><span class="dot d6"></span><span>本月新会员</span></a>
+    <a href="#sec7"><span class="dot" style="background:#14b8a6"></span><span>教练会员</span></a>
   </nav>
   <div style="padding:12px 16px;border-top:1px solid #333">
     <div style="font-size:11px;color:#888;margin-bottom:4px">选择日期</div>
@@ -1953,6 +2071,7 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
     <span onclick="scrollToSec('sec4')">里程碑 {s['milestones']}人</span>
     <span onclick="scrollToSec('sec5')">教练空闲 {s['coaches']}位</span>
     <span onclick="scrollToSec('sec6')">本月新会员 {len(sections_data['monthly_converted']) + len(sections_data['monthly_unconverted'])}人（转化{len(sections_data['monthly_converted'])} 未转化{len(sections_data['monthly_unconverted'])}）</span>
+    <span onclick="scrollToSec('sec7')">教练会员 {_cm_total}人</span>
   </div>
 </div>
 
@@ -2012,6 +2131,13 @@ body {{font-family:-apple-system,'PingFang SC',sans-serif;background:#f0f2f5;col
       </div>
       <div class="subrows" id="subrows_subsec6b"></div>
     </div>
+  </div>
+</div>
+
+<div class="sec collapsed" id="sec7">
+  <div class="sh" onclick="toggleSec('sec7')"><span>七、教练的会员列表（私教·按最近约课教练归属）</span><span style="display:flex;gap:8px;align-items:center"><span class="badge c4">{_cm_total}人</span><span class="arrow">&#9660;</span></span></div>
+  <div class="rows" id="rows_sec7">
+    {coach_members_html}
   </div>
 </div>
 
@@ -2236,7 +2362,8 @@ function exportCSV() {{
   const secNames = {{
     new_members:'今日新会员', second_class:'第2节小班课',
     low_sessions:'课时不足', milestones:'里程碑', coaches:'教练空闲',
-    monthly_converted:'本月新会员·已转化', monthly_unconverted:'本月新会员·未转化'
+    monthly_converted:'本月新会员·已转化', monthly_unconverted:'本月新会员·未转化',
+    coach_members:'教练的会员列表'
   }};
   Object.entries(secNames).forEach(function(kv) {{
     const key = kv[0], secName = kv[1];
@@ -2296,7 +2423,7 @@ function exportMonthlyNewCSV() {{
 
 // 导航高亮
 const navLinks = document.querySelectorAll('.sidebar nav a');
-const secIds = ['sec1','sec2','sec3','sec4','sec5','sec6'];
+const secIds = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
 window.addEventListener('scroll', function() {{
   let current = '';
   secIds.forEach(function(id) {{
@@ -2390,6 +2517,7 @@ def save_and_open(report):
         "coaches": {k: {"weekday": v["weekday"], "trainers": v["trainers"]}
                     for k, v in report.coaches.items()},
         "monthly_new_members": report.monthly_new_members,
+        "coach_members": report.coach_members,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
 
     import webbrowser
