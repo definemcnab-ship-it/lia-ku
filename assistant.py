@@ -748,17 +748,32 @@ def _ts_to_date(raw):
         return None
 
 
-def build_coach_member_list(trainees, private_dated_courses, member_lookup):
+def build_coach_member_list(trainees, private_dated_courses, member_lookup, members=None):
     """按教练归集私教会员列表（不含纯体验会员）。
+
+    会员用【姓名+手机号】区分：工作室里存在同名不同人（如两个 lulu），
+    只按姓名会把不同人的课时加在一起、教练也混掉，所以一律按手机号拆开。
 
     归属规则：优先按"最近上课的教练"——取该会员最近一节【已上过的、非体验】私教课
     的教练（只看今天及以前，不含未来还没上的约课，避免被将来的约课带偏）；
-    若已上过的课里找不到，再退一步看未来约课；仍没有则按签课记录里"上课最多"的教练。
+    若已上过的课里找不到，再退一步看未来约课；仍不行则看课包（只挂一个教练时才采信）；
+    都无法确定就归入"待确认"，不瞎猜。
+    注意：课程记录里只有学员姓名、没有手机号，所以【同名不同人】时无法确定哪节课是谁上的，
+    这种情况不采用上课记录，只用课包信息，否则可能把课记到另一个同名会员头上。
     只纳入有【正式（非体验）私教课包】且【剩余节数 > 0】的会员。
     """
     from collections import Counter
 
     today_iso = date.today().isoformat()
+
+    # 按手机号索引会员卡，取会籍顾问——避免同名会员的会籍互相串
+    consultant_by_phone = {}
+    for m in (members or []):
+        ph = _clean(m.get("memberPhone"))
+        if not ph:
+            continue
+        if not consultant_by_phone.get(ph):
+            consultant_by_phone[ph] = _clean(m.get("sellerName"))
 
     # 1) 最近上课教练：遍历带日期的私教课，取每个会员"最近一节已上过的非体验课"。
     #    过去/今天的课与未来的约课分开记，优先用已上过的，未来约课只作次选。
@@ -785,10 +800,9 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
             if cur is None or (d, st) > (cur[0], cur[1]):
                 bucket[name] = (d, st, coach)
 
-    # 2) 真实私教会员集合 + 剩余节数 + 备用教练（排除纯体验课包）
-    real_members = set()
-    remain_total = {}   # name -> 剩余总节数
-    fallback = {}       # name -> Counter(coach -> 已上节数)
+    # 2) 按【姓名+手机号】聚合课包：剩余节数、备用教练（排除纯体验课包）
+    #    同名不同人（两个 lulu）因此不会被合并
+    agg = {}   # (name, phone) -> {"remain": int, "single": Counter(coach->已上节数)}
     for t in trainees:
         name = t.get("traineeName", "")
         if not name:
@@ -796,8 +810,10 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         cn = t.get("courseName", "") or ""
         if "体验" in cn:           # 跳过体验课包
             continue
-        real_members.add(name)
-        remain_total[name] = remain_total.get(name, 0) + (t.get("remainCount", 0) or 0)
+        phone = (_clean(t.get("phone")) or _clean(t.get("memberPhone"))
+                 or _clean(t.get("traineePhone")))
+        ent = agg.setdefault((name, phone), {"remain": 0, "single": Counter()})
+        ent["remain"] += (t.get("remainCount", 0) or 0)
         used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
         # 备用信号只采信"课包只挂一个教练"的情况。
         # 课包写成"Ada/花花"这种多教练时，无法知道这些课时各上了谁的，
@@ -805,35 +821,43 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         coaches = [c.strip() for c in (t.get("courseTrainers", "") or "").split("/")
                    if c.strip() and not _is_excluded_coach(c.strip())]
         if len(coaches) == 1:
-            fallback.setdefault(name, Counter())[coaches[0]] += used
+            ent["single"][coaches[0]] += used
+
+    # 哪些姓名对应多个不同的人（手机号不同）——这些不能用课程记录归属
+    phones_by_name = {}
+    for (name, phone) in agg:
+        phones_by_name.setdefault(name, set()).add(phone)
 
     # 3) 归集：教练 -> 会员
     coach_members = {}
-    for name in real_members:
+    for (name, phone), ent in agg.items():
         # 剔除剩余 0 节的会员（课已上完，不算教练当前在带的会员）
-        if remain_total.get(name, 0) <= 0:
+        if ent["remain"] <= 0:
             continue
-        # 优先：最近一节【已上过】的课 → 次选：未来约课
-        # → 兜底：课包只挂一个教练时用它 → 都不行则归入"待确认"，不瞎猜
-        if name in latest_past:
-            coach = latest_past[name][2]
-            last_date = latest_past[name][0]
-        elif name in latest_future:
-            coach = latest_future[name][2]
-            last_date = latest_future[name][0]
-        elif fallback.get(name):
-            coach = fallback[name].most_common(1)[0][0]
-            last_date = ""
-        else:
+        dup_count = len(phones_by_name.get(name, ()))
+        coach, last_date = None, ""
+        # 同名不同人时，课程记录（只有姓名）无法确定是谁上的课，跳过这步
+        if dup_count <= 1:
+            if name in latest_past:
+                coach, last_date = latest_past[name][2], latest_past[name][0]
+            elif name in latest_future:
+                coach, last_date = latest_future[name][2], latest_future[name][0]
+        # 兜底：课包只挂一个教练时用它（课包是按人分的，同名也准）
+        if coach is None and ent["single"]:
+            coach = ent["single"].most_common(1)[0][0]
+        if coach is None:
             coach = UNASSIGNED_COACH_LABEL
-            last_date = ""
         m = member_lookup.get(name, {})
+        # 同名时不能用按姓名合并的 member_lookup（会串号），优先用课包里的手机号
+        consultant = (consultant_by_phone.get(phone) or
+                      ("" if dup_count > 1 else m.get("sellerName", "")))
         coach_members.setdefault(coach, []).append({
             "name": name,
-            "phone": m.get("memberPhone", ""),
-            "consultant": m.get("sellerName", ""),
-            "remaining": remain_total.get(name, 0),
+            "phone": phone or ("" if dup_count > 1 else m.get("memberPhone", "")),
+            "consultant": consultant,
+            "remaining": ent["remain"],
             "last_class": last_date,
+            "dup_count": dup_count,
         })
     # 每位教练内部按剩余节数从少到多排（快用完的排前面，方便盯续课）
     for coach in coach_members:
@@ -1485,7 +1509,8 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     for src in (courses, week_courses, month_courses, upcoming_courses, past_courses):
         if isinstance(src, dict):
             _priv_dated.extend(src.get("private", []))
-    report.coach_members = build_coach_member_list(trainees, _priv_dated, member_lookup)
+    report.coach_members = build_coach_member_list(trainees, _priv_dated, member_lookup,
+                                                   members=members)
     _cm_total = sum(len(v) for v in report.coach_members.values())
     _unassigned = len(report.coach_members.get(UNASSIGNED_COACH_LABEL, []))
     print(f"\n  [教练会员列表] {len(report.coach_members)} 位教练，共 {_cm_total} 名私教会员"
@@ -2029,14 +2054,17 @@ def generate_html(report):
             phone = f"  {m['phone']}" if m.get("phone") else ""
             consultant = f"  会籍:{m['consultant']}" if m.get("consultant") else ""
             last_cls = f"  最近上课:{m['last_class']}" if m.get("last_class") else ""
+            dup = (f'<span class="lb dg">同名{m["dup_count"]}人</span>'
+                   if m.get("dup_count", 1) > 1 else "")
             member_rows += (
                 f'<div class="r"><div class="top">'
-                f'<span class="n">{m["name"]}</span>'
+                f'<span class="n">{m["name"]}{dup}</span>'
                 f'<span class="i">剩余{m.get("remaining",0)}节{last_cls}{phone}{consultant}</span>'
                 f'</div></div>'
             )
             sections_data["coach_members"].append({
-                "id": f"cm_{coach}_{m['name']}",
+                # id 带手机号，避免同名会员的跟进记录互相覆盖
+                "id": f"cm_{coach}_{m['name']}_{m.get('phone','')}",
                 "name": m["name"],
                 "phone": m.get("phone", ""),
                 "info": f'教练:{coach} 剩余{m.get("remaining",0)}节{last_cls}',
@@ -2741,7 +2769,7 @@ def inspect_member(name, show_browser=False):
             # ---- 4) 程序算出的归属 ----
             print(f"\n---- 4) 程序算出的归属 ----")
             ml = build_member_lookup(members)
-            cm = build_coach_member_list(trainees, priv, ml)
+            cm = build_coach_member_list(trainees, priv, ml, members=members)
             hit = False
             for coach, ms in cm.items():
                 for m in ms:
