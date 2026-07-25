@@ -34,6 +34,15 @@ MILESTONES = {
 }
 
 # ============================================================
+#  "教练的会员列表"里不作为归属教练的名字
+#  这些是会籍/管理等角色，不带私教。她们名下的会员会自动改归到
+#  "最近上课的真实教练"。以后要增删，直接改这个列表即可。
+# ============================================================
+EXCLUDED_COACHES = {
+    "莉娅", "林超群", "维尼", "肖湘蓉", "姣姣", "丽丽", "子希",
+}
+
+# ============================================================
 #  飞书推送配置
 #  填入飞书机器人 webhook 地址，可填多个（发给多人/多群）
 #  留空列表则不推送
@@ -676,7 +685,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         if "体验" in cn:           # 不含体验课
             continue
         coach = (c.get("trainerName", "") or "").strip()
-        if not coach:
+        if not coach or coach in EXCLUDED_COACHES:  # 跳过非归属教练（会籍/管理）
             continue
         d = c.get("date", "") or ""
         st = c.get("startTime", "") or ""
@@ -703,7 +712,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
         for coach in (t.get("courseTrainers", "") or "").split("/"):
             coach = coach.strip()
-            if coach:
+            if coach and coach not in EXCLUDED_COACHES:  # 跳过非归属教练
                 fallback.setdefault(name, Counter())[coach] += used
 
     # 3) 归集：教练 -> 会员
