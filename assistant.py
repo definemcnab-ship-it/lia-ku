@@ -2577,6 +2577,110 @@ def save_and_open(report):
 
 
 # ============================================================
+#  单个会员诊断（--who 姓名）
+# ============================================================
+def inspect_member(name, show_browser=False):
+    """把一个会员的底细全部打出来：会员卡、私教课包、私教课记录、程序算出的归属。
+    用于核对"剩余节数"和"归属教练"到底是从哪条数据来的。"""
+    print(f"===== 会员诊断: {name} =====\n")
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=not show_browser)
+        storage_state = str(AUTH_FILE) if AUTH_FILE.exists() else None
+        context = browser.new_context(storage_state=storage_state, no_viewport=True)
+        context.set_default_timeout(60000)
+        try:
+            page = context.new_page()
+            ensure_login(page)
+
+            print("抓取数据中（约1-3分钟）...\n")
+            courses, api_urls = fetch_courses(page)
+            month_courses = fetch_month_courses(page)
+            upcoming_courses = fetch_upcoming_courses(page, weeks=2)
+            members = fetch_all_members(page)
+            trainees = fetch_all_trainees(page)
+
+            # ---- 1) 会员卡 ----
+            print(f"\n---- 1) 会员卡（displayName == {name}）----")
+            cards = [m for m in members if (m.get("displayName") or "") == name]
+            print(f"共 {len(cards)} 张")
+            member_ids = set()
+            for m in cards:
+                member_ids.add(m.get("memberId"))
+                print(f"  memberId={m.get('memberId')} 卡={m.get('cardName')} "
+                      f"状态={m.get('statusStr')}({m.get('status')}) unit={m.get('unit')} "
+                      f"remain={m.get('remain')} buyCount={m.get('buyCount')} "
+                      f"手机={m.get('memberPhone')} 会籍={m.get('sellerName')}")
+            if len(member_ids) > 1:
+                print(f"  ⚠️ 同名『{name}』对应 {len(member_ids)} 个不同 memberId: {member_ids}")
+                print(f"     → 这会让不同的人被合并统计（剩余节数相加、教练混在一起）！")
+
+            # ---- 2) 私教课包 ----
+            print(f"\n---- 2) 私教课包（traineeName == {name}）----")
+            tlist = [t for t in trainees if (t.get("traineeName") or "") == name]
+            print(f"共 {len(tlist)} 条")
+            if tlist:
+                print("  [第一条的全部字段（看有没有能区分同名的ID）]")
+                for k, v in tlist[0].items():
+                    print(f"    {k} = {v}")
+            cur_total = 0
+            for t in tlist:
+                cn = t.get("courseName") or ""
+                rc = t.get("remainCount") or 0
+                marks = []
+                if "体验" in cn:
+                    marks.append("体验课包·当前不计入")
+                if "赠课" in cn or "赠送" in cn:
+                    marks.append("赠课·当前【计入】")
+                if "体验" not in cn:
+                    cur_total += rc
+                mk = ("  << " + " / ".join(marks)) if marks else ""
+                print(f"  课包={cn} 教练={t.get('courseTrainers')} "
+                      f"购={t.get('buyCount')} 剩={rc}{mk}")
+            print(f"  → 当前口径合计剩余 = {cur_total} 节")
+
+            # ---- 3) 私教课记录 ----
+            print(f"\n---- 3) 私教课记录（学员含 {name}）----")
+            priv = []
+            for src in (courses, month_courses, upcoming_courses):
+                if isinstance(src, dict):
+                    priv.extend(src.get("private", []))
+            rows = set()
+            for c in priv:
+                if name in parse_trainee_names(c.get("traineeNames", "")):
+                    rows.add((c.get("date", ""), c.get("startTime", ""),
+                              c.get("trainerName", ""), c.get("courseName", ""),
+                              c.get("status")))
+            today_iso = date.today().isoformat()
+            for d, st, tr, cn, stt in sorted(rows):
+                when = "已上/今天" if d and d <= today_iso else "未来约课"
+                trial = "  (体验课·不参与归属)" if "体验" in (cn or "") else ""
+                excl = "  (该教练在排除名单)" if _is_excluded_coach(tr) else ""
+                print(f"  {d} {st} 教练={tr} 课程={cn} status={stt} [{when}]{trial}{excl}")
+            print(f"  共 {len(rows)} 节")
+
+            # ---- 4) 程序算出的归属 ----
+            print(f"\n---- 4) 程序算出的归属 ----")
+            ml = build_member_lookup(members)
+            cm = build_coach_member_list(trainees, priv, ml)
+            hit = False
+            for coach, ms in cm.items():
+                for m in ms:
+                    if m["name"] == name:
+                        print(f"  归属教练 = {coach} | 剩余 = {m['remaining']} 节 "
+                              f"| 最近上课 = {m.get('last_class') or '无'}")
+                        hit = True
+            if not hit:
+                print("  该会员未出现在教练会员列表中")
+            print("\n===== 诊断结束 =====")
+        except Exception as e:
+            print(f"\n诊断出错: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            browser.close()
+
+
+# ============================================================
 #  主流程
 # ============================================================
 def run(show_browser=True, push_feishu=False):
@@ -2721,9 +2825,13 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--cron", action="store_true", help="后台模式")
     p.add_argument("--no-browser", action="store_true", help="不显示浏览器")
+    p.add_argument("--who", metavar="姓名",
+                   help="诊断单个会员：打印其会员卡/私教课包/课程记录/归属结果")
     args = p.parse_args()
 
-    if args.cron:
+    if args.who:
+        inspect_member(args.who, show_browser=False)
+    elif args.cron:
         try:
             subprocess.run(["osascript", "-e",
                 'display notification "正在生成每日提醒..." with title "智能助理"'],
