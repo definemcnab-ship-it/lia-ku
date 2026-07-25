@@ -41,6 +41,10 @@ MILESTONES = {
 EXCLUDED_COACHES = {
     "莉娅", "林超群", "维尼", "肖湘蓉", "姣姣", "丽丽", "子希",
 }
+
+# "待确认"分组名：查不到最近上课教练、又无法从课包唯一确定归属时放这里，
+# 避免瞎猜归错人。这一组需要人工确认教练。
+UNASSIGNED_COACH_LABEL = "⚠️ 待确认（查不到最近上课教练）"
 # 归一化排除名单（去掉英文/空格），用于匹配"莉娅Lia"这类"中文名+英文名"的写法
 _EXCLUDED_COACHES_NORM = {
     re.sub(r"[A-Za-z\s]+", "", x).strip() for x in EXCLUDED_COACHES
@@ -476,6 +480,69 @@ def fetch_upcoming_courses(page, weeks=2):
     return {"group": all_group, "private": all_private}
 
 
+def fetch_past_private_courses(page, weeks=14):
+    """往前回溯抓取过去 N 周的课程，用于"教练的会员列表"判断最近上课教练。
+
+    只抓本月数据是不够的：一个会员最近一次上课可能在两三个月前，
+    那样就找不到她真正的教练，只能靠很不准的兜底猜测。这里按周回溯，
+    覆盖约 N 周（默认14周≈3个半月）。
+    """
+    import time as _time
+    from datetime import date as dt_date, timedelta
+
+    today = dt_date.today()
+    this_monday = today - timedelta(days=today.weekday())
+
+    all_private = []
+    all_group = []
+    print(f"  回溯过去 {weeks} 周课程（用于判断最近上课教练）...")
+
+    for i in range(1, weeks + 1):
+        ws_d = this_monday - timedelta(days=7 * i)
+        we_d = ws_d + timedelta(days=6)
+        ws, we = ws_d.isoformat(), we_d.isoformat()
+        _ts = int(_time.time())
+        seg = {"group": [], "private": []}
+
+        def on_response(response):
+            url = response.url
+            if "reserved_instances" in url:
+                try:
+                    data = response.json()
+                    if "isWebPage=true" in url:
+                        seg["group"] = data.get("data", [])
+                    elif "isTraining" not in url and "isWebPage" not in url:
+                        seg["private"] = data.get("data", [])
+                except Exception:
+                    pass
+
+        page.on("response", on_response)
+        try:
+            page_url = (f"{BASE_URL}/home/manage/course/reservations"
+                        f"?startDate={ws}&endDate={we}&_t={_ts}")
+            _safe_goto(page, page_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(1200)
+            _safe_reload(page, wait_until="networkidle")
+            page.wait_for_timeout(3000)
+            if "login" in page.url.lower():
+                page.remove_listener("response", on_response)
+                break
+            all_private.extend(seg["private"])
+            all_group.extend(seg["group"])
+        except Exception as e:
+            print(f"    ⚠️ 回溯 {ws}~{we} 失败: {str(e)[:60]}")
+        finally:
+            page.remove_listener("response", on_response)
+
+    # 统计覆盖到的最早日期，便于核对
+    dates = [c.get("date", "") for c in all_private if c.get("date")]
+    if dates:
+        print(f"  回溯完成: 私教 {len(all_private)} 节，最早 {min(dates)}")
+    else:
+        print("  ⚠️ 回溯未取到历史课程")
+    return {"group": all_group, "private": all_private}
+
+
 def get_tomorrow_trials(upcoming_courses, member_lookup, pt_used=None):
     """从未来课程中提取明天的体验课新会员列表，逻辑与今日新会员一致：
     小班：体验课 + (签到=0 或 备注含"二次体验")
@@ -718,7 +785,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
             if cur is None or (d, st) > (cur[0], cur[1]):
                 bucket[name] = (d, st, coach)
 
-    # 2) 真实私教会员集合 + 剩余节数 + 备用"上课最多"教练（排除纯体验课包）
+    # 2) 真实私教会员集合 + 剩余节数 + 备用教练（排除纯体验课包）
     real_members = set()
     remain_total = {}   # name -> 剩余总节数
     fallback = {}       # name -> Counter(coach -> 已上节数)
@@ -732,10 +799,13 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         real_members.add(name)
         remain_total[name] = remain_total.get(name, 0) + (t.get("remainCount", 0) or 0)
         used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
-        for coach in (t.get("courseTrainers", "") or "").split("/"):
-            coach = coach.strip()
-            if coach and not _is_excluded_coach(coach):  # 跳过非归属教练
-                fallback.setdefault(name, Counter())[coach] += used
+        # 备用信号只采信"课包只挂一个教练"的情况。
+        # 课包写成"Ada/花花"这种多教练时，无法知道这些课时各上了谁的，
+        # 以前给每个教练都加同样的分数再随机挑一个，会挑错人——直接不采信。
+        coaches = [c.strip() for c in (t.get("courseTrainers", "") or "").split("/")
+                   if c.strip() and not _is_excluded_coach(c.strip())]
+        if len(coaches) == 1:
+            fallback.setdefault(name, Counter())[coaches[0]] += used
 
     # 3) 归集：教练 -> 会员
     coach_members = {}
@@ -743,7 +813,8 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         # 剔除剩余 0 节的会员（课已上完，不算教练当前在带的会员）
         if remain_total.get(name, 0) <= 0:
             continue
-        # 优先：最近一节【已上过】的课 → 次选：未来约课 → 兜底：上课最多
+        # 优先：最近一节【已上过】的课 → 次选：未来约课
+        # → 兜底：课包只挂一个教练时用它 → 都不行则归入"待确认"，不瞎猜
         if name in latest_past:
             coach = latest_past[name][2]
             last_date = latest_past[name][0]
@@ -754,7 +825,8 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
             coach = fallback[name].most_common(1)[0][0]
             last_date = ""
         else:
-            continue  # 没有任何教练线索，跳过
+            coach = UNASSIGNED_COACH_LABEL
+            last_date = ""
         m = member_lookup.get(name, {})
         coach_members.setdefault(coach, []).append({
             "name": name,
@@ -870,8 +942,9 @@ def _collect_today_courses(sources, key, today):
 
 
 def apply_rules(courses, members, trainees, week_courses=None, month_courses=None,
-                next_booking=None, upcoming_courses=None):
-    """应用5大提醒规则。week_courses用于整周教练空闲，month_courses用于月度新会员"""
+                next_booking=None, upcoming_courses=None, past_courses=None):
+    """应用5大提醒规则。week_courses用于整周教练空闲，month_courses用于月度新会员，
+    past_courses（回溯的历史课程）用于教练会员列表判断最近上课教练"""
     report = DailyReport(date=today_str())
     today = today_str()
     next_booking = next_booking or {}
@@ -1406,14 +1479,17 @@ def apply_rules(courses, members, trainees, week_courses=None, month_courses=Non
     # ---- 规则6: 本月新会员汇总（含转化信息）----
     _enrich_monthly_new_members(report, member_lookup, pt_used, trainees, month_courses)
 
-    # ---- 规则7: 教练的会员列表（私教，不含体验，按最近约课教练归属）----
+    # ---- 规则7: 教练的会员列表（私教，不含体验，按最近上课教练归属）----
+    # 含回溯的历史课程，否则最近一次上课在几个月前的会员会找不到真实教练
     _priv_dated = []
-    for src in (courses, week_courses, month_courses, upcoming_courses):
+    for src in (courses, week_courses, month_courses, upcoming_courses, past_courses):
         if isinstance(src, dict):
             _priv_dated.extend(src.get("private", []))
     report.coach_members = build_coach_member_list(trainees, _priv_dated, member_lookup)
     _cm_total = sum(len(v) for v in report.coach_members.values())
-    print(f"\n  [教练会员列表] {len(report.coach_members)} 位教练，共 {_cm_total} 名私教会员")
+    _unassigned = len(report.coach_members.get(UNASSIGNED_COACH_LABEL, []))
+    print(f"\n  [教练会员列表] {len(report.coach_members)} 位教练，共 {_cm_total} 名私教会员"
+          f"（其中待确认 {_unassigned} 人）")
 
     return report
 
@@ -1943,7 +2019,10 @@ def generate_html(report):
     sections_data["coach_members"] = []
     coach_members_html = ""
     _cm_total = sum(len(v) for v in report.coach_members.values())
-    for _idx, coach in enumerate(sorted(report.coach_members.keys())):
+    # 教练按名字排序，"待确认"分组固定排在最后
+    _coach_order = sorted(report.coach_members.keys(),
+                          key=lambda c: (c == UNASSIGNED_COACH_LABEL, c))
+    for _idx, coach in enumerate(_coach_order):
         members = report.coach_members[coach]
         member_rows = ""
         for m in members:
@@ -2592,10 +2671,11 @@ def inspect_member(name, show_browser=False):
             page = context.new_page()
             ensure_login(page)
 
-            print("抓取数据中（约1-3分钟）...\n")
+            print("抓取数据中（约3-5分钟）...\n")
             courses, api_urls = fetch_courses(page)
             month_courses = fetch_month_courses(page)
             upcoming_courses = fetch_upcoming_courses(page, weeks=2)
+            past_courses = fetch_past_private_courses(page, weeks=14)
             members = fetch_all_members(page)
             trainees = fetch_all_trainees(page)
 
@@ -2641,7 +2721,7 @@ def inspect_member(name, show_browser=False):
             # ---- 3) 私教课记录 ----
             print(f"\n---- 3) 私教课记录（学员含 {name}）----")
             priv = []
-            for src in (courses, month_courses, upcoming_courses):
+            for src in (courses, month_courses, upcoming_courses, past_courses):
                 if isinstance(src, dict):
                     priv.extend(src.get("private", []))
             rows = set()
@@ -2751,6 +2831,9 @@ def run(show_browser=True, push_feishu=False):
             next_booking = build_next_booking_lookup(upcoming_courses)
             print(f"  [下次约课] 已建立 {len(next_booking)} 名会员的下次约课索引")
 
+            # 回溯历史课程，用于"教练的会员列表"判断最近上课教练
+            past_courses = fetch_past_private_courses(page, weeks=14)
+
             # 2. 获取全部会员数据
             print("[2/5] 获取会员数据...")
             members = fetch_all_members(page)
@@ -2762,7 +2845,8 @@ def run(show_browser=True, push_feishu=False):
             # 4. 应用规则（传入整周课程、整月课程、下次约课）
             print("[4/5] 应用提醒规则...")
             report = apply_rules(courses, members, trainees, week_courses, month_courses,
-                                 next_booking=next_booking, upcoming_courses=upcoming_courses)
+                                 next_booking=next_booking, upcoming_courses=upcoming_courses,
+                                 past_courses=past_courses)
 
             # 5. 生成报告
             print("[5/5] 生成报告...")
