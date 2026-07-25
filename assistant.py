@@ -684,14 +684,19 @@ def _ts_to_date(raw):
 def build_coach_member_list(trainees, private_dated_courses, member_lookup):
     """按教练归集私教会员列表（不含纯体验会员）。
 
-    归属规则：优先按"最近约课的教练"——取该会员最新一节【非体验】私教课的教练；
-    若近期（已抓取的课程范围内）没有约课记录，退回按签课记录里"上课最多"的教练。
+    归属规则：优先按"最近上课的教练"——取该会员最近一节【已上过的、非体验】私教课
+    的教练（只看今天及以前，不含未来还没上的约课，避免被将来的约课带偏）；
+    若已上过的课里找不到，再退一步看未来约课；仍没有则按签课记录里"上课最多"的教练。
     只纳入有【正式（非体验）私教课包】且【剩余节数 > 0】的会员。
     """
     from collections import Counter
 
-    # 1) 最近约课教练：遍历带日期的私教课，取每个会员"最新一节非体验课"的教练
-    latest = {}  # name -> (date, startTime, coach)
+    today_iso = date.today().isoformat()
+
+    # 1) 最近上课教练：遍历带日期的私教课，取每个会员"最近一节已上过的非体验课"。
+    #    过去/今天的课与未来的约课分开记，优先用已上过的，未来约课只作次选。
+    latest_past = {}    # name -> (date, startTime, coach)  今天及以前（已上过）
+    latest_future = {}  # name -> (date, startTime, coach)  今天以后（还没上）
     for c in private_dated_courses:
         if c.get("status") == -1:  # 已取消跳过
             continue
@@ -702,13 +707,16 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         if not coach or _is_excluded_coach(coach):  # 跳过非归属教练（会籍/管理）
             continue
         d = c.get("date", "") or ""
+        if not d:
+            continue
         st = c.get("startTime", "") or ""
+        bucket = latest_past if d <= today_iso else latest_future
         for name in parse_trainee_names(c.get("traineeNames", "")):
             if not name:
                 continue
-            cur = latest.get(name)
+            cur = bucket.get(name)
             if cur is None or (d, st) > (cur[0], cur[1]):
-                latest[name] = (d, st, coach)
+                bucket[name] = (d, st, coach)
 
     # 2) 真实私教会员集合 + 剩余节数 + 备用"上课最多"教练（排除纯体验课包）
     real_members = set()
@@ -735,10 +743,16 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         # 剔除剩余 0 节的会员（课已上完，不算教练当前在带的会员）
         if remain_total.get(name, 0) <= 0:
             continue
-        if name in latest:
-            coach = latest[name][2]
+        # 优先：最近一节【已上过】的课 → 次选：未来约课 → 兜底：上课最多
+        if name in latest_past:
+            coach = latest_past[name][2]
+            last_date = latest_past[name][0]
+        elif name in latest_future:
+            coach = latest_future[name][2]
+            last_date = latest_future[name][0]
         elif fallback.get(name):
             coach = fallback[name].most_common(1)[0][0]
+            last_date = ""
         else:
             continue  # 没有任何教练线索，跳过
         m = member_lookup.get(name, {})
@@ -747,6 +761,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
             "phone": m.get("memberPhone", ""),
             "consultant": m.get("sellerName", ""),
             "remaining": remain_total.get(name, 0),
+            "last_class": last_date,
         })
     # 每位教练内部按剩余节数从少到多排（快用完的排前面，方便盯续课）
     for coach in coach_members:
@@ -1934,22 +1949,23 @@ def generate_html(report):
         for m in members:
             phone = f"  {m['phone']}" if m.get("phone") else ""
             consultant = f"  会籍:{m['consultant']}" if m.get("consultant") else ""
+            last_cls = f"  最近上课:{m['last_class']}" if m.get("last_class") else ""
             member_rows += (
                 f'<div class="r"><div class="top">'
                 f'<span class="n">{m["name"]}</span>'
-                f'<span class="i">剩余{m.get("remaining",0)}节{phone}{consultant}</span>'
+                f'<span class="i">剩余{m.get("remaining",0)}节{last_cls}{phone}{consultant}</span>'
                 f'</div></div>'
             )
             sections_data["coach_members"].append({
                 "id": f"cm_{coach}_{m['name']}",
                 "name": m["name"],
                 "phone": m.get("phone", ""),
-                "info": f'教练:{coach} 剩余{m.get("remaining",0)}节',
+                "info": f'教练:{coach} 剩余{m.get("remaining",0)}节{last_cls}',
                 "label": f'剩{m.get("remaining",0)}节',
                 "coach": coach,
                 "consultant": m.get("consultant", ""),
                 "course": "",
-                "time": "",
+                "time": m.get("last_class", ""),
             })
         if not member_rows:
             member_rows = '<div style="padding:10px;color:#999;text-align:center">暂无会员</div>'
