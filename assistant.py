@@ -41,6 +41,20 @@ MILESTONES = {
 EXCLUDED_COACHES = {
     "莉娅", "林超群", "维尼", "肖湘蓉", "姣姣", "丽丽", "子希",
 }
+# 归一化排除名单（去掉英文/空格），用于匹配"莉娅Lia"这类"中文名+英文名"的写法
+_EXCLUDED_COACHES_NORM = {
+    re.sub(r"[A-Za-z\s]+", "", x).strip() for x in EXCLUDED_COACHES
+}
+
+
+def _is_excluded_coach(coach):
+    """教练名是否在排除名单里。忽略中文名后缀的英文（莉娅Lia→按'莉娅'匹配）。"""
+    if not coach:
+        return False
+    if coach in EXCLUDED_COACHES:
+        return True
+    core = re.sub(r"[A-Za-z\s]+", "", coach).strip()
+    return bool(core) and core in _EXCLUDED_COACHES_NORM
 
 # ============================================================
 #  飞书推送配置
@@ -685,7 +699,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         if "体验" in cn:           # 不含体验课
             continue
         coach = (c.get("trainerName", "") or "").strip()
-        if not coach or coach in EXCLUDED_COACHES:  # 跳过非归属教练（会籍/管理）
+        if not coach or _is_excluded_coach(coach):  # 跳过非归属教练（会籍/管理）
             continue
         d = c.get("date", "") or ""
         st = c.get("startTime", "") or ""
@@ -712,7 +726,7 @@ def build_coach_member_list(trainees, private_dated_courses, member_lookup):
         used = max(0, (t.get("buyCount", 0) or 0) - (t.get("remainCount", 0) or 0))
         for coach in (t.get("courseTrainers", "") or "").split("/"):
             coach = coach.strip()
-            if coach and coach not in EXCLUDED_COACHES:  # 跳过非归属教练
+            if coach and not _is_excluded_coach(coach):  # 跳过非归属教练
                 fallback.setdefault(name, Counter())[coach] += used
 
     # 3) 归集：教练 -> 会员
